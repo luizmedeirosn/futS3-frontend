@@ -1,0 +1,23 @@
+
+:host::ng-deep {
+    .p-menubar {
+        padding: 0 15rem;
+        background: linear-gradient(to right, aquamarine, rgb(255,228,181));
+        border: none;
+    }
+}
+
+.logo {
+    width: 100px !important;
+    height: 100px !important;
+    background-image: url('../../../../../assets/logo-removebg.png') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+}
+
+.menu {
+    display: flex;
+    align-items: center;
+}
+
