@@ -1,9 +1,12 @@
-
 :host::ng-deep {
     .p-menubar {
-        padding: 0 15rem;
-        background: linear-gradient(to right, aquamarine, rgb(255,228,181));
+        background: linear-gradient(to right, #7fffd4, #ffef97);
         border: none;
+        color: white;
+        width: 110%;
+        .p-menuitem {
+            margin: 0rem 2rem 0rem 2rem;
+        }
     }
 }
 
@@ -19,5 +22,8 @@
 .menu {
     display: flex;
     align-items: center;
+    width: 90%;
+    padding: 0 1rem;
+    margin: 0rem 1rem 0rem 1rem;
 }
 
