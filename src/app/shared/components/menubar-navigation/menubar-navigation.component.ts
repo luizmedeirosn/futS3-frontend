@@ -66,7 +66,8 @@ export class MenubarNavigationComponent implements OnInit {
                 items: [
                     {
                         label: 'Find All',
-                        icon: 'pi pi-search'
+                        icon: 'pi pi-search',
+                        routerLink: ['/parameters']
                     },
                     {
                         label: 'Add',

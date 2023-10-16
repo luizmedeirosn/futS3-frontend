@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
-import { FindAllPlayers } from 'src/app/models/interfaces/player/response/FindAllPlayers';
+import { FindAllPlayersDTO } from 'src/app/models/interfaces/player/response/FindAllPlayersDTO';
 import { PlayerService } from 'src/app/services/player/player.service';
 
 @Component({
@@ -12,7 +12,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
 
     private readonly destroy$: Subject<void> = new Subject();
 
-    public players: Array<FindAllPlayers> = [];
+    public players: Array<FindAllPlayersDTO> = [];
 
     constructor (
         private playerService: PlayerService
@@ -28,7 +28,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$))
         .subscribe (
             {
-                next: (players: FindAllPlayers[]) => {
+                next: (players: FindAllPlayersDTO[]) => {
                     if (players.length > 0) {
                         console.log(players);
                         this.players = players.slice().reverse();

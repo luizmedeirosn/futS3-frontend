@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { FindAllPlayers } from 'src/app/models/interfaces/player/response/FindAllPlayers';
+import { FindAllPlayersDTO } from 'src/app/models/interfaces/player/response/FindAllPlayersDTO';
 
 @Component({
   selector: 'app-players-table',
@@ -9,6 +9,6 @@ import { FindAllPlayers } from 'src/app/models/interfaces/player/response/FindAl
 export class PlayersTableComponent {
 
     @Input()
-    public players: Array<FindAllPlayers> = [];
+    public players: Array<FindAllPlayersDTO> = [];
 
 }
