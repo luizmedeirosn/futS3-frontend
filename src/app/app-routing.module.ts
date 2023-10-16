@@ -8,6 +8,10 @@ const routes: Routes = [
         pathMatch: 'full'
     },
     {
+        path: 'gamemodes',
+        loadChildren: () => import('./modules/gamemodes/gamemodes.module').then((module) => module.GamemodesModule)
+    },
+    {
         path: 'parameters',
         loadChildren: () => import('./modules/parameters/parameters.module').then((module) => module.ParametersModule)
     },
