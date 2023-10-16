@@ -14,12 +14,16 @@ export class ParametersHomeComponent implements OnInit, OnDestroy {
 
     public parameters: ParameterMinDTO[] = [];
 
-    constructor (
+    public constructor (
         private parameterService: ParameterService
     ) {
     }
 
     public ngOnInit(): void {
+        this.setParameters();
+    }
+
+    private setParameters(): void {
         this.parameterService.findAllParameters()
         .pipe(takeUntil(this.destroy$))
         .subscribe (
