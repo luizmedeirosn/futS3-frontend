@@ -88,7 +88,8 @@ export class MenubarNavigationComponent implements OnInit {
                 items: [
                     {
                         label: 'Find All',
-                        icon: 'pi pi-search'
+                        icon: 'pi pi-search',
+                        routerLink: ['/players']
                     },
                     {
                         label: 'Add',
@@ -110,4 +111,5 @@ export class MenubarNavigationComponent implements OnInit {
             }
         ]
     }
+
 }

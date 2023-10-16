@@ -10,19 +10,15 @@ import { FindAllPlayers } from 'src/app/models/interfaces/player/response/FindAl
 export class PlayerService {
 
     private API_URL: string = environment.API_URL;
-    private httpOptions = {
-
-    };
 
     constructor (
         private httpClient: HttpClient
     ) {
-    }
+    };
 
     public findAllPlayers(): Observable<Array<FindAllPlayers>> {
         return this.httpClient.get<Array<FindAllPlayers>> (
             `${this.API_URL}/players`,
-            this.httpOptions
         );
     }
 }
