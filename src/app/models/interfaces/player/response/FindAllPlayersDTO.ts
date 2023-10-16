@@ -1,4 +1,4 @@
-export interface FindAllPlayers {
+export interface FindAllPlayersDTO {
     playerId: number;
     playerName: string;
     positionId: number;
