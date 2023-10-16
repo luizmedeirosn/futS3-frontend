@@ -2,23 +2,24 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/app/environments/environment.prod';
-import { PlayerMinDTO } from 'src/app/models/interfaces/player/response/PlayerMinDTO';
+import { GameModeDTO } from 'src/app/models/interfaces/gamemode/response/GameModeDTO';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
-export class PlayerService {
+export class GameModeService {
 
     private readonly API_URL: string = environment.API_URL;
 
     constructor (
         private httpClient: HttpClient
     ) {
-    };
+    }
 
-    public findAllPlayers(): Observable<Array<PlayerMinDTO>> {
-        return this.httpClient.get<Array<PlayerMinDTO>> (
-            `${this.API_URL}/players`,
+    public findAllGameModes(): Observable<GameModeDTO[]> {
+        return this.httpClient.get<GameModeDTO[]> (
+            `${this.API_URL}/gamemodes`
         );
     }
+
 }

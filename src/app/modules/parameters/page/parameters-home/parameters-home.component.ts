@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
-import { FindAllParametersDTO } from 'src/app/models/interfaces/parameters/response/FindAllParametersDTO';
+import { ParameterMinDTO } from 'src/app/models/interfaces/parameters/response/ParameterMinDTO';
 import { ParameterService } from 'src/app/services/parameter/parameter.service';
 
 @Component({
@@ -12,7 +12,7 @@ export class ParametersHomeComponent implements OnInit, OnDestroy {
 
     private readonly destroy$: Subject<void> = new Subject();
 
-    public parameters: FindAllParametersDTO[] = [];
+    public parameters: ParameterMinDTO[] = [];
 
     constructor (
         private parameterService: ParameterService

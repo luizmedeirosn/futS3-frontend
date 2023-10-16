@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { FindAllParametersDTO } from 'src/app/models/interfaces/parameters/response/FindAllParametersDTO';
+import { ParameterMinDTO } from 'src/app/models/interfaces/parameters/response/ParameterMinDTO';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/app/environments/environment.prod';
@@ -16,8 +16,8 @@ export class ParameterService {
     ) {
     }
 
-    public findAllParameters(): Observable<FindAllParametersDTO[]> {
-        return this.httpClient.get<FindAllParametersDTO[]>(
+    public findAllParameters(): Observable<ParameterMinDTO[]> {
+        return this.httpClient.get<ParameterMinDTO[]>(
             `${this.API_URL}/parameters`
         );
     }
