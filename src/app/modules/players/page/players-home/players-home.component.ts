@@ -14,7 +14,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
 
     public players: Array<PlayerMinDTO> = [];
 
-    constructor (
+    public constructor (
         private playerService: PlayerService
     ) {
     }

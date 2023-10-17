@@ -1,9 +1,9 @@
 <p-card
     styleClass="shadow-3 m-5"
-    header="Parameters"
+    header="Game Modes"
 >
     <p-table
-        [value]="parameters"
+        [value]="gameModes"
         dataKey="id"
         [rows]="100"
         [paginator]="true"
@@ -35,16 +35,34 @@
                         </div>
                     </div>
                 </th>
-                <th id="2" pSortableColumn="name">
+                <th id="2" pSortableColumn="formationName">
                     <div class="flex justify-content-between align-items-center">
-                        <div class="flex justify-content-between align-items-center">
-                            Name
+                        <div class="flex justify-content-between align-items-center" style="white-space: nowrap;">
+                            Formation Name
                         </div>
                         <div class="flex justify-content-between align-items-center">
-                            <p-sortIcon field="name"></p-sortIcon>
+                            <p-sortIcon field="formationName"></p-sortIcon>
                             <p-columnFilter
                                 type="text"
-                                field="name"
+                                field="formationName"
+                                display="menu"
+                                matchMode="contains"
+                                [showMatchModes]="false"
+                                [showOperator]="false"
+                                [showAddButton]="false"
+                            ></p-columnFilter>
+                        </div>
+                    </div>
+                </th>
+                <th id="2">
+                    <div class="flex justify-content-between align-items-center">
+                        <div class="flex justify-content-between align-items-center">
+                            Description
+                        </div>
+                        <div class="flex justify-content-between align-items-center">
+                            <p-columnFilter
+                                type="text"
+                                field="description"
                                 display="menu"
                                 matchMode="contains"
                                 [showMatchModes]="false"
@@ -56,10 +74,11 @@
                 </th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-parameter>
+        <ng-template pTemplate="body" let-gameMode>
             <tr>
-                <td>{{ parameter.id }}</td>
-                <td>{{ parameter.name }}</td>
+                <td>{{ gameMode.id }}</td>
+                <td>{{ gameMode.formationName }}</td>
+                <td>{{ gameMode.description }}</td>
             </tr>
         </ng-template>
     </p-table>
