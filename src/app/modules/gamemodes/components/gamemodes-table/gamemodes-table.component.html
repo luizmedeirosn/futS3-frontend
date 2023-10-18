@@ -1,85 +1,93 @@
-<p-card
-    styleClass="shadow-3 m-5 font-arial"
-    header="Game Modes"
->
-    <p-table
-        [value]="gameModes"
-        dataKey="id"
-        [rows]="100"
-        [paginator]="true"
-        [responsive]="true"
-        [showCurrentPageReport]="true"
-        [tableStyle]="{'min-width': '75rem'}"
-        [globalFilterFields]="['id', 'name']"
-        [rowHover]="true"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} parameters"
-        >
-        <ng-template pTemplate="header">
-            <tr>
-                <th id="1" pSortableColumn="id">
-                    <div class="flex justify-content-between align-items-center">
+<div class="table">
+    <p-card
+        styleClass="shadow-3 m-5"
+    >
+        <div class="header" style="font-size:2.5rem; font-family: Arial, Helvetica, sans-serif; color: #136c34; margin-bottom: 1rem; text-align: center;">
+            Game Modes
+        </div>
+        <p-table
+            [value]="gameModes"
+            dataKey="id"
+            [rows]="100"
+            [paginator]="true"
+            [responsive]="true"
+            [showCurrentPageReport]="true"
+            [tableStyle]="{'min-width': '75rem'}"
+            [globalFilterFields]="['id', 'name']"
+            [rowHover]="true"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} parameters"
+            >
+            <ng-template pTemplate="header">
+                <tr>
+                    <th id="1" pSortableColumn="id">
                         <div class="flex justify-content-between align-items-center">
-                            ID
+                            <div class="flex justify-content-center align-items-center text-lg mt-1">
+                                ID
+                            </div>
+                            <div class="flex justify-content-between align-items-center">
+                                <p-sortIcon field="id"></p-sortIcon>
+                                <p-columnFilter
+                                    type="text"
+                                    field="id"
+                                    display="menu"
+                                    matchMode="contains"
+                                    [showMatchModes]="false"
+                                    [showOperator]="false"
+                                    [showAddButton]="false"
+                                    style="height: 1.7rem;"
+                                ></p-columnFilter>
+                            </div>
                         </div>
+                    </th>
+                    <th id="2" pSortableColumn="formationName">
                         <div class="flex justify-content-between align-items-center">
-                            <p-sortIcon field="id"></p-sortIcon>
-                            <p-columnFilter
-                                type="text"
-                                field="id"
-                                display="menu"
-                                matchMode="contains"
-                                [showMatchModes]="false"
-                                [showOperator]="false"
-                                [showAddButton]="false"
-                            ></p-columnFilter>
+                            <div class="flex justify-content-center align-items-center text-lg mt-1 text-nowrap" style="white-space: nowrap;">
+                                Formation Name
+                            </div>
+                            <div class="flex justify-content-between align-items-center">
+                                <p-sortIcon field="formationName"></p-sortIcon>
+                                <p-columnFilter
+                                    type="text"
+                                    field="formationName"
+                                    display="menu"
+                                    matchMode="contains"
+                                    [showMatchModes]="false"
+                                    [showOperator]="false"
+                                    [showAddButton]="false"
+                                    style="height: 1.7rem;"
+                                ></p-columnFilter>
+                            </div>
                         </div>
-                    </div>
-                </th>
-                <th id="2" pSortableColumn="formationName">
-                    <div class="flex justify-content-between align-items-center">
-                        <div class="flex justify-content-between align-items-center" style="white-space: nowrap;">
-                            Formation Name
-                        </div>
+                    </th>
+                    <th id="2">
                         <div class="flex justify-content-between align-items-center">
-                            <p-sortIcon field="formationName"></p-sortIcon>
-                            <p-columnFilter
-                                type="text"
-                                field="formationName"
-                                display="menu"
-                                matchMode="contains"
-                                [showMatchModes]="false"
-                                [showOperator]="false"
-                                [showAddButton]="false"
-                            ></p-columnFilter>
+                            <div class="flex justify-content-center align-items-center text-lg mt-1">
+                                Description
+                            </div>
+                            <div class="flex justify-content-between align-items-center">
+                                <p-columnFilter
+                                    type="text"
+                                    field="description"
+                                    display="menu"
+                                    matchMode="contains"
+                                    [showMatchModes]="false"
+                                    [showOperator]="false"
+                                    [showAddButton]="false"
+                                    style="height: 1.7rem;"
+
+                                ></p-columnFilter>
+                            </div>
                         </div>
-                    </div>
-                </th>
-                <th id="2">
-                    <div class="flex justify-content-between align-items-center">
-                        <div class="flex justify-content-between align-items-center">
-                            Description
-                        </div>
-                        <div class="flex justify-content-between align-items-center">
-                            <p-columnFilter
-                                type="text"
-                                field="description"
-                                display="menu"
-                                matchMode="contains"
-                                [showMatchModes]="false"
-                                [showOperator]="false"
-                                [showAddButton]="false"
-                            ></p-columnFilter>
-                        </div>
-                    </div>
-                </th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-gameMode>
-            <tr>
-                <td>{{ gameMode.id }}</td>
-                <td>{{ gameMode.formationName }}</td>
-                <td>{{ gameMode.description }}</td>
-            </tr>
-        </ng-template>
-    </p-table>
-</p-card>
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-gameMode>
+                <tr>
+                    <td>{{ gameMode.id }}</td>
+                    <td>{{ gameMode.formationName }}</td>
+                    <td>{{ gameMode.description }}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-card>
+</div>

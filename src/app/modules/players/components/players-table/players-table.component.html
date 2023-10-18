@@ -1,67 +1,73 @@
-<p-card
-    styleClass="shadow-3 m-5 font-arial"
-    header="Players"
->
-    <p-table
-    styleClass="font-arial"
-        [value]="players"
-        dataKey="id"
-        [rows]="100"
-        [paginator]="true"
-        [responsive]="true"
-        [showCurrentPageReport]="true"
-        [tableStyle]="{'min-width': '75rem'}"
-        [globalFilterFields]="['playerName', 'positionName']"
-        [rowHover]="true"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} players"
-        >
-        <ng-template pTemplate="header">
-            <tr>
-                <th id="1" pSortableColumn="playerName">
-                    <div class="flex justify-content-between align-items-center">
+<div class="table">
+    <p-card
+        styleClass="shadow-3 m-3"
+    >
+        <div class="header" style="font-size:2.5rem; font-family: Arial, Helvetica, sans-serif; color: #136c34; margin-bottom: 1rem; text-align: center;">
+            Players
+        </div>
+        <p-table
+        styleClass="font-arial"
+            [value]="players"
+            dataKey="id"
+            [rows]="100"
+            [paginator]="true"
+            [responsive]="true"
+            [showCurrentPageReport]="true"
+            [tableStyle]="{'min-width': '75rem'}"
+            [globalFilterFields]="['playerName', 'positionName']"
+            [rowHover]="true"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} players"
+            >
+            <ng-template pTemplate="header">
+                <tr>
+                    <th id="1" pSortableColumn="playerName">
                         <div class="flex justify-content-between align-items-center">
-                            Name
-                      </div>
-                      <div class="flex justify-content-between align-items-center">
-                        <p-sortIcon field="playerName"></p-sortIcon>
-                        <p-columnFilter
-                            type="text"
-                            field="playerName"
-                            display="menu"
-                            matchMode="contains"
-                            [showMatchModes]="false"
-                            [showOperator]="false"
-                            [showAddButton]="false"
-                        ></p-columnFilter>
-                      </div>
-                    </div>
-                </th>
-                <th id="2" pSortableColumn="playerPosition">
-                    <div class="flex justify-content-between align-items-center">
-                      <div class="flex justify-content-between align-items-center">
-                        Position
-                      </div>
-                      <div class="flex justify-content-between align-items-center">
-                        <p-sortIcon field="playerPosition"></p-sortIcon>
-                        <p-columnFilter
-                            type="text"
-                            field="positionName"
-                            display="menu"
-                            matchMode="contains"
-                            [showMatchModes]="false"
-                            [showOperator]="false"
-                            [showAddButton]="false"
-                        ></p-columnFilter>
-                      </div>
-                    </div>
-                </th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-player>
-            <tr>
-                <td>{{ player.playerName }}</td>
-                <td>{{ player.positionName }}</td>
-            </tr>
-        </ng-template>
-    </p-table>
-</p-card>
+                            <div class="flex justify-content-between align-items-center text-lg mt-1">
+                                Name
+                          </div>
+                          <div class="flex justify-content-between align-items-center">
+                            <p-sortIcon field="playerName"></p-sortIcon>
+                            <p-columnFilter
+                                type="text"
+                                field="playerName"
+                                display="menu"
+                                matchMode="contains"
+                                [showMatchModes]="false"
+                                [showOperator]="false"
+                                [showAddButton]="false"
+                                style="height: 1.8rem;"
+                            ></p-columnFilter>
+                          </div>
+                        </div>
+                    </th>
+                    <th id="2" pSortableColumn="playerPosition">
+                        <div class="flex justify-content-between align-items-center">
+                            <div class="flex justify-content-center align-items-center text-lg mt-1">
+                                Position
+                          </div>
+                          <div class="flex justify-content-between align-items-center">
+                            <p-sortIcon field="playerPosition"></p-sortIcon>
+                            <p-columnFilter
+                                type="text"
+                                field="positionName"
+                                display="menu"
+                                matchMode="contains"
+                                [showMatchModes]="false"
+                                [showOperator]="false"
+                                [showAddButton]="false"
+                                style="height: 1.8rem;"
+                            ></p-columnFilter>
+                          </div>
+                        </div>
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-player>
+                <tr>
+                    <td>{{ player.playerName }}</td>
+                    <td>{{ player.positionName }}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-card>
+</div>
