@@ -7,3 +7,9 @@ body {
 .font-arial {
     font-family: Arial, Helvetica, sans-serif;
 }
+
+.table {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }

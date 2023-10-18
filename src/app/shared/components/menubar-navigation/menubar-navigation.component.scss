@@ -1,15 +1,15 @@
 :host::ng-deep {
     .p-menubar {
-        padding: 0 5rem;
+        padding: 0 0.5rem;
         background: linear-gradient(to right, #7fffd4, #ffef97);
         border: none;
-        color: white;
+        color: #fff;
     }
 }
 
 .logo {
-    width: 100px !important;
-    height: 100px !important;
+    width: 160px !important;
+    height: 160px !important;
     background-image: url('../../../../assets/logo-removebg.png') !important;
     background-size: cover !important;
     background-position: center !important;
