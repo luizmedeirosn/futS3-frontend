@@ -24,7 +24,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
     }
 
     private setPlayers(): void {
-        this.playerService.findAllPlayers()
+        this.playerService.findAll()
         .pipe(takeUntil(this.destroy$))
         .subscribe (
             {

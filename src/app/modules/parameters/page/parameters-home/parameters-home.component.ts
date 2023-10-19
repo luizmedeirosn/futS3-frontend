@@ -24,7 +24,7 @@ export class ParametersHomeComponent implements OnInit, OnDestroy {
     }
 
     private setParameters(): void {
-        this.parameterService.findAllParameters()
+        this.parameterService.findAll()
         .pipe(takeUntil(this.destroy$))
         .subscribe (
             {

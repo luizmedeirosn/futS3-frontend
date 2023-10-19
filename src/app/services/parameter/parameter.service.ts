@@ -16,7 +16,7 @@ export class ParameterService {
     ) {
     }
 
-    public findAllParameters(): Observable<ParameterMinDTO[]> {
+    public findAll(): Observable<ParameterMinDTO[]> {
         return this.httpClient.get<ParameterMinDTO[]>(
             `${this.API_URL}/parameters`
         );

@@ -16,7 +16,7 @@ export class GameModeService {
     ) {
     }
 
-    public findAllGameModes(): Observable<GameModeDTO[]> {
+    public findAll(): Observable<GameModeDTO[]> {
         return this.httpClient.get<GameModeDTO[]> (
             `${this.API_URL}/gamemodes`
         );

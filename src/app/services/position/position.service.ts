@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/app/environments/environment.prod';
-import { PlayerMinDTO } from 'src/app/models/interfaces/player/response/PlayerMinDTO';
+import { PositionDTO } from 'src/app/models/interfaces/position/response/PositionDTO';
 
 @Injectable({
     providedIn: 'root'
@@ -16,9 +16,9 @@ export class PlayerService {
     ) {
     };
 
-    public findAll(): Observable<Array<PlayerMinDTO>> {
-        return this.httpClient.get<Array<PlayerMinDTO>> (
-            `${this.API_URL}/players`,
+    public findAll(): Observable<Array<PositionDTO>> {
+        return this.httpClient.get<Array<PositionDTO>> (
+            `${this.API_URL}/positions`,
         );
     }
 }
