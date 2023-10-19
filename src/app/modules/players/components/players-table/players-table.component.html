@@ -20,11 +20,31 @@
             >
             <ng-template pTemplate="header">
                 <tr>
-                    <th id="1" pSortableColumn="playerName">
+                    <th id="1" pSortableColumn="playerId">
+                        <div class="flex justify-content-between align-items-center">
+                            <div class="flex justify-content-center align-items-center text-lg mt-1">
+                                ID
+                            </div>
+                            <div class="flex justify-content-between align-items-center">
+                                <p-sortIcon field="playerId"></p-sortIcon>
+                                <p-columnFilter
+                                    type="text"
+                                    field="playerId"
+                                    display="menu"
+                                    matchMode="contains"
+                                    [showMatchModes]="false"
+                                    [showOperator]="false"
+                                    [showAddButton]="false"
+                                    style="height: 1.7rem;"
+                                ></p-columnFilter>
+                            </div>
+                        </div>
+                    </th>
+                    <th id="2" pSortableColumn="playerName">
                         <div class="flex justify-content-between align-items-center">
                             <div class="flex justify-content-between align-items-center text-lg mt-1">
                                 Name
-                          </div>
+                            </div>
                           <div class="flex justify-content-between align-items-center">
                             <p-sortIcon field="playerName"></p-sortIcon>
                             <p-columnFilter
@@ -40,13 +60,13 @@
                           </div>
                         </div>
                     </th>
-                    <th id="2" pSortableColumn="playerPosition">
+                    <th id="3" pSortableColumn="positionName">
                         <div class="flex justify-content-between align-items-center">
                             <div class="flex justify-content-center align-items-center text-lg mt-1">
                                 Position
                           </div>
                           <div class="flex justify-content-between align-items-center">
-                            <p-sortIcon field="playerPosition"></p-sortIcon>
+                            <p-sortIcon field="positionName"></p-sortIcon>
                             <p-columnFilter
                                 type="text"
                                 field="positionName"
@@ -64,6 +84,7 @@
             </ng-template>
             <ng-template pTemplate="body" let-player>
                 <tr>
+                    <td>{{ player.playerId }}</td>
                     <td>{{ player.playerName }}</td>
                     <td>{{ player.positionName }}</td>
                 </tr>
