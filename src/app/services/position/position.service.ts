@@ -7,7 +7,7 @@ import { PositionDTO } from 'src/app/models/interfaces/position/response/Positio
 @Injectable({
     providedIn: 'root'
 })
-export class PlayerService {
+export class PositionService {
 
     private readonly API_URL: string = environment.API_URL;
 
