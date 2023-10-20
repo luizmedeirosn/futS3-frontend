@@ -1,5 +1,5 @@
 import { Component, Input, ViewEncapsulation } from '@angular/core';
-import { GameModeDTO } from './../../../../models/interfaces/gamemode/response/GameModeDTO';
+import { GameModeMinDTO } from '../../../../models/interfaces/gamemode/response/GameModeMinDTO';
 
 @Component({
   selector: 'app-gamemodes-table',
@@ -10,6 +10,6 @@ import { GameModeDTO } from './../../../../models/interfaces/gamemode/response/G
 export class GameModesTableComponent {
 
     @Input()
-    public gameModes: GameModeDTO[]= [];
+    public gameModes: GameModeMinDTO[]= [];
 
 }

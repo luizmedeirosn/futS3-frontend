@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
-import { ParameterMinDTO } from 'src/app/models/interfaces/parameters/response/ParameterMinDTO';
+import { ParameterDTO } from 'src/app/models/interfaces/parameters/response/ParameterDTO';
 import { ParameterService } from 'src/app/services/parameter/parameter.service';
 
 @Component({
@@ -15,7 +15,7 @@ export class ParametersHomeComponent implements OnInit, OnDestroy {
     private readonly toastLife: number = 2500;
 
 
-    public parameters: ParameterMinDTO[] = [];
+    public parameters: ParameterDTO[] = [];
 
     public constructor (
         private parameterService: ParameterService,

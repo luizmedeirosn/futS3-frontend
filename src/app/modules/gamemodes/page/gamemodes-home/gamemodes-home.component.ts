@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
-import { GameModeDTO } from 'src/app/models/interfaces/gamemode/response/GameModeDTO';
+import { GameModeMinDTO } from 'src/app/models/interfaces/gamemode/response/GameModeMinDTO';
 import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
 
 @Component({
@@ -14,7 +14,7 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
     private readonly destroy$: Subject<void> = new Subject();
     private readonly toastLife: number = 2500;
 
-    public gameModes: GameModeDTO[] = [];
+    public gameModes: GameModeMinDTO[] = [];
 
     public constructor (
         private gameModeService: GameModeService,

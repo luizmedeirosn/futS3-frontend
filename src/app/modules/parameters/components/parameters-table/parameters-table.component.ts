@@ -1,5 +1,5 @@
 import { Component, Input, ViewEncapsulation } from '@angular/core';
-import { ParameterMinDTO } from 'src/app/models/interfaces/parameters/response/ParameterMinDTO';
+import { ParameterDTO } from 'src/app/models/interfaces/parameters/response/ParameterDTO';
 
 @Component({
   selector: 'app-parameters-table',
@@ -10,6 +10,6 @@ import { ParameterMinDTO } from 'src/app/models/interfaces/parameters/response/P
 export class ParametersTableComponent {
 
     @Input()
-    public parameters: ParameterMinDTO[] = [];
+    public parameters: ParameterDTO[] = [];
 
 }

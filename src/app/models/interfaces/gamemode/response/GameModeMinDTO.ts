@@ -1,4 +1,4 @@
-export interface GameModeDTO {
+export interface GameModeMinDTO {
 
     id: number;
     formationName: string;

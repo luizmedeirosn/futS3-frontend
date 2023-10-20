@@ -1,4 +1,4 @@
-export interface ParameterMinDTO {
+export interface ParameterDTO {
 
     id: number;
     name: string;
