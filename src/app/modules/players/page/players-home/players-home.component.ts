@@ -12,6 +12,7 @@ import { PlayerService } from 'src/app/services/player/player.service';
 export class PlayersHomeComponent implements OnInit, OnDestroy {
 
     private readonly destroy$: Subject<void> = new Subject();
+    private readonly toastLife: number = 2500;
 
     public players: Array<PlayerMinDTO> = [];
 
@@ -40,12 +41,20 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                                 severity: 'success',
                                 summary: 'Success',
                                 detail: 'Successful search completed!',
-                                life: 3000
+                                life: this.toastLife
                             }
                         );
                     }
                 },
                 error: (err) => {
+                    this.messageService.add (
+                        {
+                            severity: 'error',
+                            summary: 'Error',
+                            detail: 'Please check your internet connection!',
+                            life: this.toastLife
+                        }
+                    );
                     console.log(err);
                 }
             }

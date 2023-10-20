@@ -12,6 +12,7 @@ import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
 export class GameModesHomeComponent implements OnInit, OnDestroy {
 
     private readonly destroy$: Subject<void> = new Subject();
+    private readonly toastLife: number = 2500;
 
     public gameModes: GameModeDTO[] = [];
 
@@ -23,6 +24,7 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
+        console.log(this.gameModes);
         this.setGameModes();
     }
 
@@ -39,7 +41,7 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
                                 severity: 'success',
                                 summary: 'Success',
                                 detail: 'Successful search completed!',
-                                life: 3000
+                                life: this.toastLife
                             }
                         );
                     }
@@ -50,7 +52,7 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
                             severity: 'error',
                             summary: 'Error',
                             detail: 'Please check your internet connection!',
-                            life: 3000
+                            life: this.toastLife
                         }
                     );
                     console.log(err);

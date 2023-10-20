@@ -12,6 +12,7 @@ import { PositionService } from 'src/app/services/position/position.service';
 export class PositionsHomeComponent implements OnInit, OnDestroy {
 
     private readonly destroy$: Subject<void> = new Subject();
+    private readonly toastLife: number = 2500;
 
     public positions: PositionDTO[] = [];
 
@@ -37,7 +38,7 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
                             severity: 'success',
                             summary: 'Success',
                             detail: 'Successful search completed!',
-                            life: 3000
+                            life: this.toastLife
                         }
                     );
                     this.positions = positions;
@@ -48,9 +49,10 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
                             severity: 'error',
                             summary: 'Error',
                             detail: 'Please check your internet connection!',
-                            life: 3000
+                            life: this.toastLife
                         }
                     );
+                    console.log(err);
                 }
             }
         );
