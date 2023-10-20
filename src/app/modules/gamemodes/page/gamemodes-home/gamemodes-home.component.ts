@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
 import { GameModeDTO } from 'src/app/models/interfaces/gamemode/response/GameModeDTO';
 import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
@@ -15,7 +16,9 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
     public gameModes: GameModeDTO[] = [];
 
     public constructor (
-        private gameModeService: GameModeService
+        private gameModeService: GameModeService,
+
+        private messageService: MessageService
     ) {
     }
 
@@ -31,9 +34,25 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
                 next: (gameModes) => {
                     if (gameModes.length > 0) {
                         this.gameModes = gameModes;
+                        this.messageService.add (
+                            {
+                                severity: 'success',
+                                summary: 'Success',
+                                detail: 'Successful search completed!',
+                                life: 3000
+                            }
+                        );
                     }
                 },
                 error: (err) => {
+                    this.messageService.add (
+                        {
+                            severity: 'error',
+                            summary: 'Error',
+                            detail: 'Please check your internet connection!',
+                            life: 3000
+                        }
+                    );
                     console.log(err);
                 }
             }

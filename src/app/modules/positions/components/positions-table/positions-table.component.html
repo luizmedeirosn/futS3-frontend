@@ -15,7 +15,7 @@
             [tableStyle]="{'min-width': '75rem'}"
             [globalFilterFields]="['id', 'name']"
             [rowHover]="true"
-            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} position"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} positions"
             >
             <ng-template pTemplate="header">
                 <tr>
@@ -59,7 +59,7 @@
                             </div>
                         </div>
                     </th>
-                    <th id="3">
+                    <th id="3" pSortableColumn="">
                         <div class="flex justify-content-between align-items-center">
                             <div class="flex justify-content-center align-items-center text-lg mt-1">
                                 Description

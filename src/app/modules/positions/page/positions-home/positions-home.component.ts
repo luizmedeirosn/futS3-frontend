@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
 import { PositionDTO } from 'src/app/models/interfaces/position/response/PositionDTO';
 import { PositionService } from 'src/app/services/position/position.service';
@@ -15,7 +16,9 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
     public positions: PositionDTO[] = [];
 
     constructor (
-        private positionService: PositionService
+        private positionService: PositionService,
+
+        private messageService: MessageService
     ) {
     }
 
@@ -29,12 +32,25 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
         .subscribe (
             {
                 next: (positions) => {
-                    if (positions.length > 0) {
-                        this.positions = positions;
-                    }
+                    this.messageService.add (
+                        {
+                            severity: 'success',
+                            summary: 'Success',
+                            detail: 'Successful search completed!',
+                            life: 3000
+                        }
+                    );
+                    this.positions = positions;
                 },
                 error: (err) => {
-                    console.log(err);
+                    this.messageService.add (
+                        {
+                            severity: 'error',
+                            summary: 'Error',
+                            detail: 'Please check your internet connection!',
+                            life: 3000
+                        }
+                    );
                 }
             }
         );

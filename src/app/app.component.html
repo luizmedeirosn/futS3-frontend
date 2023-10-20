@@ -1,1 +1,12 @@
 <router-outlet></router-outlet>
+
+<p-toast
+  position="bottom-right"
+  [showTransformOptions]="'translateY(100%)'"
+  [showTransformOptions]="'translateX(100%)'"
+  [showTransitionOptions]="'1000ms'"
+  [hideTransitionOptions]="'1000ms'"
+  styleClass="opacity-100"
+  [breakpoints]="{ '920px' : { width: '100%', right: '0', left: '0' } }"
+  [style]="{'white-space': 'nowrap'}"
+></p-toast>

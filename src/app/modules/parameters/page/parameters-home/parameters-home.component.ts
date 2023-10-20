@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
 import { ParameterMinDTO } from 'src/app/models/interfaces/parameters/response/ParameterMinDTO';
 import { ParameterService } from 'src/app/services/parameter/parameter.service';
@@ -15,7 +16,9 @@ export class ParametersHomeComponent implements OnInit, OnDestroy {
     public parameters: ParameterMinDTO[] = [];
 
     public constructor (
-        private parameterService: ParameterService
+        private parameterService: ParameterService,
+
+        private messageService: MessageService
     ) {
     }
 
@@ -31,9 +34,26 @@ export class ParametersHomeComponent implements OnInit, OnDestroy {
                 next: (parameters) => {
                     if (parameters.length > 0) {
                         this.parameters = parameters;
+                        this.messageService.add (
+                            {
+                                severity: 'success',
+                                summary: 'Success',
+                                detail: 'Successful search completed!',
+                                life: 3000
+                            }
+                        );
+
                     }
                 },
                 error: (err) => {
+                    this.messageService.add (
+                        {
+                            severity: 'error',
+                            summary: 'Error',
+                            detail: 'Please check your internet connection!',
+                            life: 3000
+                        }
+                    );
                     console.log(err);
                 }
             }

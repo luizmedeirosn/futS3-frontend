@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
 import { PlayerMinDTO } from 'src/app/models/interfaces/player/response/PlayerMinDTO';
 import { PlayerService } from 'src/app/services/player/player.service';
@@ -15,7 +16,9 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
     public players: Array<PlayerMinDTO> = [];
 
     public constructor (
-        private playerService: PlayerService
+        private playerService: PlayerService,
+
+        private messageService: MessageService
     ) {
     }
 
@@ -32,6 +35,14 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                     if (players.length > 0) {
                         console.log(players);
                         this.players = players.slice().reverse();
+                        this.messageService.add (
+                            {
+                                severity: 'success',
+                                summary: 'Success',
+                                detail: 'Successful search completed!',
+                                life: 3000
+                            }
+                        );
                     }
                 },
                 error: (err) => {

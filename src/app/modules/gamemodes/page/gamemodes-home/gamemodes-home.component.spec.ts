@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GamemodesHomeComponent } from './gamemodes-home.component';
+import { GameModesHomeComponent } from './gamemodes-home.component';
 
-describe('GamemodesHomeComponent', () => {
-  let component: GamemodesHomeComponent;
-  let fixture: ComponentFixture<GamemodesHomeComponent>;
+describe('GameModesHomeComponent', () => {
+  let component: GameModesHomeComponent;
+  let fixture: ComponentFixture<GameModesHomeComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [GamemodesHomeComponent]
+      declarations: [GameModesHomeComponent]
     });
-    fixture = TestBed.createComponent(GamemodesHomeComponent);
+    fixture = TestBed.createComponent(GameModesHomeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
