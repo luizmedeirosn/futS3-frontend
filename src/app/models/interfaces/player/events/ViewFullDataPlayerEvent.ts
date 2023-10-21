@@ -1,6 +1,5 @@
 export interface ViewFullDataPlayerEvent {
 
-    action: string;
-    id: string;
+    id: number;
 
 }

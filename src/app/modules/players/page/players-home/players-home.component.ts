@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
+import { ViewFullDataPlayerEvent } from 'src/app/models/interfaces/player/events/ViewFullDataPlayerEvent';
 import { PlayerMinDTO } from 'src/app/models/interfaces/player/response/PlayerMinDTO';
 import { PlayerService } from 'src/app/services/player/player.service';
 
@@ -58,6 +59,39 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                 }
             }
         );
+    }
+
+    handleViewFullDataPlayerAction($event: ViewFullDataPlayerEvent) {
+        if ($event) {
+            this.playerService.findFullById ($event.id)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(
+                {
+                    next: (player) => {
+                        this.messageService.add (
+                            {
+                                severity: 'success',
+                                summary: 'Success',
+                                detail: 'Access granted successfully!',
+                                life: 2500
+                            }
+                        );
+                        console.log(player);
+                    },
+                    error: (err) => {
+                        this.messageService.add (
+                            {
+                                severity: 'error',
+                                summary: 'Error',
+                                detail: 'Unable to access the player!',
+                                life: 2500
+                            }
+                        );
+                        console.log(err);
+                    }
+                }
+            );
+        }
     }
 
     public ngOnDestroy(): void {

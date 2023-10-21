@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/app/environments/environment.prod';
+import { PlayerFullDTO } from 'src/app/models/interfaces/player/response/PlayerFullDTO';
 import { PlayerMinDTO } from 'src/app/models/interfaces/player/response/PlayerMinDTO';
 
 @Injectable({
@@ -19,6 +20,12 @@ export class PlayerService {
     public findAll(): Observable<Array<PlayerMinDTO>> {
         return this.httpClient.get<Array<PlayerMinDTO>> (
             `${this.API_URL}/players`,
+        );
+    }
+
+    public findFullById(id: number): Observable<PlayerFullDTO> {
+        return this.httpClient.get<PlayerFullDTO> (
+            `${this.API_URL}/players/${id}/full`,
         );
     }
 }
