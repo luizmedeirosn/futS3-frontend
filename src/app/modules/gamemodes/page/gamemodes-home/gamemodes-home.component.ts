@@ -24,7 +24,6 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        console.log(this.gameModes);
         this.setGameModes();
     }
 

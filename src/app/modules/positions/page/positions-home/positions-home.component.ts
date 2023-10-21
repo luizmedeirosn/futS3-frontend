@@ -33,6 +33,7 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
         .subscribe (
             {
                 next: (positions) => {
+                    this.positions = positions;
                     this.messageService.add (
                         {
                             severity: 'success',
@@ -41,7 +42,6 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
                             life: this.toastLife
                         }
                     );
-                    this.positions = positions;
                 },
                 error: (err) => {
                     this.messageService.add (

@@ -9,6 +9,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 
 import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
+import { ToastModule } from 'primeng/toast';
 
 
 
@@ -25,6 +26,7 @@ import { TableModule } from 'primeng/table';
 
     CardModule,
     TableModule,
+    ToastModule,
   ]
 })
 export class GamemodesModule { }

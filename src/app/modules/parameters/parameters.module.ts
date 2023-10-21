@@ -9,6 +9,7 @@ import { PARAMETERS_ROUTES } from './parameters.routing';
 
 import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
+import { ToastModule } from 'primeng/toast';
 
 
 
@@ -26,6 +27,7 @@ import { TableModule } from 'primeng/table';
 
     CardModule,
     TableModule,
+    ToastModule,
   ]
 })
 export class ParametersModule { }

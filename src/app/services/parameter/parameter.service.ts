@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { ParameterDTO } from 'src/app/models/interfaces/parameters/response/ParameterDTO';
+import { ParameterDTO } from 'src/app/models/interfaces/parameter/response/ParameterDTO';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/app/environments/environment.prod';

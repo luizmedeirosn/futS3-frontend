@@ -34,7 +34,6 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
             {
                 next: (players: PlayerMinDTO[]) => {
                     if (players.length > 0) {
-                        console.log(players);
                         this.players = players.slice().reverse();
                         this.messageService.add (
                             {

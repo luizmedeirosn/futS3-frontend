@@ -10,6 +10,7 @@ import { PLAYERS_ROUTES } from './players.routing';
 
 import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
+import { ToastModule } from 'primeng/toast';
 
 
 @NgModule({
@@ -25,6 +26,7 @@ import { TableModule } from 'primeng/table';
 
     CardModule,
     TableModule,
-  ]
+    ToastModule,
+]
 })
 export class PlayersHomeModule { }

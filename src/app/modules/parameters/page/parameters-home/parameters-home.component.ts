@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
-import { ParameterDTO } from 'src/app/models/interfaces/parameters/response/ParameterDTO';
+import { ParameterDTO } from 'src/app/models/interfaces/parameter/response/ParameterDTO';
 import { ParameterService } from 'src/app/services/parameter/parameter.service';
 
 @Component({
