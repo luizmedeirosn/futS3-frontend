@@ -1,6 +1,13 @@
 <div class="flex justify-content-center">
-    <p-card>
-        <div class="flex"></div>
+    <p-card
+    >
+        <div class="flex justify-start">
+            <button
+                pButton
+                icon="pi pi-arrow-left"
+                (click)="handleBackEvent()"
+            ></button>
+        </div>
         <div class="flex"></div>
         <p-table></p-table>
     </p-card>

@@ -111,6 +111,10 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
         }
     }
 
+    public handleBackAction(): void {
+        this.playerService.playerView$.next(false);
+    }
+
     public ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();

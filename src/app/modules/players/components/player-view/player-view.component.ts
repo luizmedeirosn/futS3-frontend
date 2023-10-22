@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { PlayerFullDTO } from 'src/app/models/interfaces/player/response/PlayerFullDTO';
 
 @Component({
@@ -11,4 +11,10 @@ export class PlayerViewComponent {
     @Input()
     public player!: PlayerFullDTO;
 
+    @Output()
+    public backEvent: EventEmitter<void> = new EventEmitter();
+
+    public handleBackEvent() {
+        this.backEvent.emit();
+    }
 }

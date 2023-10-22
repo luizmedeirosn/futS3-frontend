@@ -9,4 +9,5 @@
 <app-player-view
     *ngIf="playerView"
     [player]="player"
+    (backEvent)="handleBackAction()"
 ></app-player-view>

@@ -12,6 +12,7 @@ import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { PlayerViewComponent } from './components/player-view/player-view.component';
+import { ButtonModule } from 'primeng/button';
 
 
 @NgModule({
@@ -29,6 +30,7 @@ import { PlayerViewComponent } from './components/player-view/player-view.compon
         CardModule,
         TableModule,
         ToastModule,
+        ButtonModule,
     ],
 })
 export class PlayersHomeModule { }
