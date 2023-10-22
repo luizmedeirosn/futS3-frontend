@@ -11,12 +11,14 @@ import { PLAYERS_ROUTES } from './players.routing';
 import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
+import { PlayerViewComponent } from './components/player-view/player-view.component';
 
 
 @NgModule({
   declarations: [
     PlayersHomeComponent,
-    PlayersTableComponent
+    PlayersTableComponent,
+    PlayerViewComponent
   ],
   imports: [
     CommonModule,

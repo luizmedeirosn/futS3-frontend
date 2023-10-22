@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuItem } from 'primeng/api';
+import { PlayersHomeComponent } from 'src/app/modules/players/page/players-home/players-home.component';
 
 @Component({
   selector: 'app-menubar-navigation',
@@ -9,6 +10,11 @@ import { MenuItem } from 'primeng/api';
 export class MenubarNavigationComponent implements OnInit {
 
     public items: MenuItem[] | undefined;
+
+    constructor (
+        private playersHomeComponent: PlayersHomeComponent,
+    ){
+    }
 
     public ngOnInit(): void {
         this.items = [
@@ -92,6 +98,7 @@ export class MenubarNavigationComponent implements OnInit {
                     {
                         label: 'Find All',
                         icon: 'pi pi-search',
+                        command: () => { this.playersHomeComponent.playerView = false },
                         routerLink: ['/players']
                     },
                     {

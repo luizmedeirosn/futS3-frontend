@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
 import { ViewFullDataPlayerEvent } from 'src/app/models/interfaces/player/events/ViewFullDataPlayerEvent';
+import { PlayerFullDTO } from 'src/app/models/interfaces/player/response/PlayerFullDTO';
 import { PlayerMinDTO } from 'src/app/models/interfaces/player/response/PlayerMinDTO';
 import { PlayerService } from 'src/app/services/player/player.service';
 
@@ -16,11 +17,14 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
     private readonly toastLife: number = 2500;
 
     public players: Array<PlayerMinDTO> = [];
+    public player!: PlayerFullDTO;
+
+    public playerView: boolean = false;
 
     public constructor (
         private playerService: PlayerService,
 
-        private messageService: MessageService
+        private messageService: MessageService,
     ) {
     }
 
@@ -68,6 +72,8 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
             .subscribe(
                 {
                     next: (player) => {
+                        this.player = player;
+                        this.playerView = true;
                         this.messageService.add (
                             {
                                 severity: 'success',
@@ -76,7 +82,6 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                                 life: 2500
                             }
                         );
-                        console.log(player);
                     },
                     error: (err) => {
                         this.messageService.add (
