@@ -77,7 +77,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
         );
     }
 
-    handleViewFullDataPlayerAction($event: ViewFullDataPlayerEvent) {
+    public handleViewFullDataPlayerAction($event: ViewFullDataPlayerEvent): void {
         if ($event) {
             this.playerService.findFullById ($event.id)
             .pipe(takeUntil(this.destroy$))
