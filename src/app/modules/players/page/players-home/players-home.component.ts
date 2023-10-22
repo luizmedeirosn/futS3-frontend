@@ -19,7 +19,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
     public players: Array<PlayerMinDTO> = [];
     public player!: PlayerFullDTO;
 
-    public playerView: boolean = false;
+    public playerView!: boolean;
 
     public constructor (
         private playerService: PlayerService,
@@ -30,6 +30,18 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.setPlayers();
+        this.playerService.playerView$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe (
+            {
+                next: (playerView) => {
+                    this.playerView = playerView;
+                },
+                error: (err) => {
+                    console.log(err);
+                }
+            }
+        );
     }
 
     private setPlayers(): void {
@@ -73,7 +85,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                 {
                     next: (player) => {
                         this.player = player;
-                        this.playerView = true;
+                        this.playerService.playerView$.next(true);
                         this.messageService.add (
                             {
                                 severity: 'success',

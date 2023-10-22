@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
-import { MenubarModule } from 'primeng/menubar';
 import { ButtonModule } from 'primeng/button';
+import { MenubarModule } from 'primeng/menubar';
 
 import { MenubarNavigationComponent } from './components/menubar-navigation/menubar-navigation.component';
 import { ShortenPipe } from './pipes/shorten.pipe';

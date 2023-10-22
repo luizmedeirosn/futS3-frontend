@@ -15,20 +15,20 @@ import { PlayerViewComponent } from './components/player-view/player-view.compon
 
 
 @NgModule({
-  declarations: [
-    PlayersHomeComponent,
-    PlayersTableComponent,
-    PlayerViewComponent
-  ],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(PLAYERS_ROUTES),
+    declarations: [
+        PlayersHomeComponent,
+        PlayersTableComponent,
+        PlayerViewComponent
+    ],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(PLAYERS_ROUTES),
 
-    SharedModule,
+        SharedModule,
 
-    CardModule,
-    TableModule,
-    ToastModule,
-]
+        CardModule,
+        TableModule,
+        ToastModule,
+    ],
 })
 export class PlayersHomeModule { }
