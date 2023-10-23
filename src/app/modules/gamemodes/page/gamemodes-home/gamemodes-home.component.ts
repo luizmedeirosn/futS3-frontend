@@ -12,7 +12,7 @@ import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
 export class GameModesHomeComponent implements OnInit, OnDestroy {
 
     private readonly destroy$: Subject<void> = new Subject();
-    private readonly toastLife: number = 2500;
+    private readonly toastLife: number = 1500;
 
     public gameModes: GameModeMinDTO[] = [];
 

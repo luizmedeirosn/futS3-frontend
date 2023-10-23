@@ -12,7 +12,7 @@ import { ParameterService } from 'src/app/services/parameter/parameter.service';
 export class ParametersHomeComponent implements OnInit, OnDestroy {
 
     private readonly destroy$: Subject<void> = new Subject();
-    private readonly toastLife: number = 2500;
+    private readonly toastLife: number = 1500;
 
 
     public parameters: ParameterDTO[] = [];

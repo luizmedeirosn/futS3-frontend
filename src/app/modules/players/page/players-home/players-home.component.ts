@@ -14,7 +14,7 @@ import { PlayerService } from 'src/app/services/player/player.service';
 export class PlayersHomeComponent implements OnInit, OnDestroy {
 
     private readonly destroy$: Subject<void> = new Subject();
-    private readonly toastLife: number = 2500;
+    private readonly toastLife: number = 1500;
 
     public players: Array<PlayerMinDTO> = [];
     public player!: PlayerFullDTO;
@@ -91,7 +91,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                                 severity: 'success',
                                 summary: 'Success',
                                 detail: 'Access granted successfully!',
-                                life: 2500
+                                life: this.toastLife
                             }
                         );
                     },
@@ -101,7 +101,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                                 severity: 'error',
                                 summary: 'Error',
                                 detail: 'Unable to access the player!',
-                                life: 2500
+                                life: this.toastLife
                             }
                         );
                         console.log(err);
