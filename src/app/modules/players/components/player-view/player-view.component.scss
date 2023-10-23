@@ -1,12 +1,23 @@
 .player-picture {
     img {
-        width: 170px !important;
-        height: 270px !important;
+        width: 270px !important;
+        height: 370px !important;
         border-radius: 0.375rem;
         border-style: solid;
         border-color: var(--green-700);
         border-width: 0.200rem;
 
+    }
+}
+
+.without-picture {
+    img {
+        width: 160px !important;
+        height: 160px !important;
+        border-radius: 0.375rem;
+        border-style: solid;
+        border-color: var(--green-700);
+        border-width: 0.200rem;
     }
 }
 
