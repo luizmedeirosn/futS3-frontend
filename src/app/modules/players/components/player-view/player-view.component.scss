@@ -1,0 +1,18 @@
+.player-picture {
+    img {
+        width: 170px !important;
+        height: 270px !important;
+        border-radius: 0.375rem;
+        border-style: solid;
+        border-color: var(--green-700);
+        border-width: 0.200rem;
+
+    }
+}
+
+.p-fieldset {
+    background-color: #f7f8f9;
+    legend {
+        background-color: #dadee3;
+    }
+}
