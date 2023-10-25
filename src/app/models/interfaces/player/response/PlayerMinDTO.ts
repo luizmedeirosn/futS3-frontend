@@ -1,9 +1,10 @@
+import { PositionDTO } from "../../position/response/PositionDTO";
+
 export interface PlayerMinDTO {
 
-    playerId: number;
-    playerName: string;
-    positionId: number;
-    positionName: string;
+    id: number;
+    name: string;
+    position: PositionDTO;
     profilePictureLink: string;
 
 }

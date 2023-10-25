@@ -15,6 +15,7 @@ import { FieldsetModule } from 'primeng/fieldset';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
+import { ImageModule } from 'primeng/image';
 
 
 @NgModule({
@@ -34,6 +35,7 @@ import { TooltipModule } from 'primeng/tooltip';
         ToastModule,
         ButtonModule,
         TooltipModule,
+        ImageModule,
         FieldsetModule,
     ],
 })

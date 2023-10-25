@@ -13,22 +13,21 @@
             [paginator]="true"
             [showCurrentPageReport]="true"
             [tableStyle]="{'min-width': '75rem'}"
-            [globalFilterFields]="['playerName', 'positionName']"
             [rowHover]="true"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} players"
             >
-            <ng-template pTemplate="header">
+            <ng-template pTemplate="header" let-player>
                 <tr>
-                    <th id="1" pSortableColumn="playerId">
+                    <th id="1" pSortableColumn="id">
                         <div class="flex justify-content-between align-items-center">
                             <div class="flex justify-content-center align-items-center text-lg mt-1">
                                 ID
                             </div>
                             <div class="flex justify-content-between align-items-center">
-                                <p-sortIcon field="playerId"></p-sortIcon>
+                                <p-sortIcon field="id"></p-sortIcon>
                                 <p-columnFilter
                                     type="text"
-                                    field="playerId"
+                                    field="id"
                                     display="menu"
                                     matchMode="contains"
                                     [showMatchModes]="false"
@@ -39,16 +38,23 @@
                             </div>
                         </div>
                     </th>
-                    <th id="2" pSortableColumn="playerName">
+                    <th id="2" pSortableColumn="">
+                        <div class="flex justify-content-between align-items-center">
+                            <div class="flex justify-content-center align-items-center text-lg mt-1">
+                                Profile Picture
+                            </div>
+                        </div>
+                    </th>
+                    <th id="3" pSortableColumn="name">
                         <div class="flex justify-content-between align-items-center">
                             <div class="flex justify-content-between align-items-center text-lg mt-1">
                                 Name
                             </div>
                           <div class="flex justify-content-between align-items-center">
-                            <p-sortIcon field="playerName"></p-sortIcon>
+                            <p-sortIcon field="name"></p-sortIcon>
                             <p-columnFilter
                                 type="text"
-                                field="playerName"
+                                field="name"
                                 display="menu"
                                 matchMode="contains"
                                 [showMatchModes]="false"
@@ -59,38 +65,41 @@
                           </div>
                         </div>
                     </th>
-                    <th id="3" pSortableColumn="positionName">
+                    <th id="4" pSortableColumn="position.name">
                         <div class="flex justify-content-between align-items-center">
                             <div class="flex justify-content-center align-items-center text-lg mt-1">
                                 Position
-                          </div>
-                          <div class="flex justify-content-between align-items-center">
-                            <p-sortIcon field="positionName"></p-sortIcon>
-                            <p-columnFilter
-                                type="text"
-                                field="positionName"
-                                display="menu"
-                                matchMode="contains"
-                                [showMatchModes]="false"
-                                [showOperator]="false"
-                                [showAddButton]="false"
-                                style="height: 1.8rem;"
-                            ></p-columnFilter>
-                          </div>
+                            </div>
+                            <div class="flex justify-content-between align-items-center">
+                                <p-sortIcon field="position.name"></p-sortIcon>
+                                <p-columnFilter
+                                    type="text"
+                                    field="position.name"
+                                    display="menu"
+                                    matchMode="contains"
+                                    [showMatchModes]="false"
+                                    [showOperator]="false"
+                                    [showAddButton]="false"
+                                    style="height: 1.8rem;"
+                                ></p-columnFilter>
+                            </div>
                         </div>
                     </th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-player>
                 <tr>
-                    <td (click)="handleViewFullDataPlayerEvent(player.playerId)">
-                        {{ player.playerId }}
+                    <td (click)="handleViewFullDataPlayerEvent(player.id)" class="cell-text-player-table">
+                        {{ player.id }}
                     </td>
-                    <td (click)="handleViewFullDataPlayerEvent(player.playerId)">
-                        {{ player.playerName }}
+                    <td (click)="handleViewFullDataPlayerEvent(player.id)" class="cell-text-player-table">
+                        <img alt="" src="{{ player.profilePictureLink }}" class="player-profile-picture"/>
                     </td>
-                    <td (click)="handleViewFullDataPlayerEvent(player.playerId)">
-                        {{ player.positionName }}
+                    <td (click)="handleViewFullDataPlayerEvent(player.id)" class="cell-text-player-table">
+                        {{ player.name }}
+                    </td>
+                    <td (click)="handleViewFullDataPlayerEvent(player.id)" class="cell-text-player-table">
+                        {{ player.position.name }}
                     </td>
                 </tr>
             </ng-template>
