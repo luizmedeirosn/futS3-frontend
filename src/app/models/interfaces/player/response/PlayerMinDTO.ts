@@ -4,5 +4,6 @@ export interface PlayerMinDTO {
     playerName: string;
     positionId: number;
     positionName: string;
+    profilePictureLink: string;
 
 }

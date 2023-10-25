@@ -14,14 +14,12 @@
 
         <div class="flex justify-content-center align-items-center mt-3 gap-3">
             <div class="player-picture">
-                <img
-                    *ngIf="player.id != 1 && player.id != 26"
+                <img *ngIf=" player.profilePictureLink === '' "
                     src="../../../../../assets/without-picture.png"
                     alt="profile-picture" class="border-none without-picture"
                     style="width: 160px !important; height: 160px !important;"
                 >
-                <img *ngIf="player.id == 1" src="../../../../../assets/1-denis.webp" alt="profile-picture">
-                <img *ngIf="player.id == 26" src="../../../../../assets/26-vagnerlove.webp" alt="profile-picture">
+                <img *ngIf=" player.profilePictureLink !== '' " src="{{ player.profilePictureLink }}" alt="profile-picture">
             </div>
             <div class="flex flex-column justify-content-center align-items-center">
                 <p-fieldset legend="Name" styleClass="m-1 w-6 white-space-nowrap">
