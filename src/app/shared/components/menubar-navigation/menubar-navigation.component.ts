@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { PlayerService } from 'src/app/services/player/player.service';
 
 @Component({
   selector: 'app-menubar-navigation',
   templateUrl: './menubar-navigation.component.html',
-  styleUrls: ['./menubar-navigation.component.scss']
+  styleUrls: ['./menubar-navigation.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class MenubarNavigationComponent implements OnInit {
 
