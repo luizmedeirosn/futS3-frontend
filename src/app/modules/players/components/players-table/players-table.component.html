@@ -93,7 +93,7 @@
                         {{ player.id }}
                     </td>
                     <td (click)="handleViewFullDataPlayerEvent(player.id)" class="cell-text-player-table">
-                        <img alt="" src="{{ player.profilePictureLink }}" class="player-profile-picture"/>
+                        <img alt="" src="{{ player.profilePictureLink || '../../../../../../../assets/without-picture.png' }}" class="{{ player.profilePictureLink ? 'player-profile-picture' : 'player-profile-without-picture' }}"/>
                     </td>
                     <td (click)="handleViewFullDataPlayerEvent(player.id)" class="cell-text-player-table">
                         {{ player.name }}
