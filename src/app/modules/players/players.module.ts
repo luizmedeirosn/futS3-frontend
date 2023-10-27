@@ -16,6 +16,7 @@ import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
 import { ImageModule } from 'primeng/image';
+import { DynamicDialogModule } from 'primeng/dynamicdialog';
 
 
 @NgModule({
@@ -37,6 +38,8 @@ import { ImageModule } from 'primeng/image';
         TooltipModule,
         ImageModule,
         FieldsetModule,
+        DynamicDialogModule,
+
     ],
 })
 export class PlayersHomeModule { }
