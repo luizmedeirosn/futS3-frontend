@@ -4,8 +4,7 @@ import { PlayerFullDTO } from 'src/app/models/interfaces/player/response/PlayerF
 @Component({
   selector: 'app-player-view',
   templateUrl: './player-view.component.html',
-  styleUrls: ['./player-view.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  styleUrls: ['./player-view.component.scss']
 })
 export class PlayerViewComponent {
 

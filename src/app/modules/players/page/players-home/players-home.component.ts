@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
 import { ViewFullDataPlayerEvent } from 'src/app/models/interfaces/player/events/ViewFullDataPlayerEvent';
@@ -9,7 +9,8 @@ import { PlayerService } from 'src/app/services/player/player.service';
 @Component({
   selector: 'app-players-home',
   templateUrl: './players-home.component.html',
-  styleUrls: []
+  styleUrls: [],
+  encapsulation: ViewEncapsulation.None
 })
 export class PlayersHomeComponent implements OnInit, OnDestroy {
 

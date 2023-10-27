@@ -1,12 +1,11 @@
-import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ViewFullDataPlayerEvent } from 'src/app/models/interfaces/player/events/ViewFullDataPlayerEvent';
 import { PlayerMinDTO } from 'src/app/models/interfaces/player/response/PlayerMinDTO';
 
 @Component({
   selector: 'app-players-table',
   templateUrl: './players-table.component.html',
-  styleUrls: ['./players-table.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  styleUrls: ['./players-table.component.scss']
 })
 export class PlayersTableComponent {
 

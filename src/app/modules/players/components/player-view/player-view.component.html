@@ -1,5 +1,6 @@
 <div class="flex justify-content-center">
     <p-card
+        styleClass="shadow-3 m-3"
         header="Player View"
     >
         <div class="flex justify-content-start">
@@ -13,13 +14,11 @@
         </div>
 
         <div class="flex justify-content-center align-items-center mt-3 gap-3">
-            <div class="player-picture">
-                <img *ngIf=" player.profilePictureLink === '' "
-                    src="../../../../../assets/without-picture.png"
-                    alt="profile-picture" class="border-none without-picture"
-                    style="width: 160px !important; height: 160px !important;"
+            <div class="{{ player.profilePictureLink ? 'player-profile-picture' : 'player-without-picture' }}">
+                <img
+                    src="{{ player.profilePictureLink || '../../../../../assets/without-picture.png' }}"
+                    alt="profile-picture"
                 >
-                <img *ngIf=" player.profilePictureLink !== '' " src="{{ player.profilePictureLink }}" alt="profile-picture">
             </div>
             <div class="flex flex-column justify-content-center align-items-center">
                 <p-fieldset legend="Name" styleClass="m-1 w-6 white-space-nowrap">
@@ -43,7 +42,6 @@
             [rows]="5"
             [paginator]="true"
             [showCurrentPageReport]="true"
-            [tableStyle]="{'min-width': '30rem'}"
             [globalFilterFields]="['id', 'name']"
             [rowHover]="true"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} parameters"
@@ -122,7 +120,7 @@
         </p-table>
 
         <ng-template #withoutParameters>
-            <h3 class="text-center text-large text-green-800">No parameters for now!</h3>
+            <h3 class="text-center text-large text-green-900">No parameters for now!</h3>
         </ng-template>
     </p-card>
 </div>

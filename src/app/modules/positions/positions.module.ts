@@ -9,6 +9,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
 import { PositionsTableComponent } from './components/positions-table/positions-table.component';
+import { PositionViewComponent } from './components/position-view/position-view.component';
 
 
 
@@ -16,6 +17,7 @@ import { PositionsTableComponent } from './components/positions-table/positions-
   declarations: [
     PositionsHomeComponent,
     PositionsTableComponent,
+    PositionViewComponent,
   ],
   imports: [
     CommonModule,

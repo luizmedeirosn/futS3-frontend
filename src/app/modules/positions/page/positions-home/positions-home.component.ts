@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
 import { PositionDTO } from 'src/app/models/interfaces/position/response/PositionDTO';
@@ -7,7 +7,8 @@ import { PositionService } from 'src/app/services/position/position.service';
 @Component({
   selector: 'app-positions-home',
   templateUrl: './positions-home.component.html',
-  styleUrls: []
+  styleUrls: [],
+  encapsulation: ViewEncapsulation.None
 })
 export class PositionsHomeComponent implements OnInit, OnDestroy {
 

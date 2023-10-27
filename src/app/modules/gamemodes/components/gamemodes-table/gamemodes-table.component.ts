@@ -1,11 +1,10 @@
-import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { GameModeMinDTO } from '../../../../models/interfaces/gamemode/response/GameModeMinDTO';
 
 @Component({
   selector: 'app-gamemodes-table',
   templateUrl: './gamemodes-table.component.html',
-  styleUrls: [],
-  encapsulation: ViewEncapsulation.None
+  styleUrls: []
 })
 export class GameModesTableComponent {
 

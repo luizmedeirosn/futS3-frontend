@@ -1,10 +1,8 @@
 <div class="flex justify-content-center">
     <p-card
         styleClass="shadow-3 m-3"
+        header="Parameters"
         >
-        <div class="header" style="font-size:2.5rem; font-family: Arial, Helvetica, sans-serif; color: #136c34; margin-bottom: 1rem; text-align: center;">
-            Parameters
-        </div>
         <p-table
             [value]="parameters"
             dataKey="id"
@@ -58,12 +56,33 @@
                             </div>
                         </div>
                     </th>
+                    <th id="3" pSortableColumn="description">
+                        <div class="flex justify-content-between align-items-center">
+                            <div class="flex justify-content-center align-items-center text-lg mt-1">
+                                Description
+                            </div>
+                            <div class="flex justify-content-between align-items-center">
+                                <p-sortIcon field="description"></p-sortIcon>
+                                <p-columnFilter
+                                    type="text"
+                                    field="description"
+                                    display="menu"
+                                    matchMode="contains"
+                                    [showMatchModes]="false"
+                                    [showOperator]="false"
+                                    [showAddButton]="false"
+                                    style="height: 1.7rem;"
+                                ></p-columnFilter>
+                            </div>
+                        </div>
+                    </th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-parameter>
                 <tr>
                     <td>{{ parameter.id }}</td>
                     <td>{{ parameter.name }}</td>
+                    <td>{{ parameter.description || 'No description fow now!' }}</td>
                 </tr>
             </ng-template>
         </p-table>
