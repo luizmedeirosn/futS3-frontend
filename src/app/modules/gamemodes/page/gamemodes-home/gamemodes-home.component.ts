@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
 import { GameModeMinDTO } from 'src/app/models/interfaces/gamemode/response/GameModeMinDTO';
@@ -7,8 +7,7 @@ import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
 @Component({
   selector: 'app-gamemodes-home',
   templateUrl: './gamemodes-home.component.html',
-  styleUrls: [],
-  encapsulation: ViewEncapsulation.None
+  styleUrls: []
 })
 export class GameModesHomeComponent implements OnInit, OnDestroy {
 

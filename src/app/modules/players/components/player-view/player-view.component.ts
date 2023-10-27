@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
 import { PlayerFullDTO } from 'src/app/models/interfaces/player/response/PlayerFullDTO';
 
 @Component({
   selector: 'app-player-view',
   templateUrl: './player-view.component.html',
-  styleUrls: ['./player-view.component.scss']
+  styleUrls: ['./player-view.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class PlayerViewComponent {
 

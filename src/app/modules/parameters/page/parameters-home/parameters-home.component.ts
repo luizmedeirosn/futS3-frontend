@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
 import { ParameterDTO } from 'src/app/models/interfaces/parameter/response/ParameterDTO';
@@ -7,8 +7,7 @@ import { ParameterService } from 'src/app/services/parameter/parameter.service';
 @Component({
   selector: 'app-parameters-home',
   templateUrl: './parameters-home.component.html',
-  styleUrls: [],
-  encapsulation: ViewEncapsulation.None
+  styleUrls: []
 })
 export class ParametersHomeComponent implements OnInit, OnDestroy {
 

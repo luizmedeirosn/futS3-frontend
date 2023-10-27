@@ -17,6 +17,7 @@ import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
 import { ImageModule } from 'primeng/image';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
+import { InputTextModule } from 'primeng/inputtext';
 
 
 @NgModule({
@@ -39,6 +40,7 @@ import { DynamicDialogModule } from 'primeng/dynamicdialog';
         ImageModule,
         FieldsetModule,
         DynamicDialogModule,
+        InputTextModule,
 
     ],
 })

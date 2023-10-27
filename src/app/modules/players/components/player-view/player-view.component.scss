@@ -18,8 +18,11 @@
 }
 
 .p-fieldset {
-    background-color: #f7f8f9;
+    background-color: #fffafa;
     legend {
         background-color: #dadee3;
+    }
+    .p-fieldset-content {
+        padding: 0.5rem;
     }
 }

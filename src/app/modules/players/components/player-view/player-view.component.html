@@ -32,20 +32,20 @@
             </div>
         </div>
 
-        <div class="flex justify-content-center align-items-center mt-3 gap-3">
-            <div class="{{ player.profilePictureLink ? 'player-profile-picture' : 'player-without-picture' }}">
+        <div class="flex justify-content-center align-content-center align-items-center mt-3 gap-3">
+            <div class="{{ player.profilePictureLink ? 'player-profile-picture' : 'player-profile-without-picture' }}">
                 <img
                     src="{{ player.profilePictureLink || '../../../../../assets/without-picture.png' }}"
                     alt="profile-picture"
                 >
             </div>
-            <div class="flex flex-column justify-content-center align-items-center">
-                <p-fieldset legend="Name" styleClass="m-1 w-6 white-space-nowrap">
+            <div class="flex flex-column justify-content-center align-content-center align-items-center">
+                <p-fieldset legend="Name" styleClass="m-1 w-6 white-space-nowrap border-blue-400">
                     <p class="m-0 text-lg">
                         {{player.name}}
                     </p>
                 </p-fieldset>
-                <p-fieldset legend="Position" styleClass="m-1 w-6">
+                <p-fieldset legend="Position" styleClass="m-1 w-6 border-blue-400">
                     <p class="m-0 text-lg white-space-nowrap">
                         {{player.position.name}}
                     </p>
