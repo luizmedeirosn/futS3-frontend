@@ -82,7 +82,7 @@
                 <tr>
                     <td>{{ gameMode.id }}</td>
                     <td>{{ gameMode.formationName }}</td>
-                    <td>{{ gameMode.description | shorten: 50 }}</td>
+                    <td>{{ (gameMode.description | shorten: 50) || 'No description for now!' }}</td>
                 </tr>
             </ng-template>
         </p-table>

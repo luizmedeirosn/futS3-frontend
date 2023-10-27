@@ -81,7 +81,7 @@
                 <tr>
                     <td>{{ position.id }}</td>
                     <td>{{ position.name }}</td>
-                    <td>{{ position.description  | shorten: 50 }}</td>
+                    <td>{{ (position.description  | shorten: 50 ) || 'No description for now!' }}</td>
                 </tr>
             </ng-template>
         </p-table>
