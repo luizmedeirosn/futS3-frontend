@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
+import { ViewFullDataPositionEvent } from 'src/app/models/interfaces/position/events/ViewFullDataPositionEvent';
 import { PositionDTO } from 'src/app/models/interfaces/position/response/PositionDTO';
 import { PositionService } from 'src/app/services/position/position.service';
 
@@ -57,6 +58,23 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
                 }
             }
         );
+    }
+
+    public handleViewFullDataPositionAction($event: ViewFullDataPositionEvent): void {
+        if ($event) {
+            this.positionService.findPositionParametersById($event.id)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe (
+                {
+                    next: (parameters) => {
+                        console.log(parameters);
+                    },
+                    error: (err) => {
+                        console.log(err);
+                    }
+                }
+            );
+        }
     }
 
     public ngOnDestroy(): void {

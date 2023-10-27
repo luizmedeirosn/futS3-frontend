@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ViewFullDataPositionEvent } from 'src/app/models/interfaces/position/events/ViewFullDataPositionEvent';
 import { PositionDTO } from 'src/app/models/interfaces/position/response/PositionDTO';
 
 @Component({
@@ -10,5 +11,12 @@ export class PositionsTableComponent {
 
     @Input()
     public positions: PositionDTO[] = [];
+
+    @Output()
+    public viewEvent: EventEmitter<ViewFullDataPositionEvent> = new EventEmitter();
+
+    public handleViewFullDataPositionEvent(id: number): void {
+        this.viewEvent.emit({ id });
+    }
 
 }

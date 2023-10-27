@@ -80,21 +80,23 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
 
     public handleViewFullDataPlayerAction($event: ViewFullDataPlayerEvent): void {
         if ($event) {
-            this.playerService.findFullById ($event.id)
+            this.playerService.findFullById($event.id)
             .pipe(takeUntil(this.destroy$))
             .subscribe(
                 {
                     next: (player) => {
-                        this.player = player;
-                        this.playerService.playerView$.next(true);
-                        this.messageService.add (
-                            {
-                                severity: 'success',
-                                summary: 'Success',
-                                detail: 'Access granted successfully!',
-                                life: this.toastLife
-                            }
-                        );
+                        if (player) {
+                            this.player = player;
+                            this.playerService.playerView$.next(true);
+                            this.messageService.add (
+                                {
+                                    severity: 'success',
+                                    summary: 'Success',
+                                    detail: 'Access granted successfully!',
+                                    life: this.toastLife
+                                }
+                            );
+                        }
                     },
                     error: (err) => {
                         this.messageService.add (

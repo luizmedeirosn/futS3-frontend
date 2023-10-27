@@ -15,7 +15,7 @@ export class PlayersTableComponent {
     @Output()
     public viewEvent: EventEmitter<ViewFullDataPlayerEvent> = new EventEmitter<ViewFullDataPlayerEvent>();
 
-    public handleViewFullDataPlayerEvent(id: number) {
+    public handleViewFullDataPlayerEvent(id: number): void {
         this.viewEvent.emit({ id });
     }
 
