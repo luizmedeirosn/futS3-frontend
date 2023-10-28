@@ -15,8 +15,14 @@ export class PositionsTableComponent {
     @Output()
     public viewEvent: EventEmitter<ViewFullDataPositionEvent> = new EventEmitter();
 
-    public handleViewFullDataPositionEvent(id: number): void {
-        this.viewEvent.emit({ id });
+    public handleViewFullDataPositionEvent(position: PositionDTO): void {
+        this.viewEvent.emit (
+            {
+                id: position.id,
+                name: position.name,
+                description: position.description
+            }
+        );
     }
 
 }

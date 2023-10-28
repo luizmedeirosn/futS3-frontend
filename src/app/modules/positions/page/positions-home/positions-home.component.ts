@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
+import { FullDataPosition } from 'src/app/models/interfaces/position/data/FullDataPosition';
 import { ViewFullDataPositionEvent } from 'src/app/models/interfaces/position/events/ViewFullDataPositionEvent';
 import { PositionDTO } from 'src/app/models/interfaces/position/response/PositionDTO';
 import { PositionService } from 'src/app/services/position/position.service';
@@ -17,6 +18,9 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
 
     public positions: PositionDTO[] = [];
 
+    public positionView!: boolean;
+    public position!: FullDataPosition;
+
     constructor (
         private positionService: PositionService,
 
@@ -26,6 +30,18 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.setPositions();
+        this.positionService.positionView$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe (
+            {
+                next: (positionView) => {
+                    this.positionView = positionView;
+                },
+                error: (err) => {
+                    console.log(err);
+                }
+            }
+        );
     }
 
     private setPositions(): void {
@@ -66,14 +82,41 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
             .subscribe (
                 {
                     next: (parameters) => {
-                        console.log(parameters);
+                        const position: FullDataPosition = {
+                            id: $event.id,
+                            name: $event.name,
+                            description: $event.description,
+                            parameters: parameters
+                        };
+                        this.position = position;
+                        this.positionService.positionView$.next(true);
+                        this.messageService.add (
+                            {
+                                severity: 'success',
+                                summary: 'Success',
+                                detail: 'Access granted successfully!',
+                                life: this.toastLife
+                            }
+                        );
                     },
                     error: (err) => {
+                        this.messageService.add (
+                            {
+                                severity: 'error',
+                                summary: 'Error',
+                                detail: 'Unable to access the player!',
+                                life: this.toastLife
+                            }
+                        );
                         console.log(err);
                     }
                 }
             );
         }
+    }
+
+    public handleBackAction(): void {
+        this.positionService.positionView$.next(false);
     }
 
     public ngOnDestroy(): void {

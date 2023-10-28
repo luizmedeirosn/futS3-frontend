@@ -1,3 +1,4 @@
+import { PositionService } from 'src/app/services/position/position.service';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { PlayerService } from 'src/app/services/player/player.service';
@@ -14,6 +15,7 @@ export class MenubarNavigationComponent implements OnInit {
 
     constructor (
         private playerService: PlayerService,
+        private positionService: PositionService,
 
     ){
     }
@@ -54,6 +56,7 @@ export class MenubarNavigationComponent implements OnInit {
                     {
                         label: 'Find All',
                         icon: 'pi pi-search',
+                        command: () => this.positionService.positionView$.next(false),
                         routerLink: ['/positions']
                     },
                     {
@@ -100,7 +103,7 @@ export class MenubarNavigationComponent implements OnInit {
                     {
                         label: 'Find All',
                         icon: 'pi pi-search',
-                        command: () => { this.playerService.playerView$.next(false) },
+                        command: () => this.playerService.playerView$.next(false),
                         routerLink: ['/players']
                     },
                     {

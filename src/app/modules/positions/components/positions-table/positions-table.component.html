@@ -80,17 +80,17 @@
             <ng-template pTemplate="body" let-position>
                 <tr>
                     <td
-                        (click)="handleViewFullDataPositionEvent(position.id)"
+                        (click)="handleViewFullDataPositionEvent(position)"
                     >
                         {{ position.id }}
                     </td>
                     <td
-                        (click)="handleViewFullDataPositionEvent(position.id)"
+                        (click)="handleViewFullDataPositionEvent(position)"
                     >
                         {{ position.name }}
                     </td>
                     <td
-                        (click)="handleViewFullDataPositionEvent(position.id)"
+                        (click)="handleViewFullDataPositionEvent(position)"
                     >
                         {{ (position.description  | shorten: 50 ) || 'No description for now!' }}
                     </td>

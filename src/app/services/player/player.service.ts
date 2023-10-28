@@ -12,7 +12,7 @@ export class PlayerService {
 
     private readonly API_URL: string = environment.API_URL;
 
-    public playerView$: Subject<boolean> = new Subject<boolean>();
+    public playerView$: Subject<boolean> = new Subject();
 
     constructor (
         private httpClient: HttpClient

@@ -10,6 +10,8 @@ import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
 import { PositionsTableComponent } from './components/positions-table/positions-table.component';
 import { PositionViewComponent } from './components/position-view/position-view.component';
+import { FieldsetModule } from 'primeng/fieldset';
+import { ButtonModule } from 'primeng/button';
 
 
 
@@ -23,10 +25,12 @@ import { PositionViewComponent } from './components/position-view/position-view.
     CommonModule,
     RouterModule.forChild(POSITIONS_ROUTES),
 
+    SharedModule,
+
     CardModule,
     TableModule,
-
-    SharedModule,
+    FieldsetModule,
+    ButtonModule,
   ]
 })
 export class PositionsModule { }
