@@ -10,6 +10,10 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
+import { GamemodeViewComponent } from './components/gamemode-view/gamemode-view.component';
+import { ButtonModule } from 'primeng/button';
+import { TooltipModule } from 'primeng/tooltip';
+import { FieldsetModule } from 'primeng/fieldset';
 
 
 
@@ -17,6 +21,7 @@ import { ToastModule } from 'primeng/toast';
   declarations: [
     GameModesHomeComponent,
     GameModesTableComponent,
+    GamemodeViewComponent,
 ],
   imports: [
     CommonModule,
@@ -27,6 +32,9 @@ import { ToastModule } from 'primeng/toast';
     CardModule,
     TableModule,
     ToastModule,
+    ButtonModule,
+    TooltipModule,
+    FieldsetModule,
   ]
 })
 export class GamemodesModule { }

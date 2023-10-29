@@ -5,12 +5,10 @@
         >
         <p-table
             [value]="parameters"
-            dataKey="id"
-            [rows]="10"
+            [tableStyle]="{'min-width': '60rem'}"
             [paginator]="true"
+            [rows]="10"
             [showCurrentPageReport]="true"
-            [tableStyle]="{'min-width': '75rem'}"
-            [globalFilterFields]="['id', 'name']"
             [rowHover]="true"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} parameters"
             >

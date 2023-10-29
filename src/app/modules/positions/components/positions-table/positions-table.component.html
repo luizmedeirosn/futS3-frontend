@@ -5,11 +5,10 @@
         >
         <p-table
             [value]="positions"
-            dataKey="id"
-            [rows]="10"
+            [tableStyle]="{'min-width': '60rem'}"
             [paginator]="true"
+            [rows]="10"
             [showCurrentPageReport]="true"
-            [tableStyle]="{'min-width': '75rem'}"
             [globalFilterFields]="['id', 'name']"
             [rowHover]="true"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} positions"
@@ -56,12 +55,13 @@
                             </div>
                         </div>
                     </th>
-                    <th id="3" pSortableColumn="">
+                    <th id="2" pSortableColumn="description">
                         <div class="flex justify-content-between align-items-center">
                             <div class="flex justify-content-center align-items-center text-lg mt-1">
                                 Description
                             </div>
                             <div class="flex justify-content-between align-items-center">
+                                <p-sortIcon field="description"></p-sortIcon>
                                 <p-columnFilter
                                     type="text"
                                     field="description"
@@ -70,7 +70,7 @@
                                     [showMatchModes]="false"
                                     [showOperator]="false"
                                     [showAddButton]="false"
-                                    style="height: 2.3rem;"
+                                    style="height: 1.7rem;"
                                 ></p-columnFilter>
                             </div>
                         </div>

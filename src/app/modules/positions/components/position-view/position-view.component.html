@@ -1,7 +1,8 @@
 <div class="flex justify-content-center">
     <p-card
         styleClass="shadow-3 m-3"
-        header="Player View"
+        [style]="{ 'min-width':'40rem' }"
+        header="Position View"
     >
         <div class="flex justify-content-between align-content-center align-items-center">
             <button
@@ -47,13 +48,11 @@
 
         <p-table
             *ngIf="position.parameters.length > 0; else withoutParameters"
-            styleClass="mt-3"
             [value]="position.parameters"
-            dataKey="id"
-            [rows]="5"
+            styleClass="mt-3"
             [paginator]="true"
+            [rows]="5"
             [showCurrentPageReport]="true"
-            [globalFilterFields]="['id', 'name']"
             [rowHover]="true"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} parameters"
             >
