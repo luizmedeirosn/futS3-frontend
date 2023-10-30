@@ -5,7 +5,7 @@ import { PlayerMinDTO } from 'src/app/models/interfaces/player/response/PlayerMi
 @Component({
   selector: 'app-players-table',
   templateUrl: './players-table.component.html',
-  styleUrls: ['./players-table.component.scss'],
+  styleUrls: ['./players-table.component.scss']
 })
 export class PlayersTableComponent {
 

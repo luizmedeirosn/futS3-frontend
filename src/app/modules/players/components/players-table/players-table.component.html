@@ -5,6 +5,7 @@
     >
         <p-table
             [value]="players"
+            dataKey="id"
             [tableStyle]="{'min-width': '60rem'}"
             [paginator]="true"
             [rows]="10"
@@ -88,7 +89,7 @@
                     <td (click)="handleViewFullDataPlayerEvent(player.id)" class="cell-text-player-table">
                         {{ player.id }}
                     </td>
-                    <td (click)="handleViewFullDataPlayerEvent(player.id)" class="cell-text-player-table">
+                    <td (click)="handleViewFullDataPlayerEvent(player.id)">
                         <img alt="" src="{{ player.profilePictureLink || '../../../../../../../assets/without-picture.png' }}" class="{{ player.profilePictureLink ? 'player-profile-picture' : 'player-profile-without-picture' }}"/>
                     </td>
                     <td (click)="handleViewFullDataPlayerEvent(player.id)" class="cell-text-player-table">

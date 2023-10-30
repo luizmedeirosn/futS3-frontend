@@ -49,6 +49,7 @@
         <p-table
             *ngIf="position.parameters.length > 0; else withoutParameters"
             [value]="position.parameters"
+            dataKey="id"
             styleClass="mt-3"
             [paginator]="true"
             [rows]="5"

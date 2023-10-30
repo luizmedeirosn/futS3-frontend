@@ -49,6 +49,7 @@
         <p-table
             *ngIf="gameMode.fields.length > 0; else withoutPositions"
             [value]="gameMode.fields"
+            dataKey="positionId"
             sortField="positionName"
             sortMode="single"
             dataKey="positionName"

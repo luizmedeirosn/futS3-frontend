@@ -13,3 +13,7 @@ body {
         padding: 0.5rem;
     }
 }
+
+img {
+    image-rendering: -webkit-optimize-contrast !important;
+}
