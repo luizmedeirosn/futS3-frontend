@@ -59,16 +59,16 @@
         >
             <ng-template pTemplate="header">
                 <tr>
-                    <th id="1" pSortableColumn="gameMode.fields.positionName">
+                    <th id="1" pSortableColumn="fields.positionName">
                             <div class="flex justify-content-between align-items-center">
                                 <div class="flex justify-content-center align-items-center text-lg mt-1">
                                     Position
                                 </div>
                                 <div class="flex justify-content-between align-items-center">
-                                    <p-sortIcon field="gameMode.fields.positionName"></p-sortIcon>
+                                    <p-sortIcon field="fields.positionName"></p-sortIcon>
                                     <p-columnFilter
                                         type="text"
-                                        field="gameMode.fields.positionName"
+                                        field="positionName"
                                         display="menu"
                                         matchMode="contains"
                                         [showMatchModes]="false"
@@ -87,7 +87,7 @@
                                 <div class="flex justify-content-between align-items-center">
                                     <p-columnFilter
                                         type="text"
-                                        field="gameMode.fields.parameterName"
+                                        field="parameterName"
                                         display="menu"
                                         matchMode="contains"
                                         [showMatchModes]="false"
@@ -106,7 +106,7 @@
                                 <div class="flex justify-content-between align-items-center">
                                     <p-columnFilter
                                         type="text"
-                                        field="gameMode.fields.parameterWeight"
+                                        field="parameterWeight"
                                         display="menu"
                                         matchMode="contains"
                                         [showMatchModes]="false"
