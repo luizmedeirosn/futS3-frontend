@@ -1,7 +1,7 @@
 <app-menubar-navigation></app-menubar-navigation>
 
 <app-positions-table
-*ngIf="!positionView"
+    *ngIf="!positionView"
     [positions]="positions"
     (viewEvent)="handleViewFullDataPositionAction($event)"
 ></app-positions-table>

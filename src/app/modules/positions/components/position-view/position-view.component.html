@@ -41,7 +41,7 @@
             </p-fieldset>
             <p-fieldset legend="Description" styleClass="m-1 w-10 border-blue-400" [toggleable]="true">
                 <p class="m-0 text-lg w-30rem">
-                    {{position.description}}
+                    {{position.description || 'No description for now!' }}
                 </p>
             </p-fieldset>
         </div>

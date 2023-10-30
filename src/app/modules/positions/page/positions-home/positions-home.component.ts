@@ -104,7 +104,7 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
                             {
                                 severity: 'error',
                                 summary: 'Error',
-                                detail: 'Unable to access the player!',
+                                detail: 'Unable to access the position!',
                                 life: this.toastLife
                             }
                         );

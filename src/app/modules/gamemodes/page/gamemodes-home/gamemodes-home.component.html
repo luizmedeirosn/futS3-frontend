@@ -1,10 +1,13 @@
 <app-menubar-navigation></app-menubar-navigation>
 
 <app-gamemodes-table
-*ngIf="false"
+    *ngIf="!gameModeView"
     [gameModes]="gameModes"
+    (viewEvent)="handleViewFullDataGameModeAction($event)"
 ></app-gamemodes-table>
 
-<app-gamemode-view>
-
-</app-gamemode-view>
+<app-gamemode-view
+    *ngIf="gameModeView"
+    [gameMode]="gameMode"
+    (backEvent)="handleBackAction()"
+></app-gamemode-view>

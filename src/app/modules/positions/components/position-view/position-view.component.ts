@@ -4,7 +4,7 @@ import { FullDataPosition } from 'src/app/models/interfaces/position/data/FullDa
 @Component({
     selector: 'app-position-view',
     templateUrl: './position-view.component.html',
-    styleUrls: ['./position-view.component.scss']
+    styleUrls: []
 })
 export class PositionViewComponent {
 

@@ -1,6 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
+import { ViewFullDataGameModeEvent } from 'src/app/models/interfaces/gamemode/event/ViewFullDataGameModeEvent';
+import { GameModeFullDTO } from 'src/app/models/interfaces/gamemode/response/GameModeFullDTO';
 import { GameModeMinDTO } from 'src/app/models/interfaces/gamemode/response/GameModeMinDTO';
 import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
 
@@ -16,6 +18,9 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
 
     public gameModes: GameModeMinDTO[] = [];
 
+    public gameModeView!: boolean;
+    public gameMode!: GameModeFullDTO;
+
     public constructor (
         private gameModeService: GameModeService,
 
@@ -25,6 +30,18 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.setGameModes();
+        this.gameModeService.gameModeView$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe (
+            {
+                next: (gameModeView) => {
+                    this.gameModeView = gameModeView;
+                },
+                error: (err) => {
+                    console.log(err);
+                }
+            }
+        );
     }
 
     private setGameModes(): void {
@@ -58,6 +75,46 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
                 }
             }
         );
+    }
+
+    public handleViewFullDataGameModeAction($event: ViewFullDataGameModeEvent): void {
+        if ($event) {
+            this.gameModeService.findFullById($event.id)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe (
+                {
+                    next: (gameMode) => {
+                        if (gameMode) {
+                            this.gameMode = gameMode;
+                            this.gameModeService.gameModeView$.next(true);
+                            this.messageService.add (
+                                {
+                                    severity: 'success',
+                                    summary: 'Success',
+                                    detail: 'Access granted successfully!',
+                                    life: this.toastLife
+                                }
+                            );
+                        }
+                    },
+                    error: (err) => {
+                        this.messageService.add (
+                            {
+                                severity: 'error',
+                                summary: 'Error',
+                                detail: 'Unable to access the game mode!',
+                                life: this.toastLife
+                            }
+                        );
+                        console.log(err);
+                    }
+                }
+            );
+        }
+    }
+
+    public handleBackAction() {
+        this.gameModeService.gameModeView$.next(false);
     }
 
     public ngOnDestroy(): void {

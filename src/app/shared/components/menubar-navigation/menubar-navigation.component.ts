@@ -2,6 +2,7 @@ import { PositionService } from 'src/app/services/position/position.service';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { PlayerService } from 'src/app/services/player/player.service';
+import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
 
 @Component({
   selector: 'app-menubar-navigation',
@@ -16,7 +17,7 @@ export class MenubarNavigationComponent implements OnInit {
     constructor (
         private playerService: PlayerService,
         private positionService: PositionService,
-
+        private gameModeService: GameModeService,
     ){
     }
 
@@ -33,6 +34,7 @@ export class MenubarNavigationComponent implements OnInit {
                     {
                         label: 'Find All',
                         icon: 'pi pi-search',
+                        command: () => this.gameModeService.gameModeView$.next(false),
                         routerLink: ['/gamemodes']
                     },
                     {
