@@ -1,7 +1,7 @@
 <div class="flex justify-content-center">
     <p-card
-        styleClass="shadow-3 m-3 justify-content-center"
-        [style]="{ 'min-width':'40rem' }"
+        styleClass="shadow-3 justify-content-center"
+        [style]="{ 'min-width':'35rem' }"
         header="Player View"
     >
         <div class="flex justify-content-between align-content-center align-items-center">
@@ -33,22 +33,37 @@
             </div>
         </div>
 
-        <div class="flex justify-content-center align-content-center align-items-center mt-3 gap-3">
+        <div class="flex justify-content-between align-content-center align-items-center mt-3 gap-3">
             <div class="{{ player.profilePictureLink ? 'player-profile-picture' : 'player-profile-without-picture' }}">
                 <img
                     src="{{ player.profilePictureLink || '../../../../../assets/without-picture.png' }}"
                     alt="profile-picture"
                 >
             </div>
-            <div class="flex flex-column justify-content-center align-content-center align-items-center">
-                <p-fieldset legend="Name" styleClass="m-1 w-6 white-space-nowrap border-blue-400">
-                    <p class="m-0 text-lg">
+            <div class="flex flex-column justify-content-center align-content-center align-items-end">
+                <p-fieldset legend="Name" styleClass="m-1 mr-0 w-6 white-space-nowrap border-blue-400" class="player-data-fieldset">
+                    <p class="player-data-field">
                         {{player.name}}
                     </p>
                 </p-fieldset>
-                <p-fieldset legend="Position" styleClass="m-1 w-6 border-blue-400">
-                    <p class="m-0 text-lg white-space-nowrap">
+                <p-fieldset legend="Position" styleClass="m-1 mr-0 w-6 border-blue-400" class="player-data-fieldset">
+                    <p class="player-data-field">
                         {{player.position.name}}
+                    </p>
+                </p-fieldset>
+                <p-fieldset legend="Age" styleClass="m-1 mr-0 w-6 border-blue-400" class="player-data-fieldset">
+                    <p class="player-data-field">
+                        39 years
+                    </p>
+                </p-fieldset>
+                <p-fieldset legend="Height" styleClass="m-1 mr-0 w-6 border-blue-400" class="player-data-fieldset">
+                    <p class="player-data-field">
+                        178cm
+                    </p>
+                </p-fieldset>
+                <p-fieldset legend="Team" styleClass="m-1 mr-0 w-6 border-blue-400" class="player-data-fieldset">
+                    <p class="player-data-field">
+                        Sport Recife
                     </p>
                 </p-fieldset>
             </div>

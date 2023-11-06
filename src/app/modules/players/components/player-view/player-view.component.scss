@@ -15,3 +15,16 @@
         height: 160px !important;
     }
 }
+
+.player-data-fieldset {
+    .p-fieldset legend {
+        padding: 0.5rem;
+    }
+}
+
+.player-data-field {
+    margin: 0;
+    font-size: 1.125rem;
+    white-space: nowrap;
+    min-width: 15rem;
+}
