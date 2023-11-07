@@ -26,6 +26,7 @@ export class MenubarNavigationComponent implements OnInit {
             {
                 label: 'Ranking',
                 icon: 'pi pi-chart-line',
+                routerLink: ['/ranking'],
             },
             {
                 label: 'Game Modes',

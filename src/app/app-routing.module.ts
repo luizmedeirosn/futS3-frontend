@@ -8,6 +8,10 @@ const routes: Routes = [
         pathMatch: 'full'
     },
     {
+        path: 'ranking',
+        loadChildren: () => import('./modules/players-ranking/players-ranking.module').then((module) => module.PlayersRankingModule)
+    },
+    {
         path: 'gamemodes',
         loadChildren: () => import('./modules/gamemodes/gamemodes.module').then((module) => module.GamemodesModule)
     },
