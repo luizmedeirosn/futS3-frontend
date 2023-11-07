@@ -17,3 +17,9 @@ body {
 img {
     image-rendering: -webkit-optimize-contrast !important;
 }
+
+@media screen and (max-width: 1050px) {
+    p-card, p-table {
+        width: 90vw !important;
+    }
+}
