@@ -1,45 +1,69 @@
 .menubar {
-    background-color: #0eda96;
+    border: none;
 }
 
 .logo {
-    width: 100px !important;
-    height: 100px !important;
-    background-image: url('../../../../assets/logo-3.png') !important;
-    background-size: cover !important;
-    background-position: center !important;
-    background-repeat: no-repeat !important;
+    img {
+        width: 100px;
+        height: 100px;
+    }
 }
 
 .p-menubar {
     background-color: #ffffff00;
     border: none;
+
     .p-submenu-list {
-        background-color: #0eda96;
+        background: linear-gradient(to bottom, #0F0725, #04f3a3);
     }
-    span.p-menuitem-text, span.p-menuitem-icon {
-        color: var(--gray-900);
-        text {
-            font-family: Verdana, Geneva, Tahoma, sans-serif;
-        }
-        font-weight: 600;
+
+    span.p-menuitem-text {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 1rem;
+        font-weight: bold;
+        color: #fff;
     }
-    .p-menuitem-link:hover {
-        background-color: #18afdd7d;
+
+    span.p-menuitem-icon {
+        color: #fff;
+    }
+
+    .p-menuitem:hover {
+        background-color: #18afdda9;
         border-radius: 10px;
     }
-    .p-menuitem-content:hover {
-        background-color: #18afdd7d;
+
+    .p-menuitem:hover .p-submenu-list {
+        display: block;
     }
+
+    .p-menuitem-link:hover {
+        background-color: #18afdda1 !important;
+        border-radius: 10px;
+    }
+
+    .p-menuitem-content:hover {
+        background-color: #18afdda1 !important;
+    }
+
     .p-icon {
-        color: var(--gray-900);
+        color: #fff;
     }
 }
 
+.p-menubar-button {
+    &:focus {
+        box-shadow: 0 0 0 3px #ffffff, 0 0 0 8px #2563eb, 0 0 0 2px rgba(0, 0, 0, 0);
+    }
+    transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+
 @media screen and (max-width: 960px) {
     .p-menubar-root-list {
-        min-width: 25vh;
-        background-color: #18d596;
+        min-width: 55vw;
+        background: linear-gradient(to bottom, #0F0725, #04f3a3);
+
     }
 }
 
@@ -49,7 +73,7 @@
             width: 14vw !important;
         }
         span.p-menuitem-text, span.p-menuitem-icon {
-            color: #000000;
+            color: #fff;
             font-size: 1.4vw;
         }
     }
@@ -63,7 +87,10 @@
 
 @media screen and (min-width: 960px) and (max-width: 1150px) {
     .logo {
-        width: 60px !important;
-        height: 60px !important;
+        img {
+            width: 60px !important;
+            height: 60px !important;
+        }
     }
+
 }
