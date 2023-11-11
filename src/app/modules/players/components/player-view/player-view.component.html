@@ -43,27 +43,27 @@
             <div class="flex flex-column justify-content-center align-content-center align-items-end">
                 <p-fieldset legend="Name" styleClass="m-1 mr-0 w-6 white-space-nowrap border-blue-400" class="player-data-fieldset">
                     <p class="player-data-field">
-                        {{player.name}}
+                        {{ player.name }}
                     </p>
                 </p-fieldset>
                 <p-fieldset legend="Position" styleClass="m-1 mr-0 w-6 border-blue-400" class="player-data-fieldset">
                     <p class="player-data-field">
-                        {{player.position.name}}
+                        {{ player.position.name }}
                     </p>
                 </p-fieldset>
                 <p-fieldset legend="Age" styleClass="m-1 mr-0 w-6 border-blue-400" class="player-data-fieldset">
                     <p class="player-data-field">
-                        39 years
+                        {{ player.age ? player.age + ' years' : 'Unregistered data' }}
                     </p>
                 </p-fieldset>
                 <p-fieldset legend="Height" styleClass="m-1 mr-0 w-6 border-blue-400" class="player-data-fieldset">
                     <p class="player-data-field">
-                        178cm
+                        {{ player.age ? player.height + ' cm' : 'Unregistered data' }}
                     </p>
                 </p-fieldset>
                 <p-fieldset legend="Team" styleClass="m-1 mr-0 w-6 border-blue-400" class="player-data-fieldset">
                     <p class="player-data-field">
-                        Sport Recife
+                        {{ player.team }}
                     </p>
                 </p-fieldset>
             </div>
