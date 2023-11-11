@@ -8,6 +8,7 @@ body {
 img {
     image-rendering: -webkit-optimize-contrast !important;
 }
+
 text {
     text-rendering: optimizelegibility !important;
 }
@@ -25,17 +26,9 @@ text {
 
 .p-card-title {
     text-align: center;
-    font-size:2.5rem;
+    font-size: 2.5rem;
     font-family: Arial, Helvetica, sans-serif;
     font-weight: 900;
     color: var(--green-900);
     margin-bottom: 1rem;
-}
-
-@media screen and (max-width: 1050px) {
-    p-card, p-table {
-        display: flex;
-        justify-content: center;
-        width: 90vw !important;
-    }
 }

@@ -2,18 +2,45 @@
     font-size: 1.1rem;
 }
 
-.player-profile-picture {
+.players-table-profile-picture {
     margin-top: 0.25rem;
-    width: 6rem !important;
-    height: 6rem !important;
+    width: 6rem;
+    height: 6rem;
     border-style: solid;
     border-width: 3px;
     border-color: var(--green-700);
     border-radius: 50%;
 }
 
-.player-profile-without-picture {
+.players-table-profile-without-picture {
     margin-top: 0.25rem;
-    width: 6rem !important;
-    height: 6rem !important;
+    width: 6rem;
+    height: 6rem;
+}
+
+
+// Smartphone
+@media screen and (max-width: 430px) {
+    .p-datatable-table {
+        max-width: 30rem !important;
+        min-width: 30rem !important;
+    }
+    .players-table-profile-picture {
+        width: 3rem;
+        height: 3rem;
+    }
+
+    .players-table-profile-without-picture {
+        width: 3rem;
+        height: 3rem;
+    }
+
+    .p-card-content {
+        min-width: 80vw !important;
+        max-width: 80vw !important;
+    }
+
+    .cell-text-player-table {
+        font-size: 0.9rem;
+    }
 }
