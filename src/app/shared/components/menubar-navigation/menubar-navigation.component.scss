@@ -37,6 +37,11 @@
         display: block;
     }
 
+    .p-menuitem:not(.p-highlight):not(.p-disabled).p-focus > .p-menuitem-content {
+        color: #ffffff00 !important;
+        background: #ffffff00 !important;
+    }
+
     .p-menuitem-link:hover {
         background-color: #18afdda1 !important;
         border-radius: 10px;
@@ -51,13 +56,17 @@
     }
 }
 
+.p-menubar .p-menuitem.p-highlight > .p-menuitem-content {
+    color: #18afdda9 !important;
+    background: #18afdda9 !important;
+}
+
 .p-menubar-button {
     &:focus {
         box-shadow: 0 0 0 3px #ffffff, 0 0 0 8px #2563eb, 0 0 0 2px rgba(0, 0, 0, 0);
     }
     transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
 }
-
 
 @media screen and (max-width: 960px) {
     .p-menubar-root-list {
@@ -69,8 +78,8 @@
 
 @media screen and (min-width: 960px) and (max-width: 1115px) {
     .menubar {
-        .p-menuitem-link {
-            width: 14vw !important;
+        .p-menuitem-link { // tava bugando o hover no submenu
+            width: 100% !important;
         }
         span.p-menuitem-text, span.p-menuitem-icon {
             color: #fff;
