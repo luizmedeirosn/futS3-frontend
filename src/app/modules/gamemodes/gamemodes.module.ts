@@ -14,6 +14,7 @@ import { GamemodeViewComponent } from './components/gamemode-view/gamemode-view.
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { FieldsetModule } from 'primeng/fieldset';
+import { PlayersRankingsHomeComponent } from './page/players-rankings-home/players-rankings-home.component';
 
 
 
@@ -22,6 +23,7 @@ import { FieldsetModule } from 'primeng/fieldset';
     GameModesHomeComponent,
     GameModesTableComponent,
     GamemodeViewComponent,
+    PlayersRankingsHomeComponent,
 ],
   imports: [
     CommonModule,

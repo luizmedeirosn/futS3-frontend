@@ -24,9 +24,9 @@ export class MenubarNavigationComponent implements OnInit {
     public ngOnInit(): void {
         this.items = [
             {
-                label: 'Ranking',
+                label: 'Rankings',
                 icon: 'pi pi-chart-line',
-                routerLink: ['/ranking'],
+                routerLink: ['/gamemodes/rankings'],
             },
             {
                 label: 'Game Modes',
