@@ -1,6 +1,6 @@
 <div class="flex justify-content-center">
     <p-card
-        styleClass="shadow-3"
+        styleClass="fadeindown animation-duration-500 animation-iteration-1 animation-ease-out"
         header="Players"
     >
         <p-table
@@ -86,16 +86,16 @@
             </ng-template>
             <ng-template pTemplate="body" let-player>
                 <tr style="cursor: pointer;">
-                    <td (click)="handleViewFullDataPlayerEvent(player.id)" class="cell-text-player-table">
+                    <td (click)="handleViewFullDataPlayerEvent(player.id)">
                         {{ player.id }}
                     </td>
                     <td (click)="handleViewFullDataPlayerEvent(player.id)">
                         <img alt="" src="{{ player.profilePictureLink || '../../../../../../../assets/without-picture.png' }}" class="{{ player.profilePictureLink ? 'players-table-profile-picture' : 'players-table-profile-without-picture' }}"/>
                     </td>
-                    <td (click)="handleViewFullDataPlayerEvent(player.id)" class="cell-text-player-table">
+                    <td (click)="handleViewFullDataPlayerEvent(player.id)">
                         {{ player.name }}
                     </td>
-                    <td (click)="handleViewFullDataPlayerEvent(player.id)" class="cell-text-player-table">
+                    <td (click)="handleViewFullDataPlayerEvent(player.id)">
                         {{ player.position.name }}
                     </td>
                 </tr>
