@@ -78,9 +78,14 @@
 
 @media screen and (min-width: 960px) and (max-width: 1115px) {
     .menubar {
-        .p-menuitem-link { // tava bugando o hover no submenu
-            width: 100% !important;
+        .p-menuitem-link {
+            width: 14vw !important;
         }
+
+        .p-submenu-list {
+            width: 14vw !important;
+        }
+
         span.p-menuitem-text, span.p-menuitem-icon {
             color: #fff;
             font-size: 1.4vw;
