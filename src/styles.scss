@@ -31,6 +31,13 @@ text {
     font-weight: 900;
     color: var(--green-900);
     margin-bottom: 1rem;
+
+}
+
+tr {
+    &:hover {
+        color: var(--blue-600);
+    }
 }
 
 // Computer (fazer para outras resoluções)
@@ -38,3 +45,4 @@ text {
     overflow: hidden;
     height: 900px;
 }
+
