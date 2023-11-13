@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
 import { FullDataPosition } from 'src/app/models/interfaces/position/data/FullDataPosition';
 
 @Component({
     selector: 'app-position-view',
     templateUrl: './position-view.component.html',
-    styleUrls: []
+    styleUrls: [],
+    encapsulation: ViewEncapsulation.None,
 })
 export class PositionViewComponent {
 
