@@ -1,8 +1,49 @@
 <div class="flex justify-content-center">
     <p-card
-        styleClass="shadow-3"
-        [style]="{ 'min-width':'40rem', 'max-width':'40rem' }"
+        styleClass="flipleft animation-duration-1000 animation-iteration-1 animation-ease-out"
+        [style]="{ 'min-width': '40rem', 'max-width': '40rem' }"
         header="Rankings"
     >
+        <form [formGroup]="playersRankingForm">
+            <div class="flex justify-content-between align-content-center align-items-center">
+                <span class="p-float-label">
+                    <p-dropdown
+                        [options]="gameModes"
+                        optionLabel="formationName"
+                        [(ngModel)]="selectedGameMode"
+                        [filter]="true"
+                        filterBy="formationName"
+                        [showClear]="true"
+                        placeholder="Select a Game Mode"
+                        inputId="float-label-gamemode"
+                        optionValue="id"
+                        formControlName="gameModeId"
+                        (onChange)="handleFindGameModePositionsEvent($event.value)"
+                    >
+                    ></p-dropdown>
+                    <label for="float-label-gamemode" class="white-space-nowrap">Select a Game Mode</label>
+                </span>
+                <span class="p-float-label">
+                    <p-dropdown
+                        [disabled]="positionsDropdownDisabled"
+                        [options]="['B', 'A']"
+                        optionLabel="name"
+                        [filter]="true"
+                        filterBy="name"
+                        [showClear]="true"
+                        placeholder="Select a Position"
+                        inputId="float-label-position"
+                    >
+                    </p-dropdown>
+                    <label for="float-label-position" class="white-space-nowrap">Select a Position</label>
+                </span>
+                <p-button
+                    [disabled]="!playersRankingForm.valid"
+                    type="submit"
+                    label="Query"
+                    styleClass="p-button-success"
+                ></p-button>
+            </div>
+        </form>
     </p-card>
 </div>

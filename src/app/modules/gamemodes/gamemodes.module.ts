@@ -16,6 +16,8 @@ import { TooltipModule } from 'primeng/tooltip';
 import { FieldsetModule } from 'primeng/fieldset';
 import { PlayersRankingsHomeComponent } from './page/players-rankings-home/players-rankings-home.component';
 import { PlayersRankingsViewComponent } from './components/players-rankings-view/players-rankings-view.component';
+import { DropdownModule } from 'primeng/dropdown';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -30,6 +32,8 @@ import { PlayersRankingsViewComponent } from './components/players-rankings-view
   imports: [
     CommonModule,
     RouterModule.forChild(GAME_MODES_ROUTES),
+    FormsModule,
+    ReactiveFormsModule,
 
     SharedModule,
 
@@ -39,6 +43,7 @@ import { PlayersRankingsViewComponent } from './components/players-rankings-view
     ButtonModule,
     TooltipModule,
     FieldsetModule,
+    DropdownModule,
   ]
 })
 export class GamemodesModule { }

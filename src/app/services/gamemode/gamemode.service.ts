@@ -4,6 +4,7 @@ import { Observable, Subject } from 'rxjs';
 import { environment } from 'src/app/environments/environment.prod';
 import { GameModeFullDTO } from 'src/app/models/interfaces/gamemode/response/GameModeFullDTO';
 import { GameModeMinDTO } from 'src/app/models/interfaces/gamemode/response/GameModeMinDTO';
+import { PlayerFullScoreDTO } from 'src/app/models/interfaces/gamemode/response/PlayerFullScoreDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +30,12 @@ export class GameModeService {
     public findFullById(id: number): Observable<GameModeFullDTO> {
         return this.httpClient.get<GameModeFullDTO> (
             `${this.API_URL}/gamemodes/${id}/full`
+        );
+    }
+
+    public getRanking(gameModeId: number, positionId: number): Observable<PlayerFullScoreDTO> {
+        return this.httpClient.get<PlayerFullScoreDTO> (
+            `${this.API_URL}/gamemodes/ranking?gameModeId=${gameModeId}&positionId=${positionId}`
         );
     }
 
