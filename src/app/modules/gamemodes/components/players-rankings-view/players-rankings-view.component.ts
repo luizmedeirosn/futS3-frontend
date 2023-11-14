@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, ViewEncapsulation } from '@angular/core';
+import { GameModeFullDTO } from 'src/app/models/interfaces/gamemode/response/GameModeFullDTO';
+import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { MessageService } from 'primeng/api';
 import { DropdownChangeEvent } from 'primeng/dropdown';
 import { GameModeMinDTO } from 'src/app/models/interfaces/gamemode/response/GameModeMinDTO';
 
@@ -10,16 +10,18 @@ import { GameModeMinDTO } from 'src/app/models/interfaces/gamemode/response/Game
   styleUrls: ['./players-rankings-view.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class PlayersRankingsViewComponent {
+export class PlayersRankingsViewComponent implements OnInit {
 
     @Input()
     public gameModes!: GameModeMinDTO[];
-
     @Input()
     public positionsDropdownDisabled!: boolean;
+    @Output()
+    public findGameModePositionsEvent: EventEmitter<{id: number}> = new EventEmitter();
+    @Input()
+    public selectedGameModeFull!: GameModeFullDTO;
 
     public selectedGameMode!: GameModeMinDTO;
-    public findGameModePositionsEvent: EventEmitter<{id: number}> = new EventEmitter();
     public playersRankingForm: any = this.formBuilder.group (
         {
             gameModeId: ['', Validators.required],
@@ -29,17 +31,29 @@ export class PlayersRankingsViewComponent {
 
     public constructor (
         private formBuilder: FormBuilder,
-        private messageService: MessageService,
     ) {
     }
 
-    public handleFindGameModePositionsEvent(event$: DropdownChangeEvent): void {
-        this.playersRankingForm.value.gameModeId.valid &&
-        this.findGameModePositionsEvent.emit (
-            {
-                id: this.playersRankingForm.value.id as number,
-            }
-        );
+    public ngOnInit(): void {
+        this.selectedGameModeFull = {
+            id: 0,
+            formationName: '',
+            description: '',
+            fields: []
+        }
+    }
+
+    public handleFindGameModePositionsEvent($event: DropdownChangeEvent): void {
+        if ($event && this.playersRankingForm.value.gameModeId) {
+            this.findGameModePositionsEvent.emit (
+                {
+                    id: this.gameModes.at( ($event.value as number) -1 )?.id as number,
+                }
+            );
+        } else {
+            this.positionsDropdownDisabled = true;
+        }
+
     }
 
 }

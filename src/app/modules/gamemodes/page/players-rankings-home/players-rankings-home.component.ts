@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
+import { GameModeFullDTO } from 'src/app/models/interfaces/gamemode/response/GameModeFullDTO';
 import { GameModeMinDTO } from 'src/app/models/interfaces/gamemode/response/GameModeMinDTO';
 import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
 
@@ -9,13 +10,14 @@ import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
   templateUrl: './players-rankings-home.component.html',
   styleUrls: []
 })
-export class PlayersRankingsHomeComponent implements OnInit {
+export class PlayersRankingsHomeComponent implements OnInit, OnDestroy {
 
     private destroy$: Subject<void> = new Subject();
     private readonly toastLife: number = 1500;
 
     public positionsDropdownDisabled!: boolean;
     public gameModes!: GameModeMinDTO[];
+    public selectedGameModeFull!: GameModeFullDTO;
 
     public constructor(
         private gameModeService: GameModeService,
@@ -60,6 +62,40 @@ export class PlayersRankingsHomeComponent implements OnInit {
             }
         );
 
+    }
+
+    public handleFindGameModePositionsAction( $event: { id: number; } ) : void {
+        this.gameModeService.findFullById ($event.id)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe (
+            {
+                next: (gameMode) => {
+                    if (gameMode.fields.length > 0) {
+                        this.selectedGameModeFull = gameMode;
+                        this.positionsDropdownDisabled = false;
+                    } else {
+                        this.positionsDropdownDisabled = true;
+                        this.messageService.add (
+                            {
+                                severity: 'info',
+                                summary: 'Info',
+                                detail: 'No positions registered for this game mode!',
+                                life: 8000,
+                            }
+                        );
+                    }
+
+                },
+                error: (err) => {
+                    console.log(err);
+                }
+            }
+        );
+    }
+
+    public ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
 

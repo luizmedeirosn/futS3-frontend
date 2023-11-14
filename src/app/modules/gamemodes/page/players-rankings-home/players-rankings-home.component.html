@@ -3,4 +3,6 @@
 <app-players-rankings-view
     [positionsDropdownDisabled]="positionsDropdownDisabled"
     [gameModes]="gameModes"
+    (findGameModePositionsEvent)="handleFindGameModePositionsAction($event)"
+    [selectedGameModeFull]="selectedGameModeFull"
 ></app-players-rankings-view>

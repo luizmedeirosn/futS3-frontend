@@ -18,7 +18,7 @@
                         inputId="float-label-gamemode"
                         optionValue="id"
                         formControlName="gameModeId"
-                        (onChange)="handleFindGameModePositionsEvent($event.value)"
+                        (onChange)="handleFindGameModePositionsEvent($event)"
                     >
                     ></p-dropdown>
                     <label for="float-label-gamemode" class="white-space-nowrap">Select a Game Mode</label>
@@ -26,10 +26,10 @@
                 <span class="p-float-label">
                     <p-dropdown
                         [disabled]="positionsDropdownDisabled"
-                        [options]="['B', 'A']"
-                        optionLabel="name"
+                        [options]="selectedGameModeFull.fields"
+                        optionLabel="positionName"
                         [filter]="true"
-                        filterBy="name"
+                        filterBy="positionName"
                         [showClear]="true"
                         placeholder="Select a Position"
                         inputId="float-label-position"
@@ -42,6 +42,8 @@
                     type="submit"
                     label="Query"
                     styleClass="p-button-success"
+                    pTooltip="Query Ranking"
+                    tooltipPosition="top"
                 ></p-button>
             </div>
         </form>
