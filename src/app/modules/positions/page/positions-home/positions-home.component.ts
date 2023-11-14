@@ -14,7 +14,7 @@ import { PositionService } from 'src/app/services/position/position.service';
 export class PositionsHomeComponent implements OnInit, OnDestroy {
 
     private readonly destroy$: Subject<void> = new Subject();
-    private readonly toastLife: number = 1500;
+    private readonly messageLife: number = 2500;
 
     public positions: PositionDTO[] = [];
 
@@ -56,7 +56,7 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
                             severity: 'success',
                             summary: 'Success',
                             detail: 'Successful search completed!',
-                            life: this.toastLife
+                            life: this.messageLife
                         }
                     );
                 },
@@ -66,7 +66,7 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
                             severity: 'error',
                             summary: 'Error',
                             detail: 'Please check your internet connection!',
-                            life: this.toastLife
+                            life: this.messageLife
                         }
                     );
                     console.log(err);
@@ -95,7 +95,7 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
                                 severity: 'success',
                                 summary: 'Success',
                                 detail: 'Access granted successfully!',
-                                life: this.toastLife
+                                life: this.messageLife
                             }
                         );
                     },
@@ -105,7 +105,7 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
                                 severity: 'error',
                                 summary: 'Error',
                                 detail: 'Unable to access the position!',
-                                life: this.toastLife
+                                life: this.messageLife
                             }
                         );
                         console.log(err);

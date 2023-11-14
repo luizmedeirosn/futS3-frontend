@@ -12,7 +12,7 @@ import { ParameterService } from 'src/app/services/parameter/parameter.service';
 export class ParametersHomeComponent implements OnInit, OnDestroy {
 
     private readonly destroy$: Subject<void> = new Subject();
-    private readonly toastLife: number = 1500;
+    private readonly messageLife: number = 2500;
 
 
     public parameters: ParameterDTO[] = [];
@@ -41,7 +41,7 @@ export class ParametersHomeComponent implements OnInit, OnDestroy {
                                 severity: 'success',
                                 summary: 'Success',
                                 detail: 'Successful search completed!',
-                                life: this.toastLife
+                                life: this.messageLife
                             }
                         );
 
@@ -53,7 +53,7 @@ export class ParametersHomeComponent implements OnInit, OnDestroy {
                             severity: 'error',
                             summary: 'Error',
                             detail: 'Please check your internet connection!',
-                            life: this.toastLife
+                            life: this.messageLife
                         }
                     );
                     console.log(err);

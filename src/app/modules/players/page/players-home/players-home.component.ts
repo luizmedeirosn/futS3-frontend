@@ -15,7 +15,7 @@ import { PlayerService } from 'src/app/services/player/player.service';
 export class PlayersHomeComponent implements OnInit, OnDestroy {
 
     private readonly destroy$: Subject<void> = new Subject();
-    private readonly toastLife: number = 1500;
+    private readonly messageLife: number = 2500;
 
     public players: Array<PlayerMinDTO> = [];
     public player!: PlayerFullDTO;
@@ -58,7 +58,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                                 severity: 'success',
                                 summary: 'Success',
                                 detail: 'Successful search completed!',
-                                life: this.toastLife
+                                life: this.messageLife
                             }
                         );
                     }
@@ -69,7 +69,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                             severity: 'error',
                             summary: 'Error',
                             detail: 'Please check your internet connection!',
-                            life: this.toastLife
+                            life: this.messageLife
                         }
                     );
                     console.log(err);
@@ -93,7 +93,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                                     severity: 'success',
                                     summary: 'Success',
                                     detail: 'Access granted successfully!',
-                                    life: this.toastLife
+                                    life: this.messageLife
                                 }
                             );
                         }
@@ -104,7 +104,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                                 severity: 'error',
                                 summary: 'Error',
                                 detail: 'Unable to access the player!',
-                                life: this.toastLife
+                                life: this.messageLife
                             }
                         );
                         console.log(err);

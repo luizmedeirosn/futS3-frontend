@@ -13,7 +13,7 @@ import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
 export class PlayersRankingsHomeComponent implements OnInit, OnDestroy {
 
     private destroy$: Subject<void> = new Subject();
-    private readonly toastLife: number = 1500;
+    private readonly messageLife: number = 2500;
 
     public positionsDropdownDisabled!: boolean;
     public gameModes!: GameModeMinDTO[];
@@ -43,7 +43,7 @@ export class PlayersRankingsHomeComponent implements OnInit, OnDestroy {
                                 severity: 'success',
                                 summary: 'Success',
                                 detail: 'Data loaded successfully!',
-                                life: this.toastLife
+                                life: this.messageLife
                             }
                         );
                     }
@@ -54,7 +54,7 @@ export class PlayersRankingsHomeComponent implements OnInit, OnDestroy {
                             severity: 'error',
                             summary: 'Error',
                             detail: 'Please check your internet connection!',
-                            life: this.toastLife
+                            life: this.messageLife
                         }
                     );
                     console.log(err);
