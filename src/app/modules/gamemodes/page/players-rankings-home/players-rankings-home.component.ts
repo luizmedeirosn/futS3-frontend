@@ -4,6 +4,7 @@ import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
 import { GameModeFullDTO } from 'src/app/models/interfaces/gamemode/response/GameModeFullDTO';
 import { GameModeMinDTO } from 'src/app/models/interfaces/gamemode/response/GameModeMinDTO';
+import { PlayerFullScoreDTO } from 'src/app/models/interfaces/gamemode/response/PlayerFullScoreDTO';
 import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
 
 @Component({
@@ -18,13 +19,13 @@ export class PlayersRankingsHomeComponent implements OnInit, OnDestroy {
 
     public gameModes!: GameModeMinDTO[];
     public selectedGameModeFull!: GameModeFullDTO;
-
     public getPlayersRankingForm: any = this.formBuilder.group (
         {
             gameModeId: new FormControl('', Validators.required),
             positionId: new FormControl({value: '', disabled: true}, Validators.required),
         }
     );
+    public playersRanking!: PlayerFullScoreDTO[];
 
     public constructor(
         private gameModeService: GameModeService,
@@ -72,33 +73,69 @@ export class PlayersRankingsHomeComponent implements OnInit, OnDestroy {
     }
 
     public handleFindGameModePositionsAction( $event: { id: number; } ) : void {
-        this.gameModeService.findFullById ($event.id)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe (
-            {
-                next: (gameMode) => {
-                    this.selectedGameModeFull = gameMode;
-                    if (gameMode.fields.length > 0) {
-                        this.getPlayersRankingForm.get('positionId').enable(true);
-                        this.messageService.clear();
-                    } else {
-                        this.getPlayersRankingForm.get('positionId').disable(true);
+        if ($event) {
+            this.gameModeService.findFullById($event.id)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe (
+                {
+                    next: (gameMode) => {
+                        this.selectedGameModeFull = gameMode;
+                        if (gameMode.fields.length > 0) {
+                            this.getPlayersRankingForm.get('positionId').enable(true);
+                            this.messageService.clear();
+                        } else {
+                            this.getPlayersRankingForm.get('positionId').disable(true);
+                            this.messageService.add (
+                                {
+                                    severity: 'info',
+                                    summary: 'Info',
+                                    detail: 'No positions registered for this game mode!',
+                                    life: 5000,
+                                }
+                            );
+                        }
+
+                    },
+                    error: (err) => {
+                        console.log(err);
+                    }
+                }
+            );
+        }
+    }
+
+    public handleGetPlayersRankingAction( $event: {gameModeId: number, positionId: number} ): void {
+        if ($event) {
+            this.gameModeService.getRanking( $event.gameModeId, $event.positionId)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe (
+                {
+                    next: (playersRanking) => {
+                        this.playersRanking = playersRanking;
+                        console.log(this.playersRanking);
                         this.messageService.add (
                             {
-                                severity: 'info',
-                                summary: 'Info',
-                                detail: 'No positions registered for this game mode!',
-                                life: 5000,
+                                severity: 'success',
+                                summary: 'Success',
+                                detail: 'Ranking obtained successfully!',
+                                life: this.messageLife
                             }
                         );
+                    },
+                    error: (err) => {
+                        this.messageService.add (
+                            {
+                                severity: 'error',
+                                summary: 'Error',
+                                detail: '"Error retrieving the ranking!',
+                                life: this.messageLife
+                            }
+                        );
+                        console.log(err);
                     }
-
-                },
-                error: (err) => {
-                    console.log(err);
                 }
-            }
-        );
+            );
+        }
     }
 
     public ngOnDestroy(): void {

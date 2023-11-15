@@ -33,8 +33,8 @@ export class GameModeService {
         );
     }
 
-    public getRanking(gameModeId: number, positionId: number): Observable<PlayerFullScoreDTO> {
-        return this.httpClient.get<PlayerFullScoreDTO> (
+    public getRanking(gameModeId: number, positionId: number): Observable<PlayerFullScoreDTO[]> {
+        return this.httpClient.get<PlayerFullScoreDTO[]> (
             `${this.API_URL}/gamemodes/ranking?gameModeId=${gameModeId}&positionId=${positionId}`
         );
     }

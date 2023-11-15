@@ -1,9 +1,8 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { DropdownChangeEvent } from 'primeng/dropdown';
-import { Subject, takeUntil } from 'rxjs';
 import { GameModeFullDTO } from 'src/app/models/interfaces/gamemode/response/GameModeFullDTO';
 import { GameModeMinDTO } from 'src/app/models/interfaces/gamemode/response/GameModeMinDTO';
-import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
+import { PlayerFullScoreDTO } from 'src/app/models/interfaces/gamemode/response/PlayerFullScoreDTO';
 
 @Component({
   selector: 'app-players-rankings-view',
@@ -11,20 +10,15 @@ import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
   styleUrls: ['./players-rankings-view.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class PlayersRankingsViewComponent implements OnInit, OnDestroy {
-
-    private readonly destroy$: Subject<void> = new Subject();
+export class PlayersRankingsViewComponent implements OnInit {
 
     @Input() public gameModes!: GameModeMinDTO[];
     @Input() public selectedGameModeFull!: GameModeFullDTO;
     @Input() public getPlayersRankingForm: any;
+    @Input() public playersRanking!: PlayerFullScoreDTO[];
 
-    @Output() public findGameModePositionsEvent: EventEmitter<{id: number}> = new EventEmitter();
-
-    public constructor (
-        private gameModeService: GameModeService,
-    ) {
-    }
+    @Output() public findGameModePositionsEvent: EventEmitter<{ id: number }> = new EventEmitter();
+    @Output() public getPlayerRankingEvent: EventEmitter<{ gameModeId: number, positionId:number }> = new EventEmitter();
 
     public ngOnInit(): void {
         this.selectedGameModeFull = {
@@ -47,26 +41,15 @@ export class PlayersRankingsViewComponent implements OnInit, OnDestroy {
         }
     }
 
-    public handleGetPlayersRanking(): void {
+    public handleGetPlayersRankingEvent(): void {
         if (this.getPlayersRankingForm.value.gameModeId && this.getPlayersRankingForm.value.positionId) {
-            this.gameModeService.getRanking(this.getPlayersRankingForm.value.gameModeId, this.getPlayersRankingForm.value.positionId)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe (
+            this.getPlayerRankingEvent.emit (
                 {
-                    next: (playersRanking) => {
-                        console.log(playersRanking);
-                    },
-                    error: (err) => {
-                        console.log(err);
-                    }
+                    gameModeId: this.getPlayersRankingForm.value.gameModeId as number,
+                    positionId: this.getPlayersRankingForm.value.positionId as number,
                 }
             );
         }
-    }
-
-    public ngOnDestroy(): void {
-        this.destroy$.next();
-        this.destroy$.complete();
     }
 
 }
