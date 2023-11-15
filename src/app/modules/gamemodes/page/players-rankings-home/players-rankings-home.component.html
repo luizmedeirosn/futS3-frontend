@@ -1,8 +1,8 @@
 <app-menubar-navigation></app-menubar-navigation>
 
 <app-players-rankings-view
-    [positionsDropdownDisabled]="positionsDropdownDisabled"
     [gameModes]="gameModes"
+    [getPlayersRankingForm]="getPlayersRankingForm"
     (findGameModePositionsEvent)="handleFindGameModePositionsAction($event)"
     [selectedGameModeFull]="selectedGameModeFull"
 ></app-players-rankings-view>

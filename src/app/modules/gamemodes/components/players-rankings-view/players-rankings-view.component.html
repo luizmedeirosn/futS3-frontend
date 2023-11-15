@@ -4,13 +4,12 @@
         [style]="{ 'min-width': '40rem', 'max-width': '40rem' }"
         header="Rankings"
     >
-        <form [formGroup]="playersRankingForm">
+        <form [formGroup]="getPlayersRankingForm" (ngSubmit)="handleGetPlayersRanking()">
             <div class="flex justify-content-between align-content-center align-items-center">
                 <span class="p-float-label">
                     <p-dropdown
                         [options]="gameModes"
                         optionLabel="formationName"
-                        [(ngModel)]="selectedGameMode"
                         [filter]="true"
                         filterBy="formationName"
                         [showClear]="true"
@@ -19,13 +18,11 @@
                         optionValue="id"
                         formControlName="gameModeId"
                         (onChange)="handleFindGameModePositionsEvent($event)"
-                    >
                     ></p-dropdown>
                     <label for="float-label-gamemode" class="white-space-nowrap">Select a Game Mode</label>
                 </span>
                 <span class="p-float-label">
                     <p-dropdown
-                        [disabled]="positionsDropdownDisabled"
                         [options]="selectedGameModeFull.fields"
                         optionLabel="positionName"
                         [filter]="true"
@@ -33,12 +30,13 @@
                         [showClear]="true"
                         placeholder="Select a Position"
                         inputId="float-label-position"
-                    >
-                    </p-dropdown>
+                        optionValue="positionId"
+                        formControlName="positionId"
+                    ></p-dropdown>
                     <label for="float-label-position" class="white-space-nowrap">Select a Position</label>
                 </span>
                 <p-button
-                    [disabled]="!playersRankingForm.valid"
+                    [disabled]="!getPlayersRankingForm.value.gameModeId || !getPlayersRankingForm.value.positionId"
                     type="submit"
                     label="Query"
                     styleClass="p-button-success"

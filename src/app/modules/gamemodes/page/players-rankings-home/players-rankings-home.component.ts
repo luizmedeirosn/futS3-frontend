@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
 import { GameModeFullDTO } from 'src/app/models/interfaces/gamemode/response/GameModeFullDTO';
@@ -15,18 +16,24 @@ export class PlayersRankingsHomeComponent implements OnInit, OnDestroy {
     private destroy$: Subject<void> = new Subject();
     private readonly messageLife: number = 2500;
 
-    public positionsDropdownDisabled!: boolean;
     public gameModes!: GameModeMinDTO[];
     public selectedGameModeFull!: GameModeFullDTO;
+
+    public getPlayersRankingForm: any = this.formBuilder.group (
+        {
+            gameModeId: new FormControl('', Validators.required),
+            positionId: new FormControl({value: '', disabled: true}, Validators.required),
+        }
+    );
 
     public constructor(
         private gameModeService: GameModeService,
         private messageService: MessageService,
+        private formBuilder: FormBuilder,
     ) {
     }
 
     public ngOnInit(): void {
-        this.positionsDropdownDisabled = true;
         this.setGameModes();
     }
 
@@ -70,17 +77,18 @@ export class PlayersRankingsHomeComponent implements OnInit, OnDestroy {
         .subscribe (
             {
                 next: (gameMode) => {
+                    this.selectedGameModeFull = gameMode;
                     if (gameMode.fields.length > 0) {
-                        this.selectedGameModeFull = gameMode;
-                        this.positionsDropdownDisabled = false;
+                        this.getPlayersRankingForm.get('positionId').enable(true);
+                        this.messageService.clear();
                     } else {
-                        this.positionsDropdownDisabled = true;
+                        this.getPlayersRankingForm.get('positionId').disable(true);
                         this.messageService.add (
                             {
                                 severity: 'info',
                                 summary: 'Info',
                                 detail: 'No positions registered for this game mode!',
-                                life: 8000,
+                                life: 5000,
                             }
                         );
                     }
