@@ -5,6 +5,7 @@ import { environment } from 'src/app/environments/environment.prod';
 import { GameModeFullDTO } from 'src/app/models/interfaces/gamemode/response/GameModeFullDTO';
 import { GameModeMinDTO } from 'src/app/models/interfaces/gamemode/response/GameModeMinDTO';
 import { PlayerFullScoreDTO } from 'src/app/models/interfaces/gamemode/response/PlayerFullScoreDTO';
+import { GameModePositionDTO } from './../../models/interfaces/gamemode/response/GameModePositonDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +31,12 @@ export class GameModeService {
     public findFullById(id: number): Observable<GameModeFullDTO> {
         return this.httpClient.get<GameModeFullDTO> (
             `${this.API_URL}/gamemodes/${id}/full`
+        );
+    }
+
+    public findGameModePositions(id: number): Observable<GameModePositionDTO[]> {
+        return this.httpClient.get<GameModePositionDTO[]> (
+            `${this.API_URL}/gamemodes/${id}/positions`
         );
     }
 

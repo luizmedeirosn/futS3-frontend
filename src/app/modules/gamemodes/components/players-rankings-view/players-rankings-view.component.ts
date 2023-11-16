@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
 import { DropdownChangeEvent } from 'primeng/dropdown';
-import { GameModeFullDTO } from 'src/app/models/interfaces/gamemode/response/GameModeFullDTO';
 import { GameModeMinDTO } from 'src/app/models/interfaces/gamemode/response/GameModeMinDTO';
+import { GameModePositionDTO } from 'src/app/models/interfaces/gamemode/response/GameModePositonDTO';
 import { PlayerFullScoreDTO } from 'src/app/models/interfaces/gamemode/response/PlayerFullScoreDTO';
 
 @Component({
@@ -10,24 +10,15 @@ import { PlayerFullScoreDTO } from 'src/app/models/interfaces/gamemode/response/
   styleUrls: ['./players-rankings-view.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class PlayersRankingsViewComponent implements OnInit {
+export class PlayersRankingsViewComponent {
 
     @Input() public gameModes!: GameModeMinDTO[];
-    @Input() public selectedGameModeFull!: GameModeFullDTO;
+    @Input() public selectedGameModePositions!: GameModePositionDTO[];
     @Input() public getPlayersRankingForm: any;
     @Input() public playersRanking!: PlayerFullScoreDTO[];
 
     @Output() public findGameModePositionsEvent: EventEmitter<{ id: number }> = new EventEmitter();
     @Output() public getPlayerRankingEvent: EventEmitter<{ gameModeId: number, positionId:number }> = new EventEmitter();
-
-    public ngOnInit(): void {
-        this.selectedGameModeFull = {
-            id: 0,
-            formationName: '',
-            description: '',
-            fields: []
-        }
-    }
 
     public handleFindGameModePositionsEvent($event: DropdownChangeEvent): void {
         if ($event && this.getPlayersRankingForm.value.gameModeId) {

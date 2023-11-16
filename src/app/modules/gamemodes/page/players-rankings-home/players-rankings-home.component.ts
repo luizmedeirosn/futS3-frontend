@@ -2,8 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
-import { GameModeFullDTO } from 'src/app/models/interfaces/gamemode/response/GameModeFullDTO';
 import { GameModeMinDTO } from 'src/app/models/interfaces/gamemode/response/GameModeMinDTO';
+import { GameModePositionDTO } from 'src/app/models/interfaces/gamemode/response/GameModePositonDTO';
 import { PlayerFullScoreDTO } from 'src/app/models/interfaces/gamemode/response/PlayerFullScoreDTO';
 import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
 
@@ -18,7 +18,7 @@ export class PlayersRankingsHomeComponent implements OnInit, OnDestroy {
     private readonly messageLife: number = 2500;
 
     public gameModes!: GameModeMinDTO[];
-    public selectedGameModeFull!: GameModeFullDTO;
+    public selectedGameModePositions!: GameModePositionDTO[];
     public getPlayersRankingForm: any = this.formBuilder.group (
         {
             gameModeId: new FormControl('', Validators.required),
@@ -74,13 +74,13 @@ export class PlayersRankingsHomeComponent implements OnInit, OnDestroy {
 
     public handleFindGameModePositionsAction( $event: { id: number; } ) : void {
         if ($event) {
-            this.gameModeService.findFullById($event.id)
+            this.gameModeService.findGameModePositions($event.id)
             .pipe(takeUntil(this.destroy$))
             .subscribe (
                 {
-                    next: (gameMode) => {
-                        this.selectedGameModeFull = gameMode;
-                        if (gameMode.fields.length > 0) {
+                    next: (gameModePositions) => {
+                        this.selectedGameModePositions = gameModePositions;
+                        if (gameModePositions.length > 0) {
                             this.getPlayersRankingForm.get('positionId').enable(true);
                             this.messageService.clear();
                         } else {
@@ -142,6 +142,5 @@ export class PlayersRankingsHomeComponent implements OnInit, OnDestroy {
         this.destroy$.next();
         this.destroy$.complete();
     }
-
 
 }
