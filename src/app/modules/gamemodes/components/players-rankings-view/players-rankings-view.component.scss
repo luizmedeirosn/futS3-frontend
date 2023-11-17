@@ -1,0 +1,62 @@
+.ranking-text-accordion-header {
+    .p-card-body {
+        padding: 0.5rem;
+    }
+
+    .p-card-content {
+        padding: 0.5rem;
+    }
+
+    .p-card-title {
+        background: linear-gradient(to right, #080414, var(--blue-1));
+        -webkit-background-clip: text;
+        display: inline-block;
+        background-size: 100% 100%;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+        background-clip: text;
+        font-size: 1.3rem;
+        padding: 0;
+        margin: 0;
+    }
+
+    .p-card-subtitle {
+        color: var(--black-1);
+        font-size: 0.9rem;
+        padding: 0;
+        margin: 0;
+    }
+
+    .p-accordion, .p-accordion-header, .p-accordion-header-link {
+        padding: 0.8rem;
+        color: var(--black-1);
+    }
+}
+
+.players-ranking-profile-picture {
+    width: 5rem;
+    height: 5rem;
+    border-style: solid;
+    border-width: 3px;
+    border-color: var(--blue-900);
+    border-radius: 0.3rem;
+}
+
+.players-ranking-profile-without-picture {
+    width: 6rem;
+    height: 6rem;
+}
+
+.player-ranking-data-fieldset {
+    .p-fieldset legend {
+        padding: 0.5rem;
+    }
+}
+
+.player-ranking-data-field {
+    margin: 0;
+    font-size: 1rem;
+    white-space: nowrap;
+    width: 8rem;
+    color: var(--black-1);
+}

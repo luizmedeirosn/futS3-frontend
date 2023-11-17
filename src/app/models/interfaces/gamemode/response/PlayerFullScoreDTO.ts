@@ -5,7 +5,7 @@ export interface PlayerFullScoreDTO {
     id: number;
     name: string;
     profilePictureLink: string;
-    agr: number;
+    age: number;
     height: number;
     team: string;
     totalScore: number;

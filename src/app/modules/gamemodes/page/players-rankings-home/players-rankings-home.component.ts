@@ -21,8 +21,8 @@ export class PlayersRankingsHomeComponent implements OnInit, OnDestroy {
     public selectedGameModePositions!: GameModePositionDTO[];
     public getPlayersRankingForm: any = this.formBuilder.group (
         {
-            gameModeId: new FormControl('', Validators.required),
-            positionId: new FormControl({value: '', disabled: true}, Validators.required),
+            gameModeId: new FormControl(1, Validators.required),
+            positionId: new FormControl({value: 14, disabled: false}, Validators.required),
         }
     );
     public playersRanking!: PlayerFullScoreDTO[];

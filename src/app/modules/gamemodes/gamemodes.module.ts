@@ -1,23 +1,25 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
+import { SharedModule } from 'src/app/shared/shared.module';
+import { GamemodeViewComponent } from './components/gamemode-view/gamemode-view.component';
+import { GameModesTableComponent } from './components/gamemodes-table/gamemodes-table.component';
+import { PlayersRankingsViewComponent } from './components/players-rankings-view/players-rankings-view.component';
 import { GAME_MODES_ROUTES } from './gamemodes.routing';
 import { GameModesHomeComponent } from './page/gamemodes-home/gamemodes-home.component';
-import { GameModesTableComponent } from './components/gamemodes-table/gamemodes-table.component';
-import { SharedModule } from 'src/app/shared/shared.module';
+import { PlayersRankingsHomeComponent } from './page/players-rankings-home/players-rankings-home.component';
 
+import { AccordionModule } from 'primeng/accordion';
+import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
+import { DropdownModule } from 'primeng/dropdown';
+import { FieldsetModule } from 'primeng/fieldset';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
-import { GamemodeViewComponent } from './components/gamemode-view/gamemode-view.component';
-import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
-import { FieldsetModule } from 'primeng/fieldset';
-import { PlayersRankingsHomeComponent } from './page/players-rankings-home/players-rankings-home.component';
-import { PlayersRankingsViewComponent } from './components/players-rankings-view/players-rankings-view.component';
-import { DropdownModule } from 'primeng/dropdown';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DividerModule } from 'primeng/divider';
 
 
 
@@ -44,6 +46,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     TooltipModule,
     FieldsetModule,
     DropdownModule,
-  ]
+    AccordionModule,
+    DividerModule,
+  ],
 })
 export class GamemodesModule { }
