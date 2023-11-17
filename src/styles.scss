@@ -12,10 +12,13 @@ body {
     background-repeat: no-repeat;
 }
 
-img, svg text, span {
+img, svg {
+    filter: brightness(1.0) contrast(1.0) saturate(1.2) grayscale(5%);
     image-rendering: -webkit-optimize-contrast !important;
-    text-rendering: optimizelegibility !important;
+}
 
+text, span {
+    text-rendering: optimizelegibility !important;
 }
 
 .p-fieldset {
@@ -24,6 +27,7 @@ img, svg text, span {
         background-color: #e3e3e3;
     }
     .p-fieldset-content {
+        color: var(--black-1);
         padding: 0.1rem;
     }
 }
@@ -39,6 +43,7 @@ img, svg text, span {
 }
 
 tr {
+    color: var(--black-1);
     &:hover {
         color: var(--blue-600);
     }
