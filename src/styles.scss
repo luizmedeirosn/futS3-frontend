@@ -1,3 +1,8 @@
+:root {
+    --black-1: rgba(0, 0, 0, .87);
+    --blue-1: var(--blue-600);
+}
+
 body {
     width: 100%;
     height: 100%;
@@ -7,14 +12,11 @@ body {
     background-repeat: no-repeat;
 }
 
-img {
+img, svg text, span {
     image-rendering: -webkit-optimize-contrast !important;
-}
-
-text {
     text-rendering: optimizelegibility !important;
-}
 
+}
 
 .p-fieldset {
     background-color: #fcfcfc;
@@ -39,6 +41,31 @@ text {
 tr {
     &:hover {
         color: var(--blue-600);
+    }
+}
+
+.p-dropdown {
+    border: solid;
+    border-width: 1px;
+    border-radius: 3px;
+    span {
+        color: var(--black-1);
+    }
+    &:hover {
+        background-color: whitesmoke;
+    }
+}
+
+.p-inputtext,
+.p-dropdown .p-dropdown-clear-icon,
+.p-dropdown .p-dropdown-trigger,
+.p-dropdown-panel .p-dropdown-header .p-dropdown-filter-icon {
+    color: rgba(0, 0, 0, .87);
+}
+
+p-dropdownitem:hover {
+    span {
+        color: var(--blue-1)
     }
 }
 

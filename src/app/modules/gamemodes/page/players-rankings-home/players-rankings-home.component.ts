@@ -135,6 +135,7 @@ export class PlayersRankingsHomeComponent implements OnInit, OnDestroy {
                     }
                 }
             );
+            this.getPlayersRankingForm.get('positionId').reset();
         }
     }
 
