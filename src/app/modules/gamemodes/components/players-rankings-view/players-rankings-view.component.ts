@@ -38,6 +38,8 @@ export class PlayersRankingsViewComponent {
         const gameModeId = this.getPlayersRankingForm.value?.gameModeId as number | undefined;
         const positionId = this.getPlayersRankingForm.value?.positionId as number | undefined;
         if (gameModeId && positionId) {
+            this.playersRanking = new Array();
+            this.playersRankingLoading$.next(true);
             this.getPlayerRankingEvent.emit({ gameModeId, positionId });
         }
     }

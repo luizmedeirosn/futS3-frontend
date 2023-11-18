@@ -45,13 +45,13 @@
                 ></p-button>
             </div>
         </form>
-        <div *ngIf="playersRanking">
-            <p-accordion *ngIf="!(playersRankingLoading$ | async); else rakingLoadingTemplate"
+        <div>
+            <p-accordion *ngIf="playersRanking && !(playersRankingLoading$ | async);"
                 class="w-full"
             >
                     <div
                         *ngFor="let player of playersRanking; index as i;"
-                        class="mt-2 fadeindown animation-duration-1000 animation-iteration-1 animation-ease-out"
+                        class="mt-2 fadein animation-duration-500 animation-iteration-1"
                     >
                         <p-card
                             styleClass="shadow-3 mt-3 ranking-text-accordion-header"
@@ -152,13 +152,15 @@
                         </p-card>
                     </div>
             </p-accordion>
-            <ng-template #rakingLoadingTemplate>
-                <p-skeleton styleClass="mt-3"></p-skeleton>
-                <p-skeleton styleClass="mt-3"></p-skeleton>
-                <p-skeleton styleClass="mt-3"></p-skeleton>
-                <p-skeleton styleClass="mt-3"></p-skeleton>
-                <p-skeleton styleClass="mt-3"></p-skeleton>
-            </ng-template>
+            <div *ngIf="playersRanking && (playersRankingLoading$ | async)"
+                class="fadeindown animation-duration-1000 animation-iteration-1 animation-ease-out"
+            >
+                <p-skeleton styleClass="mt-3 h-10rem"></p-skeleton>
+                <p-skeleton styleClass="mt-3 h-10rem"></p-skeleton>
+                <p-skeleton styleClass="mt-3 h-10rem"></p-skeleton>
+                <p-skeleton styleClass="mt-3 h-10rem"></p-skeleton>
+                <p-skeleton styleClass="mt-3 h-10rem"></p-skeleton>
+            </div>
         </div>
     </p-card>
 </div>

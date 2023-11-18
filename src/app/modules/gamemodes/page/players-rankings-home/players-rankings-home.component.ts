@@ -98,6 +98,16 @@ export class PlayersRankingsHomeComponent implements OnInit, OnDestroy {
                         }
                     },
                     error: (err) => {
+                        this.getPlayersRankingForm.get('positionId').disable(true);
+                        this.messageService.clear();
+                        this.messageService.add (
+                            {
+                                severity: 'error',
+                                summary: 'Error',
+                                detail: 'Please check your internet connection!',
+                                life: this.messageLife,
+                            }
+                        );
                         console.log(err);
                     }
                 }
@@ -107,14 +117,13 @@ export class PlayersRankingsHomeComponent implements OnInit, OnDestroy {
 
     public handleGetPlayersRankingAction( $event: {gameModeId: number, positionId: number} ): void {
         if ($event) {
+            setTimeout( () => this.playersRankingLoading$.next(false), 1000 );
             this.gameModeService.getRanking( $event.gameModeId, $event.positionId)
             .pipe(takeUntil(this.destroy$))
             .subscribe (
                 {
                     next: (playersRanking) => {
                         this.playersRanking = playersRanking;
-                        this.playersRankingLoading$.next(true);
-                        setTimeout( () =>  this.playersRankingLoading$.next(false), 500 );
                         setTimeout( () =>  {
                             if (playersRanking.length > 0) {
                                 this.messageService.clear();
@@ -137,7 +146,7 @@ export class PlayersRankingsHomeComponent implements OnInit, OnDestroy {
                                     }
                                 );
                             }
-                        }, 800 );
+                        }, 1500 );
                     },
                     error: (err) => {
                         this.messageService.add (
