@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { GameModeMinDTO } from 'src/app/models/interfaces/gamemode/response/GameModeMinDTO';
 import { GameModePositionDTO } from 'src/app/models/interfaces/gamemode/response/GameModePositonDTO';
 import { PlayerFullScoreDTO } from 'src/app/models/interfaces/gamemode/response/PlayerFullScoreDTO';
@@ -25,6 +25,7 @@ export class PlayersRankingsHomeComponent implements OnInit, OnDestroy {
             positionId: new FormControl({value: '', disabled: true}, Validators.required),
         }
     );
+    public playersRankingLoading$: BehaviorSubject<boolean> = new BehaviorSubject(true);
     public playersRanking!: PlayerFullScoreDTO[];
 
     public constructor(
@@ -112,27 +113,31 @@ export class PlayersRankingsHomeComponent implements OnInit, OnDestroy {
                 {
                     next: (playersRanking) => {
                         this.playersRanking = playersRanking;
-                        if (playersRanking.length > 0) {
-                            this.messageService.clear();
-                            this.messageService.add (
-                                {
-                                    severity: 'success',
-                                    summary: 'Success',
-                                    detail: 'Ranking obtained successfully!',
-                                    life: this.messageLife
-                                }
-                            );
-                        } else {
-                            this.messageService.add (
-                                {
-                                    key: 'without-ranking-warn',
-                                    severity: 'warn',
-                                    summary: 'Warn',
-                                    detail: 'Unable to list a ranking. Please update this position or register and edit players!',
-                                    life: 10000,
-                                }
-                            );
-                        }
+                        this.playersRankingLoading$.next(true);
+                        setTimeout( () =>  this.playersRankingLoading$.next(false), 1000 );
+                        setTimeout( () =>  {
+                            if (playersRanking.length > 0) {
+                                this.messageService.clear();
+                                this.messageService.add (
+                                    {
+                                        severity: 'success',
+                                        summary: 'Success',
+                                        detail: 'Ranking obtained successfully!',
+                                        life: this.messageLife
+                                    }
+                                );
+                            } else {
+                                this.messageService.add (
+                                    {
+                                        key: 'without-ranking-warn',
+                                        severity: 'warn',
+                                        summary: 'Warn',
+                                        detail: 'Unable to list a ranking. Please update this position or register and edit players!',
+                                        life: 10000,
+                                    }
+                                );
+                            }
+                        }, 1250 );
                     },
                     error: (err) => {
                         this.messageService.add (

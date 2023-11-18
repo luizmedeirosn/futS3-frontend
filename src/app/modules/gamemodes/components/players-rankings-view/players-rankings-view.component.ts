@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
 import { DropdownChangeEvent } from 'primeng/dropdown';
+import { BehaviorSubject } from 'rxjs';
 import { GameModeMinDTO } from 'src/app/models/interfaces/gamemode/response/GameModeMinDTO';
 import { GameModePositionDTO } from 'src/app/models/interfaces/gamemode/response/GameModePositonDTO';
 import { PlayerFullScoreDTO } from 'src/app/models/interfaces/gamemode/response/PlayerFullScoreDTO';
@@ -15,13 +16,14 @@ export class PlayersRankingsViewComponent {
     @Input() public gameModes!: GameModeMinDTO[];
     @Input() public selectedGameModePositions!: GameModePositionDTO[];
     @Input() public getPlayersRankingForm: any;
+    @Input() public playersRankingLoading$!: BehaviorSubject<boolean>;
     @Input() public playersRanking!: PlayerFullScoreDTO[];
 
     @Output() public findGameModePositionsEvent: EventEmitter<{ id: number }> = new EventEmitter();
-    @Output() public getPlayerRankingEvent: EventEmitter<{ gameModeId: number, positionId:number }> = new EventEmitter();
+    @Output() public getPlayerRankingEvent: EventEmitter<{ gameModeId: number, positionId: number }> = new EventEmitter();
 
     public handleFindGameModePositionsEvent($event: DropdownChangeEvent): void {
-        if ($event && this.getPlayersRankingForm.value.gameModeId) {
+        if ($event && this.getPlayersRankingForm.value?.gameModeId) {
             this.findGameModePositionsEvent.emit (
                 {
                     id: this.gameModes.at( ($event.value as number) -1 )?.id as number,
@@ -33,13 +35,10 @@ export class PlayersRankingsViewComponent {
     }
 
     public handleGetPlayersRankingEvent(): void {
-        if (this.getPlayersRankingForm.value.gameModeId && this.getPlayersRankingForm.value.positionId) {
-            this.getPlayerRankingEvent.emit (
-                {
-                    gameModeId: this.getPlayersRankingForm.value.gameModeId as number,
-                    positionId: this.getPlayersRankingForm.value.positionId as number,
-                }
-            );
+        const gameModeId = this.getPlayersRankingForm.value?.gameModeId as number | undefined;
+        const positionId = this.getPlayersRankingForm.value?.positionId as number | undefined;
+        if (gameModeId && positionId) {
+            this.getPlayerRankingEvent.emit({ gameModeId, positionId });
         }
     }
 

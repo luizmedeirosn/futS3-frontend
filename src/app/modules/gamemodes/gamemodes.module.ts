@@ -19,8 +19,7 @@ import { FieldsetModule } from 'primeng/fieldset';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
-import { DividerModule } from 'primeng/divider';
-
+import { SkeletonModule } from 'primeng/skeleton';
 
 
 @NgModule({
@@ -47,7 +46,7 @@ import { DividerModule } from 'primeng/divider';
     FieldsetModule,
     DropdownModule,
     AccordionModule,
-    DividerModule,
+    SkeletonModule,
   ],
 })
 export class GamemodesModule { }
