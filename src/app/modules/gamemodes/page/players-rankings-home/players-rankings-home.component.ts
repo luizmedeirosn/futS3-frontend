@@ -114,7 +114,7 @@ export class PlayersRankingsHomeComponent implements OnInit, OnDestroy {
                     next: (playersRanking) => {
                         this.playersRanking = playersRanking;
                         this.playersRankingLoading$.next(true);
-                        setTimeout( () =>  this.playersRankingLoading$.next(false), 1000 );
+                        setTimeout( () =>  this.playersRankingLoading$.next(false), 500 );
                         setTimeout( () =>  {
                             if (playersRanking.length > 0) {
                                 this.messageService.clear();
@@ -137,7 +137,7 @@ export class PlayersRankingsHomeComponent implements OnInit, OnDestroy {
                                     }
                                 );
                             }
-                        }, 1250 );
+                        }, 800 );
                     },
                     error: (err) => {
                         this.messageService.add (
