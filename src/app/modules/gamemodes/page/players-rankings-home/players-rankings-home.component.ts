@@ -21,8 +21,8 @@ export class PlayersRankingsHomeComponent implements OnInit, OnDestroy {
     public selectedGameModePositions!: GameModePositionDTO[];
     public getPlayersRankingForm: any = this.formBuilder.group (
         {
-            gameModeId: new FormControl(1, Validators.required),
-            positionId: new FormControl({value: 14, disabled: false}, Validators.required),
+            gameModeId: new FormControl('', Validators.required),
+            positionId: new FormControl({value: '', disabled: true}, Validators.required),
         }
     );
     public playersRanking!: PlayerFullScoreDTO[];
@@ -85,6 +85,7 @@ export class PlayersRankingsHomeComponent implements OnInit, OnDestroy {
                             this.messageService.clear();
                         } else {
                             this.getPlayersRankingForm.get('positionId').disable(true);
+                            this.messageService.clear();
                             this.messageService.add (
                                 {
                                     severity: 'info',
@@ -94,7 +95,6 @@ export class PlayersRankingsHomeComponent implements OnInit, OnDestroy {
                                 }
                             );
                         }
-
                     },
                     error: (err) => {
                         console.log(err);
@@ -112,15 +112,27 @@ export class PlayersRankingsHomeComponent implements OnInit, OnDestroy {
                 {
                     next: (playersRanking) => {
                         this.playersRanking = playersRanking;
-                        console.log(this.playersRanking);
-                        this.messageService.add (
-                            {
-                                severity: 'success',
-                                summary: 'Success',
-                                detail: 'Ranking obtained successfully!',
-                                life: this.messageLife
-                            }
-                        );
+                        if (playersRanking.length > 0) {
+                            this.messageService.clear();
+                            this.messageService.add (
+                                {
+                                    severity: 'success',
+                                    summary: 'Success',
+                                    detail: 'Ranking obtained successfully!',
+                                    life: this.messageLife
+                                }
+                            );
+                        } else {
+                            this.messageService.add (
+                                {
+                                    key: 'without-ranking-warn',
+                                    severity: 'warn',
+                                    summary: 'Warn',
+                                    detail: 'Unable to list a ranking. Please update this position or register and edit players!',
+                                    life: 10000,
+                                }
+                            );
+                        }
                     },
                     error: (err) => {
                         this.messageService.add (

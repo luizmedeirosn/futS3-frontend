@@ -1,12 +1,20 @@
 <router-outlet></router-outlet>
 
 <p-toast
-  position="bottom-right"
-  [showTransformOptions]="'translateY(100%)'"
-  [showTransformOptions]="'translateX(100%)'"
-  [showTransitionOptions]="'1000ms'"
-  [hideTransitionOptions]="'500ms'"
-  styleClass="opacity-100"
-  styleClass="w-4 white-space-nowrap opacity-100"
-  [breakpoints]="{ '920px' : { width: '100vw', right: '0', left: '0' } }"
+    position="bottom-right"
+    [showTransformOptions]="'translateY(100%)'"
+    [showTransformOptions]="'translateX(100%)'"
+    [showTransitionOptions]="'1000ms'"
+    [hideTransitionOptions]="'500ms'"
+    styleClass="w-4 white-space-nowrap opacity-100"
+    [breakpoints]="{ '920px' : { width: '100vw', right: '0', left: '0' } }"
+></p-toast>
+
+<p-toast
+    key="without-ranking-warn"
+    position="bottom-center"
+    [showTransformOptions]="'translateY(100%)'"
+    [showTransitionOptions]="'1000ms'"
+    [hideTransitionOptions]="'500ms'"
+    styleClass="w-6 white-space-nowrap opacity-100"
 ></p-toast>
