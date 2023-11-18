@@ -1,6 +1,7 @@
 <div class="flex justify-content-center">
     <p-card
-        styleClass="fadeindown animation-duration-500 animation-iteration-1 animation-ease-out"
+        *ngIf="players.length > 0"
+        styleClass="fadeindown animation-duration-1000 animation-iteration-1 animation-ease-out"
         header="Players"
     >
         <p-table
