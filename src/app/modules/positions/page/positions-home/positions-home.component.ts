@@ -16,7 +16,7 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
     private readonly destroy$: Subject<void> = new Subject();
     private readonly messageLife: number = 2500;
 
-    public positions: PositionDTO[] = [];
+    public positions!: PositionDTO[];
 
     public positionView!: boolean;
     public position!: FullDataPosition;

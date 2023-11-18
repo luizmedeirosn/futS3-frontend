@@ -16,7 +16,7 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
     private readonly destroy$: Subject<void> = new Subject();
     private readonly messageLife: number = 2500;
 
-    public gameModes: GameModeMinDTO[] = [];
+    public gameModes!: GameModeMinDTO[];
 
     public gameModeView!: boolean;
     public gameMode!: GameModeFullDTO;

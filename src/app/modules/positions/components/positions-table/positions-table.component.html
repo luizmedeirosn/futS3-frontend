@@ -1,6 +1,8 @@
-<div class="flex justify-content-center">
+<div
+    *ngIf="positions"
+    class="flex justify-content-center fadeindown animation-duration-1000 animation-iteration-1 animation-ease-out"
+>
     <p-card
-        styleClass="fadeindown animation-duration-1000 animation-iteration-1 animation-ease-out"
         header="Positions"
     >
         <p-table

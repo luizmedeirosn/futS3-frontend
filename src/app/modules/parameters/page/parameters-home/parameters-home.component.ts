@@ -15,7 +15,7 @@ export class ParametersHomeComponent implements OnInit, OnDestroy {
     private readonly messageLife: number = 2500;
 
 
-    public parameters: ParameterDTO[] = [];
+    public parameters!: ParameterDTO[];
 
     public constructor (
         private parameterService: ParameterService,

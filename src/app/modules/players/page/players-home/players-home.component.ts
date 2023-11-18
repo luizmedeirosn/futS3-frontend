@@ -17,7 +17,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
     private readonly destroy$: Subject<void> = new Subject();
     private readonly messageLife: number = 2500;
 
-    public players: Array<PlayerMinDTO> = [];
+    public players!: Array<PlayerMinDTO>;
     public player!: PlayerFullDTO;
 
     public playerView!: boolean;

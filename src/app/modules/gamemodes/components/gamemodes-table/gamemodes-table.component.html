@@ -1,6 +1,8 @@
-<div class="flex justify-content-center">
+<div
+    *ngIf="gameModes"
+    class="flex justify-content-center fadeindown animation-duration-1000 animation-iteration-1 animation-ease-out"
+>
     <p-card
-        styleClass="fadeindown animation-duration-1000 animation-iteration-1 animation-ease-out"
         header="Game Modes"
     >
         <p-table

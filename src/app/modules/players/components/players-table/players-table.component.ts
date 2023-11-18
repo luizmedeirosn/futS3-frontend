@@ -11,7 +11,7 @@ import { PlayerMinDTO } from 'src/app/models/interfaces/player/response/PlayerMi
 export class PlayersTableComponent {
 
     @Input()
-    public players: Array<PlayerMinDTO> = [];
+    public players!: Array<PlayerMinDTO>;
 
     @Output()
     public viewEvent: EventEmitter<ViewFullDataPlayerEvent> = new EventEmitter<ViewFullDataPlayerEvent>();

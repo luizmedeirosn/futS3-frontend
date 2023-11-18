@@ -9,6 +9,6 @@ import { ParameterDTO } from 'src/app/models/interfaces/parameter/response/Param
 export class ParametersTableComponent {
 
     @Input()
-    public parameters: ParameterDTO[] = [];
+    public parameters!: ParameterDTO[];
 
 }

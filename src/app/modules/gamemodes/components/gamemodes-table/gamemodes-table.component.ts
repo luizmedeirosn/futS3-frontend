@@ -10,7 +10,7 @@ import { ViewFullDataGameModeEvent } from 'src/app/models/interfaces/gamemode/ev
 export class GameModesTableComponent {
 
     @Input()
-    public gameModes: GameModeMinDTO[]= [];
+    public gameModes!: GameModeMinDTO[];
 
     @Output()
     public viewEvent: EventEmitter<ViewFullDataGameModeEvent> = new EventEmitter();

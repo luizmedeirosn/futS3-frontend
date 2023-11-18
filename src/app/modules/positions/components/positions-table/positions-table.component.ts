@@ -10,7 +10,7 @@ import { PositionDTO } from 'src/app/models/interfaces/position/response/Positio
 export class PositionsTableComponent {
 
     @Input()
-    public positions: PositionDTO[] = [];
+    public positions!: PositionDTO[];
 
     @Output()
     public viewEvent: EventEmitter<ViewFullDataPositionEvent> = new EventEmitter();
