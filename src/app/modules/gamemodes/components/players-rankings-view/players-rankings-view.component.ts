@@ -6,7 +6,7 @@ import { GameModePositionDTO } from 'src/app/models/interfaces/gamemode/response
 import { PlayerFullScoreDTO } from 'src/app/models/interfaces/gamemode/response/PlayerFullScoreDTO';
 import { PositionParametersDTO } from './../../../../models/interfaces/position/response/PositionParametersDTO';
 
-import { IconDefinition, faChartBar, faRankingStar } from '@fortawesome/free-solid-svg-icons';
+import { IconDefinition, faMagnifyingGlassChart, faRankingStar } from '@fortawesome/free-solid-svg-icons';
 import { PaginatorState } from 'primeng/paginator';
 import { PositionService } from 'src/app/services/position/position.service';
 
@@ -33,7 +33,7 @@ export class PlayersRankingsViewComponent implements OnDestroy {
     private positionParameters!: PositionParametersDTO[];
 
     public readonly faRankingStar: IconDefinition = faRankingStar;
-    public readonly faChartBar: IconDefinition = faChartBar;
+    public readonly faMagnifyingGlassChart: IconDefinition = faMagnifyingGlassChart;
     public readonly faIconsStyles: any = {
         'color' : '#fff;',
         'align-content' : 'end;'
@@ -48,7 +48,7 @@ export class PlayersRankingsViewComponent implements OnDestroy {
     public chartBarOptions: any;
 
     public chartRadarData: any;
-    public charRadarOptions: any;
+    public chartRadarOptions: any;
     private readonly colors: Array<string>
         = new Array( '--green-500', '--blue-600', '--red-600'  );
 
@@ -102,7 +102,7 @@ export class PlayersRankingsViewComponent implements OnDestroy {
 
     public desactiveViewPlayersRanking() {
         this.playersRankingViewEnable$.next(false);
-        this.setChartBarData(0 , 5);
+        this.setChartBarData(0 , 8);
         this.setCharRadarData(0, 3);
     }
 
@@ -131,8 +131,8 @@ export class PlayersRankingsViewComponent implements OnDestroy {
             datasets: [
                 {
                     label: 'Total Score',
-                    backgroundColor: this.documentStyle.getPropertyValue('--indigo-600'),
-                    borderColor: this.documentStyle.getPropertyValue('--indigo-600'),
+                    backgroundColor: this.documentStyle.getPropertyValue('--blue-700'),
+                    borderColor: this.documentStyle.getPropertyValue('--blue-700'),
                     data: playersTotalScores
                 },
             ]
@@ -143,36 +143,43 @@ export class PlayersRankingsViewComponent implements OnDestroy {
             maintainAspectRatio: false,
             aspectRatio: 0.8,
             plugins: {
-                legend: {
-                    labels: {
-                        color: this.textColor
-                    }
+              legend: {
+                labels: {
+                  color: this.textColor,
+                  font: {
+                    weight: '500',
+                    size: 15
+                  }
                 }
+              }
             },
             scales: {
-                x: {
-                    ticks: {
-                        color: this.textColorSecondary,
-                        font: {
-                            weight: 500
-                        }
-                    },
-                    grid: {
-                        color: this.surfaceBorder,
-                        drawBorder: false
-                    }
+              x: {
+                ticks: {
+                  color: this.textColorSecondary,
+                  font: {
+                    weight: '500',
+                    size: 15
+                  }
                 },
-                y: {
-                    ticks: {
-                        color: this.textColorSecondary
-                    },
-                    grid: {
-                        color: this.surfaceBorder,
-                        drawBorder: false
-                    }
+                grid: {
+                  color: this.surfaceBorder
                 }
+              },
+              y: {
+                ticks: {
+                  color: this.textColorSecondary,
+                  font: {
+                    weight: '500',
+                    size: 15
+                  }
+                },
+                grid: {
+                  color: this.surfaceBorder
+                }
+              }
             }
-        };
+          }
     }
 
     private setCharRadarData(first: number, rows: number) {
@@ -198,23 +205,36 @@ export class PlayersRankingsViewComponent implements OnDestroy {
             datasets
         };
 
-        this.charRadarOptions = {
+        this.chartRadarOptions = {
             plugins: {
                 legend: {
                     labels: {
-                        color: this.textColor
+                        color: this.textColor,
+                        font: {
+                            weight: '500',
+                            size: 16
+                        }
                     }
                 }
             },
             scales: {
                 r: {
                     grid: {
-                        color: this.surfaceBorder
+                        color: this.surfaceBorder,
                     },
                     pointLabels: {
-                        color: this.textColorSecondary
+                        color: this.textColorSecondary,
+                        font: {
+                            size: 15
+                        }
+                    },
+                    ticks: {
+                        color: this.textColorSecondary,
+                        font: {
+                            size: 16
+                        }
                     }
-                }
+                },
             }
         };
     }
