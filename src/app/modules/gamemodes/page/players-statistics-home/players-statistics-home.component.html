@@ -1,6 +1,6 @@
 <app-menubar-navigation></app-menubar-navigation>
 
-<app-players-rankings-view
+<app-players-statistics-view
     [gameModes]="gameModes"
     [getPlayersRankingForm]="getPlayersRankingForm"
     (findGameModePositionsEvent)="handleFindGameModePositionsAction($event)"
@@ -8,4 +8,4 @@
     (getPlayerRankingEvent)="handleGetPlayersRankingAction($event)"
     [playersRankingLoading$]="playersRankingLoading$"
     [playersRanking]="playersRanking"
-></app-players-rankings-view>
+></app-players-statistics-view>

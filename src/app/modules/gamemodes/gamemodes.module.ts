@@ -6,10 +6,10 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { GamemodeViewComponent } from './components/gamemode-view/gamemode-view.component';
 import { GameModesTableComponent } from './components/gamemodes-table/gamemodes-table.component';
-import { PlayersRankingsViewComponent } from './components/players-rankings-view/players-rankings-view.component';
+import { PlayersStatisticsViewComponent } from './components/players-statistics-view/players-statistics-view.component';
 import { GAME_MODES_ROUTES } from './gamemodes.routing';
 import { GameModesHomeComponent } from './page/gamemodes-home/gamemodes-home.component';
-import { PlayersRankingsHomeComponent } from './page/players-rankings-home/players-rankings-home.component';
+import { PlayersStatisticsHomeComponent } from './page/players-statistics-home/players-statistics-home.component';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
@@ -34,8 +34,8 @@ import { PaginatorModule } from 'primeng/paginator';
     GameModesHomeComponent,
     GameModesTableComponent,
     GamemodeViewComponent,
-    PlayersRankingsHomeComponent,
-    PlayersRankingsViewComponent,
+    PlayersStatisticsHomeComponent,
+    PlayersStatisticsViewComponent,
 ],
   imports: [
     CommonModule,

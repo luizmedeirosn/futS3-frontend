@@ -8,11 +8,11 @@ import { PlayerFullScoreDTO } from 'src/app/models/interfaces/gamemode/response/
 import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
 
 @Component({
-  selector: 'app-players-rankings-home',
-  templateUrl: './players-rankings-home.component.html',
+  selector: 'app-players-statistics-home',
+  templateUrl: './players-statistics-home.component.html',
   styleUrls: []
 })
-export class PlayersRankingsHomeComponent implements OnInit, OnDestroy {
+export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
 
     private destroy$: Subject<void> = new Subject();
     private readonly messageLife: number = 2500;

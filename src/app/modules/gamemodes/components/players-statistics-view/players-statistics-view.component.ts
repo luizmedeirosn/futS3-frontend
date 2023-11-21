@@ -4,19 +4,19 @@ import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { GameModeMinDTO } from 'src/app/models/interfaces/gamemode/response/GameModeMinDTO';
 import { GameModePositionDTO } from 'src/app/models/interfaces/gamemode/response/GameModePositonDTO';
 import { PlayerFullScoreDTO } from 'src/app/models/interfaces/gamemode/response/PlayerFullScoreDTO';
-import { PositionParametersDTO } from './../../../../models/interfaces/position/response/PositionParametersDTO';
+import { PositionParametersDTO } from '../../../../models/interfaces/position/response/PositionParametersDTO';
 
 import { IconDefinition, faMagnifyingGlassChart, faRankingStar } from '@fortawesome/free-solid-svg-icons';
 import { PaginatorState } from 'primeng/paginator';
 import { PositionService } from 'src/app/services/position/position.service';
 
 @Component({
-  selector: 'app-players-rankings-view',
-  templateUrl: './players-rankings-view.component.html',
-  styleUrls: ['./players-rankings-view.component.scss'],
+  selector: 'app-players-statistics-view',
+  templateUrl: './players-statistics-view.component.html',
+  styleUrls: ['./players-statistics-view.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class PlayersRankingsViewComponent implements OnDestroy {
+export class PlayersStatisticsViewComponent implements OnDestroy {
 
     private readonly destroy$: Subject<void> = new Subject();
 
