@@ -11,6 +11,8 @@ import { GAME_MODES_ROUTES } from './gamemodes.routing';
 import { GameModesHomeComponent } from './page/gamemodes-home/gamemodes-home.component';
 import { PlayersRankingsHomeComponent } from './page/players-rankings-home/players-rankings-home.component';
 
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
 import { AccordionModule } from 'primeng/accordion';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -20,6 +22,11 @@ import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
 import { SkeletonModule } from 'primeng/skeleton';
+
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { ChartModule } from 'primeng/chart';
+import { PaginatorModule } from 'primeng/paginator';
+
 
 
 @NgModule({
@@ -47,6 +54,11 @@ import { SkeletonModule } from 'primeng/skeleton';
     DropdownModule,
     AccordionModule,
     SkeletonModule,
-  ],
+    FontAwesomeModule,
+    SelectButtonModule,
+    ChartModule,
+    PaginatorModule,
+
+  ]
 })
 export class GamemodesModule { }

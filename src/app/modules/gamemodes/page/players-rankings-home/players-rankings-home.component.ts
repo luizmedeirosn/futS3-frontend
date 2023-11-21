@@ -25,6 +25,7 @@ export class PlayersRankingsHomeComponent implements OnInit, OnDestroy {
             positionId: new FormControl({value: '', disabled: true}, Validators.required),
         }
     );
+
     public playersRankingLoading$: BehaviorSubject<boolean> = new BehaviorSubject(true);
     public playersRanking!: PlayerFullScoreDTO[];
 

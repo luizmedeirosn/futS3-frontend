@@ -1,40 +1,42 @@
 <div class="flex justify-content-center">
     <p-card
         styleClass="flipleft animation-duration-1000 animation-iteration-1 animation-ease-out"
-        [style]="{ 'min-width': '45rem', 'max-width': '45rem' }"
+        [style]="{ 'min-width': '90rem', 'max-width': '90rem' }"
         header="Rankings"
     >
         <form [formGroup]="getPlayersRankingForm" (ngSubmit)="handleGetPlayersRankingEvent()">
             <div class="flex justify-content-between align-content-center align-items-center">
-                <span class="p-float-label">
-                    <p-dropdown
-                        [options]="gameModes"
-                        optionLabel="formationName"
-                        [filter]="true"
-                        filterBy="formationName"
-                        [showClear]="true"
-                        placeholder="Select a Game Mode"
-                        inputId="float-label-gamemode"
-                        optionValue="id"
-                        formControlName="gameModeId"
-                        (onChange)="handleFindGameModePositionsEvent($event)"
-                    ></p-dropdown>
-                    <label for="float-label-gamemode" class="white-space-nowrap">Select a Game Mode</label>
-                </span>
-                <span class="p-float-label">
-                    <p-dropdown
-                        [options]="selectedGameModePositions"
-                        optionLabel="positionName"
-                        [filter]="true"
-                        filterBy="positionName"
-                        [showClear]="true"
-                        placeholder="Select a Position"
-                        inputId="float-label-position"
-                        optionValue="positionId"
-                        formControlName="positionId"
-                    ></p-dropdown>
-                    <label for="float-label-position" class="white-space-nowrap">Select a Position</label>
-                </span>
+                <div class="flex justify-content-center align-items-center gap-3">
+                    <span class="p-float-label">
+                        <p-dropdown
+                            [options]="gameModes"
+                            optionLabel="formationName"
+                            [filter]="true"
+                            filterBy="formationName"
+                            [showClear]="true"
+                            placeholder="Select a Game Mode"
+                            inputId="float-label-gamemode"
+                            optionValue="id"
+                            formControlName="gameModeId"
+                            (onChange)="handleFindGameModePositionsEvent($event)"
+                        ></p-dropdown>
+                        <label for="float-label-gamemode" class="white-space-nowrap">Select a Game Mode</label>
+                    </span>
+                    <span class="p-float-label">
+                        <p-dropdown
+                            [options]="selectedGameModePositions"
+                            optionLabel="positionName"
+                            [filter]="true"
+                            filterBy="positionName"
+                            [showClear]="true"
+                            placeholder="Select a Position"
+                            inputId="float-label-position"
+                            optionValue="positionId"
+                            formControlName="positionId"
+                        ></p-dropdown>
+                        <label for="float-label-position" class="white-space-nowrap">Select a Position</label>
+                    </span>
+                </div>
                 <p-button
                     [disabled]="!getPlayersRankingForm.value.gameModeId || !getPlayersRankingForm.value.positionId"
                     type="submit"
@@ -45,9 +47,39 @@
                 ></p-button>
             </div>
         </form>
-        <div>
+
+        <div class="flex justify-content-end align-items-center mt-3 gap-2">
+            <p-button
+                [disabled]="
+                    playersRanking === undefined ||
+                    playersRanking.length === 0 ||
+                    (playersRankingLoading$ | async) ||
+                    (playersRankingViewEnable$ | async) === true
+                "
+                styleClass="flex justify-content-center align-content-center align-items-end bg-indigo-800 hover:bg-indigo-900 border-none gap-2"
+                label="Ranking"
+                [raised]="true"
+                (onClick)="activeViewPlayersRanking()"
+                ><fa-icon [icon]="faRankingStar" size="xl" [styles]="faIconsStyles"></fa-icon>
+            </p-button>
+            <p-button
+                [disabled]="
+                    playersRanking === undefined ||
+                    playersRanking.length === 0 ||
+                    (playersRankingLoading$ | async) ||
+                    (playersRankingViewEnable$ | async) === false
+                "
+                styleClass="flex justify-content-center align-content-center align-items-end bg-indigo-800 hover:bg-indigo-900 border-none gap-2"
+                label="Insights"
+                [raised]="true"
+                (onClick)="desactiveViewPlayersRanking()"
+                ><fa-icon [icon]="faChartBar" size="xl" [styles]="faIconsStyles"></fa-icon>
+            </p-button>
+        </div>
+
+        <div *ngIf="playersRankingViewEnable$ | async">
             <p-accordion *ngIf="playersRanking && !(playersRankingLoading$ | async);"
-                class="w-full"
+            class="w-full"
             >
                     <div
                         *ngFor="let player of playersRanking; index as i;"
@@ -152,15 +184,35 @@
                         </p-card>
                     </div>
             </p-accordion>
+
             <div *ngIf="playersRanking && (playersRankingLoading$ | async)"
-                class="fadeindown animation-duration-1000 animation-iteration-1 animation-ease-out"
-            >
-                <p-skeleton styleClass="mt-3 h-10rem"></p-skeleton>
-                <p-skeleton styleClass="mt-3 h-10rem"></p-skeleton>
-                <p-skeleton styleClass="mt-3 h-10rem"></p-skeleton>
-                <p-skeleton styleClass="mt-3 h-10rem"></p-skeleton>
-                <p-skeleton styleClass="mt-3 h-10rem"></p-skeleton>
+                    class="fadeindown animation-duration-1000 animation-iteration-1 animation-ease-out"
+                >
+                    <p-skeleton styleClass="mt-3 h-10rem"></p-skeleton>
+                    <p-skeleton styleClass="mt-3 h-10rem"></p-skeleton>
+                    <p-skeleton styleClass="mt-3 h-10rem"></p-skeleton>
+                    <p-skeleton styleClass="mt-3 h-10rem"></p-skeleton>
+                    <p-skeleton styleClass="mt-3 h-10rem"></p-skeleton>
             </div>
+        </div>
+
+        <div *ngIf="!(playersRankingViewEnable$ | async)" class="flex align-content-center mt-3 gap-3">
+            <p-card
+                styleClass="shadow-3 flex flex-column align-content-center"
+                header="Total Score for Player"
+                [style]="{ 'min-width': '43rem', 'max-width': '43rem', 'min-height': '45rem', 'max-height': '45rem' }"
+            >
+                <p-chart type="bar" [data]="chartBarData" [options]="chartBarOptions" width="100%" height="32rem"></p-chart>
+                <p-paginator (onPageChange)="onPageChangeChartBar($event)" [first]="0" [rows]="5" [totalRecords]="playersRanking.length"></p-paginator>
+            </p-card>
+            <p-card
+                styleClass="shadow-3 flex flex-column align-content-center"
+                header="Parameters for Player"
+                [style]="{ 'min-width': '43rem', 'max-width': '43rem', 'min-height': '45rem', 'max-height': '45rem' }"
+            >
+                <p-chart type="radar" [data]="chartRadarData" [options]="charRadarOptions" width="100%" height="32rem"></p-chart>
+                <p-paginator (onPageChange)="onPageChangeChartRadar($event)" [first]="0" [rows]="3" [totalRecords]="playersRanking.length"></p-paginator>
+            </p-card>
         </div>
     </p-card>
 </div>
