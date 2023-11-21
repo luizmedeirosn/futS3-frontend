@@ -8,7 +8,7 @@ export const GAME_MODES_ROUTES: Routes = [
         component: GameModesHomeComponent
     },
     {
-        path: 'rankings',
+        path: 'statistics',
         component: PlayersRankingsHomeComponent
     }
 ];
