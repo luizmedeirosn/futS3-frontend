@@ -15,7 +15,7 @@ import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
 export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
 
     private destroy$: Subject<void> = new Subject();
-    private readonly messageLife: number = 2500;
+    private readonly messageLife: number = 3000;
 
     public gameModes!: GameModeMinDTO[];
     public selectedGameModePositions!: GameModePositionDTO[];

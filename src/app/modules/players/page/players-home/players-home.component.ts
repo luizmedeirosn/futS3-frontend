@@ -15,7 +15,7 @@ import { PlayerService } from 'src/app/services/player/player.service';
 export class PlayersHomeComponent implements OnInit, OnDestroy {
 
     private readonly destroy$: Subject<void> = new Subject();
-    private readonly messageLife: number = 2500;
+    private readonly messageLife: number = 3000;
 
     public players!: Array<PlayerMinDTO>;
     public player!: PlayerFullDTO;

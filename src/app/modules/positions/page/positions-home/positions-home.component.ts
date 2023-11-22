@@ -14,7 +14,7 @@ import { PositionService } from 'src/app/services/position/position.service';
 export class PositionsHomeComponent implements OnInit, OnDestroy {
 
     private readonly destroy$: Subject<void> = new Subject();
-    private readonly messageLife: number = 2500;
+    private readonly messageLife: number = 3000;
 
     public positions!: PositionDTO[];
 
