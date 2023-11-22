@@ -204,7 +204,7 @@
                     header="Total Score for Player"
                 >
                     <p-chart type="bar" [data]="chartBarData" [options]="chartBarOptions" width="100%" height="30rem"></p-chart>
-                    <p-paginator (onPageChange)="onPageChangeChartBar($event)" [first]="0" [rows]="8" [totalRecords]="playersRanking.length"></p-paginator>
+                    <p-paginator (onPageChange)="onPageChangeChartBar($event)" [first]="0" [rows]="5" [totalRecords]="playersRanking.length"></p-paginator>
                 </p-card>
                 <p-card
                     styleClass="shadow-3 flex flex-column align-content-center"

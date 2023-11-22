@@ -102,7 +102,7 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
 
     public desactiveViewPlayersRanking() {
         this.playersRankingViewEnable$.next(false);
-        this.setChartBarData(0 , 8);
+        this.setChartBarData(0 , 5);
         this.setCharRadarData(0, 3);
     }
 
@@ -220,7 +220,7 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
             scales: {
                 r: {
                     grid: {
-                        color: this.surfaceBorder,
+                        color: this.documentStyle.getPropertyValue('--gray-500'),
                     },
                     pointLabels: {
                         color: this.textColorSecondary,
