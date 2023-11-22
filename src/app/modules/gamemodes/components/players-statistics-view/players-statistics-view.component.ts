@@ -235,7 +235,8 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
                         }
                     }
                 },
-            }
+            },
+            backgroundColor: '#dfdfdf10',
         };
     }
 

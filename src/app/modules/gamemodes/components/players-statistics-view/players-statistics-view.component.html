@@ -40,9 +40,9 @@
                 <p-button
                     [disabled]="!getPlayersRankingForm.value.gameModeId || !getPlayersRankingForm.value.positionId"
                     type="submit"
-                    label="Query"
+                    label="Search"
                     styleClass="p-button-success"
-                    pTooltip="Query Ranking"
+                    pTooltip="Search Ranking"
                     tooltipPosition="top"
                 ></p-button>
             </div>
@@ -197,7 +197,7 @@
         </div>
 
         <div *ngIf="!(playersRankingViewEnable$ | async)" class="insights-section">
-            <div class="flex justify-content-between align-content-center mt-3 gap-3 fadein animation-duration-500 animation-iteration-1">
+            <div class="flex justify-content-between align-content-center mt-3 gap-3 fadein animation-duration-200 animation-iteration-1">
                 <p-card
                     styleClass="shadow-3 flex flex-column align-content-center"
                     [style]="{ 'min-width': '38rem', 'max-width': '38rem' }"
