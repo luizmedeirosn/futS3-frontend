@@ -131,8 +131,8 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
             datasets: [
                 {
                     label: 'Total Score',
-                    backgroundColor: this.documentStyle.getPropertyValue('--blue-700'),
-                    borderColor: this.documentStyle.getPropertyValue('--blue-700'),
+                    backgroundColor: this.documentStyle.getPropertyValue('--blue-600'),
+                    borderColor: this.documentStyle.getPropertyValue('--blue-600'),
                     data: playersTotalScores
                 },
             ]
@@ -212,7 +212,7 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
                         color: this.textColor,
                         font: {
                             weight: '500',
-                            size: 16
+                            size: 17
                         }
                     }
                 }
@@ -225,18 +225,18 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
                     pointLabels: {
                         color: this.textColorSecondary,
                         font: {
-                            size: 15
+                            size: 17
                         }
                     },
                     ticks: {
                         color: this.textColorSecondary,
                         font: {
-                            size: 16
+                            size: 17
                         }
                     }
                 },
             },
-            backgroundColor: '#dfdfdf10',
+            backgroundColor: '#dfdfdf20',
         };
     }
 
