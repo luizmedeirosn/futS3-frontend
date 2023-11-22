@@ -41,6 +41,7 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
     }
 
     private setGameModes(): void {
+        this.messageService.clear();
         this.gameModeService.findAll()
         .pipe(takeUntil(this.destroy$))
         .subscribe (
@@ -75,6 +76,7 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
     }
 
     public handleFindGameModePositionsAction( $event: { id: number; } ) : void {
+        this.messageService.clear();
         if ($event) {
             this.gameModeService.findGameModePositions($event.id)
             .pipe(takeUntil(this.destroy$))
@@ -84,10 +86,8 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
                         this.selectedGameModePositions = gameModePositions;
                         if (gameModePositions.length > 0) {
                             this.getPlayersRankingForm.get('positionId').enable(true);
-                            this.messageService.clear();
                         } else {
                             this.getPlayersRankingForm.get('positionId').disable(true);
-                            this.messageService.clear();
                             this.messageService.add (
                                 {
                                     severity: 'info',
@@ -100,7 +100,6 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
                     },
                     error: (err) => {
                         this.getPlayersRankingForm.get('positionId').disable(true);
-                        this.messageService.clear();
                         this.messageService.add (
                             {
                                 severity: 'error',
@@ -117,6 +116,7 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
     }
 
     public handleGetPlayersRankingAction( $event: {gameModeId: number, positionId: number} ): void {
+        this.messageService.clear();
         if ($event) {
             setTimeout( () => this.playersRankingLoading$.next(false), 1000 );
             this.gameModeService.getRanking( $event.gameModeId, $event.positionId)
@@ -127,7 +127,6 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
                         this.playersRanking = playersRanking;
                         setTimeout( () =>  {
                             if (playersRanking.length > 0) {
-                                this.messageService.clear();
                                 this.messageService.add (
                                     {
                                         severity: 'success',

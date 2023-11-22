@@ -45,6 +45,7 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
     }
 
     private setPositions(): void {
+        this.messageService.clear();
         this.positionService.findAll()
         .pipe(takeUntil(this.destroy$))
         .subscribe (
@@ -76,6 +77,7 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
     }
 
     public handleViewFullDataPositionAction($event: ViewFullDataPositionEvent): void {
+        this.messageService.clear();
         if ($event) {
             this.positionService.findPositionParametersById($event.id)
             .pipe(takeUntil(this.destroy$))

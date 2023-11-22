@@ -45,6 +45,7 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
     }
 
     private setGameModes(): void {
+        this.messageService.clear();
         this.gameModeService.findAll()
         .pipe(takeUntil(this.destroy$))
         .subscribe (
@@ -78,6 +79,7 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
     }
 
     public handleViewFullDataGameModeAction($event: ViewFullDataGameModeEvent): void {
+        this.messageService.clear();
         if ($event) {
             this.gameModeService.findFullById($event.id)
             .pipe(takeUntil(this.destroy$))

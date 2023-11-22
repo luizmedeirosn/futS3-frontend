@@ -46,6 +46,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
     }
 
     private setPlayers(): void {
+        this.messageService.clear();
         this.playerService.findAll()
         .pipe(takeUntil(this.destroy$))
         .subscribe (
@@ -79,6 +80,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
     }
 
     public handleViewFullDataPlayerAction($event: ViewFullDataPlayerEvent): void {
+        this.messageService.clear();
         if ($event) {
             this.playerService.findFullById($event.id)
             .pipe(takeUntil(this.destroy$))
