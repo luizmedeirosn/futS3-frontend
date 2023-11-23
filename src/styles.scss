@@ -68,9 +68,14 @@ tr {
     color: rgba(0, 0, 0, .87);
 }
 
-p-dropdownitem:hover {
-    span {
-        color: var(--blue-1)
+.p-dropdown-filter-container {
+    .p-inputtext {
+        border: solid;
+        border-width: 1px;
+        border-radius: 3px;
+        span {
+            color: var(--black-1);
+        }
     }
 }
 
