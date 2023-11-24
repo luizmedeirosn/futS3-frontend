@@ -51,9 +51,9 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
     public chartRadarData: any;
     public chartRadarOptions: any;
     private readonly colors: Array<string>
-        = new Array( '--green-500', '--blue-600', '--red-600'  );
+        = new Array( '--green-600', '--blue-600', '--red-600'  );
 
-    constructor (
+    public constructor (
         private positionService: PositionService
     ) {
     }
@@ -102,7 +102,7 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
 
     public desactiveViewPlayersRanking() {
         this.playersRankingViewEnable$.next(false);
-        this.setChartBarData(0 , 5);
+        this.setChartBarData(0 , 6);
         this.setCharRadarData(0, 3);
     }
 
@@ -239,7 +239,7 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
                         }
                     },
                 },
-                backgroundColor: '#dfdfdf20',
+                backgroundColor: '#d0d0d030',
             };
         }
     }
