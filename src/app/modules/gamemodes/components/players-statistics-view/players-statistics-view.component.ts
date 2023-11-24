@@ -23,7 +23,8 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
     @Input() public gameModes!: GameModeMinDTO[];
     @Input() public selectedGameModePositions!: GameModePositionDTO[];
     @Input() public getPlayersRankingForm: any;
-    @Input() public playersRanking!: PlayerFullScoreDTO[];
+    @Input() public playersRanking!: PlayerFullScoreDTO[] | undefined;
+    @Input() public viewActivate$!: BehaviorSubject<boolean>;
     @Input() public playersRankingLoading$!: BehaviorSubject<boolean>;
 
     @Output() public findGameModePositionsEvent: EventEmitter<{ id: number }> = new EventEmitter();
@@ -52,7 +53,6 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
     private readonly colors: Array<string>
         = new Array( '--green-500', '--blue-600', '--red-600'  );
 
-
     constructor (
         private positionService: PositionService
     ) {
@@ -75,8 +75,8 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
         const positionId = this.getPlayersRankingForm.value?.positionId as number | undefined;
         if (gameModeId && positionId) {
             this.setPositionParameters(positionId);
-            this.playersRanking = new Array();
             this.playersRankingLoading$.next(true);
+            this.playersRanking = undefined;
             this.getPlayerRankingEvent.emit({ gameModeId, positionId });
         }
     }
@@ -119,125 +119,129 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
     }
 
     private setChartBarData(first: number, rows: number): void {
-        const playersNames =
-            this.playersRanking.filter( (element, index) => index >= first && index < first+rows )
-            .map( (value) => value.name );
-        const playersTotalScores =
-            this.playersRanking.filter( (element, index) => index >= first && index < first+rows )
-            .map( (value) => value.totalScore );
+        if (this.playersRanking) {
+            const playersNames =
+                this.playersRanking.filter( (element, index) => index >= first && index < first+rows )
+                .map( (value) => value.name );
+            const playersTotalScores =
+                this.playersRanking.filter( (element, index) => index >= first && index < first+rows )
+                .map( (value) => value.totalScore );
 
-        this.chartBarData = {
-            labels: playersNames,
-            datasets: [
-                {
-                    label: 'Total Score',
-                    backgroundColor: this.documentStyle.getPropertyValue('--blue-600'),
-                    borderColor: this.documentStyle.getPropertyValue('--blue-600'),
-                    data: playersTotalScores
-                },
-            ]
-        };
+            this.chartBarData = {
+                labels: playersNames,
+                datasets: [
+                    {
+                        label: 'Total Score',
+                        backgroundColor: this.documentStyle.getPropertyValue('--blue-600'),
+                        borderColor: this.documentStyle.getPropertyValue('--blue-600'),
+                        data: playersTotalScores
+                    },
+                ]
+            };
 
-        this.chartBarOptions = {
-            indexAxis: 'y',
-            maintainAspectRatio: false,
-            aspectRatio: 0.8,
-            plugins: {
-              legend: {
-                labels: {
-                  color: this.textColor,
-                  font: {
-                    weight: '500',
-                    size: 15
-                  }
+            this.chartBarOptions = {
+                indexAxis: 'y',
+                maintainAspectRatio: false,
+                aspectRatio: 0.8,
+                plugins: {
+                legend: {
+                    labels: {
+                    color: this.textColor,
+                    font: {
+                        weight: '500',
+                        size: 15
+                    }
+                    }
                 }
-              }
-            },
-            scales: {
-              x: {
-                ticks: {
-                  color: this.textColorSecondary,
-                  font: {
-                    weight: '500',
-                    size: 15
-                  }
                 },
-                grid: {
-                  color: this.surfaceBorder
+                scales: {
+                    x: {
+                        ticks: {
+                            color: this.textColorSecondary,
+                            font: {
+                                weight: '500',
+                                size: 15
+                            }
+                        },
+                        grid: {
+                            color: this.surfaceBorder
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            color: this.textColorSecondary,
+                            font: {
+                                weight: '500',
+                                size: 15
+                            }
+                        },
+                        grid: {
+                            color: this.surfaceBorder
+                        }
+                    }
                 }
-              },
-              y: {
-                ticks: {
-                  color: this.textColorSecondary,
-                  font: {
-                    weight: '500',
-                    size: 15
-                  }
-                },
-                grid: {
-                  color: this.surfaceBorder
-                }
-              }
             }
-          }
+        }
     }
 
     private setCharRadarData(first: number, rows: number) {
-        let datasets: any[] = [];
-        let colorIndex = 0;
-        for (let i = first + rows - 1; i >= first; i--, colorIndex++) {
-            const player = this.playersRanking.at(i);
-            if (player) {
-                datasets.push({
-                    label: player.name,
-                    borderColor: this.documentStyle.getPropertyValue(String(this.colors.at(colorIndex))),
-                    pointBackgroundColor: this.documentStyle.getPropertyValue(String(this.colors.at(colorIndex))),
-                    pointBorderColor: this.documentStyle.getPropertyValue(String(this.colors.at(colorIndex))),
-                    pointHoverBackgroundColor: this.textColor,
-                    pointHoverBorderColor: this.documentStyle.getPropertyValue(String(this.colors.at(colorIndex))),
-                    data: player.parameters.map((element) => element.playerScore),
-                });
-            }
-        }
-        datasets.reverse();
-        this.chartRadarData = {
-            labels: this.positionParameters.map( (element) => element.parameterName ),
-            datasets
-        };
-
-        this.chartRadarOptions = {
-            plugins: {
-                legend: {
-                    labels: {
-                        color: this.textColor,
-                        font: {
-                            weight: '500',
-                            size: 17
-                        }
-                    }
+        if (this.playersRanking) {
+            let datasets: any[] = [];
+            let colorIndex = 0;
+            for (let i = first + rows - 1; i >= first; i--, colorIndex++) {
+                const player = this.playersRanking.at(i);
+                if (player) {
+                    datasets.push({
+                        label: player.name,
+                        borderColor: this.documentStyle.getPropertyValue(String(this.colors.at(colorIndex))),
+                        pointBackgroundColor: this.documentStyle.getPropertyValue(String(this.colors.at(colorIndex))),
+                        pointBorderColor: this.documentStyle.getPropertyValue(String(this.colors.at(colorIndex))),
+                        pointHoverBackgroundColor: this.textColor,
+                        pointHoverBorderColor: this.documentStyle.getPropertyValue(String(this.colors.at(colorIndex))),
+                        data: player.parameters.map((element) => element.playerScore),
+                    });
                 }
-            },
-            scales: {
-                r: {
-                    grid: {
-                        color: this.documentStyle.getPropertyValue('--gray-500'),
-                    },
-                    pointLabels: {
-                        color: this.textColorSecondary,
-                        font: {
-                            size: 17
-                        }
-                    },
-                    ticks: {
-                        color: this.textColorSecondary,
-                        font: {
-                            size: 17
+            }
+            datasets.reverse();
+            this.chartRadarData = {
+                labels: this.positionParameters.map( (element) => element.parameterName ),
+                datasets
+            };
+
+            this.chartRadarOptions = {
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: this.textColor,
+                            font: {
+                                weight: '500',
+                                size: 17
+                            }
                         }
                     }
                 },
-            },
-            backgroundColor: '#dfdfdf20',
-        };
+                scales: {
+                    r: {
+                        grid: {
+                            color: this.documentStyle.getPropertyValue('--gray-500'),
+                        },
+                        pointLabels: {
+                            color: this.textColorSecondary,
+                            font: {
+                                size: 17
+                            }
+                        },
+                        ticks: {
+                            color: this.textColorSecondary,
+                            font: {
+                                size: 17
+                            }
+                        }
+                    },
+                },
+                backgroundColor: '#dfdfdf20',
+            };
+        }
     }
 
     public ngOnDestroy() {

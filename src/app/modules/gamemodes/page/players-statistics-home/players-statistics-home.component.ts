@@ -26,8 +26,9 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
         }
     );
 
+    public viewActivate$: BehaviorSubject<boolean> = new BehaviorSubject(false);
     public playersRankingLoading$: BehaviorSubject<boolean> = new BehaviorSubject(true);
-    public playersRanking!: PlayerFullScoreDTO[];
+    public playersRanking!: PlayerFullScoreDTO[] | undefined;
 
     public constructor(
         private gameModeService: GameModeService,
@@ -117,6 +118,7 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
 
     public handleGetPlayersRankingAction( $event: {gameModeId: number, positionId: number} ): void {
         this.messageService.clear();
+        this.viewActivate$.next(true);
         if ($event) {
             setTimeout( () => this.playersRankingLoading$.next(false), 1000 );
             this.gameModeService.getRanking( $event.gameModeId, $event.positionId)
@@ -136,6 +138,8 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
                                     }
                                 );
                             } else {
+                                this.viewActivate$.next(false);
+                                this.playersRanking = undefined;
                                 this.messageService.add (
                                     {
                                         key: 'without-ranking-warn',
