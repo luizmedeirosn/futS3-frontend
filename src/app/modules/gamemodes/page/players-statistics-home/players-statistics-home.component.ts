@@ -29,6 +29,7 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
     public viewActivate$: BehaviorSubject<boolean> = new BehaviorSubject(false);
     public playersRankingLoading$: BehaviorSubject<boolean> = new BehaviorSubject(true);
     public playersRanking!: PlayerFullScoreDTO[] | undefined;
+    public playersRankingPage!: PlayerFullScoreDTO[];
 
     public constructor(
         private gameModeService: GameModeService,
@@ -127,17 +128,21 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
                 {
                     next: (playersRanking) => {
                         this.playersRanking = playersRanking;
-                        setTimeout( () =>  {
-                            if (playersRanking.length > 0) {
-                                this.messageService.add (
-                                    {
-                                        severity: 'success',
-                                        summary: 'Success',
-                                        detail: 'Ranking obtained successfully!',
-                                        life: this.messageLife
-                                    }
-                                );
-                            } else {
+                        this.playersRanking && (
+                            this.playersRankingPage =
+                                this.playersRanking.filter( (element, index) => index >= 0 && index < 6 )
+                        );
+                        if (playersRanking.length > 0) {
+                            this.messageService.add (
+                                {
+                                    severity: 'success',
+                                    summary: 'Success',
+                                    detail: 'Ranking obtained successfully!',
+                                    life: this.messageLife
+                                }
+                            );
+                        } else {
+                            setTimeout( () => {
                                 this.viewActivate$.next(false);
                                 this.playersRanking = undefined;
                                 this.messageService.add (
@@ -149,8 +154,8 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
                                         life: 10000,
                                     }
                                 );
-                            }
-                        }, 1500 );
+                            }, 1000);
+                        }
                     },
                     error: (err) => {
                         this.messageService.add (

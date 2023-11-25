@@ -23,15 +23,14 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
     @Input() public gameModes!: GameModeMinDTO[];
     @Input() public selectedGameModePositions!: GameModePositionDTO[];
     @Input() public getPlayersRankingForm: any;
-    @Input() public playersRanking!: PlayerFullScoreDTO[] | undefined;
     @Input() public viewActivate$!: BehaviorSubject<boolean>;
     @Input() public playersRankingLoading$!: BehaviorSubject<boolean>;
+    @Input() public playersRanking!: PlayerFullScoreDTO[] | undefined;
+    @Input() public playersRankingPage!: PlayerFullScoreDTO[];
+
 
     @Output() public findGameModePositionsEvent: EventEmitter<{ id: number }> = new EventEmitter();
-    @Output() public getPlayerRankingEvent: EventEmitter<{ gameModeId: number, positionId: number }> = new EventEmitter();
-
-    public playersRankingViewEnable$: BehaviorSubject<boolean> = new BehaviorSubject(true);
-    private positionParameters!: PositionParametersDTO[];
+    @Output() public getPlayersRankingEvent: EventEmitter<{ gameModeId: number, positionId: number }> = new EventEmitter();
 
     public readonly faRankingStar: IconDefinition = faRankingStar;
     public readonly faMagnifyingGlassChart: IconDefinition = faMagnifyingGlassChart;
@@ -39,6 +38,9 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
         'color' : '#fff;',
         'align-content' : 'end;'
     }
+
+    public playersRankingViewEnable$: BehaviorSubject<boolean> = new BehaviorSubject(true);
+    private positionParameters!: PositionParametersDTO[];
 
     private readonly documentStyle = getComputedStyle(document.documentElement);
     private readonly textColor = this.documentStyle.getPropertyValue('--black-1');
@@ -50,8 +52,8 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
 
     public chartRadarData: any;
     public chartRadarOptions: any;
-    private readonly colors: Array<string>
-        = new Array( '--green-600', '--blue-600', '--red-600'  );
+    private readonly colors: Array<string> =
+        new Array( '--blue-600', '--green-600', '--red-600'  );
 
     public constructor (
         private positionService: PositionService
@@ -77,7 +79,7 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
             this.setPositionParameters(positionId);
             this.playersRankingLoading$.next(true);
             this.playersRanking = undefined;
-            this.getPlayerRankingEvent.emit({ gameModeId, positionId });
+            this.getPlayersRankingEvent.emit({ gameModeId, positionId });
         }
     }
 
@@ -104,6 +106,15 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
         this.playersRankingViewEnable$.next(false);
         this.setChartBarData(0 , 6);
         this.setCharRadarData(0, 3);
+    }
+
+    public onPageChangeRankingPage(event$: PaginatorState) {
+        if (this.playersRanking && event$.first !== undefined && event$.rows !== undefined) {
+            const first = event$.first;
+            const rows = event$.rows;
+            this.playersRankingPage =
+                this.playersRanking.filter( (element, index) => index >= first && index < first+rows );
+        }
     }
 
     public onPageChangeChartBar(event$: PaginatorState): void {
@@ -198,6 +209,7 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
                         pointBorderColor: this.documentStyle.getPropertyValue(String(this.colors.at(colorIndex))),
                         pointHoverBackgroundColor: this.textColor,
                         pointHoverBorderColor: this.documentStyle.getPropertyValue(String(this.colors.at(colorIndex))),
+                        pointBorderWidth: 3,
                         data: player.parameters.map((element) => element.playerScore),
                     });
                 }
@@ -239,7 +251,7 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
                         }
                     },
                 },
-                backgroundColor: '#d0d0d030',
+                backgroundColor: '#d0d0d001',
             };
         }
     }
