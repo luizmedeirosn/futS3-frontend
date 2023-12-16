@@ -11,10 +11,10 @@ import { PaginatorState } from 'primeng/paginator';
 import { PositionService } from 'src/app/services/position/position.service';
 
 @Component({
-  selector: 'app-players-statistics-view',
-  templateUrl: './players-statistics-view.component.html',
-  styleUrls: ['./players-statistics-view.component.scss'],
-  encapsulation: ViewEncapsulation.None
+    selector: 'app-players-statistics-view',
+    templateUrl: './players-statistics-view.component.html',
+    styleUrls: ['./players-statistics-view.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class PlayersStatisticsViewComponent implements OnDestroy {
 
@@ -35,8 +35,8 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
     public readonly faRankingStar: IconDefinition = faRankingStar;
     public readonly faMagnifyingGlassChart: IconDefinition = faMagnifyingGlassChart;
     public readonly faIconsStyles: any = {
-        'color' : '#fff;',
-        'align-content' : 'end;'
+        'color': '#fff;',
+        'align-content': 'end;'
     }
 
     public playersRankingViewEnable$: BehaviorSubject<boolean> = new BehaviorSubject(true);
@@ -53,18 +53,18 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
     public chartRadarData: any;
     public chartRadarOptions: any;
     private readonly colors: Array<string> =
-        new Array( '--blue-600', '--green-600', '--red-600'  );
+        new Array('--blue-600', '--green-600', '--red-600');
 
-    public constructor (
+    public constructor(
         private positionService: PositionService
     ) {
     }
 
     public handleFindGameModePositionsEvent($event: DropdownChangeEvent): void {
         if ($event && this.getPlayersRankingForm.value?.gameModeId) {
-            this.findGameModePositionsEvent.emit (
+            this.findGameModePositionsEvent.emit(
                 {
-                    id: this.gameModes.at( ($event.value as number) -1 )?.id as number,
+                    id: this.gameModes.at(($event.value as number) - 1)?.id as number,
                 }
             );
         } else {
@@ -85,17 +85,17 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
 
     private setPositionParameters(positionId: number): void {
         this.positionService.findPositionParametersById(positionId)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe (
-            {
-                next: (positionParameters) => {
-                    this.positionParameters = positionParameters;
-                },
-                error: (err) => {
-                    console.log(err);
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(
+                {
+                    next: (positionParameters) => {
+                        this.positionParameters = positionParameters;
+                    },
+                    error: (err) => {
+                        console.log(err);
+                    }
                 }
-            }
-        );
+            );
     }
 
     public activeViewPlayersRanking() {
@@ -104,7 +104,7 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
 
     public desactiveViewPlayersRanking() {
         this.playersRankingViewEnable$.next(false);
-        this.setChartBarData(0 , 6);
+        this.setChartBarData(0, 6);
         this.setCharRadarData(0, 3);
     }
 
@@ -113,7 +113,7 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
             const first = event$.first;
             const rows = event$.rows;
             this.playersRankingPage =
-                this.playersRanking.filter( (element, index) => index >= first && index < first+rows );
+                this.playersRanking.filter((element, index) => index >= first && index < first + rows);
         }
     }
 
@@ -132,19 +132,19 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
     private setChartBarData(first: number, rows: number): void {
         if (this.playersRanking) {
             const playersNames =
-                this.playersRanking.filter( (element, index) => index >= first && index < first+rows )
-                .map( (value) => value.name );
+                this.playersRanking.filter((element, index) => index >= first && index < first + rows)
+                    .map((value) => value.name);
             const playersTotalScores =
-                this.playersRanking.filter( (element, index) => index >= first && index < first+rows )
-                .map( (value) => value.totalScore );
+                this.playersRanking.filter((element, index) => index >= first && index < first + rows)
+                    .map((value) => value.totalScore);
 
             this.chartBarData = {
                 labels: playersNames,
                 datasets: [
                     {
                         label: 'Total Score',
-                        backgroundColor: this.documentStyle.getPropertyValue('--blue-600'),
-                        borderColor: this.documentStyle.getPropertyValue('--blue-600'),
+                        backgroundColor: this.documentStyle.getPropertyValue('--green-600'),
+                        borderColor: this.documentStyle.getPropertyValue('--green-600'),
                         data: playersTotalScores
                     },
                 ]
@@ -155,15 +155,15 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
                 maintainAspectRatio: false,
                 aspectRatio: 0.8,
                 plugins: {
-                legend: {
-                    labels: {
-                    color: this.textColor,
-                    font: {
-                        weight: '500',
-                        size: 15
+                    legend: {
+                        labels: {
+                            color: this.textColor,
+                            font: {
+                                weight: '500',
+                                size: 15
+                            }
+                        }
                     }
-                    }
-                }
                 },
                 scales: {
                     x: {
@@ -216,7 +216,7 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
             }
             datasets.reverse();
             this.chartRadarData = {
-                labels: this.positionParameters.map( (element) => element.parameterName ),
+                labels: this.positionParameters.map((element) => element.parameterName),
                 datasets
             };
 
@@ -256,7 +256,7 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
         }
     }
 
-    public ngOnDestroy() {
+    public ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
     }
