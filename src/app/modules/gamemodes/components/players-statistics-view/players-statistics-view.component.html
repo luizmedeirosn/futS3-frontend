@@ -4,41 +4,57 @@
         [style]="{ 'min-width': '80rem', 'max-width': '80rem' }"
         header="Statistics"
     >
-        <form [formGroup]="getPlayersRankingForm" (ngSubmit)="handleGetPlayersRankingEvent()">
-            <div class="flex justify-content-center align-content-center align-items-center gap-3">
-                <div class="flex justify-content-between align-items-center gap-3">
+        <form
+            [formGroup]="getPlayersRankingForm"
+            (ngSubmit)="handleGetPlayersRankingEvent()"
+        >
+            <div
+                class="flex justify-content-center align-content-center align-items-center gap-3"
+            >
+                <div
+                    class="flex justify-content-between align-items-center gap-3"
+                >
                     <span class="p-float-label">
                         <p-dropdown
-                            [options]="gameModes"
-                            optionLabel="formationName"
-                            [filter]="true"
-                            filterBy="formationName"
+                            [editable]="true"
                             [showClear]="true"
+                            [options]="gameModes"
+                            formControlName="gameMode"
+                            optionLabel="formationName"
                             placeholder="Select a Game Mode"
                             inputId="float-label-gamemode"
-                            optionValue="id"
-                            formControlName="gameModeId"
-                            (onChange)="handleFindGameModePositionsEvent($event)"
+                            (onChange)="
+                                handleFindGameModePositionsEvent($event)
+                            "
                         ></p-dropdown>
-                        <label for="float-label-gamemode" class="white-space-nowrap">Select a Game Mode</label>
+                        <label
+                            for="float-label-gamemode"
+                            class="white-space-nowrap"
+                            >Select a Game Mode</label
+                        >
                     </span>
                     <span class="p-float-label">
                         <p-dropdown
-                            [options]="selectedGameModePositions"
-                            optionLabel="positionName"
-                            [filter]="true"
-                            filterBy="positionName"
+                            [editable]="true"
                             [showClear]="true"
+                            [options]="selectedGameModePositions"
+                            formControlName="position"
+                            optionLabel="positionName"
                             placeholder="Select a Position"
                             inputId="float-label-position"
-                            optionValue="positionId"
-                            formControlName="positionId"
                         ></p-dropdown>
-                        <label for="float-label-position" class="white-space-nowrap">Select a Position</label>
+                        <label
+                            for="float-label-position"
+                            class="white-space-nowrap"
+                            >Select a Position</label
+                        >
                     </span>
                 </div>
                 <p-button
-                    [disabled]="!getPlayersRankingForm.value.gameModeId || !getPlayersRankingForm.value.positionId"
+                    [disabled]="
+                        !getPlayersRankingForm.value.gameMode ||
+                        !getPlayersRankingForm.value.position
+                    "
                     type="submit"
                     label="Search"
                     styleClass="p-button-success"
@@ -60,7 +76,11 @@
                 label="Ranking"
                 [raised]="true"
                 (onClick)="activeViewPlayersRanking()"
-                ><fa-icon [icon]="faRankingStar" size="xl" [styles]="faIconsStyles"></fa-icon>
+                ><fa-icon
+                    [icon]="faRankingStar"
+                    size="xl"
+                    [styles]="faIconsStyles"
+                ></fa-icon>
             </p-button>
             <p-button
                 [disabled]="
@@ -73,118 +93,224 @@
                 label="Insights"
                 [raised]="true"
                 (onClick)="desactiveViewPlayersRanking()"
-                ><fa-icon [icon]="faMagnifyingGlassChart" size="xl" [styles]="faIconsStyles"></fa-icon>
+                ><fa-icon
+                    [icon]="faMagnifyingGlassChart"
+                    size="xl"
+                    [styles]="faIconsStyles"
+                ></fa-icon>
             </p-button>
         </div>
 
-        <div *ngIf="(viewActivate$ | async) && (playersRankingViewEnable$ | async)">
-            <div *ngIf="playersRanking && !(playersRankingLoading$ | async) && playersRanking.length > 0;">
-                <p-accordion
-                    [multiple]="true"
-                    class="w-full"
-                >
-                        <div
-                            *ngFor="let player of playersRankingPage;"
-                            class="mt-2 fadein animation-duration-300 animation-iteration-1"
+        <div
+            *ngIf="
+                (viewActivate$ | async) && (playersRankingViewEnable$ | async)
+            "
+        >
+            <div
+                *ngIf="
+                    playersRanking &&
+                    !(playersRankingLoading$ | async) &&
+                    playersRanking.length > 0
+                "
+            >
+                <p-accordion [multiple]="true" class="w-full">
+                    <div
+                        *ngFor="let player of playersRankingPage"
+                        class="mt-2 fadein animation-duration-300 animation-iteration-1"
+                    >
+                        <p-card
+                            styleClass="shadow-3 mt-3 ranking-text-accordion-header"
+                            header="Ranking #{{
+                                playersRanking.indexOf(player) + 1
+                            }}"
+                            subheader="Total Score: {{ player.totalScore }}"
                         >
-                            <p-card
-                                styleClass="shadow-3 mt-3 ranking-text-accordion-header"
-                                header="Ranking #{{ playersRanking.indexOf(player) + 1 }}"
-                                subheader="Total Score: {{ player.totalScore }}"
-                            >
-                                <p-accordionTab>
-                                    <ng-template pTemplate="header">
-                                        <div class="flex align-items-center mr-2 gap-2">
-                                            <img
-                                                alt=""
-                                                src="{{ player.profilePictureLink || '../../../../../../../assets/without-picture.png' }}"
-                                                class="{{ player.profilePictureLink ? 'players-ranking-profile-picture' : 'players-ranking-profile-without-picture' }}"
-                                            />
-                                            <span class="vertical-align-middle text-lg">
-                                                {{ player.name }}
-                                            </span>
-                                        </div>
-                                    </ng-template>
-                                    <ng-template pTemplate="content">
-                                        <div class="flex justify-content-center align-content-center align-items-center gap-3">
-                                            <p-fieldset *ngIf="player.team.length <= 13; else teamDiv" legend="Team" styleClass="border-blue-400" class="player-ranking-data-fieldset">
-                                                <p class="player-ranking-data-field white-space-nowrap">
-                                                    {{ player.team }}
-                                                </p>
-                                            </p-fieldset>
-                                            <ng-template #teamDiv>
-                                                <p-fieldset legend="Team" styleClass="border-blue-400" class="player-ranking-data-fieldset" pTooltip="{{ player.team }}" tooltipPosition="bottom">
-                                                    <p class="player-ranking-data-field white-space-nowrap" pTooltip="{{player.team}}" tooltipPosition="bottom">
-                                                        {{ player.team | shorten:10 }}
-                                                    </p>
-                                                </p-fieldset>
-                                            </ng-template>
-
-                                            <p-fieldset legend="Age" styleClass="border-blue-400" class="player-ranking-data-fieldset">
-                                                <p class="player-ranking-data-field white-space-nowrap">
-                                                    {{ player.age ? player.age + ' years' : 'Unregistered' | shorten:13 }}
-                                                </p>
-                                            </p-fieldset>
-
-                                            <p-fieldset legend="Height" styleClass="border-blue-400" class="player-ranking-data-fieldset">
-                                                <p class="player-ranking-data-field white-space-nowrap">
-                                                    {{ player.height ? player.height + ' cm' : 'Unregistered' | shorten:13 }}
-                                                </p>
-                                            </p-fieldset>
-                                        </div>
-                                        <p-table
-                                            [value]="player.parameters"
-                                            dataKey="id"
-                                            styleClass="mt-3"
-                                            [rows]="3"
-                                            [paginator]="true"
-                                            [rowHover]="true"
+                            <p-accordionTab>
+                                <ng-template pTemplate="header">
+                                    <div
+                                        class="flex align-items-center mr-2 gap-2"
+                                    >
+                                        <img
+                                            alt=""
+                                            src="{{
+                                                player.profilePictureLink ||
+                                                    '../../../../../../../assets/without-picture.png'
+                                            }}"
+                                            class="{{
+                                                player.profilePictureLink
+                                                    ? 'players-ranking-profile-picture'
+                                                    : 'players-ranking-profile-without-picture'
+                                            }}"
+                                        />
+                                        <span
+                                            class="vertical-align-middle text-lg"
                                         >
-                                            <ng-template pTemplate="header">
-                                                <tr>
-                                                    <th id="" pSortableColumn="name">
-                                                        <div class="flex justify-content-between align-items-center">
-                                                            <div class="flex justify-content-center align-items-center mt-1">
-                                                                Parameter
-                                                            </div>
-                                                            <div class="flex justify-content-between align-items-center">
-                                                                <p-sortIcon field="name"></p-sortIcon>
-                                                                <p-columnFilter
-                                                                    type="text"
-                                                                    field="name"
-                                                                    display="menu"
-                                                                    matchMode="contains"
-                                                                    [showMatchModes]="false"
-                                                                    [showOperator]="false"
-                                                                    [showAddButton]="false"
-                                                                    style="height: 1.7rem;"
-                                                                ></p-columnFilter>
-                                                            </div>
+                                            {{ player.name }}
+                                        </span>
+                                    </div>
+                                </ng-template>
+                                <ng-template pTemplate="content">
+                                    <div
+                                        class="flex justify-content-center align-content-center align-items-center gap-3"
+                                    >
+                                        <p-fieldset
+                                            *ngIf="
+                                                player.team.length <= 13;
+                                                else teamDiv
+                                            "
+                                            legend="Team"
+                                            styleClass="border-blue-400"
+                                            class="player-ranking-data-fieldset"
+                                        >
+                                            <p
+                                                class="player-ranking-data-field white-space-nowrap"
+                                            >
+                                                {{ player.team }}
+                                            </p>
+                                        </p-fieldset>
+                                        <ng-template #teamDiv>
+                                            <p-fieldset
+                                                legend="Team"
+                                                styleClass="border-blue-400"
+                                                class="player-ranking-data-fieldset"
+                                                pTooltip="{{ player.team }}"
+                                                tooltipPosition="bottom"
+                                            >
+                                                <p
+                                                    class="player-ranking-data-field white-space-nowrap"
+                                                    pTooltip="{{ player.team }}"
+                                                    tooltipPosition="bottom"
+                                                >
+                                                    {{
+                                                        player.team
+                                                            | shorten : 10
+                                                    }}
+                                                </p>
+                                            </p-fieldset>
+                                        </ng-template>
+
+                                        <p-fieldset
+                                            legend="Age"
+                                            styleClass="border-blue-400"
+                                            class="player-ranking-data-fieldset"
+                                        >
+                                            <p
+                                                class="player-ranking-data-field white-space-nowrap"
+                                            >
+                                                {{
+                                                    player.age
+                                                        ? player.age + " years"
+                                                        : ("Unregistered"
+                                                          | shorten : 13)
+                                                }}
+                                            </p>
+                                        </p-fieldset>
+
+                                        <p-fieldset
+                                            legend="Height"
+                                            styleClass="border-blue-400"
+                                            class="player-ranking-data-fieldset"
+                                        >
+                                            <p
+                                                class="player-ranking-data-field white-space-nowrap"
+                                            >
+                                                {{
+                                                    player.height
+                                                        ? player.height + " cm"
+                                                        : ("Unregistered"
+                                                          | shorten : 13)
+                                                }}
+                                            </p>
+                                        </p-fieldset>
+                                    </div>
+                                    <p-table
+                                        [value]="player.parameters"
+                                        dataKey="id"
+                                        styleClass="mt-3"
+                                        [rows]="3"
+                                        [paginator]="true"
+                                        [rowHover]="true"
+                                    >
+                                        <ng-template pTemplate="header">
+                                            <tr>
+                                                <th
+                                                    id=""
+                                                    pSortableColumn="name"
+                                                >
+                                                    <div
+                                                        class="flex justify-content-between align-items-center"
+                                                    >
+                                                        <div
+                                                            class="flex justify-content-center align-items-center mt-1"
+                                                        >
+                                                            Parameter
                                                         </div>
-                                                    </th>
-                                                    <th id="" pSortableColumn="playerScore">
-                                                        <div class="flex justify-content-between align-items-center">
-                                                            <div class="flex justify-content-center align-items-center mt-1">
-                                                                Score
-                                                            </div>
-                                                            <div class="flex justify-content-between align-items-center">
-                                                                <p-sortIcon field="playerScore"></p-sortIcon>
-                                                            </div>
+                                                        <div
+                                                            class="flex justify-content-between align-items-center"
+                                                        >
+                                                            <p-sortIcon
+                                                                field="name"
+                                                            ></p-sortIcon>
+                                                            <p-columnFilter
+                                                                type="text"
+                                                                field="name"
+                                                                display="menu"
+                                                                matchMode="contains"
+                                                                [showMatchModes]="
+                                                                    false
+                                                                "
+                                                                [showOperator]="
+                                                                    false
+                                                                "
+                                                                [showAddButton]="
+                                                                    false
+                                                                "
+                                                                style="
+                                                                    height: 1.7rem;
+                                                                "
+                                                            ></p-columnFilter>
                                                         </div>
-                                                    </th>
-                                                </tr>
-                                            </ng-template>
-                                            <ng-template pTemplate="body" let-parameter>
-                                                <tr>
-                                                    <td>{{ parameter.name }}</td>
-                                                    <td>{{ parameter.playerScore }}</td>
-                                                </tr>
-                                            </ng-template>
-                                        </p-table>
-                                    </ng-template>
-                                </p-accordionTab>
-                            </p-card>
-                        </div>
+                                                    </div>
+                                                </th>
+                                                <th
+                                                    id=""
+                                                    pSortableColumn="playerScore"
+                                                >
+                                                    <div
+                                                        class="flex justify-content-between align-items-center"
+                                                    >
+                                                        <div
+                                                            class="flex justify-content-center align-items-center mt-1"
+                                                        >
+                                                            Score
+                                                        </div>
+                                                        <div
+                                                            class="flex justify-content-between align-items-center"
+                                                        >
+                                                            <p-sortIcon
+                                                                field="playerScore"
+                                                            ></p-sortIcon>
+                                                        </div>
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template
+                                            pTemplate="body"
+                                            let-parameter
+                                        >
+                                            <tr>
+                                                <td>{{ parameter.name }}</td>
+                                                <td>
+                                                    {{ parameter.playerScore }}
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
+                                </ng-template>
+                            </p-accordionTab>
+                        </p-card>
+                    </div>
                 </p-accordion>
                 <p-paginator
                     (onPageChange)="onPageChangeRankingPage($event)"
@@ -193,19 +319,30 @@
                     [totalRecords]="playersRanking.length || 0"
                 ></p-paginator>
             </div>
-            <div *ngIf="!playersRanking || (playersRankingLoading$ | async);"
-                    class="fadein animation-duration-1000 animation-iteration-1 animation-ease-out"
-                >
-                    <p-skeleton styleClass="mt-3 h-10rem"></p-skeleton>
-                    <p-skeleton styleClass="mt-3 h-10rem"></p-skeleton>
-                    <p-skeleton styleClass="mt-3 h-10rem"></p-skeleton>
-                    <p-skeleton styleClass="mt-3 h-10rem"></p-skeleton>
-                    <p-skeleton styleClass="mt-3 h-10rem"></p-skeleton>
+            <div
+                *ngIf="!playersRanking || (playersRankingLoading$ | async)"
+                class="fadein animation-duration-1000 animation-iteration-1 animation-ease-out"
+            >
+                <p-skeleton styleClass="mt-3 h-10rem"></p-skeleton>
+                <p-skeleton styleClass="mt-3 h-10rem"></p-skeleton>
+                <p-skeleton styleClass="mt-3 h-10rem"></p-skeleton>
+                <p-skeleton styleClass="mt-3 h-10rem"></p-skeleton>
+                <p-skeleton styleClass="mt-3 h-10rem"></p-skeleton>
             </div>
         </div>
 
-        <div *ngIf="(viewActivate$ | async) && !(playersRankingViewEnable$ | async)" class="insights-section">
-            <div *ngIf="playersRanking && !(playersRankingLoading$ | async) && playersRanking.length > 0;"
+        <div
+            *ngIf="
+                (viewActivate$ | async) && !(playersRankingViewEnable$ | async)
+            "
+            class="insights-section"
+        >
+            <div
+                *ngIf="
+                    playersRanking &&
+                    !(playersRankingLoading$ | async) &&
+                    playersRanking.length > 0
+                "
                 class="flex justify-content-between align-content-center mt-3 gap-3"
             >
                 <p-card
@@ -213,27 +350,60 @@
                     [style]="{ 'min-width': '38rem', 'max-width': '38rem' }"
                     header="Total Score for Player"
                 >
-                    <p-chart type="bar" [data]="chartBarData" [options]="chartBarOptions" width="100%" height="30rem"></p-chart>
-                    <p-paginator (onPageChange)="onPageChangeChartBar($event)" [first]="0" [rows]="5" [totalRecords]="playersRanking.length"></p-paginator>
+                    <p-chart
+                        type="bar"
+                        [data]="chartBarData"
+                        [options]="chartBarOptions"
+                        width="100%"
+                        height="30rem"
+                    ></p-chart>
+                    <p-paginator
+                        (onPageChange)="onPageChangeChartBar($event)"
+                        [first]="0"
+                        [rows]="5"
+                        [totalRecords]="playersRanking.length"
+                    ></p-paginator>
                 </p-card>
                 <p-card
                     styleClass="shadow-3 flex flex-column align-content-center"
                     [style]="{ 'min-width': '38rem', 'max-width': '38rem' }"
                     header="Parameters for Player"
                 >
-                    <p-chart type="radar" [data]="chartRadarData" [options]="chartRadarOptions" width="100%" height="30rem"></p-chart>
-                    <p-paginator (onPageChange)="onPageChangeChartRadar($event)" [first]="0" [rows]="3" [totalRecords]="playersRanking.length"></p-paginator>
+                    <p-chart
+                        type="radar"
+                        [data]="chartRadarData"
+                        [options]="chartRadarOptions"
+                        width="100%"
+                        height="30rem"
+                    ></p-chart>
+                    <p-paginator
+                        (onPageChange)="onPageChangeChartRadar($event)"
+                        [first]="0"
+                        [rows]="3"
+                        [totalRecords]="playersRanking.length"
+                    ></p-paginator>
                 </p-card>
             </div>
-            <div *ngIf="!playersRanking || (playersRankingLoading$ | async);"
-                    class="flex align-content-center align-items-center mt-3 gap-3 fadein animation-duration-1000 animation-iteration-1 animation-ease-out"
-                >
-                    <p-skeleton
-                        [style]="{ 'min-width': '38rem', 'max-width': '38rem', 'min-height':'38rem','max-height':'38rem' }"
-                    ></p-skeleton>
-                    <p-skeleton
-                        [style]="{ 'min-width': '38rem', 'max-width': '38rem', 'min-height':'38rem', 'max-height':'38rem' }"
-                    ></p-skeleton>
+            <div
+                *ngIf="!playersRanking || (playersRankingLoading$ | async)"
+                class="flex align-content-center align-items-center mt-3 gap-3 fadein animation-duration-1000 animation-iteration-1 animation-ease-out"
+            >
+                <p-skeleton
+                    [style]="{
+                        'min-width': '38rem',
+                        'max-width': '38rem',
+                        'min-height': '38rem',
+                        'max-height': '38rem'
+                    }"
+                ></p-skeleton>
+                <p-skeleton
+                    [style]="{
+                        'min-width': '38rem',
+                        'max-width': '38rem',
+                        'min-height': '38rem',
+                        'max-height': '38rem'
+                    }"
+                ></p-skeleton>
             </div>
         </div>
     </p-card>

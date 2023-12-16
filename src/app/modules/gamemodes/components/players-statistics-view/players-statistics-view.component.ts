@@ -61,20 +61,20 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
     }
 
     public handleFindGameModePositionsEvent($event: DropdownChangeEvent): void {
-        if ($event && this.getPlayersRankingForm.value?.gameModeId) {
+        if ($event && this.getPlayersRankingForm.value?.gameMode && this.gameModes.includes($event.value)) {
             this.findGameModePositionsEvent.emit(
                 {
-                    id: this.gameModes.at(($event.value as number) - 1)?.id as number,
+                    id: $event.value.id as number,
                 }
             );
         } else {
-            this.getPlayersRankingForm.get('positionId').disable(true);
+            this.getPlayersRankingForm.get('position').disable(true);
         }
     }
 
     public handleGetPlayersRankingEvent(): void {
-        const gameModeId = this.getPlayersRankingForm.value?.gameModeId as number | undefined;
-        const positionId = this.getPlayersRankingForm.value?.positionId as number | undefined;
+        const gameModeId = this.getPlayersRankingForm.value?.gameMode.id as number | undefined;
+        const positionId = this.getPlayersRankingForm.value?.position.positionId as number | undefined;
         if (gameModeId && positionId) {
             this.setPositionParameters(positionId);
             this.playersRankingLoading$.next(true);
