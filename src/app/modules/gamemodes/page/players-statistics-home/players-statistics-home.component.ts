@@ -90,12 +90,14 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
                                 this.getPlayersRankingForm.get('position').enable(true);
                             } else {
                                 this.getPlayersRankingForm.get('position').disable(true);
+                                this.messageService.clear();
                                 this.messageService.add(
                                     {
+                                        key: 'info-statistics-section',
                                         severity: 'info',
                                         summary: 'Info',
                                         detail: 'No positions registered for this game mode!',
-                                        life: 5000,
+                                        life: 10000,
                                     }
                                 );
                             }
@@ -145,9 +147,10 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
                                 setTimeout(() => {
                                     this.viewActivate$.next(false);
                                     this.playersRanking = undefined;
+                                    this.messageService.clear();
                                     this.messageService.add(
                                         {
-                                            key: 'without-ranking-warn',
+                                            key: 'warn-statistics-section',
                                             severity: 'warn',
                                             summary: 'Warn',
                                             detail: 'Unable to list a ranking. Please update this position or register and edit players!',

@@ -1,10 +1,12 @@
 <div class="flex justify-content-center overflow-hidden">
     <p-card
-        styleClass="flipleft animation-duration-1000 animation-iteration-1 animation-ease-out"
-        [style]="{ 'min-width':'40rem', 'max-width':'40rem' }"
         header="Position View"
+        styleClass="flipleft animation-duration-1000 animation-iteration-1 animation-ease-out"
+        [style]="{ 'min-width': '80rem', 'max-width': '80rem' }"
     >
-        <div class="flex justify-content-between align-content-center align-items-center m-2">
+        <div
+            class="flex justify-content-between align-content-center align-items-center m-2"
+        >
             <button
                 pButton
                 pRipple
@@ -13,7 +15,9 @@
                 tooltipPosition="top"
                 (click)="handleBackEvent()"
             ></button>
-            <div class="flex justify-content-between align-content-center align-items-center gap-3">
+            <div
+                class="flex justify-content-between align-content-center align-items-center gap-3"
+            >
                 <button
                     pButton
                     pRipple
@@ -33,15 +37,24 @@
             </div>
         </div>
 
-        <div class="flex flex-column justify-content-center align-content-center align-items-center">
-            <p-fieldset legend="Name" styleClass="m-1 w-6 white-space-nowrap border-blue-400">
+        <div
+            class="flex flex-column justify-content-center align-content-center align-items-center"
+        >
+            <p-fieldset
+                legend="Name"
+                styleClass="m-1 w-6 white-space-nowrap border-blue-400"
+            >
                 <p class="m-0 text-lg">
-                    {{position.name}}
+                    {{ position.name }}
                 </p>
             </p-fieldset>
-            <p-fieldset legend="Description" styleClass="m-1 w-10 border-blue-400" [toggleable]="true">
+            <p-fieldset
+                legend="Description"
+                styleClass="m-1 w-10 border-blue-400"
+                [toggleable]="true"
+            >
                 <p class="m-0 text-lg w-30rem">
-                    {{position.description || 'No description for now!' }}
+                    {{ position.description || "No description for now!" }}
                 </p>
             </p-fieldset>
         </div>
@@ -56,15 +69,21 @@
             [showCurrentPageReport]="true"
             [rowHover]="true"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} parameters"
-            >
+        >
             <ng-template pTemplate="header">
                 <tr>
                     <th id="1" pSortableColumn="parameterId">
-                        <div class="flex justify-content-between align-items-center">
-                            <div class="flex justify-content-center align-items-center text-lg mt-1">
+                        <div
+                            class="flex justify-content-between align-items-center"
+                        >
+                            <div
+                                class="flex justify-content-center align-items-center text-lg mt-1"
+                            >
                                 ID
                             </div>
-                            <div class="flex justify-content-between align-items-center">
+                            <div
+                                class="flex justify-content-between align-items-center"
+                            >
                                 <p-sortIcon field="parameterId"></p-sortIcon>
                                 <p-columnFilter
                                     type="text"
@@ -74,17 +93,23 @@
                                     [showMatchModes]="false"
                                     [showOperator]="false"
                                     [showAddButton]="false"
-                                    style="height: 1.7rem;"
+                                    style="height: 1.7rem"
                                 ></p-columnFilter>
                             </div>
                         </div>
                     </th>
                     <th id="2" pSortableColumn="parameterName">
-                        <div class="flex justify-content-between align-items-center">
-                            <div class="flex justify-content-center align-items-center text-lg mt-1">
+                        <div
+                            class="flex justify-content-between align-items-center"
+                        >
+                            <div
+                                class="flex justify-content-center align-items-center text-lg mt-1"
+                            >
                                 Name
                             </div>
-                            <div class="flex justify-content-between align-items-center">
+                            <div
+                                class="flex justify-content-between align-items-center"
+                            >
                                 <p-sortIcon field="parameterName"></p-sortIcon>
                                 <p-columnFilter
                                     type="text"
@@ -94,18 +119,26 @@
                                     [showMatchModes]="false"
                                     [showOperator]="false"
                                     [showAddButton]="false"
-                                    style="height: 1.7rem;"
+                                    style="height: 1.7rem"
                                 ></p-columnFilter>
                             </div>
                         </div>
                     </th>
                     <th id="3" pSortableColumn="parameterWeight">
-                        <div class="flex justify-content-between align-items-center">
-                            <div class="flex justify-content-center align-items-center text-lg mt-1">
+                        <div
+                            class="flex justify-content-between align-items-center"
+                        >
+                            <div
+                                class="flex justify-content-center align-items-center text-lg mt-1"
+                            >
                                 Weight
                             </div>
-                            <div class="flex justify-content-between align-items-center">
-                                <p-sortIcon field="parameterWeight"></p-sortIcon>
+                            <div
+                                class="flex justify-content-between align-items-center"
+                            >
+                                <p-sortIcon
+                                    field="parameterWeight"
+                                ></p-sortIcon>
                                 <p-columnFilter
                                     type="text"
                                     field="parameterWeight"
@@ -114,7 +147,7 @@
                                     [showMatchModes]="false"
                                     [showOperator]="false"
                                     [showAddButton]="false"
-                                    style="height: 1.7rem;"
+                                    style="height: 1.7rem"
                                 ></p-columnFilter>
                             </div>
                         </div>
@@ -131,7 +164,9 @@
         </p-table>
 
         <ng-template #withoutParameters>
-            <h3 class="text-center text-large text-green-900">No parameters for now!</h3>
+            <h3 class="text-center text-large text-green-900">
+                No parameters for now!
+            </h3>
         </ng-template>
     </p-card>
 </div>

@@ -1,10 +1,12 @@
 <div class="flex justify-content-center overflow-hidden">
     <p-card
         styleClass="flipleft animation-duration-1000 animation-iteration-1 animation-ease-out"
-        [style]="{ 'min-width':'40rem', 'max-width':'40rem' }"
+        [style]="{ 'min-width': '40rem', 'max-width': '40rem' }"
         header="Player View"
     >
-        <div class="flex justify-content-between align-content-center align-items-center">
+        <div
+            class="flex justify-content-between align-content-center align-items-center"
+        >
             <button
                 pButton
                 pRipple
@@ -13,7 +15,9 @@
                 tooltipPosition="top"
                 (click)="handleBackEvent()"
             ></button>
-            <div class="flex justify-content-between align-content-center align-items-center gap-3">
+            <div
+                class="flex justify-content-between align-content-center align-items-center gap-3"
+            >
                 <button
                     pButton
                     pRipple
@@ -33,35 +37,76 @@
             </div>
         </div>
 
-        <div class="flex justify-content-between align-content-center align-items-center mt-3 gap-3">
-            <div class="{{ player.profilePictureLink ? 'player-profile-picture' : 'player-profile-without-picture' }}">
+        <div
+            class="flex justify-content-between align-content-center align-items-center mt-3 gap-3"
+        >
+            <div
+                class="{{
+                    player.profilePictureLink
+                        ? 'player-profile-picture'
+                        : 'player-profile-without-picture'
+                }}"
+            >
                 <img
-                    src="{{ player.profilePictureLink || '../../../../../assets/without-picture.png' }}"
+                    src="{{
+                        player.profilePictureLink ||
+                            '../../../../../assets/without-picture.png'
+                    }}"
                     alt="profile-picture"
-                >
+                />
             </div>
-            <div class="flex flex-column justify-content-center align-content-center align-items-end">
-                <p-fieldset legend="Name" styleClass="m-1 mr-0 w-6 white-space-nowrap border-blue-400" class="player-data-fieldset">
+            <div
+                class="flex flex-column justify-content-center align-content-center align-items-end"
+            >
+                <p-fieldset
+                    legend="Name"
+                    styleClass="m-1 mr-0 w-6 white-space-nowrap border-blue-400"
+                    class="player-data-fieldset"
+                >
                     <p class="player-data-field">
                         {{ player.name }}
                     </p>
                 </p-fieldset>
-                <p-fieldset legend="Position" styleClass="m-1 mr-0 w-6 border-blue-400" class="player-data-fieldset">
+                <p-fieldset
+                    legend="Position"
+                    styleClass="m-1 mr-0 w-6 border-blue-400"
+                    class="player-data-fieldset"
+                >
                     <p class="player-data-field">
                         {{ player.position.name }}
                     </p>
                 </p-fieldset>
-                <p-fieldset legend="Age" styleClass="m-1 mr-0 w-6 border-blue-400" class="player-data-fieldset">
+                <p-fieldset
+                    legend="Age"
+                    styleClass="m-1 mr-0 w-6 border-blue-400"
+                    class="player-data-fieldset"
+                >
                     <p class="player-data-field">
-                        {{ player.age ? player.age + ' years' : 'Unregistered data' }}
+                        {{
+                            player.age
+                                ? player.age + " years"
+                                : "Unregistered data"
+                        }}
                     </p>
                 </p-fieldset>
-                <p-fieldset legend="Height" styleClass="m-1 mr-0 w-6 border-blue-400" class="player-data-fieldset">
+                <p-fieldset
+                    legend="Height"
+                    styleClass="m-1 mr-0 w-6 border-blue-400"
+                    class="player-data-fieldset"
+                >
                     <p class="player-data-field">
-                        {{ player.height ? player.height + ' cm' : 'Unregistered data' }}
+                        {{
+                            player.height
+                                ? player.height + " cm"
+                                : "Unregistered data"
+                        }}
                     </p>
                 </p-fieldset>
-                <p-fieldset legend="Team" styleClass="m-1 mr-0 w-6 border-blue-400" class="player-data-fieldset">
+                <p-fieldset
+                    legend="Team"
+                    styleClass="m-1 mr-0 w-6 border-blue-400"
+                    class="player-data-fieldset"
+                >
                     <p class="player-data-field">
                         {{ player.team }}
                     </p>
@@ -79,15 +124,21 @@
             [showCurrentPageReport]="true"
             [rowHover]="true"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} parameters"
-            >
+        >
             <ng-template pTemplate="header">
                 <tr>
                     <th id="1" pSortableColumn="id">
-                        <div class="flex justify-content-between align-items-center">
-                            <div class="flex justify-content-center align-items-center text-lg mt-1">
+                        <div
+                            class="flex justify-content-between align-items-center"
+                        >
+                            <div
+                                class="flex justify-content-center align-items-center text-lg mt-1"
+                            >
                                 ID
                             </div>
-                            <div class="flex justify-content-between align-items-center">
+                            <div
+                                class="flex justify-content-between align-items-center"
+                            >
                                 <p-sortIcon field="id"></p-sortIcon>
                                 <p-columnFilter
                                     type="text"
@@ -97,17 +148,23 @@
                                     [showMatchModes]="false"
                                     [showOperator]="false"
                                     [showAddButton]="false"
-                                    style="height: 1.7rem;"
+                                    style="height: 1.7rem"
                                 ></p-columnFilter>
                             </div>
                         </div>
                     </th>
                     <th id="2" pSortableColumn="name">
-                        <div class="flex justify-content-between align-items-center">
-                            <div class="flex justify-content-center align-items-center text-lg mt-1">
+                        <div
+                            class="flex justify-content-between align-items-center"
+                        >
+                            <div
+                                class="flex justify-content-center align-items-center text-lg mt-1"
+                            >
                                 Name
                             </div>
-                            <div class="flex justify-content-between align-items-center">
+                            <div
+                                class="flex justify-content-between align-items-center"
+                            >
                                 <p-sortIcon field="name"></p-sortIcon>
                                 <p-columnFilter
                                     type="text"
@@ -117,17 +174,23 @@
                                     [showMatchModes]="false"
                                     [showOperator]="false"
                                     [showAddButton]="false"
-                                    style="height: 1.7rem;"
+                                    style="height: 1.7rem"
                                 ></p-columnFilter>
                             </div>
                         </div>
                     </th>
                     <th id="3" pSortableColumn="playerScore">
-                        <div class="flex justify-content-between align-items-center">
-                            <div class="flex justify-content-center align-items-center text-lg mt-1">
+                        <div
+                            class="flex justify-content-between align-items-center"
+                        >
+                            <div
+                                class="flex justify-content-center align-items-center text-lg mt-1"
+                            >
                                 Score
                             </div>
-                            <div class="flex justify-content-between align-items-center">
+                            <div
+                                class="flex justify-content-between align-items-center"
+                            >
                                 <p-sortIcon field="playerScore"></p-sortIcon>
                                 <p-columnFilter
                                     type="text"
@@ -137,7 +200,7 @@
                                     [showMatchModes]="false"
                                     [showOperator]="false"
                                     [showAddButton]="false"
-                                    style="height: 1.7rem;"
+                                    style="height: 1.7rem"
                                 ></p-columnFilter>
                             </div>
                         </div>
@@ -154,7 +217,9 @@
         </p-table>
 
         <ng-template #withoutParameters>
-            <h3 class="text-center text-large text-green-900">No parameters for now!</h3>
+            <h3 class="text-center text-large text-green-900">
+                No parameters for now!
+            </h3>
         </ng-template>
     </p-card>
 </div>
