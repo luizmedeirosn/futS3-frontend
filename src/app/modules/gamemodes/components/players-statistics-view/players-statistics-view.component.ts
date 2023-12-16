@@ -11,10 +11,10 @@ import { PaginatorState } from 'primeng/paginator';
 import { PositionService } from 'src/app/services/position/position.service';
 
 @Component({
-  selector: 'app-players-statistics-view',
-  templateUrl: './players-statistics-view.component.html',
-  styleUrls: ['./players-statistics-view.component.scss'],
-  encapsulation: ViewEncapsulation.None
+    selector: 'app-players-statistics-view',
+    templateUrl: './players-statistics-view.component.html',
+    styleUrls: ['./players-statistics-view.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class PlayersStatisticsViewComponent implements OnDestroy {
 
@@ -23,24 +23,22 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
     @Input() public gameModes!: GameModeMinDTO[];
     @Input() public selectedGameModePositions!: GameModePositionDTO[];
     @Input() public getPlayersRankingForm: any;
+    @Input() public playersRanking!: PlayerFullScoreDTO[] | undefined;
     @Input() public viewActivate$!: BehaviorSubject<boolean>;
     @Input() public playersRankingLoading$!: BehaviorSubject<boolean>;
-    @Input() public playersRanking!: PlayerFullScoreDTO[] | undefined;
-    @Input() public playersRankingPage!: PlayerFullScoreDTO[];
-
 
     @Output() public findGameModePositionsEvent: EventEmitter<{ id: number }> = new EventEmitter();
-    @Output() public getPlayersRankingEvent: EventEmitter<{ gameModeId: number, positionId: number }> = new EventEmitter();
+    @Output() public getPlayerRankingEvent: EventEmitter<{ gameModeId: number, positionId: number }> = new EventEmitter();
+
+    public playersRankingViewEnable$: BehaviorSubject<boolean> = new BehaviorSubject(true);
+    private positionParameters!: PositionParametersDTO[];
 
     public readonly faRankingStar: IconDefinition = faRankingStar;
     public readonly faMagnifyingGlassChart: IconDefinition = faMagnifyingGlassChart;
     public readonly faIconsStyles: any = {
-        'color' : '#fff;',
-        'align-content' : 'end;'
+        'color': '#fff;',
+        'align-content': 'end;'
     }
-
-    public playersRankingViewEnable$: BehaviorSubject<boolean> = new BehaviorSubject(true);
-    private positionParameters!: PositionParametersDTO[];
 
     private readonly documentStyle = getComputedStyle(document.documentElement);
     private readonly textColor = this.documentStyle.getPropertyValue('--black-1');
@@ -52,19 +50,19 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
 
     public chartRadarData: any;
     public chartRadarOptions: any;
-    private readonly colors: Array<string> =
-        new Array( '--blue-600', '--green-600', '--red-600'  );
+    private readonly colors: Array<string>
+        = new Array('--green-600', '--blue-600', '--red-600');
 
-    public constructor (
+    public constructor(
         private positionService: PositionService
     ) {
     }
 
     public handleFindGameModePositionsEvent($event: DropdownChangeEvent): void {
         if ($event && this.getPlayersRankingForm.value?.gameModeId) {
-            this.findGameModePositionsEvent.emit (
+            this.findGameModePositionsEvent.emit(
                 {
-                    id: this.gameModes.at( ($event.value as number) -1 )?.id as number,
+                    id: this.gameModes.at(($event.value as number) - 1)?.id as number,
                 }
             );
         } else {
@@ -79,23 +77,23 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
             this.setPositionParameters(positionId);
             this.playersRankingLoading$.next(true);
             this.playersRanking = undefined;
-            this.getPlayersRankingEvent.emit({ gameModeId, positionId });
+            this.getPlayerRankingEvent.emit({ gameModeId, positionId });
         }
     }
 
     private setPositionParameters(positionId: number): void {
         this.positionService.findPositionParametersById(positionId)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe (
-            {
-                next: (positionParameters) => {
-                    this.positionParameters = positionParameters;
-                },
-                error: (err) => {
-                    console.log(err);
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(
+                {
+                    next: (positionParameters) => {
+                        this.positionParameters = positionParameters;
+                    },
+                    error: (err) => {
+                        console.log(err);
+                    }
                 }
-            }
-        );
+            );
     }
 
     public activeViewPlayersRanking() {
@@ -104,17 +102,8 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
 
     public desactiveViewPlayersRanking() {
         this.playersRankingViewEnable$.next(false);
-        this.setChartBarData(0 , 6);
+        this.setChartBarData(0, 6);
         this.setCharRadarData(0, 3);
-    }
-
-    public onPageChangeRankingPage(event$: PaginatorState) {
-        if (this.playersRanking && event$.first !== undefined && event$.rows !== undefined) {
-            const first = event$.first;
-            const rows = event$.rows;
-            this.playersRankingPage =
-                this.playersRanking.filter( (element, index) => index >= first && index < first+rows );
-        }
     }
 
     public onPageChangeChartBar(event$: PaginatorState): void {
@@ -132,11 +121,11 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
     private setChartBarData(first: number, rows: number): void {
         if (this.playersRanking) {
             const playersNames =
-                this.playersRanking.filter( (element, index) => index >= first && index < first+rows )
-                .map( (value) => value.name );
+                this.playersRanking.filter((element, index) => index >= first && index < first + rows)
+                    .map((value) => value.name);
             const playersTotalScores =
-                this.playersRanking.filter( (element, index) => index >= first && index < first+rows )
-                .map( (value) => value.totalScore );
+                this.playersRanking.filter((element, index) => index >= first && index < first + rows)
+                    .map((value) => value.totalScore);
 
             this.chartBarData = {
                 labels: playersNames,
@@ -155,15 +144,15 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
                 maintainAspectRatio: false,
                 aspectRatio: 0.8,
                 plugins: {
-                legend: {
-                    labels: {
-                    color: this.textColor,
-                    font: {
-                        weight: '500',
-                        size: 15
+                    legend: {
+                        labels: {
+                            color: this.textColor,
+                            font: {
+                                weight: '500',
+                                size: 15
+                            }
+                        }
                     }
-                    }
-                }
                 },
                 scales: {
                     x: {
@@ -209,14 +198,13 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
                         pointBorderColor: this.documentStyle.getPropertyValue(String(this.colors.at(colorIndex))),
                         pointHoverBackgroundColor: this.textColor,
                         pointHoverBorderColor: this.documentStyle.getPropertyValue(String(this.colors.at(colorIndex))),
-                        pointBorderWidth: 3,
                         data: player.parameters.map((element) => element.playerScore),
                     });
                 }
             }
             datasets.reverse();
             this.chartRadarData = {
-                labels: this.positionParameters.map( (element) => element.parameterName ),
+                labels: this.positionParameters.map((element) => element.parameterName),
                 datasets
             };
 
@@ -251,7 +239,7 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
                         }
                     },
                 },
-                backgroundColor: '#d0d0d001',
+                backgroundColor: '#d0d0d030',
             };
         }
     }
