@@ -8,9 +8,9 @@ import { PlayerFullScoreDTO } from 'src/app/models/interfaces/gamemode/response/
 import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
 
 @Component({
-  selector: 'app-players-statistics-home',
-  templateUrl: './players-statistics-home.component.html',
-  styleUrls: []
+    selector: 'app-players-statistics-home',
+    templateUrl: './players-statistics-home.component.html',
+    styleUrls: []
 })
 export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
 
@@ -19,10 +19,10 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
 
     public gameModes!: GameModeMinDTO[];
     public selectedGameModePositions!: GameModePositionDTO[];
-    public getPlayersRankingForm: any = this.formBuilder.group (
+    public getPlayersRankingForm: any = this.formBuilder.group(
         {
-            gameModeId: new FormControl('', Validators.required),
-            positionId: new FormControl({value: '', disabled: true}, Validators.required),
+            gameMode: new FormControl('', Validators.required),
+            position: new FormControl({ value: '', disabled: true }, Validators.required),
         }
     );
 
@@ -45,124 +45,28 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
     private setGameModes(): void {
         this.messageService.clear();
         this.gameModeService.findAll()
-        .pipe(takeUntil(this.destroy$))
-        .subscribe (
-            {
-                next: (gameModes) => {
-                    if (gameModes.length > 0) {
-                        this.gameModes = gameModes;
-                        this.messageService.add (
-                            {
-                                severity: 'success',
-                                summary: 'Success',
-                                detail: 'Data loaded successfully!',
-                                life: this.messageLife
-                            }
-                        );
-                    }
-                },
-                error: (err) => {
-                    this.messageService.add (
-                        {
-                            severity: 'error',
-                            summary: 'Error',
-                            detail: 'Please check your internet connection!',
-                            life: this.messageLife
-                        }
-                    );
-                    console.log(err);
-                }
-            }
-        );
-
-    }
-
-    public handleFindGameModePositionsAction( $event: { id: number; } ) : void {
-        this.messageService.clear();
-        if ($event) {
-            this.gameModeService.findGameModePositions($event.id)
             .pipe(takeUntil(this.destroy$))
-            .subscribe (
+            .subscribe(
                 {
-                    next: (gameModePositions) => {
-                        this.selectedGameModePositions = gameModePositions;
-                        if (gameModePositions.length > 0) {
-                            this.getPlayersRankingForm.get('positionId').enable(true);
-                        } else {
-                            this.getPlayersRankingForm.get('positionId').disable(true);
-                            this.messageService.add (
+                    next: (gameModes) => {
+                        if (gameModes.length > 0) {
+                            this.gameModes = gameModes;
+                            this.messageService.add(
                                 {
-                                    severity: 'info',
-                                    summary: 'Info',
-                                    detail: 'No positions registered for this game mode!',
-                                    life: 5000,
+                                    severity: 'success',
+                                    summary: 'Success',
+                                    detail: 'Data loaded successfully!',
+                                    life: this.messageLife
                                 }
                             );
                         }
                     },
                     error: (err) => {
-                        this.getPlayersRankingForm.get('positionId').disable(true);
-                        this.messageService.add (
+                        this.messageService.add(
                             {
                                 severity: 'error',
                                 summary: 'Error',
                                 detail: 'Please check your internet connection!',
-                                life: this.messageLife,
-                            }
-                        );
-                        console.log(err);
-                    }
-                }
-            );
-        }
-    }
-
-    public handleGetPlayersRankingAction( $event: {gameModeId: number, positionId: number} ): void {
-        this.messageService.clear();
-        this.viewActivate$.next(true);
-        if ($event) {
-            setTimeout( () => this.playersRankingLoading$.next(false), 1000 );
-            this.gameModeService.getRanking( $event.gameModeId, $event.positionId)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe (
-                {
-                    next: (playersRanking) => {
-                        this.playersRanking = playersRanking;
-                        this.playersRanking && (
-                            this.playersRankingPage =
-                                this.playersRanking.filter( (element, index) => index >= 0 && index < 6 )
-                        );
-                        if (playersRanking.length > 0) {
-                            this.messageService.add (
-                                {
-                                    severity: 'success',
-                                    summary: 'Success',
-                                    detail: 'Ranking obtained successfully!',
-                                    life: this.messageLife
-                                }
-                            );
-                        } else {
-                            setTimeout( () => {
-                                this.viewActivate$.next(false);
-                                this.playersRanking = undefined;
-                                this.messageService.add (
-                                    {
-                                        key: 'without-ranking-warn',
-                                        severity: 'warn',
-                                        summary: 'Warn',
-                                        detail: 'Unable to list a ranking. Please update this position or register and edit players!',
-                                        life: 10000,
-                                    }
-                                );
-                            }, 1000);
-                        }
-                    },
-                    error: (err) => {
-                        this.messageService.add (
-                            {
-                                severity: 'error',
-                                summary: 'Error',
-                                detail: '"Error retrieving the ranking!',
                                 life: this.messageLife
                             }
                         );
@@ -170,7 +74,106 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
                     }
                 }
             );
-            this.getPlayersRankingForm.get('positionId').reset();
+
+    }
+
+    public handleFindGameModePositionsAction($event: { id: number; }): void {
+        this.messageService.clear();
+        if ($event) {
+            this.gameModeService.findGameModePositions($event.id)
+                .pipe(takeUntil(this.destroy$))
+                .subscribe(
+                    {
+                        next: (gameModePositions) => {
+                            this.selectedGameModePositions = gameModePositions;
+                            if (gameModePositions.length > 0) {
+                                this.getPlayersRankingForm.get('position').enable(true);
+                            } else {
+                                this.getPlayersRankingForm.get('position').disable(true);
+                                this.messageService.clear();
+                                this.messageService.add(
+                                    {
+                                        key: 'info-statistics-section',
+                                        severity: 'info',
+                                        summary: 'Info',
+                                        detail: 'No positions registered for this game mode!',
+                                        life: 10000,
+                                    }
+                                );
+                            }
+                        },
+                        error: (err) => {
+                            this.getPlayersRankingForm.get('positiod').disable(true);
+                            this.messageService.add(
+                                {
+                                    severity: 'error',
+                                    summary: 'Error',
+                                    detail: 'Please check your internet connection!',
+                                    life: this.messageLife,
+                                }
+                            );
+                            console.log(err);
+                        }
+                    }
+                );
+        }
+    }
+
+    public handleGetPlayersRankingAction($event: { gameModeId: number, positionId: number }): void {
+        this.messageService.clear();
+        this.viewActivate$.next(true);
+        if ($event) {
+            setTimeout(() => this.playersRankingLoading$.next(false), 1000);
+            this.gameModeService.getRanking($event.gameModeId, $event.positionId)
+                .pipe(takeUntil(this.destroy$))
+                .subscribe(
+                    {
+                        next: (playersRanking) => {
+                            this.playersRanking = playersRanking;
+                            this.playersRanking && (
+                                this.playersRankingPage =
+                                this.playersRanking.filter((element, index) => index >= 0 && index < 6)
+                            );
+                            if (playersRanking.length > 0) {
+                                this.messageService.add(
+                                    {
+                                        severity: 'success',
+                                        summary: 'Success',
+                                        detail: 'Ranking obtained successfully!',
+                                        life: this.messageLife
+                                    }
+                                );
+                            } else {
+                                setTimeout(() => {
+                                    this.viewActivate$.next(false);
+                                    this.playersRanking = undefined;
+                                    this.messageService.clear();
+                                    this.messageService.add(
+                                        {
+                                            key: 'warn-statistics-section',
+                                            severity: 'warn',
+                                            summary: 'Warn',
+                                            detail: 'Unable to list a ranking. Please update this position or register and edit players!',
+                                            life: 10000,
+                                        }
+                                    );
+                                }, 1000);
+                            }
+                        },
+                        error: (err) => {
+                            this.messageService.add(
+                                {
+                                    severity: 'error',
+                                    summary: 'Error',
+                                    detail: '"Error retrieving the ranking!',
+                                    life: this.messageLife
+                                }
+                            );
+                            console.log(err);
+                        }
+                    }
+                );
+            this.getPlayersRankingForm.get('position').reset();
         }
     }
 
