@@ -256,7 +256,7 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
         }
     }
 
-    public ngOnDestroy(): void {
+    public ngOnDestroy() {
         this.destroy$.next();
         this.destroy$.complete();
     }
