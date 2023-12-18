@@ -1,0 +1,25 @@
+<small
+    [ngClass]="{
+        'show-small':
+            (form.get(controlName)?.value?.length ?? 0 > 0) &&
+            (form.get(controlName)?.value?.length ?? 0 < minNumberCharacters),
+        'hide-small': !(
+            (form.get(controlName)?.value?.length ?? 0 > 0) &&
+            (form.get(controlName)?.value?.length ?? 0) < minNumberCharacters
+        )
+    }"
+>
+    Entrada muito curta (menos de {{ minNumberCharacters }} caracteres).
+</small>
+<small
+    [ngClass]="{
+        'show-small':
+            form.get(controlName)?.value?.length ?? 0 > maxNumberCharacters,
+        'hide-small': !(
+            (form.get(controlName)?.value?.length ?? 0) >
+            maxNumberCharacters
+        )
+    }"
+>
+    Entrada muito longa (mais de {{ maxNumberCharacters }} caracteres).
+</small>
