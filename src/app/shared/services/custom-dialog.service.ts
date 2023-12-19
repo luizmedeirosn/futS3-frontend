@@ -7,6 +7,7 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 export class CustomDialogService {
 
     private dynamicDialogRef!: DynamicDialogRef;
+    private changesOn: boolean = false;
 
     public constructor(
         private dialogService: DialogService
@@ -25,6 +26,17 @@ export class CustomDialogService {
         if (this.dynamicDialogRef) {
             this.dynamicDialogRef.close();
         }
+        this.changesOn && window.location.reload();
+    }
+
+    public setChangesOn(status: boolean) {
+        if (status !== null && status !== undefined) {
+            this.changesOn = status;
+        }
+    }
+
+    public getChangesOn(): boolean {
+        return this.changesOn;
     }
 
 }

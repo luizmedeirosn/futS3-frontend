@@ -70,20 +70,20 @@
         </span>
 
         <div
-            class="flex flex-column justify-content-start align-items-center gap-1"
+            class="flex flex-column justify-content-start align-items-center w-full gap-1"
         >
             <label
                 pRipple
                 pButton
                 for="input-file"
-                class="bg-gray-700 hover:bg-gray-900 w-11rem p-2 font-medium shadow-1 flex justify-content-center align-items-center gap-2 border-gray-700"
+                class="bg-gray-700 hover:bg-gray-900 w-full p-2 font-medium shadow-1 flex justify-content-center align-items-center gap-2 border-gray-700"
                 icon="pi pi-upload"
             >
                 Choose Picture
             </label>
 
             <span *ngIf="$viewSelectedPicture | async" class="font-medium">{{
-                picture.name | shorten : 15
+                playerPicture.name | shorten : 15
             }}</span>
 
             <input
@@ -91,8 +91,8 @@
                 name="input-file"
                 id="input-file"
                 style="display: none"
-                (change)="handleUploadPicture($event)"
                 accept=".jpg, .jpeg, .png .webp"
+                (change)="handleUploadPicture($event)"
             />
         </div>
     </div>
@@ -100,31 +100,33 @@
     <form
         [formGroup]="playerParameterForm"
         (ngSubmit)="handleAddNewParameter()"
-        class="flex justify-content-between align-items-center mt-1"
+        class="flex justify-content-between align-items-center mt-1 w-full"
     >
-        <span class="p-float-label">
-            <p-dropdown
-                [options]="parameters"
-                optionLabel="name"
-                [editable]="true"
-                [showClear]="true"
-                styleClass="w-20rem"
-                placeholder="Select a position"
-                formControlName="parameter"
-            ></p-dropdown>
-            <label for="parameter">Select a parameter</label>
-        </span>
-        <input
-            pInputText
-            class="w-7rem"
-            formControlName="score"
-            [minlength]="1"
-            [maxlength]="3"
-        />
+        <div class="flex justify-content-between align-content-center gap-3">
+            <span class="p-float-label">
+                <p-dropdown
+                    [options]="parameters"
+                    optionLabel="name"
+                    [editable]="true"
+                    [showClear]="true"
+                    styleClass="w-20rem"
+                    placeholder="Select a parameter"
+                    formControlName="parameter"
+                ></p-dropdown>
+                <label for="parameter">Select a parameter</label>
+            </span>
+            <input
+                pInputText
+                class="w-7rem"
+                formControlName="score"
+                [minlength]="1"
+                [maxlength]="3"
+            />
+        </div>
         <p-button
             [disabled]="!playerParameterForm.valid"
             type="submit"
-            severity="warning"
+            severity="primary"
             icon="pi pi-plus"
             pTooltip="Add new parameter"
             tooltipPosition="top"
@@ -233,7 +235,7 @@
         class="flex flex justify-content-center align-content-center align-items-center mt-4"
     >
         <p-button
-            [disabled]="!playerForm.valid || picture === undefined"
+            [disabled]="!playerForm.valid || playerPicture === undefined"
             type="submit"
             label="Send"
             styleClass="p-button-success flex justify-content-center align-content-center gap-2"

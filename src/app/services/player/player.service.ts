@@ -1,3 +1,4 @@
+import { PostPlayerDTO } from 'src/app/models/interfaces/player/request/PostPlayerDTO';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
@@ -14,21 +15,42 @@ export class PlayerService {
 
     public playerView$: Subject<boolean> = new Subject();
 
-    constructor (
+    public constructor(
         private httpClient: HttpClient
     ) {
         this.playerView$.next(false);
     };
 
     public findAll(): Observable<Array<PlayerMinDTO>> {
-        return this.httpClient.get<Array<PlayerMinDTO>> (
+        return this.httpClient.get<Array<PlayerMinDTO>>(
             `${this.API_URL}/players`,
         );
     }
 
     public findFullById(id: number): Observable<PlayerFullDTO> {
-        return this.httpClient.get<PlayerFullDTO> (
+        return this.httpClient.get<PlayerFullDTO>(
             `${this.API_URL}/players/${id}/full`,
+        );
+    }
+
+    public save(playerRequest: PostPlayerDTO): Observable<PlayerFullDTO> {
+
+        const body: FormData = new FormData();
+        body.set('name', playerRequest.name);
+        body.set('team', playerRequest.team);
+        body.set('age', playerRequest.age);
+        body.set('height', playerRequest.height);
+        body.set('positionId', playerRequest.positionId);
+        body.set('playerPicture', playerRequest.playerPicture);
+
+        const parameters = playerRequest.parameters.map(element => `${element.id} ${element.playerScore}`).join(',');
+        body.set('parameters', parameters);
+
+        console.log(body.get('parameters'));
+
+        return this.httpClient.post<PlayerFullDTO>(
+            `${this.API_URL}/players`,
+            body
         );
     }
 

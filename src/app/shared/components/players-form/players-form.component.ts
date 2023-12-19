@@ -9,6 +9,9 @@ import { PositionDTO } from 'src/app/models/interfaces/position/response/Positio
 import { PlayerParameterScoreDTO } from 'src/app/models/interfaces/player/response/PlayerParameterScoreDTO';
 import { ParameterService } from 'src/app/services/parameter/parameter.service';
 import { ParameterDTO } from 'src/app/models/interfaces/parameter/response/ParameterDTO';
+import { PostPlayerDTO } from 'src/app/models/interfaces/player/request/PostPlayerDTO';
+import { PlayerService } from 'src/app/services/player/player.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
     selector: 'app-players-form',
@@ -18,6 +21,7 @@ import { ParameterDTO } from 'src/app/models/interfaces/parameter/response/Param
 export class PlayersFormComponent implements OnInit, OnDestroy {
 
     private readonly $destroy: Subject<void> = new Subject();
+    private readonly toastLife: number = 2000;
 
     public $viewSelectedPicture: BehaviorSubject<boolean> = new BehaviorSubject(false);
     public positions!: PositionDTO[];
@@ -27,12 +31,12 @@ export class PlayersFormComponent implements OnInit, OnDestroy {
 
     public playerForm = this.formBuilder.group({
         name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
-        age: [null, [Validators.required, Validators.minLength(1), Validators.maxLength(3)]],
-        height: [null, [Validators.required, Validators.minLength(2), Validators.maxLength(3)]],
-        position: ['', Validators.required],
         team: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
+        age: [null, [Validators.required, Validators.min(1), Validators.max(150)]],
+        height: [null, [Validators.required, Validators.min(65), Validators.max(250)]],
+        position: ['', Validators.required],
     });
-    public picture!: File;
+    public playerPicture!: File;
 
     public playerParameterForm = this.formBuilder.group({
         parameter: ['', Validators.required],
@@ -46,6 +50,8 @@ export class PlayersFormComponent implements OnInit, OnDestroy {
         private httpClient: HttpClient,
         private positionService: PositionService,
         private parameterService: ParameterService,
+        private playerService: PlayerService,
+        private messageService: MessageService
     ) { }
 
     public ngOnInit(): void {
@@ -74,7 +80,7 @@ export class PlayersFormComponent implements OnInit, OnDestroy {
 
     public handleUploadPicture($event: any): void {
         if ($event) {
-            this.picture = $event.target.files[0];
+            this.playerPicture = $event.target.files[0];
             this.$viewSelectedPicture.next(true);
         }
     }
@@ -117,8 +123,49 @@ export class PlayersFormComponent implements OnInit, OnDestroy {
     }
 
     public handleSubmitPlayerForm(): void {
-        throw new Error('Method not implemented.');
+        if (this.playerForm.valid && this.playerForm.value && this.playerForm.value.age && this.playerForm.value.height) {
+            const position = this.playerForm.value.position as PositionDTO | undefined;
+            if (position) {
+                const playerRequest: PostPlayerDTO = {
+                    name: this.playerForm.value.name as string,
+                    team: this.playerForm.value.team as string,
+                    age: this.playerForm.value.age as string,
+                    height: this.playerForm.value.height as string,
+                    positionId: String(position.id),
+                    playerPicture: this.playerPicture,
+                    parameters: this.playerParametersScore
+                };
 
+                this.playerForm.reset();
+
+                this.playerService.save(playerRequest)
+                    .pipe(takeUntil(this.$destroy))
+                    .subscribe({
+                        next: () => {
+                            this.messageService.clear();
+                            this.messageService.add({
+                                severity: 'success',
+                                summary: 'Success',
+                                detail: 'Player successfully registered!',
+                                life: this.toastLife
+                            });
+                        },
+                        error: (err) => {
+                            this.messageService.clear();
+                            this.messageService.add({
+                                severity: 'error',
+                                summary: 'Error',
+                                detail: 'Invalid registration!',
+                                life: this.toastLife
+                            });
+                            console.log(err);
+                        }
+                    });
+            }
+            this.playerForm.reset();
+            this.playerParameterForm.reset();
+            this.playerParametersScore = [];
+        }
     }
 
     public ngOnDestroy(): void {
