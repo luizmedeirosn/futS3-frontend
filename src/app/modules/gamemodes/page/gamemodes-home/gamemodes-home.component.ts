@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
-import { ViewFullDataGameModeEvent } from 'src/app/models/interfaces/gamemode/event/ViewFullDataGameModeEvent';
+import { ViewGameModeAction } from 'src/app/models/interfaces/gamemode/event/ViewGameModeAction';
 import { GameModeFullDTO } from 'src/app/models/interfaces/gamemode/response/GameModeFullDTO';
 import { GameModeMinDTO } from 'src/app/models/interfaces/gamemode/response/GameModeMinDTO';
 import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
@@ -78,7 +78,7 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
             );
     }
 
-    public handleViewFullDataGameModeAction($event: ViewFullDataGameModeEvent): void {
+    public handleViewFullDataGameModeAction($event: ViewGameModeAction): void {
         this.messageService.clear();
         if ($event) {
             this.gameModeService.findFullById($event.id)

@@ -1,24 +1,31 @@
-import { PositionService } from 'src/app/services/position/position.service';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MenuItem } from 'primeng/api';
-import { PlayerService } from 'src/app/services/player/player.service';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { EnumPlayerEventsCrud } from 'src/app/models/enums/EnumPlayerEventsCrud';
 import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
+import { PlayerService } from 'src/app/services/player/player.service';
+import { PositionService } from 'src/app/services/position/position.service';
+import { CustomDialogService } from '../../services/custom-dialog.service';
+import { PlayersFormComponent } from '../players-form/players-form.component';
 
 @Component({
-  selector: 'app-menubar-navigation',
-  templateUrl: './menubar-navigation.component.html',
-  styleUrls: ['./menubar-navigation.component.scss'],
-  encapsulation: ViewEncapsulation.None
+    selector: 'app-menubar-navigation',
+    templateUrl: './menubar-navigation.component.html',
+    styleUrls: ['./menubar-navigation.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class MenubarNavigationComponent implements OnInit {
 
     public items: MenuItem[] | undefined;
 
-    constructor (
+    private dynamicDialogRef!: DynamicDialogRef;
+
+    constructor(
         private playerService: PlayerService,
         private positionService: PositionService,
         private gameModeService: GameModeService,
-    ){
+        private customDialogService: CustomDialogService,
+    ) {
     }
 
     public ngOnInit(): void {
@@ -75,8 +82,8 @@ export class MenubarNavigationComponent implements OnInit {
                         icon: 'pi pi-fw pi-trash'
                     }
                 ]
-            }
-            ,{
+            },
+            {
                 label: 'Parameters',
                 icon: 'pi pi-tags',
                 items: [
@@ -98,8 +105,8 @@ export class MenubarNavigationComponent implements OnInit {
                         icon: 'pi pi-fw pi-trash'
                     }
                 ]
-            }
-            ,{
+            },
+            {
                 label: 'Players',
                 icon: 'pi pi-users',
                 items: [
@@ -112,6 +119,19 @@ export class MenubarNavigationComponent implements OnInit {
                     {
                         label: 'Add',
                         icon: 'pi pi-fw pi-plus',
+                        command: () => {
+                            this.dynamicDialogRef = this.customDialogService.open(
+                                PlayersFormComponent,
+                                {
+                                    position: 'top',
+                                    header: EnumPlayerEventsCrud.ADD.valueOf(),
+                                    contentStyle: { overflow: 'auto' },
+                                    baseZIndex: 10000,
+                                    data: {
+                                        $event: EnumPlayerEventsCrud.ADD,
+                                    }
+                                });
+                        }
                     },
                     {
                         label: 'Edit',

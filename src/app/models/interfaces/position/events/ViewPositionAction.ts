@@ -1,4 +1,4 @@
-export interface ViewFullDataPositionEvent {
+export interface ViewPositionAction {
 
     id: number;
     name: string;

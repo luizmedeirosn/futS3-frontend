@@ -1,6 +1,7 @@
 :root {
     --black-1: rgba(0, 0, 0, .87);
     --blue-1: var(--blue-600);
+    --blue-2: #18afdda9;
 }
 
 body {
@@ -67,6 +68,7 @@ tr {
 .p-dropdown .p-dropdown-trigger,
 .p-dropdown-panel .p-dropdown-header .p-dropdown-filter-icon {
     color: rgba(0, 0, 0, .87);
+
 }
 
 .p-dropdown-trigger {
@@ -74,4 +76,28 @@ tr {
     svg {
         margin-left: 2rem
     }
+}
+
+.p-dropdown-items-wrapper {
+    max-height: 150px !important;
+}
+
+.p-dialog-header {
+    background: linear-gradient(to bottom, #080414, #04f3a3) fixed;
+    background-size: 100% 200%;
+    background-repeat: no-repeat;
+    color: #fff;
+    font-weight: bold;
+}
+
+.p-dialog {
+    width: 38rem;
+}
+
+.p-dialog-header-close-icon, .p-dialog-header-maximize-icon {
+    color: #fff;
+}
+
+.p-dialog-header-icon:enabled:hover {
+    background-color: var(--blue-2);
 }
