@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { EnumPlayerEventsCrud } from 'src/app/models/enums/EnumPlayerEventsCrud';
@@ -6,7 +6,9 @@ import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
 import { PlayerService } from 'src/app/services/player/player.service';
 import { PositionService } from 'src/app/services/position/position.service';
 import { CustomDialogService } from '../../services/custom-dialog.service';
-import { PlayersFormComponent } from '../players-form/players-form.component';
+import { SavePlayerFormComponent } from '../players-forms/save-player-form/save-player-form.component';
+import { EditPlayerFormComponent } from '../players-forms/edit-player-form/edit-player-form.component';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
     selector: 'app-menubar-navigation',
@@ -14,11 +16,12 @@ import { PlayersFormComponent } from '../players-form/players-form.component';
     styleUrls: ['./menubar-navigation.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
-export class MenubarNavigationComponent implements OnInit {
+export class MenubarNavigationComponent implements OnInit, OnDestroy {
+
+    private readonly $destroy: Subject<void> = new Subject();
+    private dynamicDialogRef!: DynamicDialogRef;
 
     public items: MenuItem[] | undefined;
-
-    private dynamicDialogRef!: DynamicDialogRef;
 
     constructor(
         private playerService: PlayerService,
@@ -121,21 +124,41 @@ export class MenubarNavigationComponent implements OnInit {
                         icon: 'pi pi-fw pi-plus',
                         command: () => {
                             this.dynamicDialogRef = this.customDialogService.open(
-                                PlayersFormComponent,
+                                SavePlayerFormComponent,
                                 {
                                     position: 'top',
                                     header: EnumPlayerEventsCrud.ADD.valueOf(),
                                     contentStyle: { overflow: 'auto' },
                                     baseZIndex: 10000,
-                                    data: {
-                                        $event: EnumPlayerEventsCrud.ADD,
-                                    }
                                 });
+
+                            this.dynamicDialogRef.onClose
+                                .pipe(takeUntil(this.$destroy))
+                                .subscribe({
+                                    next: () => {
+                                        if (this.customDialogService.getChangesOn()) {
+                                            window.location.reload();
+                                        }
+                                    },
+                                    error: (err) => {
+                                        console.log(err);
+                                    }
+                                })
                         }
                     },
                     {
                         label: 'Edit',
-                        icon: 'pi pi-fw pi-pencil'
+                        icon: 'pi pi-fw pi-pencil',
+                        command: () => {
+                            this.dynamicDialogRef = this.customDialogService.open(
+                                EditPlayerFormComponent,
+                                {
+                                    position: 'top',
+                                    header: EnumPlayerEventsCrud.EDIT.valueOf(),
+                                    contentStyle: { overflow: 'auto' },
+                                    baseZIndex: 10000,
+                                });
+                        }
                     },
                     {
                         label: 'Delete',
@@ -148,6 +171,11 @@ export class MenubarNavigationComponent implements OnInit {
                 icon: 'pi pi-sign-out'
             }
         ]
+    }
+
+    public ngOnDestroy(): void {
+        this.$destroy.next();
+        this.$destroy.complete();
     }
 
 }

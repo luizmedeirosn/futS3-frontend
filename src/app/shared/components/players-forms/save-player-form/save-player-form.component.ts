@@ -1,24 +1,22 @@
-import { PositionService } from 'src/app/services/position/position.service';
-import { HttpClient } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Validators, FormBuilder } from '@angular/forms';
-import { DynamicDialogConfig } from 'primeng/dynamicdialog';
+import { FormBuilder, Validators } from '@angular/forms';
+import { MessageService } from 'primeng/api';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { CustomDialogService } from 'src/app/shared/services/custom-dialog.service';
-import { PositionDTO } from 'src/app/models/interfaces/position/response/PositionDTO';
-import { PlayerParameterScoreDTO } from 'src/app/models/interfaces/player/response/PlayerParameterScoreDTO';
-import { ParameterService } from 'src/app/services/parameter/parameter.service';
 import { ParameterDTO } from 'src/app/models/interfaces/parameter/response/ParameterDTO';
 import { PostPlayerDTO } from 'src/app/models/interfaces/player/request/PostPlayerDTO';
+import { PlayerParameterScoreDTO } from 'src/app/models/interfaces/player/response/PlayerParameterScoreDTO';
+import { PositionDTO } from 'src/app/models/interfaces/position/response/PositionDTO';
+import { ParameterService } from 'src/app/services/parameter/parameter.service';
 import { PlayerService } from 'src/app/services/player/player.service';
-import { MessageService } from 'primeng/api';
+import { PositionService } from 'src/app/services/position/position.service';
+import { CustomDialogService } from 'src/app/shared/services/custom-dialog.service';
 
 @Component({
     selector: 'app-players-form',
-    templateUrl: './players-form.component.html',
+    templateUrl: './save-player-form.component.html',
     styleUrls: []
 })
-export class PlayersFormComponent implements OnInit, OnDestroy {
+export class SavePlayerFormComponent implements OnInit, OnDestroy {
 
     private readonly $destroy: Subject<void> = new Subject();
     private readonly toastLife: number = 2000;
@@ -32,8 +30,8 @@ export class PlayersFormComponent implements OnInit, OnDestroy {
     public playerForm = this.formBuilder.group({
         name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
         team: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
-        age: [null, [Validators.required, Validators.min(1), Validators.max(150)]],
-        height: [null, [Validators.required, Validators.min(65), Validators.max(250)]],
+        age: [null, [Validators.min(1), Validators.max(150)]],
+        height: [null, [Validators.min(65), Validators.max(250)]],
         position: ['', Validators.required],
     });
     public playerPicture!: File;
@@ -45,13 +43,11 @@ export class PlayersFormComponent implements OnInit, OnDestroy {
 
     public constructor(
         private formBuilder: FormBuilder,
-        private dynamicDialogConfig: DynamicDialogConfig,
-        private customDialogService: CustomDialogService,
-        private httpClient: HttpClient,
+        private messageService: MessageService,
         private positionService: PositionService,
         private parameterService: ParameterService,
         private playerService: PlayerService,
-        private messageService: MessageService
+        private customDialogService: CustomDialogService
     ) { }
 
     public ngOnInit(): void {
@@ -76,6 +72,7 @@ export class PlayersFormComponent implements OnInit, OnDestroy {
                     console.log(err);
                 }
             });
+
     }
 
     public handleUploadPicture($event: any): void {
@@ -84,7 +81,6 @@ export class PlayersFormComponent implements OnInit, OnDestroy {
             this.$viewSelectedPicture.next(true);
         }
     }
-
 
     public handleAddNewParameter(): void {
         const parameter = this.playerParameterForm.value?.parameter as ParameterDTO | undefined;
@@ -137,11 +133,12 @@ export class PlayersFormComponent implements OnInit, OnDestroy {
                 };
 
                 this.playerForm.reset();
-
+                this.$viewSelectedPicture.next(false);
                 this.playerService.save(playerRequest)
                     .pipe(takeUntil(this.$destroy))
                     .subscribe({
                         next: () => {
+                            this.customDialogService.setChangesOn(true);
                             this.messageService.clear();
                             this.messageService.add({
                                 severity: 'success',
@@ -151,6 +148,7 @@ export class PlayersFormComponent implements OnInit, OnDestroy {
                             });
                         },
                         error: (err) => {
+                            this.customDialogService.setChangesOn(false);
                             this.messageService.clear();
                             this.messageService.add({
                                 severity: 'error',

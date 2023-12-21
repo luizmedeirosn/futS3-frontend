@@ -126,7 +126,7 @@
         <p-button
             [disabled]="!playerParameterForm.valid"
             type="submit"
-            severity="primary"
+            severity="warning"
             icon="pi pi-plus"
             pTooltip="Add new parameter"
             tooltipPosition="top"
@@ -141,12 +141,7 @@
             >
         </div>
 
-        <p-table
-            [value]="playerParametersScore"
-            dataKey="id"
-            [showCurrentPageReport]="true"
-            [rowHover]="true"
-        >
+        <p-table [value]="playerParametersScore" [rowHover]="true">
             <ng-template pTemplate="header">
                 <tr>
                     <th id="" pSortableColumn="name">
