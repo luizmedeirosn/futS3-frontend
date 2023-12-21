@@ -1,6 +1,7 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
+import { Table } from 'primeng/table';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { ParameterDTO } from 'src/app/models/interfaces/parameter/response/ParameterDTO';
 import { UpdatePlayerDTO } from 'src/app/models/interfaces/player/request/UpdatePlayerDTO';
@@ -20,8 +21,13 @@ import { CustomDialogService } from 'src/app/shared/services/custom-dialog.servi
     encapsulation: ViewEncapsulation.None
 })
 export class EditPlayerFormComponent implements OnInit, OnDestroy {
+
+    @ViewChild('playersTable') playersTable!: Table;
+
     private readonly $destroy: Subject<void> = new Subject();
     private readonly toastLife: number = 2000;
+
+    private playersTablePages: PlayerMinDTO[][] = [];
 
     public $viewTable: BehaviorSubject<boolean> = new BehaviorSubject(true);
     public selectedPlayer!: PlayerFullDTO | undefined;
@@ -62,6 +68,19 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
             .subscribe({
                 next: (players) => {
                     this.players = players;
+
+                    let increment: number = 0;
+                    let page: Array<PlayerMinDTO> = new Array();
+
+                    players.forEach((player, index, array) => {
+                        page.push(player);
+                        increment += 1;
+                        if (increment === 5 || index === array.length - 1) {
+                            this.playersTablePages.push(page);
+                            page = new Array();
+                            increment = 0;
+                        }
+                    });
                 },
                 error: (err) => {
                     console.log(err);
@@ -120,7 +139,23 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
 
     public handleBackEvent(): void {
         this.$viewTable.next(true);
-        this.selectedPlayer = undefined;
+        setTimeout(() => {
+            if (this.selectedPlayer?.id !== undefined) {
+                const selectedPlayer: PlayerMinDTO =
+                    this.players.filter(player => player.id === this.selectedPlayer?.id)[0];
+                const index = this.players.indexOf(selectedPlayer);
+
+                const numPage: number = Math.floor(index / 5);
+                const page = this.playersTablePages.at(numPage);
+                const firstPlayerPage: PlayerMinDTO | undefined = page?.at(0);
+
+                this.playersTable.first =
+                    firstPlayerPage && this.players.indexOf(firstPlayerPage);
+                console.log(this.playersTable.first);
+
+            }
+            this.selectedPlayer = undefined
+        }, 10);
     }
 
     public handleUploadPicture($event: any): void {
