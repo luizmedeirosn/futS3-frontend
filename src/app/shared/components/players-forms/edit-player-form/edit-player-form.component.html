@@ -88,7 +88,7 @@
 <form
     *ngIf="selectedPlayer && !($viewTable | async)"
     [formGroup]="playerForm"
-    (ngSubmit)="handleSubmitPlayerForm()"
+    (ngSubmit)="handleSubmitEditPlayerForm()"
     class="flex flex-column align-content-center m-3 gap-4"
     enctype="multipart/form-data"
 >

@@ -38,8 +38,8 @@ export class PlayerService {
         const body: FormData = new FormData();
         body.set('name', playerRequest.name);
         body.set('team', playerRequest.team);
-        body.set('age', playerRequest.age);
-        body.set('height', playerRequest.height);
+        playerRequest.age && body.set('age', playerRequest.age);
+        playerRequest.height && body.set('height', playerRequest.height);
         body.set('positionId', playerRequest.positionId);
         body.set('playerPicture', playerRequest.playerPicture);
 

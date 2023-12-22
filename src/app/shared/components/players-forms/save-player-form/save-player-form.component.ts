@@ -118,15 +118,15 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
         this.parameters.sort(this.compareParameters);
     }
 
-    public handleSubmitPlayerForm(): void {
-        if (this.playerForm.valid && this.playerForm.value && this.playerForm.value.age && this.playerForm.value.height) {
+    public handleSubmitSavePlayerForm(): void {
+        if (this.playerForm.valid && this.playerForm.value) {
             const position = this.playerForm.value.position as PositionDTO | undefined;
             if (position) {
                 const playerRequest: PostPlayerDTO = {
                     name: this.playerForm.value.name as string,
                     team: this.playerForm.value.team as string,
-                    age: this.playerForm.value.age as string,
-                    height: this.playerForm.value.height as string,
+                    age: this.playerForm.value.age as string | undefined,
+                    height: this.playerForm.value.height as string | undefined,
                     positionId: String(position.id),
                     playerPicture: this.playerPicture,
                     parameters: this.playerParametersScore
@@ -162,6 +162,9 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
             }
             this.playerForm.reset();
             this.playerParameterForm.reset();
+            this.parametersOff.forEach(e => this.parameters.push(e));
+            this.parameters.sort(this.compareParameters);
+            this.parametersOff = new Array();
             this.playerParametersScore = [];
         }
     }

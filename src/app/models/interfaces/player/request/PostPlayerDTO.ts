@@ -4,8 +4,8 @@ export interface PostPlayerDTO {
 
     name: string;
     team: string;
-    age: string;
-    height: string;
+    age: string | undefined;
+    height: string | undefined;
     positionId: string;
     playerPicture: File;
     parameters: Array<PlayerParameterScoreDTO>

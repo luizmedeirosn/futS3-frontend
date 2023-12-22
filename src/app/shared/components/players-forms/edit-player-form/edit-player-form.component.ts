@@ -201,7 +201,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
         this.parameters.sort(this.compareParameters);
     }
 
-    public handleSubmitPlayerForm(): void {
+    public handleSubmitEditPlayerForm(): void {
         if (this.playerForm.valid && this.playerForm.value && this.playerForm.value.age && this.playerForm.value.height) {
             const position = this.playerForm.value.position as UpdatePlayerDTO | undefined;
             if (position) {
