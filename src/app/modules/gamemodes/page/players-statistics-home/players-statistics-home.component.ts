@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
@@ -6,6 +6,7 @@ import { GameModeMinDTO } from 'src/app/models/interfaces/gamemode/response/Game
 import { GameModePositionDTO } from 'src/app/models/interfaces/gamemode/response/GameModePositonDTO';
 import { PlayerFullScoreDTO } from 'src/app/models/interfaces/gamemode/response/PlayerFullScoreDTO';
 import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
+import { PlayersStatisticsViewComponent } from '../../components/players-statistics-view/players-statistics-view.component';
 
 @Component({
     selector: 'app-players-statistics-home',
@@ -16,6 +17,8 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
 
     private destroy$: Subject<void> = new Subject();
     private readonly messageLife: number = 3000;
+
+    @ViewChild('playersStatisticsViewRef') playerStatisticsViewComponentRef!: PlayersStatisticsViewComponent;
 
     public gameModes!: GameModeMinDTO[];
     public selectedGameModePositions!: GameModePositionDTO[];
@@ -30,6 +33,7 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
     public playersRankingLoading$: BehaviorSubject<boolean> = new BehaviorSubject(true);
     public playersRanking!: PlayerFullScoreDTO[] | undefined;
     public playersRankingPage!: PlayerFullScoreDTO[];
+    setChatBarDataRef: any;
 
     public constructor(
         private gameModeService: GameModeService,
@@ -134,6 +138,10 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
                                 this.playersRankingPage =
                                 this.playersRanking.filter((element, index) => index >= 0 && index < 6)
                             );
+
+                            this.playerStatisticsViewComponentRef.setChartBarData(0, 6, playersRanking);
+                            this.playerStatisticsViewComponentRef.setCharRadarData(0, 3, playersRanking);
+
                             if (playersRanking.length > 0) {
                                 this.messageService.add(
                                     {

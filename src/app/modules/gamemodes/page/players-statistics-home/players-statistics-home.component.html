@@ -1,13 +1,14 @@
 <app-menubar-navigation></app-menubar-navigation>
 
 <app-players-statistics-view
+    #playersStatisticsViewRef
     [gameModes]="gameModes"
-    [getPlayersRankingForm]="getPlayersRankingForm"
-    (findGameModePositionsEvent)="handleFindGameModePositionsAction($event)"
     [selectedGameModePositions]="selectedGameModePositions"
-    (getPlayersRankingEvent)="handleGetPlayersRankingAction($event)"
+    [getPlayersRankingForm]="getPlayersRankingForm"
     [viewActivate$]="viewActivate$"
     [playersRankingLoading$]="playersRankingLoading$"
     [playersRanking]="playersRanking"
     [playersRankingPage]="playersRankingPage"
+    (findGameModePositionsEvent)="handleFindGameModePositionsAction($event)"
+    (getPlayersRankingEvent)="handleGetPlayersRankingAction($event)"
 ></app-players-statistics-view>

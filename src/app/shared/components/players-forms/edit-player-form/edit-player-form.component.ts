@@ -22,10 +22,10 @@ import { CustomDialogService } from 'src/app/shared/services/custom-dialog.servi
 })
 export class EditPlayerFormComponent implements OnInit, OnDestroy {
 
-    @ViewChild('playersTable') playersTable!: Table;
-
     private readonly $destroy: Subject<void> = new Subject();
     private readonly toastLife: number = 2000;
+
+    @ViewChild('playersTable') playersTable!: Table;
 
     private playersTablePages: PlayerMinDTO[][] = [];
 
