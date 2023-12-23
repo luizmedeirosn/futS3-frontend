@@ -1,6 +1,6 @@
-import { GameModeMinDTO } from 'src/app/models/interfaces/gamemode/response/GameModeMinDTO';
+import { GameModeMinDTO } from 'src/app/models/dto/gamemode/response/GameModeMinDTO';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ViewGameModeAction } from 'src/app/models/interfaces/gamemode/event/ViewGameModeAction';
+import { ViewGameModeAction } from 'src/app/models/dto/gamemode/event/ViewGameModeAction';
 
 @Component({
     selector: 'app-gamemodes-table',

@@ -3,12 +3,12 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { ParameterDTO } from 'src/app/models/interfaces/parameter/response/ParameterDTO';
-import { UpdatePlayerDTO } from 'src/app/models/interfaces/player/request/UpdatePlayerDTO';
-import { PlayerFullDTO } from 'src/app/models/interfaces/player/response/PlayerFullDTO';
-import { PlayerMinDTO } from 'src/app/models/interfaces/player/response/PlayerMinDTO';
-import { PlayerParameterScoreDTO } from 'src/app/models/interfaces/player/response/PlayerParameterScoreDTO';
-import { PositionDTO } from 'src/app/models/interfaces/position/response/PositionDTO';
+import { ParameterDTO } from 'src/app/models/dto/parameter/response/ParameterDTO';
+import { UpdatePlayerDTO } from 'src/app/models/dto/player/request/UpdatePlayerDTO';
+import { PlayerFullDTO } from 'src/app/models/dto/player/response/PlayerFullDTO';
+import { PlayerMinDTO } from 'src/app/models/dto/player/response/PlayerMinDTO';
+import { PlayerParameterScoreDTO } from 'src/app/models/dto/player/response/PlayerParameterScoreDTO';
+import { PositionDTO } from 'src/app/models/dto/position/response/PositionDTO';
 import { ParameterService } from 'src/app/services/parameter/parameter.service';
 import { PlayerService } from 'src/app/services/player/player.service';
 import { PositionService } from 'src/app/services/position/position.service';
@@ -63,6 +63,12 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
     ) { }
 
     public ngOnInit(): void {
+        this.setPlayersWithApi();
+        this.setPositionWithApi();
+        this.setParametersWithApi();
+    }
+
+    private setPlayersWithApi(): void {
         this.playerService.findAll()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
@@ -86,7 +92,9 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                     console.log(err);
                 }
             });
+    }
 
+    private setPositionWithApi(): void {
         this.positionService.findAll()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
@@ -97,7 +105,9 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                     console.log(err);
                 }
             });
+    }
 
+    private setParametersWithApi(): void {
         this.parameterService.findAll()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
@@ -108,7 +118,6 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                     console.log(err);
                 }
             });
-
     }
 
     public handleSelectPlayer($event: number): void {
@@ -128,6 +137,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                                 position: player?.position,
                             });
                             this.playerParametersScore = player?.parameters;
+                            this.$viewSelectedPicture.next(true);
                         }
                     },
                     error: (err) => {
@@ -151,7 +161,6 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
 
                 this.playersTable.first =
                     firstPlayerPage && this.players.indexOf(firstPlayerPage);
-                console.log(this.playersTable.first);
 
             }
             this.selectedPlayer = undefined
@@ -202,26 +211,38 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
     }
 
     public handleSubmitEditPlayerForm(): void {
-        if (this.playerForm.valid && this.playerForm.value && this.playerForm.value.age && this.playerForm.value.height) {
+        if (this.playerForm.valid && this.playerForm.value && this.playerForm.value && this.selectedPlayer?.id) {
             const position = this.playerForm.value.position as UpdatePlayerDTO | undefined;
             if (position) {
                 const playerRequest: UpdatePlayerDTO = {
-                    id: 1,
+                    id: String(this.selectedPlayer.id),
                     name: this.playerForm.value.name as string,
                     team: this.playerForm.value.team as string,
-                    age: String(this.playerForm.value.age),
-                    height: String(this.playerForm.value.height),
+                    age: this.playerForm.value.age as string | undefined,
+                    height: this.playerForm.value.height as string | undefined,
                     positionId: String(position.id),
-                    playerPicture: this.playerPicture,
+                    playerPicture: this.playerPicture || undefined,
                     parameters: this.playerParametersScore
                 };
 
                 this.playerForm.reset();
 
-                this.playerService.save(playerRequest)
+                this.playerService.update(playerRequest)
                     .pipe(takeUntil(this.$destroy))
                     .subscribe({
-                        next: () => {
+                        next: (playerResponse) => {
+                            const updatedPlayer = {
+                                name: playerResponse.name,
+                                position: playerResponse.position
+                            };
+
+                            this.players.forEach((p) => {
+                                if (p.id === this.selectedPlayer?.id) {
+                                    p.name = updatedPlayer.name;
+                                    p.position = updatedPlayer.position;
+                                }
+                            });
+
                             this.customDialogService.setChangesOn(true);
                             this.messageService.clear();
                             this.messageService.add({
@@ -246,6 +267,9 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
             }
             this.playerForm.reset();
             this.playerParameterForm.reset();
+            this.parametersOff.forEach(e => this.parameters.push(e));
+            this.parameters.sort(this.compareParameters);
+            this.parametersOff = new Array();
             this.playerParametersScore = [];
         }
     }

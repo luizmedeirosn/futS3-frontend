@@ -2,9 +2,9 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { GameModeMinDTO } from 'src/app/models/interfaces/gamemode/response/GameModeMinDTO';
-import { GameModePositionDTO } from 'src/app/models/interfaces/gamemode/response/GameModePositonDTO';
-import { PlayerFullScoreDTO } from 'src/app/models/interfaces/gamemode/response/PlayerFullScoreDTO';
+import { GameModeMinDTO } from 'src/app/models/dto/gamemode/response/GameModeMinDTO';
+import { GameModePositionDTO } from 'src/app/models/dto/gamemode/response/GameModePositonDTO';
+import { PlayerFullScoreDTO } from 'src/app/models/dto/gamemode/response/PlayerFullScoreDTO';
 import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
 import { PlayersStatisticsViewComponent } from '../../components/players-statistics-view/players-statistics-view.component';
 

@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { environment } from 'src/app/environments/environment.prod';
-import { PositionDTO } from 'src/app/models/interfaces/position/response/PositionDTO';
-import { PositionParametersDTO } from 'src/app/models/interfaces/position/response/PositionParametersDTO';
+import { PositionDTO } from 'src/app/models/dto/position/response/PositionDTO';
+import { PositionParametersDTO } from 'src/app/models/dto/position/response/PositionParametersDTO';
 
 @Injectable({
     providedIn: 'root'
@@ -14,14 +14,14 @@ export class PositionService {
 
     public positionView$: Subject<boolean> = new Subject();
 
-    constructor (
+    constructor(
         private httpClient: HttpClient
     ) {
         this.positionView$.next(false);
     };
 
     public findAll(): Observable<Array<PositionDTO>> {
-        return this.httpClient.get<Array<PositionDTO>> (
+        return this.httpClient.get<Array<PositionDTO>>(
             `${this.API_URL}/positions`,
         );
     }

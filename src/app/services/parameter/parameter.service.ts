@@ -1,11 +1,11 @@
 import { Observable } from 'rxjs';
-import { ParameterDTO } from 'src/app/models/interfaces/parameter/response/ParameterDTO';
+import { ParameterDTO } from 'src/app/models/dto/parameter/response/ParameterDTO';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/app/environments/environment.prod';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class ParameterService {
 

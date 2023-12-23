@@ -2,9 +2,9 @@ import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
-import { ViewPlayerAction } from 'src/app/models/interfaces/player/events/ViewPlayerAction';
-import { PlayerFullDTO } from 'src/app/models/interfaces/player/response/PlayerFullDTO';
-import { PlayerMinDTO } from 'src/app/models/interfaces/player/response/PlayerMinDTO';
+import { ViewPlayerAction } from 'src/app/models/dto/player/events/ViewPlayerAction';
+import { PlayerFullDTO } from 'src/app/models/dto/player/response/PlayerFullDTO';
+import { PlayerMinDTO } from 'src/app/models/dto/player/response/PlayerMinDTO';
 import { PlayerService } from 'src/app/services/player/player.service';
 
 @Component({
@@ -52,7 +52,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                 {
                     next: (players: PlayerMinDTO[]) => {
                         if (players.length > 0) {
-                            this.players = players.slice().reverse();
+                            this.players = players;
                             this.messageService.add(
                                 {
                                     severity: 'success',

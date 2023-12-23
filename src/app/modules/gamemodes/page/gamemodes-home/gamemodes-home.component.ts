@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
-import { ViewGameModeAction } from 'src/app/models/interfaces/gamemode/event/ViewGameModeAction';
-import { GameModeFullDTO } from 'src/app/models/interfaces/gamemode/response/GameModeFullDTO';
-import { GameModeMinDTO } from 'src/app/models/interfaces/gamemode/response/GameModeMinDTO';
+import { ViewGameModeAction } from 'src/app/models/dto/gamemode/event/ViewGameModeAction';
+import { GameModeFullDTO } from 'src/app/models/dto/gamemode/response/GameModeFullDTO';
+import { GameModeMinDTO } from 'src/app/models/dto/gamemode/response/GameModeMinDTO';
 import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
 
 @Component({

@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, OnDestroy, Output, ViewEncapsulation } from '@angular/core';
 import { DropdownChangeEvent } from 'primeng/dropdown';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { GameModeMinDTO } from 'src/app/models/interfaces/gamemode/response/GameModeMinDTO';
-import { GameModePositionDTO } from 'src/app/models/interfaces/gamemode/response/GameModePositonDTO';
-import { PlayerFullScoreDTO } from 'src/app/models/interfaces/gamemode/response/PlayerFullScoreDTO';
-import { PositionParametersDTO } from '../../../../models/interfaces/position/response/PositionParametersDTO';
+import { GameModeMinDTO } from 'src/app/models/dto/gamemode/response/GameModeMinDTO';
+import { GameModePositionDTO } from 'src/app/models/dto/gamemode/response/GameModePositonDTO';
+import { PlayerFullScoreDTO } from 'src/app/models/dto/gamemode/response/PlayerFullScoreDTO';
+import { PositionParametersDTO } from '../../../../models/dto/position/response/PositionParametersDTO';
 
 import { IconDefinition, faMagnifyingGlassChart, faRankingStar } from '@fortawesome/free-solid-svg-icons';
 import { PaginatorState } from 'primeng/paginator';

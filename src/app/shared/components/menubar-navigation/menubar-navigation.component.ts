@@ -143,7 +143,7 @@ export class MenubarNavigationComponent implements OnInit, OnDestroy {
                                     error: (err) => {
                                         console.log(err);
                                     }
-                                })
+                                });
                         }
                     },
                     {
@@ -157,6 +157,19 @@ export class MenubarNavigationComponent implements OnInit, OnDestroy {
                                     header: EnumPlayerEventsCrud.EDIT.valueOf(),
                                     contentStyle: { overflow: 'auto' },
                                     baseZIndex: 10000,
+                                });
+
+                            this.dynamicDialogRef.onClose
+                                .pipe(takeUntil(this.$destroy))
+                                .subscribe({
+                                    next: () => {
+                                        if (this.customDialogService.getChangesOn()) {
+                                            window.location.reload();
+                                        }
+                                    },
+                                    error: (err) => {
+                                        console.log(err);
+                                    }
                                 });
                         }
                     },

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
-import { ViewPlayerAction } from 'src/app/models/interfaces/player/events/ViewPlayerAction';
-import { PlayerMinDTO } from 'src/app/models/interfaces/player/response/PlayerMinDTO';
+import { ViewPlayerAction } from 'src/app/models/dto/player/events/ViewPlayerAction';
+import { PlayerMinDTO } from 'src/app/models/dto/player/response/PlayerMinDTO';
 
 @Component({
     selector: 'app-players-table',

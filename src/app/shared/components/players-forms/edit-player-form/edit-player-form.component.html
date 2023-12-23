@@ -181,7 +181,7 @@
             </label>
 
             <span *ngIf="$viewSelectedPicture | async" class="font-medium">{{
-                playerPicture.name | shorten : 15
+                (playerPicture && playerPicture.name) || "" | shorten : 15
             }}</span>
 
             <input

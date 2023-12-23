@@ -1,14 +1,13 @@
 import { PlayerParameterScoreDTO } from "../response/PlayerParameterScoreDTO";
 
-export interface UpdatePlayerDTO {
+export interface PostPlayerDTO {
 
-    id: number;
     name: string;
     team: string;
-    age: string;
-    height: string;
+    age: string | undefined;
+    height: string | undefined;
     positionId: string;
-    playerPicture: File;
+    playerPicture: File | undefined;
     parameters: Array<PlayerParameterScoreDTO>
 
 }

@@ -1,7 +1,7 @@
 .player-profile-picture {
     img {
-        width: 270px !important;
-        height: 370px !important;
+        width: 270px;
+        height: 370px;
         border-radius: 0.375rem;
         border-style: solid;
         border-color: var(--green-700);
@@ -11,8 +11,8 @@
 
 .player-profile-without-picture {
     img {
-        width: 160px !important;
-        height: 160px !important;
+        width: 270px;
+        height: 270px;
     }
 }
 

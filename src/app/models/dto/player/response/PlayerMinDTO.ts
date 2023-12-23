@@ -10,7 +10,7 @@ export class PlayerMinDTO implements Comparable<PlayerMinDTO> {
     position: PositionDTO;
     profilePictureLink: string;
 
-    constructor(id: number, name: string, position: PositionDTO, profilePictureLink: string) {
+    public constructor(id: number, name: string, position: PositionDTO, profilePictureLink: string) {
         this.id = id;
         this.name = name;
         this.position = position;

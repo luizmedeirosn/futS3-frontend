@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
-import { FullDataPosition } from 'src/app/models/interfaces/position/data/FullDataPosition';
-import { ViewPositionAction } from 'src/app/models/interfaces/position/events/ViewPositionAction';
-import { PositionDTO } from 'src/app/models/interfaces/position/response/PositionDTO';
+import { FullDataPosition } from 'src/app/models/dto/position/data/FullDataPosition';
+import { ViewPositionAction } from 'src/app/models/dto/position/events/ViewPositionAction';
+import { PositionDTO } from 'src/app/models/dto/position/response/PositionDTO';
 import { PositionService } from 'src/app/services/position/position.service';
 
 @Component({
