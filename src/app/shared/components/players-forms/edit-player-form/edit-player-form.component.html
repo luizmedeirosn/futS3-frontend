@@ -1,11 +1,8 @@
-<div class="player-edit-form flex justify-content-center">
+<div class="edit-player-form flex justify-content-center">
     <p-card
         *ngIf="players && ($viewTable | async)"
         header="Players"
         styleClass="shadow-none justify-content-center align-content-center align-content-center"
-        [style]="{
-            width: '39rem;'
-        }"
     >
         <p-table
             #playersTable
@@ -16,7 +13,7 @@
             [showCurrentPageReport]="true"
             [paginator]="true"
             [tableStyle]="{
-                width: '100%',
+                width: 'w-full',
             }"
         >
             <ng-template pTemplate="header" let-player>
@@ -294,12 +291,8 @@
                             </div>
                         </div>
                     </th>
-                    <th id="">
-                        <div
-                            class="flex justify-content-center align-items-center text-lg mt-1"
-                        >
-                            Delete
-                        </div>
+                    <th id="" pSortableColumn="" style="cursor: default">
+                        <div class="text-lg text-center mt-1">Delete</div>
                     </th>
                 </tr>
             </ng-template>

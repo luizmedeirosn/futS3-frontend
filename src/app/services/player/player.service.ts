@@ -70,4 +70,10 @@ export class PlayerService {
         );
     }
 
+    public deleteById(id: number): Observable<void> {
+        return this.httpClient.delete<void>(
+            `${this.API_URL}/players/${id}`,
+        );
+    }
+
 }

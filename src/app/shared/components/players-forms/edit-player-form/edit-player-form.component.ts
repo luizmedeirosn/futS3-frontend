@@ -88,6 +88,13 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                     });
                 },
                 error: (err) => {
+                    this.messageService.clear();
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Error',
+                        detail: 'Failed to retrieve the data!',
+                        life: this.toastLife
+                    });
                     console.log(err);
                 }
             });

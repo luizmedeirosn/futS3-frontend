@@ -17,6 +17,7 @@ import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 import { EditPlayerFormComponent } from './components/players-forms/edit-player-form/edit-player-form.component';
 import { CardModule } from 'primeng/card';
+import { DeletePlayersFormComponent } from './components/players-forms/delete-players-form/delete-players-form.component';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { CardModule } from 'primeng/card';
         ShortenPipe,
         FormControlAlertComponent,
         SavePlayerFormComponent,
-        EditPlayerFormComponent
+        EditPlayerFormComponent,
+        DeletePlayersFormComponent
     ],
     imports: [
         CommonModule,

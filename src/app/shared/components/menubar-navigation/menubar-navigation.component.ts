@@ -9,6 +9,7 @@ import { CustomDialogService } from '../../services/custom-dialog.service';
 import { SavePlayerFormComponent } from '../players-forms/save-player-form/save-player-form.component';
 import { EditPlayerFormComponent } from '../players-forms/edit-player-form/edit-player-form.component';
 import { Subject, takeUntil } from 'rxjs';
+import { DeletePlayersFormComponent } from '../players-forms/delete-players-form/delete-players-form.component';
 
 @Component({
     selector: 'app-menubar-navigation',
@@ -175,7 +176,30 @@ export class MenubarNavigationComponent implements OnInit, OnDestroy {
                     },
                     {
                         label: 'Delete',
-                        icon: 'pi pi-fw pi-trash'
+                        icon: 'pi pi-fw pi-trash',
+                        command: () => {
+                            this.dynamicDialogRef = this.customDialogService.open(
+                                DeletePlayersFormComponent,
+                                {
+                                    position: 'top',
+                                    header: EnumPlayerEventsCrud.DELETE.valueOf(),
+                                    contentStyle: { overflow: 'auto' },
+                                    baseZIndex: 10000,
+                                });
+
+                            this.dynamicDialogRef.onClose
+                                .pipe(takeUntil(this.$destroy))
+                                .subscribe({
+                                    next: () => {
+                                        if (this.customDialogService.getChangesOn()) {
+                                            window.location.reload();
+                                        }
+                                    },
+                                    error: (err) => {
+                                        console.log(err);
+                                    }
+                                });
+                        }
                     }
                 ]
             },
