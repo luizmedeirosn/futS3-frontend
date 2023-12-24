@@ -65,7 +65,6 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.setPlayersWithApi();
         this.setPositionWithApi();
-        this.setParametersWithApi();
     }
 
     private setPlayersWithApi(): void {
@@ -120,8 +119,19 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
             });
     }
 
+    private deleteIncludedPlayerParameters(): void {
+        const parametersNames = this.playerParametersScore.map(p => p.name);
+        this.parameters.forEach(parameter => {
+            if (parametersNames.includes(parameter.name)) {
+                this.parametersOff.push(parameter);
+                this.parameters = this.parameters.filter(p => p.name != parameter.name);
+            }
+        });
+    }
+
     public handleSelectPlayer($event: number): void {
         if ($event) {
+            this.setParametersWithApi();
             this.playerService.findFullById($event)
                 .pipe(takeUntil(this.$destroy))
                 .subscribe({
@@ -138,6 +148,8 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                             });
                             this.playerParametersScore = player?.parameters;
                             this.$viewSelectedPicture.next(true);
+
+                            this.deleteIncludedPlayerParameters();
                         }
                     },
                     error: (err) => {
@@ -231,6 +243,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                     .pipe(takeUntil(this.$destroy))
                     .subscribe({
                         next: (playerResponse) => {
+                            console.log('aqui', playerResponse);
                             const updatedPlayer = {
                                 name: playerResponse.name,
                                 position: playerResponse.position
