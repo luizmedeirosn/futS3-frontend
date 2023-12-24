@@ -1,6 +1,6 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { MessageService } from 'primeng/api';
-import { Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { PlayerFullDTO } from 'src/app/models/dto/player/response/PlayerFullDTO';
 import { PlayerMinDTO } from 'src/app/models/dto/player/response/PlayerMinDTO';
 import { PlayerService } from 'src/app/services/player/player.service';
@@ -18,6 +18,8 @@ export class DeletePlayersFormComponent {
     private readonly toastLife: number = 2000;
 
     private playersTablePages: PlayerMinDTO[][] = [];
+
+    public $loadingDeletion: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
     public selectedPlayer!: PlayerFullDTO | undefined;
     public players!: PlayerMinDTO[];
@@ -71,17 +73,24 @@ export class DeletePlayersFormComponent {
     }
 
     public handleDeletePlayerAction($event: number): void {
+        this.$loadingDeletion.next(true);
+        this.messageService.clear();
+
         this.playerService.deleteById($event)
             .pipe(takeUntil(this.$destroy))
             .subscribe({
                 next: () => {
-                    this.setPlayersWithApi();
-                    this.messageService.clear();
-                    this.messageService.add({
-                        severity: 'success',
-                        summary: 'Success',
-                        detail: 'Player deleted successfully!'
-                    });
+                    setTimeout(() => {
+                        this.$loadingDeletion.next(false);
+                        this.setPlayersWithApi();
+
+                        this.messageService.clear();
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: 'Success',
+                            detail: 'Player deleted successfully!'
+                        });
+                    }, 1000);
                     this.customDialogService.setChangesOn(true);
                 },
                 error: (err) => {

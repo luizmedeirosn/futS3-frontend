@@ -1,8 +1,15 @@
-<div class="delete-player-form flex justify-content-center">
+<div class="delete-player-form flex justify-content-center align-items-center">
     <p-card
         header="Players"
         styleClass="shadow-none justify-content-center align-content-center align-content-center"
     >
+        <p-progressBar
+            *ngIf="$loadingDeletion | async"
+            mode="indeterminate"
+            [style]="{ height: '6px' }"
+            color="var(--green-600)"
+        ></p-progressBar>
+
         <p-table
             #playersTable
             [value]="players"
@@ -13,6 +20,7 @@
             [paginator]="true"
             [tableStyle]="{
                 width: 'w-full',
+                overflow: 'hidden',
             }"
         >
             <ng-template pTemplate="header" let-player>
@@ -78,9 +86,13 @@
                     <td>
                         {{ player.name }}
                     </td>
-                    <td style="text-align: center">
+                    <td
+                        *ngIf="!($loadingDeletion | async)"
+                        style="text-align: center"
+                    >
                         <p-button
                             severity="danger"
+                            styleClass="fadeindown animation-duration-1000 animation-iteration-1 animation-ease-in-out"
                             icon="pi pi-trash"
                             [rounded]="true"
                             (onClick)="handleDeletePlayerAction(player.id)"
