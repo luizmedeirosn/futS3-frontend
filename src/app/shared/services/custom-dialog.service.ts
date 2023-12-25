@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ConfirmationService } from 'primeng/api';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Injectable({
@@ -10,7 +11,8 @@ export class CustomDialogService {
     private changesOn: boolean = false;
 
     public constructor(
-        private dialogService: DialogService
+        private dialogService: DialogService,
+        private confirmationService: ConfirmationService
     ) {
     }
 
@@ -37,6 +39,17 @@ export class CustomDialogService {
 
     public getChangesOn(): boolean {
         return this.changesOn;
+    }
+
+    public openConfirmationDialog() {
+        this.confirmationService.confirm({
+            message: `Confirm the deletion of player:`,
+            header: 'Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            acceptLabel: 'Yes',
+            rejectLabel: 'No',
+            accept: () => console.log('ok')
+        });
     }
 
 }

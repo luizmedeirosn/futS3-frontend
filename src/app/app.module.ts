@@ -7,7 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { DialogService } from 'primeng/dynamicdialog';
 
@@ -26,7 +26,7 @@ import { DialogService } from 'primeng/dynamicdialog';
         HttpClientModule,
         ToastModule,
     ],
-    providers: [MessageService, DialogService],
+    providers: [MessageService, DialogService, ConfirmationService],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

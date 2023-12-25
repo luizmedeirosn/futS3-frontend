@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { PlayerFullDTO } from 'src/app/models/dto/player/response/PlayerFullDTO';
 import { PlayerMinDTO } from 'src/app/models/dto/player/response/PlayerMinDTO';
@@ -28,6 +28,7 @@ export class DeletePlayersFormComponent {
         private playerService: PlayerService,
         private messageService: MessageService,
         private customDialogService: CustomDialogService,
+        private confirmationService: ConfirmationService,
     ) { }
 
     public ngOnInit(): void {
@@ -72,38 +73,58 @@ export class DeletePlayersFormComponent {
         this.$destroy.complete();
     }
 
+    public handleDeletePlayerEvent(event: PlayerMinDTO): void {
+        if (event) {
+            this.confirmationService.confirm({
+                message: `Confirm the deletion of player: ${event?.name}?`,
+                header: 'Confirmation',
+                icon: 'pi pi-exclamation-triangle',
+                acceptLabel: 'Yes',
+                rejectLabel: 'No',
+                acceptButtonStyleClass: 'p-button-danger',
+                rejectButtonStyleClass: 'p-button-text',
+                acceptIcon: "none",
+                rejectIcon: "none",
+                accept: () => this.handleDeletePlayerAction(event?.id)
+            });
+        }
+    }
+
     public handleDeletePlayerAction($event: number): void {
-        this.$loadingDeletion.next(true);
-        this.messageService.clear();
+        if ($event) {
+            this.$loadingDeletion.next(true);
+            this.messageService.clear();
 
-        this.playerService.deleteById($event)
-            .pipe(takeUntil(this.$destroy))
-            .subscribe({
-                next: () => {
-                    setTimeout(() => {
-                        this.$loadingDeletion.next(false);
-                        this.setPlayersWithApi();
+            this.playerService.deleteById($event)
+                .pipe(takeUntil(this.$destroy))
+                .subscribe({
+                    next: () => {
+                        setTimeout(() => {
+                            this.$loadingDeletion.next(false);
+                            this.setPlayersWithApi();
 
+                            this.messageService.clear();
+                            this.messageService.add({
+                                severity: 'success',
+                                summary: 'Success',
+                                detail: 'Player deleted successfully!'
+                            });
+                        }, 1000);
+                        this.customDialogService.setChangesOn(true);
+                    },
+                    error: (err) => {
+                        console.log(err);
                         this.messageService.clear();
                         this.messageService.add({
-                            severity: 'success',
-                            summary: 'Success',
-                            detail: 'Player deleted successfully!'
+                            severity: 'error',
+                            summary: 'Error',
+                            detail: 'Unable to delete the player!'
                         });
-                    }, 1000);
-                    this.customDialogService.setChangesOn(true);
-                },
-                error: (err) => {
-                    console.log(err);
-                    this.messageService.clear();
-                    this.messageService.add({
-                        severity: 'error',
-                        summary: 'Error',
-                        detail: 'Unable to delete the player!'
-                    });
-                    this.customDialogService.setChangesOn(false);
-                }
-            });
+                        this.customDialogService.setChangesOn(false);
+                    }
+                });
+        }
+
     }
 
 }

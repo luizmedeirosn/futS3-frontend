@@ -95,11 +95,13 @@
                             styleClass="fadeindown animation-duration-1000 animation-iteration-1 animation-ease-in-out"
                             icon="pi pi-trash"
                             [rounded]="true"
-                            (onClick)="handleDeletePlayerAction(player.id)"
+                            (onClick)="handleDeletePlayerEvent(player)"
                         ></p-button>
                     </td>
                 </tr>
             </ng-template>
         </p-table>
     </p-card>
+
+    <p-confirmDialog styleClass="w-6 text-large font-medium"></p-confirmDialog>
 </div>

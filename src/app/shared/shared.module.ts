@@ -19,6 +19,8 @@ import { EditPlayerFormComponent } from './components/players-forms/edit-player-
 import { SavePlayerFormComponent } from './components/players-forms/save-player-form/save-player-form.component';
 import { ShortenPipe } from './pipes/shorten.pipe';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { ConfirmDialogModule } from "primeng/confirmdialog";
+
 
 @NgModule({
     declarations: [
@@ -44,6 +46,7 @@ import { ProgressBarModule } from 'primeng/progressbar';
         TooltipModule,
         CardModule,
         ProgressBarModule,
+        ConfirmDialogModule,
     ],
     exports: [MenubarNavigationComponent, ShortenPipe, FormControlAlertComponent],
 })
