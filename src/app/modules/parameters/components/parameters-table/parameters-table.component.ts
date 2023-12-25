@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ParameterDTO } from 'src/app/models/interfaces/parameter/response/ParameterDTO';
+import { ParameterDTO } from 'src/app/models/dto/parameter/response/ParameterDTO';
 
 @Component({
   selector: 'app-parameters-table',
@@ -8,7 +8,7 @@ import { ParameterDTO } from 'src/app/models/interfaces/parameter/response/Param
 })
 export class ParametersTableComponent {
 
-    @Input()
-    public parameters!: ParameterDTO[];
+  @Input()
+  public parameters!: ParameterDTO[];
 
 }

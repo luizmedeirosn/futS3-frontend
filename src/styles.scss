@@ -1,6 +1,7 @@
 :root {
     --black-1: rgba(0, 0, 0, .87);
     --blue-1: var(--blue-600);
+    --blue-2: #18afdda9;
 }
 
 body {
@@ -31,6 +32,19 @@ text, span {
 
 }
 
+.p-button {
+    caret-color: transparent ;
+    caret-shape: block;
+}
+
+
+tr {
+    color: var(--black-1);
+    &:hover {
+        color: var(--blue-600);
+    }
+}
+
 .p-fieldset {
     background-color: #fcfcfc;
     legend {
@@ -39,14 +53,6 @@ text, span {
     .p-fieldset-content {
         color: var(--black-1);
         padding: 0.1rem;
-    }
-}
-
-
-tr {
-    color: var(--black-1);
-    &:hover {
-        color: var(--blue-600);
     }
 }
 
@@ -62,11 +68,9 @@ tr {
     }
 }
 
-.p-inputtext,
-.p-dropdown .p-dropdown-clear-icon,
-.p-dropdown .p-dropdown-trigger,
-.p-dropdown-panel .p-dropdown-header .p-dropdown-filter-icon {
+.p-dropdown-filter-icon {
     color: rgba(0, 0, 0, .87);
+
 }
 
 .p-dropdown-trigger {
@@ -74,4 +78,33 @@ tr {
     svg {
         margin-left: 2rem
     }
+}
+
+.p-dropdown-items-wrapper {
+    max-height: 150px !important;
+}
+
+.p-dialog {
+    width: 40rem;
+}
+
+.p-dialog-header {
+    background: linear-gradient(to bottom, #080414, #04f3a3) fixed;
+    background-size: 100% 200%;
+    background-repeat: no-repeat;
+    color: #fff;
+    font-weight: bold;
+}
+
+.p-dialog-content {
+    padding-top: 0.5rem;
+}
+
+.p-dialog-header-icon {
+    color: #fff;
+    caret-color: transparent;
+}
+
+.p-dialog-header-icon:enabled:hover {
+    background-color: var(--blue-2);
 }

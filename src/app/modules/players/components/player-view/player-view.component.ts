@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
-import { PlayerFullDTO } from 'src/app/models/interfaces/player/response/PlayerFullDTO';
+import { PlayerFullDTO } from 'src/app/models/dto/player/response/PlayerFullDTO';
 
 @Component({
   selector: 'app-player-view',
@@ -9,13 +9,13 @@ import { PlayerFullDTO } from 'src/app/models/interfaces/player/response/PlayerF
 })
 export class PlayerViewComponent {
 
-    @Input()
-    public player!: PlayerFullDTO;
+  @Input()
+  public player!: PlayerFullDTO;
 
-    @Output()
-    public backEvent: EventEmitter<void> = new EventEmitter();
+  @Output()
+  public backEvent: EventEmitter<void> = new EventEmitter();
 
-    public handleBackEvent() {
-        this.backEvent.emit();
-    }
+  public handleBackEvent() {
+    this.backEvent.emit();
+  }
 }

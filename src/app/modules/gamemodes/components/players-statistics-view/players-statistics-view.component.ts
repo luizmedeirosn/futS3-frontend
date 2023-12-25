@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, OnDestroy, Output, ViewEncapsulation } from '@angular/core';
 import { DropdownChangeEvent } from 'primeng/dropdown';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { GameModeMinDTO } from 'src/app/models/interfaces/gamemode/response/GameModeMinDTO';
-import { GameModePositionDTO } from 'src/app/models/interfaces/gamemode/response/GameModePositonDTO';
-import { PlayerFullScoreDTO } from 'src/app/models/interfaces/gamemode/response/PlayerFullScoreDTO';
-import { PositionParametersDTO } from '../../../../models/interfaces/position/response/PositionParametersDTO';
+import { GameModeMinDTO } from 'src/app/models/dto/gamemode/response/GameModeMinDTO';
+import { GameModePositionDTO } from 'src/app/models/dto/gamemode/response/GameModePositonDTO';
+import { PlayerFullScoreDTO } from 'src/app/models/dto/gamemode/response/PlayerFullScoreDTO';
+import { PositionParametersDTO } from '../../../../models/dto/position/response/PositionParametersDTO';
 
 import { IconDefinition, faMagnifyingGlassChart, faRankingStar } from '@fortawesome/free-solid-svg-icons';
 import { PaginatorState } from 'primeng/paginator';
@@ -27,7 +27,6 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
     @Input() public playersRankingLoading$!: BehaviorSubject<boolean>;
     @Input() public playersRanking!: PlayerFullScoreDTO[] | undefined;
     @Input() public playersRankingPage!: PlayerFullScoreDTO[];
-
 
     @Output() public findGameModePositionsEvent: EventEmitter<{ id: number }> = new EventEmitter();
     @Output() public getPlayersRankingEvent: EventEmitter<{ gameModeId: number, positionId: number }> = new EventEmitter();
@@ -77,8 +76,8 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
         const positionId = this.getPlayersRankingForm.value?.position.positionId as number | undefined;
         if (gameModeId && positionId) {
             this.setPositionParameters(positionId);
-            this.playersRankingLoading$.next(true);
             this.playersRanking = undefined;
+            this.playersRankingLoading$.next(true);
             this.getPlayersRankingEvent.emit({ gameModeId, positionId });
         }
     }
@@ -129,7 +128,10 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
         }
     }
 
-    private setChartBarData(first: number, rows: number): void {
+    public setChartBarData(first: number, rows: number, playersRanking?: Array<PlayerFullScoreDTO>): void {
+        this.playersRanking = playersRanking ?? this.playersRanking;
+
+        console.log('aqui1')
         if (this.playersRanking) {
             const playersNames =
                 this.playersRanking.filter((element, index) => index >= first && index < first + rows)
@@ -195,7 +197,9 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
         }
     }
 
-    private setCharRadarData(first: number, rows: number) {
+    public setCharRadarData(first: number, rows: number, playersRanking?: Array<PlayerFullScoreDTO>): void {
+        this.playersRanking = playersRanking ?? this.playersRanking;
+
         if (this.playersRanking) {
             let datasets: any[] = [];
             let colorIndex = 0;

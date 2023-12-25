@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
-import { GameModeFullDTO } from 'src/app/models/interfaces/gamemode/response/GameModeFullDTO';
+import { GameModeFullDTO } from 'src/app/models/dto/gamemode/response/GameModeFullDTO';
 
 @Component({
     selector: 'app-gamemode-view',

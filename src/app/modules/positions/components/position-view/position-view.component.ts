@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
-import { FullDataPosition } from 'src/app/models/interfaces/position/data/FullDataPosition';
+import { FullDataPosition } from 'src/app/models/dto/position/data/FullDataPosition';
 
 @Component({
     selector: 'app-position-view',

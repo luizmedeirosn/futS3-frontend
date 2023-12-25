@@ -38,7 +38,7 @@
         </div>
 
         <div
-            class="flex justify-content-between align-content-center align-items-center mt-3 gap-3"
+            class="flex justify-content-center align-content-center align-items-center mt-3 gap-4"
         >
             <div
                 class="{{
@@ -68,15 +68,6 @@
                     </p>
                 </p-fieldset>
                 <p-fieldset
-                    legend="Position"
-                    styleClass="m-1 mr-0 w-6 border-blue-400"
-                    class="player-data-fieldset"
-                >
-                    <p class="player-data-field">
-                        {{ player.position.name }}
-                    </p>
-                </p-fieldset>
-                <p-fieldset
                     legend="Age"
                     styleClass="m-1 mr-0 w-6 border-blue-400"
                     class="player-data-fieldset"
@@ -100,6 +91,15 @@
                                 ? player.height + " cm"
                                 : "Unregistered data"
                         }}
+                    </p>
+                </p-fieldset>
+                <p-fieldset
+                    legend="Position"
+                    styleClass="m-1 mr-0 w-6 border-blue-400"
+                    class="player-data-fieldset"
+                >
+                    <p class="player-data-field">
+                        {{ player.position.name }}
                     </p>
                 </p-fieldset>
                 <p-fieldset

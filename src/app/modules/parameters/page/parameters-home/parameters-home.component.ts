@@ -1,13 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
-import { ParameterDTO } from 'src/app/models/interfaces/parameter/response/ParameterDTO';
+import { ParameterDTO } from 'src/app/models/dto/parameter/response/ParameterDTO';
 import { ParameterService } from 'src/app/services/parameter/parameter.service';
 
 @Component({
-  selector: 'app-parameters-home',
-  templateUrl: './parameters-home.component.html',
-  styleUrls: []
+    selector: 'app-parameters-home',
+    templateUrl: './parameters-home.component.html',
+    styleUrls: []
 })
 export class ParametersHomeComponent implements OnInit, OnDestroy {
 
@@ -17,7 +17,7 @@ export class ParametersHomeComponent implements OnInit, OnDestroy {
 
     public parameters!: ParameterDTO[];
 
-    public constructor (
+    public constructor(
         private parameterService: ParameterService,
 
         private messageService: MessageService
@@ -31,36 +31,36 @@ export class ParametersHomeComponent implements OnInit, OnDestroy {
     private setParameters(): void {
         this.messageService.clear();
         this.parameterService.findAll()
-        .pipe(takeUntil(this.destroy$))
-        .subscribe (
-            {
-                next: (parameters) => {
-                    if (parameters.length > 0) {
-                        this.parameters = parameters;
-                        this.messageService.add (
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(
+                {
+                    next: (parameters) => {
+                        if (parameters.length > 0) {
+                            this.parameters = parameters;
+                            this.messageService.add(
+                                {
+                                    severity: 'success',
+                                    summary: 'Success',
+                                    detail: 'Successful search completed!',
+                                    life: this.messageLife
+                                }
+                            );
+
+                        }
+                    },
+                    error: (err) => {
+                        this.messageService.add(
                             {
-                                severity: 'success',
-                                summary: 'Success',
-                                detail: 'Successful search completed!',
+                                severity: 'error',
+                                summary: 'Error',
+                                detail: 'Please check your internet connection!',
                                 life: this.messageLife
                             }
                         );
-
+                        console.log(err);
                     }
-                },
-                error: (err) => {
-                    this.messageService.add (
-                        {
-                            severity: 'error',
-                            summary: 'Error',
-                            detail: 'Please check your internet connection!',
-                            life: this.messageLife
-                        }
-                    );
-                    console.log(err);
                 }
-            }
-        );
+            );
     }
 
     public ngOnDestroy(): void {

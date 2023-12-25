@@ -1,0 +1,24 @@
+<small
+    [ngClass]="{
+        'show-small':
+            (form.get(controlName)?.value?.length ?? 0 > 0) &&
+            (form.get(controlName)?.value?.length ?? 0 < minNumberCharacters),
+        'hide-small': !(
+            (form.get(controlName)?.value?.length ?? 0 > 0) &&
+            (form.get(controlName)?.value?.length ?? 0) < minNumberCharacters
+        )
+    }"
+    >Input too short...</small
+>
+<small
+    [ngClass]="{
+        'show-small':
+            form.get(controlName)?.value?.length ?? 0 > maxNumberCharacters,
+        'hide-small': !(
+            (form.get(controlName)?.value?.length ?? 0) >
+            maxNumberCharacters
+        )
+    }"
+>
+    Input too long...</small
+>
