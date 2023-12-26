@@ -248,7 +248,6 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                     .pipe(takeUntil(this.$destroy))
                     .subscribe({
                         next: (playerResponse) => {
-                            console.log('aqui', playerResponse);
                             const updatedPlayer = {
                                 name: playerResponse.name,
                                 position: playerResponse.position

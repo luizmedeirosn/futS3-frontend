@@ -23,6 +23,7 @@ import { ConfirmDialogModule } from "primeng/confirmdialog";
 import { SaveParameterFormComponent } from './components/parameter-forms/save-parameter-form/save-parameter-form.component';
 import { EditParameterFormComponent } from './components/parameter-forms/edit-parameter-form/edit-parameter-form.component';
 import { DeleteParameterFormComponent } from './components/parameter-forms/delete-parameter-form/delete-parameter-form.component';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 
 @NgModule({
@@ -53,6 +54,7 @@ import { DeleteParameterFormComponent } from './components/parameter-forms/delet
         CardModule,
         ProgressBarModule,
         ConfirmDialogModule,
+        InputTextareaModule,
     ],
     exports: [MenubarNavigationComponent, ShortenPipe, FormControlAlertComponent],
 })

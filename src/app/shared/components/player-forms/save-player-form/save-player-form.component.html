@@ -1,5 +1,5 @@
 <form
-    [formGroup]="playerForm"
+    [formGroup]="newPlayerForm"
     (ngSubmit)="handleSubmitSavePlayerForm()"
     class="flex flex-column align-content-center m-3 gap-4"
     enctype="multipart/form-data"
@@ -7,7 +7,7 @@
     <span class="p-float-label mt-3">
         <input pInputText formControlName="name" class="w-full" />
         <app-form-control-alert
-            [form]="playerForm"
+            [form]="newPlayerForm"
             [controlName]="'name'"
             [minNumberCharacters]="3"
             [maxNumberCharacters]="30"
@@ -23,7 +23,7 @@
             class="w-full"
         />
         <app-form-control-alert
-            [form]="playerForm"
+            [form]="newPlayerForm"
             [controlName]="'team'"
             [minNumberCharacters]="3"
             [maxNumberCharacters]="30"
@@ -230,7 +230,7 @@
         class="flex flex justify-content-center align-content-center align-items-center mt-4"
     >
         <p-button
-            [disabled]="!playerForm.valid"
+            [disabled]="!newPlayerForm.valid"
             type="submit"
             label="Send"
             styleClass="p-button-success flex justify-content-center align-content-center gap-2"

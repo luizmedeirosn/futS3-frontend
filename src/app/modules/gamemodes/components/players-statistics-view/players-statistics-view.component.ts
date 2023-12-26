@@ -131,7 +131,6 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
     public setChartBarData(first: number, rows: number, playersRanking?: Array<PlayerFullScoreDTO>): void {
         this.playersRanking = playersRanking ?? this.playersRanking;
 
-        console.log('aqui1')
         if (this.playersRanking) {
             const playersNames =
                 this.playersRanking.filter((element, index) => index >= first && index < first + rows)
