@@ -12,7 +12,6 @@ import { PositionDTO } from 'src/app/models/dto/position/response/PositionDTO';
 import { ParameterService } from 'src/app/services/parameter/parameter.service';
 import { PlayerService } from 'src/app/services/player/player.service';
 import { PositionService } from 'src/app/services/position/position.service';
-import { CustomDialogService } from 'src/app/shared/services/custom-dialog.service';
 
 @Component({
     selector: 'app-edit-player-form',
@@ -59,7 +58,6 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
         private playerService: PlayerService,
         private positionService: PositionService,
         private parameterService: ParameterService,
-        private customDialogService: CustomDialogService
     ) { }
 
     public ngOnInit(): void {
@@ -263,7 +261,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                                 }
                             });
 
-                            this.customDialogService.setChangesOn(true);
+                            this.playerService.setChangesOn(true);
                             this.messageService.clear();
                             this.messageService.add({
                                 severity: 'success',
@@ -273,7 +271,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                             });
                         },
                         error: (err) => {
-                            this.customDialogService.setChangesOn(false);
+                            this.playerService.setChangesOn(false);
                             this.messageService.clear();
                             this.messageService.add({
                                 severity: 'error',

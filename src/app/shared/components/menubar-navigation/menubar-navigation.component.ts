@@ -47,7 +47,7 @@ export class MenubarNavigationComponent implements OnInit, OnDestroy {
                         label: 'Find All',
                         icon: 'pi pi-search',
                         routerLink: ['/gamemodes'],
-                        command: () => this.gameModeService.gameModeView$.next(false),
+                        command: () => this.gameModeService.$gameModeView.next(false),
                     },
                     {
                         label: 'Add',
@@ -71,7 +71,7 @@ export class MenubarNavigationComponent implements OnInit, OnDestroy {
                         label: 'Find All',
                         icon: 'pi pi-search',
                         routerLink: ['/positions'],
-                        command: () => this.positionService.positionView$.next(false),
+                        command: () => this.positionService.$positionView.next(false),
                     },
                     {
                         label: 'Add',
@@ -118,7 +118,7 @@ export class MenubarNavigationComponent implements OnInit, OnDestroy {
                         label: 'Find All',
                         icon: 'pi pi-search',
                         routerLink: ['/players'],
-                        command: () => this.playerService.playerView$.next(false),
+                        command: () => this.playerService.$playerView.next(false),
                     },
                     {
                         label: 'Add',
@@ -133,18 +133,6 @@ export class MenubarNavigationComponent implements OnInit, OnDestroy {
                                     baseZIndex: 10000,
                                 });
 
-                            this.dynamicDialogRef.onClose
-                                .pipe(takeUntil(this.$destroy))
-                                .subscribe({
-                                    next: () => {
-                                        if (this.customDialogService.getChangesOn()) {
-                                            window.location.reload();
-                                        }
-                                    },
-                                    error: (err) => {
-                                        console.log(err);
-                                    }
-                                });
                         }
                     },
                     {
@@ -164,9 +152,15 @@ export class MenubarNavigationComponent implements OnInit, OnDestroy {
                                 .pipe(takeUntil(this.$destroy))
                                 .subscribe({
                                     next: () => {
-                                        if (this.customDialogService.getChangesOn()) {
-                                            window.location.reload();
-                                        }
+                                        this.playerService.getChangesOn()
+                                            .pipe(takeUntil(this.$destroy))
+                                            .subscribe({
+                                                next: (changesOn) => {
+                                                    if (changesOn) {
+                                                        window.location.reload();
+                                                    }
+                                                }
+                                            });
                                     },
                                     error: (err) => {
                                         console.log(err);
@@ -185,19 +179,6 @@ export class MenubarNavigationComponent implements OnInit, OnDestroy {
                                     header: EnumPlayerEventsCrud.DELETE.valueOf(),
                                     contentStyle: { overflow: 'auto' },
                                     baseZIndex: 10000,
-                                });
-
-                            this.dynamicDialogRef.onClose
-                                .pipe(takeUntil(this.$destroy))
-                                .subscribe({
-                                    next: () => {
-                                        if (this.customDialogService.getChangesOn()) {
-                                            window.location.reload();
-                                        }
-                                    },
-                                    error: (err) => {
-                                        console.log(err);
-                                    }
                                 });
                         }
                     }

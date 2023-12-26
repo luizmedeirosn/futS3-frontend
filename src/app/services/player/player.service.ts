@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { environment } from 'src/app/environments/environment.prod';
 import { PostPlayerDTO } from 'src/app/models/dto/player/request/PostPlayerDTO';
 import { UpdatePlayerDTO } from 'src/app/models/dto/player/request/UpdatePlayerDTO';
@@ -13,14 +13,28 @@ import { PlayerMinDTO } from 'src/app/models/dto/player/response/PlayerMinDTO';
 export class PlayerService {
 
     private readonly API_URL: string = environment.API_URL;
+    private $changesOn: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-    public playerView$: Subject<boolean> = new Subject();
+    public $playerView: Subject<boolean> = new Subject();
+
 
     public constructor(
         private httpClient: HttpClient
     ) {
-        this.playerView$.next(false);
+        this.$playerView.next(false);
     };
+
+    public setChangesOn(status: boolean): void {
+        if (status !== null && status !== undefined) {
+            this.$changesOn.next(status);
+        } else {
+            console.error("Status is null or undefined");
+        }
+    }
+
+    public getChangesOn(): BehaviorSubject<boolean> {
+        return this.$changesOn;
+    }
 
     public findAll(): Observable<Array<PlayerMinDTO>> {
         return this.httpClient.get<Array<PlayerMinDTO>>(

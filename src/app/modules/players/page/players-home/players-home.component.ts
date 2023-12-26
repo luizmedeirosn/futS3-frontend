@@ -14,7 +14,7 @@ import { PlayerService } from 'src/app/services/player/player.service';
     encapsulation: ViewEncapsulation.None
 })
 export class PlayersHomeComponent implements OnInit, OnDestroy {
-    private readonly destroy$: Subject<void> = new Subject();
+    private readonly $destroy: Subject<void> = new Subject();
     private readonly messageLife: number = 3000;
 
     public players!: Array<PlayerMinDTO>;
@@ -30,8 +30,9 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.setPlayers();
-        this.playerService.playerView$
-            .pipe(takeUntil(this.destroy$))
+
+        this.playerService.$playerView
+            .pipe(takeUntil(this.$destroy))
             .subscribe(
                 {
                     next: (playerView) => {
@@ -42,28 +43,33 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                     }
                 }
             );
+
+        this.playerService.getChangesOn()
+            .pipe(takeUntil(this.$destroy))
+            .subscribe({
+                next: (changesOn: boolean) => {
+                    if (changesOn) {
+                        this.setPlayers();
+                    }
+                },
+                error: (err) => {
+                    console.log(err);
+                }
+            });
     }
 
     private setPlayers(): void {
-        this.messageService.clear();
         this.playerService.findAll()
-            .pipe(takeUntil(this.destroy$))
+            .pipe(takeUntil(this.$destroy))
             .subscribe(
                 {
                     next: (players: PlayerMinDTO[]) => {
                         if (players.length > 0) {
                             this.players = players;
-                            this.messageService.add(
-                                {
-                                    severity: 'success',
-                                    summary: 'Success',
-                                    detail: 'Successful search completed!',
-                                    life: this.messageLife
-                                }
-                            );
                         }
                     },
                     error: (err) => {
+                        this.messageService.clear();
                         this.messageService.add(
                             {
                                 severity: 'error',
@@ -82,13 +88,13 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
         this.messageService.clear();
         if ($event) {
             this.playerService.findFullById($event.id)
-                .pipe(takeUntil(this.destroy$))
+                .pipe(takeUntil(this.$destroy))
                 .subscribe(
                     {
                         next: (player) => {
                             if (player) {
                                 this.player = player;
-                                this.playerService.playerView$.next(true);
+                                this.playerService.$playerView.next(true);
                                 this.messageService.add(
                                     {
                                         severity: 'success',
@@ -116,12 +122,12 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
     }
 
     public handleBackAction(): void {
-        this.playerService.playerView$.next(false);
+        this.playerService.$playerView.next(false);
     }
 
     public ngOnDestroy(): void {
-        this.destroy$.next();
-        this.destroy$.complete();
+        this.$destroy.next();
+        this.$destroy.complete();
     }
 
 

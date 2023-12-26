@@ -11,7 +11,7 @@ import { ParameterService } from 'src/app/services/parameter/parameter.service';
 })
 export class ParametersHomeComponent implements OnInit, OnDestroy {
 
-    private readonly destroy$: Subject<void> = new Subject();
+    private readonly $destroy: Subject<void> = new Subject();
     private readonly messageLife: number = 3000;
 
 
@@ -19,36 +19,39 @@ export class ParametersHomeComponent implements OnInit, OnDestroy {
 
     public constructor(
         private parameterService: ParameterService,
-
-        private messageService: MessageService
+        private messageService: MessageService,
     ) {
     }
 
     public ngOnInit(): void {
         this.setParameters();
+
+        this.parameterService.getChangesOn()
+            .pipe(takeUntil(this.$destroy))
+            .subscribe({
+                next: (changesOn: boolean) => {
+                    if (changesOn) {
+                        this.setParameters();
+                    }
+                },
+                error: (err) => {
+                    console.log(err);
+                }
+            });
     }
 
     private setParameters(): void {
-        this.messageService.clear();
         this.parameterService.findAll()
-            .pipe(takeUntil(this.destroy$))
+            .pipe(takeUntil(this.$destroy))
             .subscribe(
                 {
                     next: (parameters) => {
                         if (parameters.length > 0) {
                             this.parameters = parameters;
-                            this.messageService.add(
-                                {
-                                    severity: 'success',
-                                    summary: 'Success',
-                                    detail: 'Successful search completed!',
-                                    life: this.messageLife
-                                }
-                            );
-
                         }
                     },
                     error: (err) => {
+                        this.messageService.clear();
                         this.messageService.add(
                             {
                                 severity: 'error',
@@ -64,8 +67,8 @@ export class ParametersHomeComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
-        this.destroy$.next();
-        this.destroy$.complete();
+        this.$destroy.next();
+        this.$destroy.complete();
     }
 
 }
