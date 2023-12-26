@@ -4,7 +4,6 @@ import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { PlayerFullDTO } from 'src/app/models/dto/player/response/PlayerFullDTO';
 import { PlayerMinDTO } from 'src/app/models/dto/player/response/PlayerMinDTO';
 import { PlayerService } from 'src/app/services/player/player.service';
-import { CustomDialogService } from 'src/app/shared/services/custom-dialog.service';
 
 @Component({
     selector: 'app-delete-players-form',
@@ -27,7 +26,6 @@ export class DeletePlayersFormComponent {
     public constructor(
         private playerService: PlayerService,
         private messageService: MessageService,
-        private customDialogService: CustomDialogService,
         private confirmationService: ConfirmationService,
     ) { }
 
@@ -109,8 +107,8 @@ export class DeletePlayersFormComponent {
                                 summary: 'Success',
                                 detail: 'Player deleted successfully!'
                             });
+                            this.playerService.setChangesOn(true);
                         }, 1000);
-                        this.customDialogService.setChangesOn(true);
                     },
                     error: (err) => {
                         console.log(err);
@@ -120,7 +118,7 @@ export class DeletePlayersFormComponent {
                             summary: 'Error',
                             detail: 'Unable to delete the player!'
                         });
-                        this.customDialogService.setChangesOn(false);
+                        this.playerService.setChangesOn(false);
                     }
                 });
         }

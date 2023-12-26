@@ -13,7 +13,7 @@ import { PositionService } from 'src/app/services/position/position.service';
 })
 export class PositionsHomeComponent implements OnInit, OnDestroy {
 
-    private readonly destroy$: Subject<void> = new Subject();
+    private readonly $destroy: Subject<void> = new Subject();
     private readonly messageLife: number = 3000;
 
     public positions!: PositionDTO[];
@@ -23,15 +23,15 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
 
     constructor(
         private positionService: PositionService,
-
-        private messageService: MessageService
+        private messageService: MessageService,
     ) {
     }
 
     public ngOnInit(): void {
         this.setPositions();
-        this.positionService.positionView$
-            .pipe(takeUntil(this.destroy$))
+
+        this.positionService.$positionView
+            .pipe(takeUntil(this.$destroy))
             .subscribe(
                 {
                     next: (positionView) => {
@@ -42,26 +42,31 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
                     }
                 }
             );
+
+        this.positionService.getChangesOn()
+            .pipe(takeUntil(this.$destroy))
+            .subscribe({
+                next: (changesOn: boolean) => {
+                    if (changesOn) {
+                        this.setPositions();
+                    }
+                },
+                error: (err) => {
+                    console.log(err);
+                }
+            });
     }
 
     private setPositions(): void {
-        this.messageService.clear();
         this.positionService.findAll()
-            .pipe(takeUntil(this.destroy$))
+            .pipe(takeUntil(this.$destroy))
             .subscribe(
                 {
                     next: (positions) => {
                         this.positions = positions;
-                        this.messageService.add(
-                            {
-                                severity: 'success',
-                                summary: 'Success',
-                                detail: 'Successful search completed!',
-                                life: this.messageLife
-                            }
-                        );
                     },
                     error: (err) => {
+                        this.messageService.clear();
                         this.messageService.add(
                             {
                                 severity: 'error',
@@ -80,7 +85,7 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
         this.messageService.clear();
         if ($event) {
             this.positionService.findPositionParametersById($event.id)
-                .pipe(takeUntil(this.destroy$))
+                .pipe(takeUntil(this.$destroy))
                 .subscribe(
                     {
                         next: (parameters) => {
@@ -91,7 +96,7 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
                                 parameters: parameters
                             };
                             this.position = position;
-                            this.positionService.positionView$.next(true);
+                            this.positionService.$positionView.next(true);
                             this.messageService.add(
                                 {
                                     severity: 'success',
@@ -118,12 +123,12 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
     }
 
     public handleBackAction(): void {
-        this.positionService.positionView$.next(false);
+        this.positionService.$positionView.next(false);
     }
 
     public ngOnDestroy(): void {
-        this.destroy$.next();
-        this.destroy$.complete();
+        this.$destroy.next();
+        this.$destroy.complete();
     }
 
 }

@@ -13,7 +13,7 @@ import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
 })
 export class GameModesHomeComponent implements OnInit, OnDestroy {
 
-    private readonly destroy$: Subject<void> = new Subject();
+    private readonly $destroy: Subject<void> = new Subject();
     private readonly messageLife: number = 3000;
 
     public gameModes!: GameModeMinDTO[];
@@ -23,15 +23,15 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
 
     public constructor(
         private gameModeService: GameModeService,
-
-        private messageService: MessageService
+        private messageService: MessageService,
     ) {
     }
 
     public ngOnInit(): void {
         this.setGameModes();
-        this.gameModeService.gameModeView$
-            .pipe(takeUntil(this.destroy$))
+
+        this.gameModeService.$gameModeView
+            .pipe(takeUntil(this.$destroy))
             .subscribe(
                 {
                     next: (gameModeView) => {
@@ -42,12 +42,25 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
                     }
                 }
             );
+
+        this.gameModeService.getChangesOn()
+            .pipe(takeUntil(this.$destroy))
+            .subscribe({
+                next: (changesOn: boolean) => {
+                    if (changesOn) {
+                        this.setGameModes();
+                    }
+                },
+                error: (err) => {
+                    console.log(err);
+                }
+            });
     }
 
     private setGameModes(): void {
         this.messageService.clear();
         this.gameModeService.findAll()
-            .pipe(takeUntil(this.destroy$))
+            .pipe(takeUntil(this.$destroy))
             .subscribe(
                 {
                     next: (gameModes) => {
@@ -82,13 +95,13 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
         this.messageService.clear();
         if ($event) {
             this.gameModeService.findFullById($event.id)
-                .pipe(takeUntil(this.destroy$))
+                .pipe(takeUntil(this.$destroy))
                 .subscribe(
                     {
                         next: (gameMode) => {
                             if (gameMode) {
                                 this.gameMode = gameMode;
-                                this.gameModeService.gameModeView$.next(true);
+                                this.gameModeService.$gameModeView.next(true);
                                 this.messageService.add(
                                     {
                                         severity: 'success',
@@ -116,12 +129,12 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
     }
 
     public handleBackAction() {
-        this.gameModeService.gameModeView$.next(false);
+        this.gameModeService.$gameModeView.next(false);
     }
 
     public ngOnDestroy(): void {
-        this.destroy$.next();
-        this.destroy$.complete();
+        this.$destroy.next();
+        this.$destroy.complete();
     }
 
 }
