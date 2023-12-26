@@ -66,17 +66,10 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
                     next: (gameModes) => {
                         if (gameModes.length > 0) {
                             this.gameModes = gameModes;
-                            this.messageService.add(
-                                {
-                                    severity: 'success',
-                                    summary: 'Success',
-                                    detail: 'Successful search completed!',
-                                    life: this.messageLife
-                                }
-                            );
                         }
                     },
                     error: (err) => {
+                        this.messageService.clear();
                         this.messageService.add(
                             {
                                 severity: 'error',

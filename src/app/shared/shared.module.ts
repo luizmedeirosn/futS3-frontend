@@ -14,12 +14,15 @@ import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 import { FormControlAlertComponent } from './components/form-control-alert/form-control-alert.component';
 import { MenubarNavigationComponent } from './components/menubar-navigation/menubar-navigation.component';
-import { DeletePlayersFormComponent } from './components/players-forms/delete-players-form/delete-players-form.component';
-import { EditPlayerFormComponent } from './components/players-forms/edit-player-form/edit-player-form.component';
-import { SavePlayerFormComponent } from './components/players-forms/save-player-form/save-player-form.component';
+import { DeletePlayersFormComponent } from './components/player-forms/delete-players-form/delete-players-form.component';
+import { EditPlayerFormComponent } from './components/player-forms/edit-player-form/edit-player-form.component';
+import { SavePlayerFormComponent } from './components/player-forms/save-player-form/save-player-form.component';
 import { ShortenPipe } from './pipes/shorten.pipe';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { ConfirmDialogModule } from "primeng/confirmdialog";
+import { SaveParameterFormComponent } from './components/parameter-forms/save-parameter-form/save-parameter-form.component';
+import { EditParameterFormComponent } from './components/parameter-forms/edit-parameter-form/edit-parameter-form.component';
+import { DeleteParameterFormComponent } from './components/parameter-forms/delete-parameter-form/delete-parameter-form.component';
 
 
 @NgModule({
@@ -29,7 +32,10 @@ import { ConfirmDialogModule } from "primeng/confirmdialog";
         FormControlAlertComponent,
         SavePlayerFormComponent,
         EditPlayerFormComponent,
-        DeletePlayersFormComponent
+        DeletePlayersFormComponent,
+        SaveParameterFormComponent,
+        EditParameterFormComponent,
+        DeleteParameterFormComponent
     ],
     imports: [
         CommonModule,
