@@ -268,7 +268,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                             this.messageService.add({
                                 severity: 'success',
                                 summary: 'Success',
-                                detail: 'Player successfully registered!',
+                                detail: 'Data edited successfully!',
                                 life: this.toastLife
                             });
                         },
