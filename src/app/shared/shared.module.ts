@@ -14,7 +14,7 @@ import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 import { FormControlAlertComponent } from './components/form-control-alert/form-control-alert.component';
 import { MenubarNavigationComponent } from './components/menubar-navigation/menubar-navigation.component';
-import { DeletePlayersFormComponent } from './components/player-forms/delete-players-form/delete-players-form.component';
+import { DeletePlayerFormComponent } from './components/player-forms/delete-players-form/delete-player-form.component';
 import { EditPlayerFormComponent } from './components/player-forms/edit-player-form/edit-player-form.component';
 import { SavePlayerFormComponent } from './components/player-forms/save-player-form/save-player-form.component';
 import { ShortenPipe } from './pipes/shorten.pipe';
@@ -32,7 +32,7 @@ import { DeleteParameterFormComponent } from './components/parameter-forms/delet
         FormControlAlertComponent,
         SavePlayerFormComponent,
         EditPlayerFormComponent,
-        DeletePlayersFormComponent,
+        DeletePlayerFormComponent,
         SaveParameterFormComponent,
         EditParameterFormComponent,
         DeleteParameterFormComponent

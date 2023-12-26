@@ -7,11 +7,11 @@ import { PlayerService } from 'src/app/services/player/player.service';
 
 @Component({
     selector: 'app-delete-players-form',
-    templateUrl: './delete-players-form.component.html',
-    styleUrls: ['./delete-players-form.component.scss'],
+    templateUrl: './delete-player-form.component.html',
+    styleUrls: ['./delete-player-form.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
-export class DeletePlayersFormComponent {
+export class DeletePlayerFormComponent {
 
     private readonly $destroy: Subject<void> = new Subject();
     private readonly toastLife: number = 2000;

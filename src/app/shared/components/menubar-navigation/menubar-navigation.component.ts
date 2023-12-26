@@ -1,15 +1,19 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { Subject, takeUntil } from 'rxjs';
+import { EnumParameterEventsCrud } from 'src/app/models/enums/EnumParameterEventsCrud';
 import { EnumPlayerEventsCrud } from 'src/app/models/enums/EnumPlayerEventsCrud';
 import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
 import { PlayerService } from 'src/app/services/player/player.service';
 import { PositionService } from 'src/app/services/position/position.service';
 import { CustomDialogService } from '../../services/custom-dialog.service';
-import { SavePlayerFormComponent } from '../player-forms/save-player-form/save-player-form.component';
+import { DeleteParameterFormComponent } from '../parameter-forms/delete-parameter-form/delete-parameter-form.component';
+import { DeletePlayerFormComponent } from '../player-forms/delete-players-form/delete-player-form.component';
 import { EditPlayerFormComponent } from '../player-forms/edit-player-form/edit-player-form.component';
-import { Subject, takeUntil } from 'rxjs';
-import { DeletePlayersFormComponent } from '../player-forms/delete-players-form/delete-players-form.component';
+import { SavePlayerFormComponent } from '../player-forms/save-player-form/save-player-form.component';
+import { EditParameterFormComponent } from '../parameter-forms/edit-parameter-form/edit-parameter-form.component';
+import { SaveParameterFormComponent } from '../parameter-forms/save-parameter-form/save-parameter-form.component';
 
 @Component({
     selector: 'app-menubar-navigation',
@@ -99,14 +103,47 @@ export class MenubarNavigationComponent implements OnInit, OnDestroy {
                     {
                         label: 'Add',
                         icon: 'pi pi-fw pi-plus',
+                        command: () => {
+                            this.dynamicDialogRef = this.customDialogService.open(
+                                SaveParameterFormComponent,
+                                {
+                                    position: 'top',
+                                    header: EnumParameterEventsCrud.ADD.valueOf(),
+                                    contentStyle: { overflow: 'auto' },
+                                    baseZIndex: 10000,
+                                });
+
+                        },
                     },
                     {
                         label: 'Edit',
-                        icon: 'pi pi-fw pi-pencil'
+                        icon: 'pi pi-fw pi-pencil',
+                        command: () => {
+                            this.dynamicDialogRef = this.customDialogService.open(
+                                EditParameterFormComponent,
+                                {
+                                    position: 'top',
+                                    header: EnumParameterEventsCrud.EDIT.valueOf(),
+                                    contentStyle: { overflow: 'auto' },
+                                    baseZIndex: 10000,
+                                });
+
+                        },
                     },
                     {
                         label: 'Delete',
-                        icon: 'pi pi-fw pi-trash'
+                        icon: 'pi pi-fw pi-trash',
+                        command: () => {
+                            this.dynamicDialogRef = this.customDialogService.open(
+                                DeleteParameterFormComponent,
+                                {
+                                    position: 'top',
+                                    header: EnumParameterEventsCrud.DELETE.valueOf(),
+                                    contentStyle: { overflow: 'auto' },
+                                    baseZIndex: 10000,
+                                });
+
+                        }
                     }
                 ]
             },
@@ -173,7 +210,7 @@ export class MenubarNavigationComponent implements OnInit, OnDestroy {
                         icon: 'pi pi-fw pi-trash',
                         command: () => {
                             this.dynamicDialogRef = this.customDialogService.open(
-                                DeletePlayersFormComponent,
+                                DeletePlayerFormComponent,
                                 {
                                     position: 'top',
                                     header: EnumPlayerEventsCrud.DELETE.valueOf(),
