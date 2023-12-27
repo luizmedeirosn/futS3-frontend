@@ -2,14 +2,14 @@ import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
-import { PostParameterDTO } from 'src/app/models/dto/parameter/request/PostParameterDTO';
+import { ParameterRequestDTO } from 'src/app/models/dto/parameter/request/ParameterRequestDTO';
 import { ParameterDTO } from 'src/app/models/dto/parameter/response/ParameterDTO';
 import { ParameterService } from 'src/app/services/parameter/parameter.service';
 
 @Component({
     selector: 'app-save-parameter-form',
     templateUrl: './save-parameter-form.component.html',
-    styleUrls: ['./save-parameter-form.component.scss']
+    styleUrls: []
 })
 export class SaveParameterFormComponent implements OnDestroy {
 
@@ -17,7 +17,7 @@ export class SaveParameterFormComponent implements OnDestroy {
     private readonly toastLife: number = 2000;
 
     public newParameterForm: any = this.formBuilder.group({
-        name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
+        name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
         description: ['', Validators.maxLength(2000)],
     });
 
@@ -29,7 +29,7 @@ export class SaveParameterFormComponent implements OnDestroy {
     }
 
     public handleSubmitSaveParameterForm(): void {
-        const parameterResquest: PostParameterDTO = {
+        const parameterResquest: ParameterRequestDTO = {
             name: this.newParameterForm.value.name as string,
             description: this.newParameterForm.value.description as string
         };

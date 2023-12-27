@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/app/environments/environment.prod';
-import { PostParameterDTO } from 'src/app/models/dto/parameter/request/PostParameterDTO';
+import { ParameterRequestDTO } from 'src/app/models/dto/parameter/request/ParameterRequestDTO';
 import { ParameterDTO } from 'src/app/models/dto/parameter/response/ParameterDTO';
 
 @Injectable({
@@ -36,9 +36,22 @@ export class ParameterService {
         );
     }
 
-    public save(parameterRequest: PostParameterDTO): Observable<ParameterDTO> {
+    public findById(id: number): Observable<ParameterDTO> {
+        return this.httpClient.get<ParameterDTO>(
+            `${this.API_URL}/parameters/${id}`
+        );
+    }
+
+    public save(parameterRequest: ParameterRequestDTO): Observable<ParameterDTO> {
         return this.httpClient.post<ParameterDTO>(
             `${this.API_URL}/parameters`,
+            parameterRequest
+        );
+    }
+
+    public update(id: number, parameterRequest: ParameterRequestDTO): Observable<ParameterDTO> {
+        return this.httpClient.put<ParameterDTO>(
+            `${this.API_URL}/parameters/${id}`,
             parameterRequest
         );
     }

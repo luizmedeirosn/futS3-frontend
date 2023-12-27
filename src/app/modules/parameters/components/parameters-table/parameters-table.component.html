@@ -98,7 +98,10 @@
                     <td>{{ parameter.id }}</td>
                     <td>{{ parameter.name }}</td>
                     <td>
-                        {{ parameter.description || "No description for now!" }}
+                        {{
+                            parameter.description || "No description for now!"
+                                | shorten : 30
+                        }}
                     </td>
                 </tr>
             </ng-template>

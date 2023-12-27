@@ -5,6 +5,7 @@ interface Comparable<T> {
 }
 
 export class PlayerMinDTO implements Comparable<PlayerMinDTO> {
+
     id: number;
     name: string;
     position: PositionDTO;

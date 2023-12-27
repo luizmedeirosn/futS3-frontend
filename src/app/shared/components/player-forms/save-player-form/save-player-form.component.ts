@@ -70,7 +70,6 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
                     console.log(err);
                 }
             });
-
     }
 
     public handleUploadPicture($event: any): void {

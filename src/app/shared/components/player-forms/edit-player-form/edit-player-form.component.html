@@ -95,11 +95,11 @@
             icon="pi pi-arrow-left"
             pTooltip="Return to the table"
             tooltipPosition="top"
-            (click)="handleBackEvent()"
+            (click)="handleBackAction()"
         ></p-button>
     </div>
 
-    <span class="p-float-label">
+    <span class="p-float-label mt-3">
         <input pInputText formControlName="name" class="w-full" />
         <app-form-control-alert
             [form]="playerForm"

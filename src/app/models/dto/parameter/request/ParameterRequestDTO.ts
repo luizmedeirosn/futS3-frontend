@@ -1,4 +1,4 @@
-export interface PostParameterDTO {
+export interface ParameterRequestDTO {
 
     name: string;
     description: string;
