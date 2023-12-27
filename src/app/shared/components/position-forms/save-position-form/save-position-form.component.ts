@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
@@ -13,7 +13,7 @@ import { PositionService } from 'src/app/services/position/position.service';
     templateUrl: './save-position-form.component.html',
     styleUrls: []
 })
-export class SavePositionFormComponent {
+export class SavePositionFormComponent implements OnInit, OnDestroy {
 
     private readonly $destroy: Subject<void> = new Subject();
     private readonly toastLife: number = 2000;

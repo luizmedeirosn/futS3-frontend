@@ -1,21 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { ParameterDTO } from 'src/app/models/dto/parameter/response/ParameterDTO';
-import { PlayerMinDTO } from 'src/app/models/dto/player/response/PlayerMinDTO';
 import { ParameterService } from 'src/app/services/parameter/parameter.service';
 
 @Component({
     selector: 'app-delete-parameter-form',
     templateUrl: './delete-parameter-form.component.html',
-    styleUrls: ['./delete-parameter-form.component.scss']
+    styleUrls: ['./delete-parameter-form.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
-export class DeleteParameterFormComponent {
+export class DeleteParameterFormComponent implements OnInit, OnDestroy {
 
     private readonly $destroy: Subject<void> = new Subject();
     private readonly toastLife: number = 2000;
-
-    private parametersTablePages: Array<Array<ParameterDTO>> = new Array();
 
     public $loadingDeletion: BehaviorSubject<boolean> = new BehaviorSubject(false);
     public parameters!: ParameterDTO[];
@@ -37,19 +35,6 @@ export class DeleteParameterFormComponent {
             .subscribe({
                 next: (parameters) => {
                     this.parameters = parameters;
-
-                    let increment: number = 0;
-                    let page: Array<ParameterDTO> = new Array();
-
-                    parameters.forEach((parameter, index, array) => {
-                        page.push(parameter);
-                        increment += 1;
-                        if (increment === 5 || index === array.length - 1) {
-                            this.parametersTablePages.push(page);
-                            page = new Array();
-                            increment = 0;
-                        }
-                    });
                 },
                 error: (err) => {
                     this.messageService.clear();
@@ -64,15 +49,10 @@ export class DeleteParameterFormComponent {
             });
     }
 
-    public ngOnDestroy(): void {
-        this.$destroy.next();
-        this.$destroy.complete();
-    }
-
-    public handleDeleteParameterEvent(event: PlayerMinDTO): void {
+    public handleDeleteParameterEvent(event: ParameterDTO): void {
         if (event) {
             this.confirmationService.confirm({
-                message: `Confirm the deletion of player: ${event?.name}?`,
+                message: `Confirm the deletion of parameter: ${event?.name}?`,
                 header: 'Confirmation',
                 icon: 'pi pi-exclamation-triangle',
                 acceptLabel: 'Yes',
@@ -103,7 +83,7 @@ export class DeleteParameterFormComponent {
                             this.messageService.add({
                                 severity: 'success',
                                 summary: 'Success',
-                                detail: 'Player deleted successfully!'
+                                detail: 'Parameter deleted successfully!'
                             });
                             this.parameterService.setChangesOn(true);
                         }, 1000);
@@ -114,13 +94,18 @@ export class DeleteParameterFormComponent {
                         this.messageService.add({
                             severity: 'error',
                             summary: 'Error',
-                            detail: 'Unable to delete the player!'
+                            detail: 'Unable to delete the parameter!'
                         });
                         this.parameterService.setChangesOn(false);
                     }
                 });
         }
 
+    }
+
+    public ngOnDestroy(): void {
+        this.$destroy.next();
+        this.$destroy.complete();
     }
 
 }
