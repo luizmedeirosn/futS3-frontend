@@ -16,12 +16,10 @@ export class DeletePlayerFormComponent {
     private readonly $destroy: Subject<void> = new Subject();
     private readonly toastLife: number = 2000;
 
-    private playersTablePages: PlayerMinDTO[][] = [];
-
+    private playersTablePages: Array<Array<PlayerMinDTO>> = new Array();
     public $loadingDeletion: BehaviorSubject<boolean> = new BehaviorSubject(false);
-
     public selectedPlayer!: PlayerFullDTO | undefined;
-    public players!: PlayerMinDTO[];
+    public players!: Array<PlayerMinDTO>;
 
     public constructor(
         private playerService: PlayerService,

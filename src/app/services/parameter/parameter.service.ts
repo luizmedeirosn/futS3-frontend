@@ -49,10 +49,16 @@ export class ParameterService {
         );
     }
 
-    public update(id: number, parameterRequest: ParameterRequestDTO): Observable<ParameterDTO> {
+    public updateById(id: number, parameterRequest: ParameterRequestDTO): Observable<ParameterDTO> {
         return this.httpClient.put<ParameterDTO>(
             `${this.API_URL}/parameters/${id}`,
             parameterRequest
+        );
+    }
+
+    public deleteById(id: number): Observable<void> {
+        return this.httpClient.delete<void>(
+            `${this.API_URL}/parameters/${id}`
         );
     }
 

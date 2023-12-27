@@ -123,7 +123,6 @@ export class EditParameterFormComponent implements OnInit, OnDestroy {
         }, 10);
     }
 
-
     public handleSubmitEditParameterForm(): void {
         const parameterResquest: ParameterRequestDTO = {
             name: this.editParameterForm.value.name as string,
@@ -132,7 +131,7 @@ export class EditParameterFormComponent implements OnInit, OnDestroy {
 
         this.editParameterForm.reset();
         this.selectedParameter &&
-            this.parameterService.update(this.selectedParameter?.id, parameterResquest)
+            this.parameterService.updateById(this.selectedParameter?.id, parameterResquest)
                 .pipe(takeUntil(this.$destroy))
                 .subscribe({
                     next: (parameter: ParameterDTO) => {
