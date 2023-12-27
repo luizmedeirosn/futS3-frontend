@@ -24,13 +24,12 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
     private readonly $destroy: Subject<void> = new Subject();
     private readonly toastLife: number = 2000;
 
-    @ViewChild('playersTable') playersTable!: Table;
-
+    @ViewChild('playersTable') public playersTable!: Table;
     private playersTablePages: PlayerMinDTO[][] = [];
 
     public $viewTable: BehaviorSubject<boolean> = new BehaviorSubject(true);
-    public selectedPlayer!: PlayerFullDTO | undefined;
     public players!: PlayerMinDTO[];
+    public selectedPlayer!: PlayerFullDTO | undefined;
 
     public $viewSelectedPicture: BehaviorSubject<boolean> = new BehaviorSubject(false);
     public positions!: PositionDTO[];
@@ -164,23 +163,24 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
         }
     }
 
-    public handleBackEvent(): void {
-        this.$viewTable.next(true);
+    public handleBackAction(): void {
+        this.$viewTable.next(true); // Activate the view child before referencing the table
         setTimeout(() => {
             if (this.selectedPlayer?.id !== undefined) {
-                const selectedPlayer: PlayerMinDTO =
-                    this.players.filter(player => player.id === this.selectedPlayer?.id)[0];
-                const index = this.players.indexOf(selectedPlayer);
+                const selectedPlayer: PlayerMinDTO | undefined =
+                    this.players.find(player => player.id === this.selectedPlayer?.id);
 
-                const numPage: number = Math.floor(index / 5);
-                const page = this.playersTablePages.at(numPage);
-                const firstPlayerPage: PlayerMinDTO | undefined = page?.at(0);
+                if (selectedPlayer) {
+                    const index = this.players.indexOf(selectedPlayer);
+                    const numPage: number = Math.floor(index / 5);
+                    const page = this.playersTablePages.at(numPage);
+                    const firstPlayerPage: PlayerMinDTO | undefined = page?.at(0);
 
-                this.playersTable.first =
-                    firstPlayerPage && this.players.indexOf(firstPlayerPage);
-
+                    this.playersTable.first =
+                        firstPlayerPage && this.players.indexOf(firstPlayerPage);
+                }
             }
-            this.selectedPlayer = undefined
+            this.selectedPlayer = undefined;
         }, 10);
     }
 
@@ -248,7 +248,6 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                     .pipe(takeUntil(this.$destroy))
                     .subscribe({
                         next: (playerResponse) => {
-                            console.log('aqui', playerResponse);
                             const updatedPlayer = {
                                 name: playerResponse.name,
                                 position: playerResponse.position

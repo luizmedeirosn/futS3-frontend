@@ -26,7 +26,7 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
     private parametersOff: ParameterDTO[] = [];
     public playerParametersScore: PlayerParameterScoreDTO[] = [];
 
-    public playerForm = this.formBuilder.group({
+    public newPlayerForm: any = this.formBuilder.group({
         name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
         team: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
         age: [null, [Validators.min(1), Validators.max(150)]],
@@ -70,7 +70,6 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
                     console.log(err);
                 }
             });
-
     }
 
     public handleUploadPicture($event: any): void {
@@ -117,20 +116,20 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
     }
 
     public handleSubmitSavePlayerForm(): void {
-        if (this.playerForm.valid && this.playerForm.value) {
-            const position = this.playerForm.value.position as PositionDTO | undefined;
+        if (this.newPlayerForm.valid && this.newPlayerForm.value) {
+            const position = this.newPlayerForm.value.position as PositionDTO | undefined;
             if (position) {
                 const playerRequest: PostPlayerDTO = {
-                    name: this.playerForm.value.name as string,
-                    team: this.playerForm.value.team as string,
-                    age: this.playerForm.value.age as string | undefined,
-                    height: this.playerForm.value.height as string | undefined,
+                    name: this.newPlayerForm.value.name as string,
+                    team: this.newPlayerForm.value.team as string,
+                    age: this.newPlayerForm.value.age as string | undefined,
+                    height: this.newPlayerForm.value.height as string | undefined,
                     positionId: String(position.id),
                     playerPicture: this.playerPicture,
                     parameters: this.playerParametersScore
                 };
 
-                this.playerForm.reset();
+                this.newPlayerForm.reset();
                 this.$viewSelectedPicture.next(false);
                 this.playerService.save(playerRequest)
                     .pipe(takeUntil(this.$destroy))
@@ -158,7 +157,7 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
                         }
                     });
             }
-            this.playerForm.reset();
+            this.newPlayerForm.reset();
             this.playerParameterForm.reset();
             this.parametersOff.forEach(e => this.parameters.push(e));
             this.parameters.sort(this.compareParameters);

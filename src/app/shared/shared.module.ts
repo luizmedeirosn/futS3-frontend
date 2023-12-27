@@ -1,3 +1,4 @@
+import { EditParameterFormComponent } from './components/parameter-forms/edit-parameter-form/edit-parameter-form.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
@@ -6,20 +7,23 @@ import { MenubarModule } from 'primeng/menubar';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CardModule } from 'primeng/card';
+import { ConfirmDialogModule } from "primeng/confirmdialog";
 import { DropdownModule } from 'primeng/dropdown';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ProgressBarModule } from 'primeng/progressbar';
 import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 import { FormControlAlertComponent } from './components/form-control-alert/form-control-alert.component';
 import { MenubarNavigationComponent } from './components/menubar-navigation/menubar-navigation.component';
-import { DeletePlayersFormComponent } from './components/players-forms/delete-players-form/delete-players-form.component';
-import { EditPlayerFormComponent } from './components/players-forms/edit-player-form/edit-player-form.component';
-import { SavePlayerFormComponent } from './components/players-forms/save-player-form/save-player-form.component';
+import { DeleteParameterFormComponent } from './components/parameter-forms/delete-parameter-form/delete-parameter-form.component';
+import { SaveParameterFormComponent } from './components/parameter-forms/save-parameter-form/save-parameter-form.component';
+import { DeletePlayerFormComponent } from './components/player-forms/delete-players-form/delete-player-form.component';
+import { EditPlayerFormComponent } from './components/player-forms/edit-player-form/edit-player-form.component';
+import { SavePlayerFormComponent } from './components/player-forms/save-player-form/save-player-form.component';
 import { ShortenPipe } from './pipes/shorten.pipe';
-import { ProgressBarModule } from 'primeng/progressbar';
-import { ConfirmDialogModule } from "primeng/confirmdialog";
 
 
 @NgModule({
@@ -29,7 +33,10 @@ import { ConfirmDialogModule } from "primeng/confirmdialog";
         FormControlAlertComponent,
         SavePlayerFormComponent,
         EditPlayerFormComponent,
-        DeletePlayersFormComponent
+        DeletePlayerFormComponent,
+        SaveParameterFormComponent,
+        EditParameterFormComponent,
+        DeleteParameterFormComponent
     ],
     imports: [
         CommonModule,
@@ -47,6 +54,7 @@ import { ConfirmDialogModule } from "primeng/confirmdialog";
         CardModule,
         ProgressBarModule,
         ConfirmDialogModule,
+        InputTextareaModule,
     ],
     exports: [MenubarNavigationComponent, ShortenPipe, FormControlAlertComponent],
 })

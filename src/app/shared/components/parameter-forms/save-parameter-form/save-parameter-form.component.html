@@ -1,0 +1,45 @@
+<form
+    [formGroup]="newParameterForm"
+    (ngSubmit)="handleSubmitSaveParameterForm()"
+    class="flex flex-column align-content-center m-3 gap-4"
+>
+    <span class="p-float-label mt-3">
+        <input pInputText formControlName="name" class="w-full" />
+        <app-form-control-alert
+            [form]="newParameterForm"
+            [controlName]="'name'"
+            [minNumberCharacters]="3"
+            [maxNumberCharacters]="50"
+        ></app-form-control-alert>
+        <label for="name">Name</label>
+    </span>
+
+    <span class="p-float-label">
+        <textarea
+            rows="8"
+            pInputTextarea
+            formControlName="description"
+            class="w-full"
+        ></textarea>
+        <app-form-control-alert
+            [form]="newParameterForm"
+            [controlName]="'description'"
+            [minNumberCharacters]="0"
+            [maxNumberCharacters]="2000"
+        ></app-form-control-alert>
+        <label for="description">Description</label>
+    </span>
+
+    <div
+        class="flex flex justify-content-center align-content-center align-items-center mt-4"
+    >
+        <p-button
+            [disabled]="!newParameterForm.valid"
+            type="submit"
+            label="Send"
+            styleClass="p-button-success flex justify-content-center align-content-center gap-2"
+        >
+            <i class="pi pi-check" style="font-size: 1.2rem"></i>
+        </p-button>
+    </div>
+</form>
