@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { environment } from 'src/app/environments/environment.prod';
+import { PositionRequestDTO } from 'src/app/models/dto/position/request/PositionRequestDTO';
 import { PositionDTO } from 'src/app/models/dto/position/response/PositionDTO';
 import { PositionParametersDTO } from 'src/app/models/dto/position/response/PositionParametersDTO';
 
@@ -39,9 +40,17 @@ export class PositionService {
         );
     }
 
-    public findPositionParametersById(id: number): Observable<PositionParametersDTO[]> {
-        return this.httpClient.get<PositionParametersDTO[]>(
+    public findPositionParametersById(id: number): Observable<Array<PositionParametersDTO>> {
+        return this.httpClient.get<Array<PositionParametersDTO>>(
             `${this.API_URL}/positions/${id}/parameters`
         );
     }
+
+    public save(positionRequest: PositionRequestDTO): Observable<PositionDTO> {
+        return this.httpClient.post<PositionDTO>(
+            `${this.API_URL}/positions`,
+            positionRequest
+        );
+    }
+
 }

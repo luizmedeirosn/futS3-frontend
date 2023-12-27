@@ -89,7 +89,7 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
             this.parametersOff.push(parameter);
             this.parameters = this.parameters.filter(p => p.name !== parameterName);
 
-            let playerParameterScore: PlayerParameterScoreDTO = {
+            const playerParameterScore: PlayerParameterScoreDTO = {
                 id: parameter.id,
                 name: parameterName,
                 playerScore: Number(this.playerParameterForm.value.score),
@@ -111,7 +111,8 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
 
     public handleDeletePlayerParameter($event: string): void {
         this.playerParametersScore = this.playerParametersScore.filter(p => p.name !== $event);
-        this.parameters.push(this.parametersOff.filter((p) => p.name === $event)[0]);
+        const parameter: ParameterDTO | undefined = this.parametersOff.find((p) => p.name === $event);
+        parameter && this.parameters.push(parameter);
         this.parameters.sort(this.compareParameters);
     }
 
@@ -129,7 +130,6 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
                     parameters: this.playerParametersScore
                 };
 
-                this.newPlayerForm.reset();
                 this.$viewSelectedPicture.next(false);
                 this.playerService.save(playerRequest)
                     .pipe(takeUntil(this.$destroy))
