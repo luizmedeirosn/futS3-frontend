@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { environment } from 'src/app/environments/environment.prod';
 import { PositionRequestDTO } from 'src/app/models/dto/position/request/PositionRequestDTO';
 import { PositionDTO } from 'src/app/models/dto/position/response/PositionDTO';
-import { PositionParametersDTO } from 'src/app/models/dto/position/response/PositionParametersDTO';
+import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
 
 @Injectable({
     providedIn: 'root'
@@ -34,21 +34,34 @@ export class PositionService {
         return this.$changesOn;
     }
 
-    public findAll(): Observable<Array<PositionDTO>> {
-        return this.httpClient.get<Array<PositionDTO>>(
+    public findAll(): Observable<Array<PositionMinDTO>> {
+        return this.httpClient.get<Array<PositionMinDTO>>(
             `${this.API_URL}/positions`,
         );
     }
 
-    public findPositionParametersById(id: number): Observable<Array<PositionParametersDTO>> {
-        return this.httpClient.get<Array<PositionParametersDTO>>(
+    public findAllWithParameters(): Observable<Array<PositionDTO>> {
+        return this.httpClient.get<Array<PositionDTO>>(
+            `${this.API_URL}/positions/parameters`,
+        );
+    }
+
+    public findByIdPositionParameters(id: number): Observable<PositionDTO> {
+        return this.httpClient.get<PositionDTO>(
             `${this.API_URL}/positions/${id}/parameters`
         );
     }
 
-    public save(positionRequest: PositionRequestDTO): Observable<PositionDTO> {
-        return this.httpClient.post<PositionDTO>(
+    public save(positionRequest: PositionRequestDTO): Observable<PositionMinDTO> {
+        return this.httpClient.post<PositionMinDTO>(
             `${this.API_URL}/positions`,
+            positionRequest
+        );
+    }
+
+    public updateById(id: number, positionRequest: PositionRequestDTO): Observable<PositionMinDTO> {
+        return this.httpClient.put<PositionMinDTO>(
+            `${this.API_URL}/positions/${id}`,
             positionRequest
         );
     }

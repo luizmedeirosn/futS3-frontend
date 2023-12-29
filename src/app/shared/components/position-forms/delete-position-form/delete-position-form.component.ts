@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { PositionDTO } from 'src/app/models/dto/position/response/PositionDTO';
+import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
 import { PositionService } from 'src/app/services/position/position.service';
 
 @Component({
@@ -16,8 +16,8 @@ export class DeletePositionFormComponent implements OnInit, OnDestroy {
     private readonly toastLife: number = 2000;
 
     public $loadingDeletion: BehaviorSubject<boolean> = new BehaviorSubject(false);
-    public positions!: Array<PositionDTO>;
-    public selectedPosition!: PositionDTO | undefined;
+    public positions!: Array<PositionMinDTO>;
+    public selectedPosition!: PositionMinDTO | undefined;
 
     public constructor(
         private positionService: PositionService,
@@ -49,7 +49,7 @@ export class DeletePositionFormComponent implements OnInit, OnDestroy {
             });
     }
 
-    public handleDeletePositionEvent(event: PositionDTO): void {
+    public handleDeletePositionEvent(event: PositionMinDTO): void {
         if (event) {
             this.confirmationService.confirm({
                 message: `Confirm the deletion of position: ${event?.name}?`,

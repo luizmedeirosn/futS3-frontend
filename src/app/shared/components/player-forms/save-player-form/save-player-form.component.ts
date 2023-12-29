@@ -5,7 +5,7 @@ import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { ParameterDTO } from 'src/app/models/dto/parameter/response/ParameterDTO';
 import { PostPlayerDTO } from 'src/app/models/dto/player/request/PostPlayerDTO';
 import { PlayerParameterScoreDTO } from 'src/app/models/dto/player/response/PlayerParameterScoreDTO';
-import { PositionDTO } from 'src/app/models/dto/position/response/PositionDTO';
+import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
 import { ParameterService } from 'src/app/services/parameter/parameter.service';
 import { PlayerService } from 'src/app/services/player/player.service';
 import { PositionService } from 'src/app/services/position/position.service';
@@ -21,7 +21,7 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
     private readonly toastLife: number = 2000;
 
     public $viewSelectedPicture: BehaviorSubject<boolean> = new BehaviorSubject(false);
-    public positions!: PositionDTO[];
+    public positions!: PositionMinDTO[];
     public parameters!: ParameterDTO[];
     private parametersOff: ParameterDTO[] = [];
     public playerParametersScore: PlayerParameterScoreDTO[] = [];
@@ -118,7 +118,7 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
 
     public handleSubmitSavePlayerForm(): void {
         if (this.newPlayerForm.valid && this.newPlayerForm.value) {
-            const position = this.newPlayerForm.value.position as PositionDTO | undefined;
+            const position = this.newPlayerForm.value.position as PositionMinDTO | undefined;
             if (position) {
                 const playerRequest: PostPlayerDTO = {
                     name: this.newPlayerForm.value.name as string,

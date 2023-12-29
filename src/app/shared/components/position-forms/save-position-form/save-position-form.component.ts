@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
 import { ParameterDTO } from 'src/app/models/dto/parameter/response/ParameterDTO';
-import { ParameterIdWeightDTO } from 'src/app/models/dto/position/request/ParameterWeightDTO';
+import { ParameterWeightDTO } from 'src/app/models/dto/position/data/ParameterWeightDTO';
 import { PositionRequestDTO } from 'src/app/models/dto/position/request/PositionRequestDTO';
 import { ParameterService } from 'src/app/services/parameter/parameter.service';
 import { PositionService } from 'src/app/services/position/position.service';
@@ -20,7 +20,7 @@ export class SavePositionFormComponent implements OnInit, OnDestroy {
 
     public parameters!: Array<ParameterDTO>;
     private parametersOff: Array<ParameterDTO> = new Array();
-    public positionParameters: Array<ParameterIdWeightDTO> = new Array();
+    public positionParameters: Array<ParameterWeightDTO> = new Array();
 
     public newPositionForm: any = this.formBuilder.group({
         name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
@@ -62,13 +62,13 @@ export class SavePositionFormComponent implements OnInit, OnDestroy {
             this.parametersOff.push(parameter);
             this.parameters = this.parameters.filter(p => p.name !== parameterName);
 
-            const parameterIdWeight: ParameterIdWeightDTO = {
-                parameterId: parameter.id,
+            const parameterWeight: ParameterWeightDTO = {
+                id: parameter.id,
                 weight: Number(this.positionParameterForm.value.weight),
                 name: parameterName
             };
 
-            this.positionParameters.push(parameterIdWeight);
+            this.positionParameters.push(parameterWeight);
         }
         this.positionParameterForm.reset();
     }
@@ -83,7 +83,7 @@ export class SavePositionFormComponent implements OnInit, OnDestroy {
     };
 
     public handleDeletePositionParameter($event: number): void {
-        this.positionParameters = this.positionParameters.filter(p => p.parameterId !== $event);
+        this.positionParameters = this.positionParameters.filter(p => p.id !== $event);
         const parameter: ParameterDTO | undefined = this.parametersOff.find((p) => p.id === $event);
         parameter && this.parameters.push(parameter);
         this.parameters.sort(this.compareParameters);
@@ -131,7 +131,6 @@ export class SavePositionFormComponent implements OnInit, OnDestroy {
         this.parametersOff = new Array();
         this.positionParameters = new Array();
     }
-
 
     public ngOnDestroy(): void {
         this.$destroy.next();
