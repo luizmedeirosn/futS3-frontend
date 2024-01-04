@@ -58,7 +58,6 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
     }
 
     private setGameModes(): void {
-        this.messageService.clear();
         this.gameModeService.findAll()
             .pipe(takeUntil(this.$destroy))
             .subscribe(
