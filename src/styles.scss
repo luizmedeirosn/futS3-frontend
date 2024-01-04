@@ -11,7 +11,6 @@ body {
     background: linear-gradient(to bottom, #080414, #04f3a3) fixed;
     background-size: 100% 200%;
     background-repeat: no-repeat;
-    overflow-y: scroll !important;
 }
 
 img, svg {
@@ -47,7 +46,7 @@ tr {
 }
 
 .p-fieldset {
-    background-color: #fcfcfc;
+    background-color: var(--gray-50);
     legend {
         background-color: #e3e3e3;
     }
