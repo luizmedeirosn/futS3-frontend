@@ -3,11 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
     {
-        path: '',
-        redirectTo: 'parameters',
-        pathMatch: 'full'
-    },
-    {
         path: 'gamemodes',
         loadChildren: () => import('./modules/gamemodes/gamemodes.module').then((module) => module.GamemodesModule)
     },
@@ -22,6 +17,11 @@ const routes: Routes = [
     {
         path: 'players',
         loadChildren: () => import('./modules/players/players.module').then((module) => module.PlayersHomeModule)
+    },
+    {
+        path: '**',
+        redirectTo: 'positions',
+        pathMatch: 'full'
     },
 ];
 

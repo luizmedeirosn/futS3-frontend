@@ -1,8 +1,7 @@
 import { ParameterWeightDTO } from "../data/ParameterWeightDTO";
 
-export interface PositionDTO {
+export interface PositionRequestDTO {
 
-    id: number;
     name: string;
     description: string;
     parameters: Array<ParameterWeightDTO>;

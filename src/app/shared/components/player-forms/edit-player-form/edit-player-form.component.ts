@@ -8,7 +8,7 @@ import { UpdatePlayerDTO } from 'src/app/models/dto/player/request/UpdatePlayerD
 import { PlayerFullDTO } from 'src/app/models/dto/player/response/PlayerFullDTO';
 import { PlayerMinDTO } from 'src/app/models/dto/player/response/PlayerMinDTO';
 import { PlayerParameterScoreDTO } from 'src/app/models/dto/player/response/PlayerParameterScoreDTO';
-import { PositionDTO } from 'src/app/models/dto/position/response/PositionDTO';
+import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
 import { ParameterService } from 'src/app/services/parameter/parameter.service';
 import { PlayerService } from 'src/app/services/player/player.service';
 import { PositionService } from 'src/app/services/position/position.service';
@@ -32,7 +32,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
     public selectedPlayer!: PlayerFullDTO | undefined;
 
     public $viewSelectedPicture: BehaviorSubject<boolean> = new BehaviorSubject(false);
-    public positions!: PositionDTO[];
+    public positions!: PositionMinDTO[];
     public parameters!: ParameterDTO[];
     private parametersOff: ParameterDTO[] = [];
     public playerParametersScore: PlayerParameterScoreDTO[] = [];

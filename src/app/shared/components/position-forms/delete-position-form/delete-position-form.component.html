@@ -1,8 +1,8 @@
 <div
-    class="delete-parameter-form flex justify-content-center align-items-center"
+    class="delete-position-form flex justify-content-center align-items-center"
 >
     <p-card
-        header="parameters"
+        header="Positions"
         styleClass="shadow-none justify-content-center align-content-center align-content-center"
     >
         <p-progressBar
@@ -13,7 +13,7 @@
         ></p-progressBar>
 
         <p-table
-            [value]="parameters"
+            [value]="positions"
             dataKey="id"
             [rows]="5"
             [rowHover]="true"
@@ -24,7 +24,7 @@
                 overflow: 'hidden',
             }"
         >
-            <ng-template pTemplate="header" let-parameter>
+            <ng-template pTemplate="header" let-position>
                 <tr>
                     <th id="" pSortableColumn="name">
                         <div
@@ -57,10 +57,10 @@
                     </th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-parameter>
+            <ng-template pTemplate="body" let-position>
                 <tr style="cursor: pointer">
                     <td>
-                        {{ parameter.name }}
+                        {{ position.name }}
                     </td>
                     <td
                         *ngIf="!($loadingDeletion | async)"
@@ -71,7 +71,7 @@
                             styleClass="fadeindown animation-duration-1000 animation-iteration-1 animation-ease-in-out"
                             icon="pi pi-trash"
                             [rounded]="true"
-                            (onClick)="handleDeleteParameterEvent(parameter)"
+                            (onClick)="handleDeletePositionEvent(position)"
                         ></p-button>
                     </td>
                 </tr>

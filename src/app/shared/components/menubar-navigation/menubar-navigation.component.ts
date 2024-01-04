@@ -14,6 +14,10 @@ import { EditPlayerFormComponent } from '../player-forms/edit-player-form/edit-p
 import { SavePlayerFormComponent } from '../player-forms/save-player-form/save-player-form.component';
 import { EditParameterFormComponent } from '../parameter-forms/edit-parameter-form/edit-parameter-form.component';
 import { SaveParameterFormComponent } from '../parameter-forms/save-parameter-form/save-parameter-form.component';
+import { SavePositionFormComponent } from '../position-forms/save-position-form/save-position-form.component';
+import { EditPositionFormComponent } from '../position-forms/edit-position-form/edit-position-form.component';
+import { DeletePositionFormComponent } from '../position-forms/delete-position-form/delete-position-form.component';
+import { EnumPositionEventsCrud } from 'src/app/models/enums/EnumPositionEventsCrud';
 
 @Component({
     selector: 'app-menubar-navigation',
@@ -80,14 +84,47 @@ export class MenubarNavigationComponent implements OnInit, OnDestroy {
                     {
                         label: 'Add',
                         icon: 'pi pi-fw pi-plus',
+                        command: () => {
+                            this.dynamicDialogRef = this.customDialogService.open(
+                                SavePositionFormComponent,
+                                {
+                                    position: 'top',
+                                    header: EnumPositionEventsCrud.ADD.valueOf(),
+                                    contentStyle: { overflow: 'auto' },
+                                    baseZIndex: 10000,
+                                });
+
+                        },
                     },
                     {
                         label: 'Edit',
-                        icon: 'pi pi-fw pi-pencil'
+                        icon: 'pi pi-fw pi-pencil',
+                        command: () => {
+                            this.dynamicDialogRef = this.customDialogService.open(
+                                EditPositionFormComponent,
+                                {
+                                    position: 'top',
+                                    header: EnumPositionEventsCrud.EDIT.valueOf(),
+                                    contentStyle: { overflow: 'auto' },
+                                    baseZIndex: 10000,
+                                });
+
+                        },
                     },
                     {
                         label: 'Delete',
-                        icon: 'pi pi-fw pi-trash'
+                        icon: 'pi pi-fw pi-trash',
+                        command: () => {
+                            this.dynamicDialogRef = this.customDialogService.open(
+                                DeletePositionFormComponent,
+                                {
+                                    position: 'top',
+                                    header: EnumPositionEventsCrud.DELETE.valueOf(),
+                                    contentStyle: { overflow: 'auto' },
+                                    baseZIndex: 10000,
+                                });
+
+                        },
                     }
                 ]
             },

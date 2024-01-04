@@ -1,40 +1,40 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { ParameterDTO } from 'src/app/models/dto/parameter/response/ParameterDTO';
-import { ParameterService } from 'src/app/services/parameter/parameter.service';
+import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
+import { PositionService } from 'src/app/services/position/position.service';
 
 @Component({
-    selector: 'app-delete-parameter-form',
-    templateUrl: './delete-parameter-form.component.html',
-    styleUrls: ['./delete-parameter-form.component.scss'],
+    selector: 'app-delete-position-form',
+    templateUrl: './delete-position-form.component.html',
+    styleUrls: ['./delete-position-form.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
-export class DeleteParameterFormComponent implements OnInit, OnDestroy {
+export class DeletePositionFormComponent implements OnInit, OnDestroy {
 
     private readonly $destroy: Subject<void> = new Subject();
     private readonly toastLife: number = 2000;
 
     public $loadingDeletion: BehaviorSubject<boolean> = new BehaviorSubject(false);
-    public parameters!: ParameterDTO[];
-    public selectedParameter!: ParameterDTO | undefined;
+    public positions!: Array<PositionMinDTO>;
+    public selectedPosition!: PositionMinDTO | undefined;
 
     public constructor(
-        private parameterService: ParameterService,
+        private positionService: PositionService,
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
     ) { }
 
     public ngOnInit(): void {
-        this.setParametersWithApi();
+        this.setPositionsWithApi();
     }
 
-    private setParametersWithApi(): void {
-        this.parameterService.findAll()
+    private setPositionsWithApi(): void {
+        this.positionService.findAll()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
-                next: (parameters) => {
-                    this.parameters = parameters;
+                next: (positions) => {
+                    this.positions = positions;
                 },
                 error: (err) => {
                     this.messageService.clear();
@@ -49,10 +49,10 @@ export class DeleteParameterFormComponent implements OnInit, OnDestroy {
             });
     }
 
-    public handleDeleteParameterEvent(event: ParameterDTO): void {
+    public handleDeletePositionEvent(event: PositionMinDTO): void {
         if (event) {
             this.confirmationService.confirm({
-                message: `Confirm the deletion of parameter: ${event?.name}?`,
+                message: `Confirm the deletion of position: ${event?.name}?`,
                 header: 'Confirmation',
                 icon: 'pi pi-exclamation-triangle',
                 acceptLabel: 'Yes',
@@ -61,46 +61,51 @@ export class DeleteParameterFormComponent implements OnInit, OnDestroy {
                 rejectButtonStyleClass: 'p-button-text',
                 acceptIcon: "none",
                 rejectIcon: "none",
-                accept: () => this.handleDeleteParameterAction(event?.id)
+                accept: () => this.handleDeletePositionAction(event?.id)
             });
         }
     }
 
-    public handleDeleteParameterAction($event: number): void {
+    public handleDeletePositionAction($event: number): void {
         if ($event) {
             this.$loadingDeletion.next(true);
             this.messageService.clear();
 
-            this.parameterService.deleteById($event)
+            this.positionService.deleteById($event)
                 .pipe(takeUntil(this.$destroy))
                 .subscribe({
                     next: () => {
                         setTimeout(() => {
                             this.$loadingDeletion.next(false);
-                            this.setParametersWithApi();
+                            this.setPositionsWithApi();
 
                             this.messageService.clear();
                             this.messageService.add({
                                 severity: 'success',
                                 summary: 'Success',
-                                detail: 'Parameter deleted successfully!'
+                                detail: 'Player deleted successfully!',
+                                life: this.toastLife
                             });
-                            this.parameterService.setChangesOn(true);
+                            this.positionService.setChangesOn(true);
                         }, 1000);
                     },
                     error: (err) => {
-                        console.log(err);
-                        this.messageService.clear();
-                        this.messageService.add({
-                            severity: 'error',
-                            summary: 'Error',
-                            detail: 'Unable to delete the parameter!'
-                        });
-                        this.parameterService.setChangesOn(false);
+                        setTimeout(() => {
+                            console.log(err);
+                            this.positionService.setChangesOn(false);
+                            this.messageService.clear();
+                            this.messageService.add({
+                                key: 'deletion-error',
+                                severity: 'error',
+                                summary: 'Error',
+                                detail: 'Is the position part of a game mode or a player!',
+                                life: 6000
+                            });
+                            this.$loadingDeletion.next(false);
+                        }, 1000);
                     }
                 });
         }
-
     }
 
     public ngOnDestroy(): void {

@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { PlayerFullDTO } from 'src/app/models/dto/player/response/PlayerFullDTO';
@@ -11,12 +11,11 @@ import { PlayerService } from 'src/app/services/player/player.service';
     styleUrls: ['./delete-player-form.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
-export class DeletePlayerFormComponent {
+export class DeletePlayerFormComponent implements OnInit, OnDestroy {
 
     private readonly $destroy: Subject<void> = new Subject();
     private readonly toastLife: number = 2000;
 
-    private playersTablePages: Array<Array<PlayerMinDTO>> = new Array();
     public $loadingDeletion: BehaviorSubject<boolean> = new BehaviorSubject(false);
     public selectedPlayer!: PlayerFullDTO | undefined;
     public players!: Array<PlayerMinDTO>;
@@ -37,19 +36,6 @@ export class DeletePlayerFormComponent {
             .subscribe({
                 next: (players) => {
                     this.players = players;
-
-                    let increment: number = 0;
-                    let page: Array<PlayerMinDTO> = new Array();
-
-                    players.forEach((player, index, array) => {
-                        page.push(player);
-                        increment += 1;
-                        if (increment === 5 || index === array.length - 1) {
-                            this.playersTablePages.push(page);
-                            page = new Array();
-                            increment = 0;
-                        }
-                    });
                 },
                 error: (err) => {
                     this.messageService.clear();
@@ -62,11 +48,6 @@ export class DeletePlayerFormComponent {
                     console.log(err);
                 }
             });
-    }
-
-    public ngOnDestroy(): void {
-        this.$destroy.next();
-        this.$destroy.complete();
     }
 
     public handleDeletePlayerEvent(event: PlayerMinDTO): void {
@@ -121,6 +102,11 @@ export class DeletePlayerFormComponent {
                 });
         }
 
+    }
+
+    public ngOnDestroy(): void {
+        this.$destroy.next();
+        this.$destroy.complete();
     }
 
 }

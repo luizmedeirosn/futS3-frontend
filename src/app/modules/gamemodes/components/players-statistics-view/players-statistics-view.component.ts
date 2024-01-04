@@ -4,11 +4,10 @@ import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { GameModeMinDTO } from 'src/app/models/dto/gamemode/response/GameModeMinDTO';
 import { GameModePositionDTO } from 'src/app/models/dto/gamemode/response/GameModePositonDTO';
 import { PlayerFullScoreDTO } from 'src/app/models/dto/gamemode/response/PlayerFullScoreDTO';
-import { PositionParametersDTO } from '../../../../models/dto/position/response/PositionParametersDTO';
-
 import { IconDefinition, faMagnifyingGlassChart, faRankingStar } from '@fortawesome/free-solid-svg-icons';
 import { PaginatorState } from 'primeng/paginator';
 import { PositionService } from 'src/app/services/position/position.service';
+import { ParameterWeightDTO } from 'src/app/models/dto/position/data/ParameterWeightDTO';
 
 @Component({
     selector: 'app-players-statistics-view',
@@ -39,7 +38,7 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
     }
 
     public playersRankingViewEnable$: BehaviorSubject<boolean> = new BehaviorSubject(true);
-    private positionParameters!: PositionParametersDTO[];
+    private positionParameters!: ParameterWeightDTO[];
 
     private readonly documentStyle = getComputedStyle(document.documentElement);
     private readonly textColor = this.documentStyle.getPropertyValue('--black-1');
@@ -83,12 +82,12 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
     }
 
     private setPositionParameters(positionId: number): void {
-        this.positionService.findPositionParametersById(positionId)
+        this.positionService.findByIdPositionParameters(positionId)
             .pipe(takeUntil(this.destroy$))
             .subscribe(
                 {
                     next: (positionParameters) => {
-                        this.positionParameters = positionParameters;
+                        this.positionParameters = positionParameters.parameters;
                     },
                     error: (err) => {
                         console.log(err);
@@ -219,7 +218,7 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
             }
             datasets.reverse();
             this.chartRadarData = {
-                labels: this.positionParameters.map((element) => element.parameterName),
+                labels: this.positionParameters.map((element) => element.name),
                 datasets
             };
 

@@ -5,7 +5,7 @@ import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { ParameterDTO } from 'src/app/models/dto/parameter/response/ParameterDTO';
 import { PostPlayerDTO } from 'src/app/models/dto/player/request/PostPlayerDTO';
 import { PlayerParameterScoreDTO } from 'src/app/models/dto/player/response/PlayerParameterScoreDTO';
-import { PositionDTO } from 'src/app/models/dto/position/response/PositionDTO';
+import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
 import { ParameterService } from 'src/app/services/parameter/parameter.service';
 import { PlayerService } from 'src/app/services/player/player.service';
 import { PositionService } from 'src/app/services/position/position.service';
@@ -21,7 +21,7 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
     private readonly toastLife: number = 2000;
 
     public $viewSelectedPicture: BehaviorSubject<boolean> = new BehaviorSubject(false);
-    public positions!: PositionDTO[];
+    public positions!: PositionMinDTO[];
     public parameters!: ParameterDTO[];
     private parametersOff: ParameterDTO[] = [];
     public playerParametersScore: PlayerParameterScoreDTO[] = [];
@@ -89,7 +89,7 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
             this.parametersOff.push(parameter);
             this.parameters = this.parameters.filter(p => p.name !== parameterName);
 
-            let playerParameterScore: PlayerParameterScoreDTO = {
+            const playerParameterScore: PlayerParameterScoreDTO = {
                 id: parameter.id,
                 name: parameterName,
                 playerScore: Number(this.playerParameterForm.value.score),
@@ -111,13 +111,14 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
 
     public handleDeletePlayerParameter($event: string): void {
         this.playerParametersScore = this.playerParametersScore.filter(p => p.name !== $event);
-        this.parameters.push(this.parametersOff.filter((p) => p.name === $event)[0]);
+        const parameter: ParameterDTO | undefined = this.parametersOff.find((p) => p.name === $event);
+        parameter && this.parameters.push(parameter);
         this.parameters.sort(this.compareParameters);
     }
 
     public handleSubmitSavePlayerForm(): void {
         if (this.newPlayerForm.valid && this.newPlayerForm.value) {
-            const position = this.newPlayerForm.value.position as PositionDTO | undefined;
+            const position = this.newPlayerForm.value.position as PositionMinDTO | undefined;
             if (position) {
                 const playerRequest: PostPlayerDTO = {
                     name: this.newPlayerForm.value.name as string,
@@ -129,7 +130,6 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
                     parameters: this.playerParametersScore
                 };
 
-                this.newPlayerForm.reset();
                 this.$viewSelectedPicture.next(false);
                 this.playerService.save(playerRequest)
                     .pipe(takeUntil(this.$destroy))

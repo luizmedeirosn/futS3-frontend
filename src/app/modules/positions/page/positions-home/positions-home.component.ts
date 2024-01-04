@@ -3,7 +3,7 @@ import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
 import { FullDataPosition } from 'src/app/models/dto/position/data/FullDataPosition';
 import { ViewPositionAction } from 'src/app/models/dto/position/events/ViewPositionAction';
-import { PositionDTO } from 'src/app/models/dto/position/response/PositionDTO';
+import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
 import { PositionService } from 'src/app/services/position/position.service';
 
 @Component({
@@ -16,7 +16,7 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
     private readonly $destroy: Subject<void> = new Subject();
     private readonly messageLife: number = 3000;
 
-    public positions!: PositionDTO[];
+    public positions!: PositionMinDTO[];
 
     public positionView!: boolean;
     public position!: FullDataPosition;
@@ -84,17 +84,11 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
     public handleViewFullDataPositionAction($event: ViewPositionAction): void {
         this.messageService.clear();
         if ($event) {
-            this.positionService.findPositionParametersById($event.id)
+            this.positionService.findByIdPositionParameters($event.id)
                 .pipe(takeUntil(this.$destroy))
                 .subscribe(
                     {
-                        next: (parameters) => {
-                            const position: FullDataPosition = {
-                                id: $event.id,
-                                name: $event.name,
-                                description: $event.description,
-                                parameters: parameters
-                            };
+                        next: (position) => {
                             this.position = position;
                             this.positionService.$positionView.next(true);
                             this.messageService.add(
