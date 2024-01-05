@@ -27,6 +27,9 @@ import { ShortenPipe } from './pipes/shorten.pipe';
 import { SavePositionFormComponent } from './components/forms/position-forms/save-position-form/save-position-form.component';
 import { EditPositionFormComponent } from './components/forms/position-forms/edit-position-form/edit-position-form.component';
 import { DeletePositionFormComponent } from './components/forms/position-forms/delete-position-form/delete-position-form.component';
+import { SaveGamemodeFormComponent } from './components/forms/gamemode-forms/save-gamemode-form/save-gamemode-form.component';
+import { EditGamemodeFormComponent } from './components/forms/gamemode-forms/edit-gamemode-form/edit-gamemode-form.component';
+import { DeleteGamemodeFormComponent } from './components/forms/gamemode-forms/delete-gamemode-form/delete-gamemode-form.component';
 
 
 @NgModule({
@@ -42,7 +45,10 @@ import { DeletePositionFormComponent } from './components/forms/position-forms/d
         DeleteParameterFormComponent,
         SavePositionFormComponent,
         EditPositionFormComponent,
-        DeletePositionFormComponent
+        DeletePositionFormComponent,
+        SaveGamemodeFormComponent,
+        EditGamemodeFormComponent,
+        DeleteGamemodeFormComponent
     ],
     imports: [
         CommonModule,
