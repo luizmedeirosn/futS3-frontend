@@ -1,6 +1,6 @@
 <div class="flex justify-content-center overflow-hidden">
     <p-card
-        styleClass="flipleft animation-duration-1000 animation-iteration-1 animation-ease-out flex-column align-items-center"
+        styleClass="flipleft animation-duration-1000 animation-iteration-1 animation-ease-out"
         [style]="{ width: '40rem' }"
         header="Game Mode View"
     >
@@ -37,7 +37,7 @@
             </div>
         </div>
 
-        <div class="flex flex-column align-items-center mt-2 gap-2">
+        <div class="flex flex-column align-items-center mt-3 gap-2">
             <div
                 class="flex flex-column border-solid border-blue-400 border-2 border-round-lg bg-gray-50 p-scrollpanel-content-custom"
             >
@@ -81,149 +81,146 @@
             </div>
         </div>
 
-        <div class="mt-2">
-            <p-table
-                *ngIf="gameMode.fields.length > 0; else withoutPositions"
-                [value]="gameMode.fields"
-                dataKey="positionId"
-                sortField="positionName"
-                sortMode="single"
-                dataKey="positionName"
-                rowGroupMode="subheader"
-                groupRowsBy="positionName"
-                [rowHover]="true"
-                [tableStyle]="{ width: '100%' }"
+        <p-table
+            *ngIf="gameMode.fields.length > 0; else withoutPositions"
+            [value]="gameMode.fields"
+            dataKey="positionId"
+            sortField="positionName"
+            sortMode="single"
+            dataKey="positionName"
+            rowGroupMode="subheader"
+            groupRowsBy="positionName"
+            styleClass="mt-2"
+            [rowHover]="true"
+            [tableStyle]="{ width: '100%' }"
+        >
+            <ng-template pTemplate="header">
+                <tr>
+                    <th id="" pSortableColumn="fields.positionName">
+                        <div
+                            class="flex justify-content-between align-items-center"
+                        >
+                            <div
+                                class="flex justify-content-center align-items-center text-lg mt-1"
+                            >
+                                Position
+                            </div>
+                            <div
+                                class="flex justify-content-between align-items-center"
+                            >
+                                <p-sortIcon
+                                    field="fields.positionName"
+                                ></p-sortIcon>
+                                <p-columnFilter
+                                    type="text"
+                                    field="positionName"
+                                    display="menu"
+                                    matchMode="contains"
+                                    [showMatchModes]="false"
+                                    [showOperator]="false"
+                                    [showAddButton]="false"
+                                    style="height: 1.7rem"
+                                ></p-columnFilter>
+                            </div>
+                        </div>
+                    </th>
+                    <th id="" pSortableColumn="" style="cursor: default">
+                        <div
+                            class="flex justify-content-between align-items-center"
+                        >
+                            <div
+                                class="flex justify-content-center align-items-center text-lg mt-1"
+                            >
+                                Parameter
+                            </div>
+                            <div
+                                class="flex justify-content-between align-items-center"
+                            >
+                                <p-columnFilter
+                                    type="text"
+                                    field="parameterName"
+                                    display="menu"
+                                    matchMode="contains"
+                                    [showMatchModes]="false"
+                                    [showOperator]="false"
+                                    [showAddButton]="false"
+                                    style="height: 1.7rem"
+                                ></p-columnFilter>
+                            </div>
+                        </div>
+                    </th>
+                    <th id="" pSortableColumn="" style="cursor: default">
+                        <div
+                            class="flex justify-content-between align-items-center"
+                        >
+                            <div
+                                class="flex justify-content-center align-items-center text-lg mt-1"
+                            >
+                                Weight
+                            </div>
+                            <div
+                                class="flex justify-content-between align-items-center"
+                            >
+                                <p-columnFilter
+                                    type="text"
+                                    field="parameterWeight"
+                                    display="menu"
+                                    matchMode="contains"
+                                    [showMatchModes]="false"
+                                    [showOperator]="false"
+                                    [showAddButton]="false"
+                                    style="height: 1.7rem"
+                                ></p-columnFilter>
+                            </div>
+                        </div>
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template
+                pTemplate="groupheader"
+                let-position
+                let-rowIndex="rowIndex"
+                let-expanded="expanded"
             >
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th id="" pSortableColumn="fields.positionName">
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
-                                <div
-                                    class="flex justify-content-center align-items-center text-lg mt-1"
-                                >
-                                    Position
-                                </div>
-                                <div
-                                    class="flex justify-content-between align-items-center"
-                                >
-                                    <p-sortIcon
-                                        field="fields.positionName"
-                                    ></p-sortIcon>
-                                    <p-columnFilter
-                                        type="text"
-                                        field="positionName"
-                                        display="menu"
-                                        matchMode="contains"
-                                        [showMatchModes]="false"
-                                        [showOperator]="false"
-                                        [showAddButton]="false"
-                                        style="height: 1.7rem"
-                                    ></p-columnFilter>
-                                </div>
-                            </div>
-                        </th>
-                        <th id="" pSortableColumn="" style="cursor: default">
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
-                                <div
-                                    class="flex justify-content-center align-items-center text-lg mt-1"
-                                >
-                                    Parameter
-                                </div>
-                                <div
-                                    class="flex justify-content-between align-items-center"
-                                >
-                                    <p-columnFilter
-                                        type="text"
-                                        field="parameterName"
-                                        display="menu"
-                                        matchMode="contains"
-                                        [showMatchModes]="false"
-                                        [showOperator]="false"
-                                        [showAddButton]="false"
-                                        style="height: 1.7rem"
-                                    ></p-columnFilter>
-                                </div>
-                            </div>
-                        </th>
-                        <th id="" pSortableColumn="" style="cursor: default">
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
-                                <div
-                                    class="flex justify-content-center align-items-center text-lg mt-1"
-                                >
-                                    Weight
-                                </div>
-                                <div
-                                    class="flex justify-content-between align-items-center"
-                                >
-                                    <p-columnFilter
-                                        type="text"
-                                        field="parameterWeight"
-                                        display="menu"
-                                        matchMode="contains"
-                                        [showMatchModes]="false"
-                                        [showOperator]="false"
-                                        [showAddButton]="false"
-                                        style="height: 1.7rem"
-                                    ></p-columnFilter>
-                                </div>
-                            </div>
-                        </th>
-                    </tr>
-                </ng-template>
-                <ng-template
-                    pTemplate="groupheader"
-                    let-position
-                    let-rowIndex="rowIndex"
-                    let-expanded="expanded"
-                >
-                    <tr>
-                        <td colspan="3">
-                            <div
-                                class="flex align-items-center expand-button gap-1"
-                            >
-                                <p-button
-                                    pRipple
-                                    [pRowToggler]="position"
-                                    class="p-button-text p-button-rounded p-button-plain mr-2"
-                                    [icon]="
-                                        expanded
-                                            ? 'pi pi-chevron-down'
-                                            : 'pi pi-chevron-right'
-                                    "
-                                    size="small"
-                                    pTooltip="{{
-                                        expanded
-                                            ? 'Hide details'
-                                            : 'View details'
-                                    }}"
-                                    tooltipPosition="top"
-                                ></p-button>
-                                {{ position.positionName }}
-                            </div>
-                        </td>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="rowexpansion" let-position>
-                    <tr>
-                        <td>
-                            {{ "" }}
-                        </td>
-                        <td>
-                            {{ position.parameterName || "No Data" }}
-                        </td>
-                        <td>
-                            {{ position.parameterWeight || "No Data" }}
-                        </td>
-                    </tr>
-                </ng-template>
-            </p-table>
-        </div>
+                <tr>
+                    <td colspan="3">
+                        <div
+                            class="flex align-items-center expand-button gap-1"
+                        >
+                            <p-button
+                                pRipple
+                                [pRowToggler]="position"
+                                class="p-button-text p-button-rounded p-button-plain mr-2"
+                                [icon]="
+                                    expanded
+                                        ? 'pi pi-chevron-down'
+                                        : 'pi pi-chevron-right'
+                                "
+                                size="small"
+                                pTooltip="{{
+                                    expanded ? 'Hide details' : 'View details'
+                                }}"
+                                tooltipPosition="top"
+                            ></p-button>
+                            {{ position.positionName }}
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="rowexpansion" let-position>
+                <tr>
+                    <td>
+                        {{ "" }}
+                    </td>
+                    <td>
+                        {{ position.parameterName || "No Data" }}
+                    </td>
+                    <td>
+                        {{ position.parameterWeight || "No Data" }}
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
 
         <ng-template #withoutPositions>
             <h3 class="text-center text-large text-green-900">

@@ -1,36 +1,36 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { POSITIONS_ROUTES } from './positions.routing';
-import { PositionsHomeComponent } from './page/positions-home/positions-home.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { PositionsHomeComponent } from './page/positions-home/positions-home.component';
+import { POSITIONS_ROUTES } from './positions.routing';
 
-import { CardModule } from 'primeng/card';
-import { TableModule } from 'primeng/table';
-import { PositionsTableComponent } from './components/positions-table/positions-table.component';
-import { PositionViewComponent } from './components/position-view/position-view.component';
-import { FieldsetModule } from 'primeng/fieldset';
 import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
+import { ScrollPanelModule } from 'primeng/scrollpanel';
+import { TableModule } from 'primeng/table';
+import { PositionViewComponent } from './components/position-view/position-view.component';
+import { PositionsTableComponent } from './components/positions-table/positions-table.component';
 
 
 
 @NgModule({
-  declarations: [
-    PositionsHomeComponent,
-    PositionsTableComponent,
-    PositionViewComponent,
-  ],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(POSITIONS_ROUTES),
+    declarations: [
+        PositionsHomeComponent,
+        PositionsTableComponent,
+        PositionViewComponent,
+    ],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(POSITIONS_ROUTES),
 
-    SharedModule,
+        SharedModule,
 
-    CardModule,
-    TableModule,
-    FieldsetModule,
-    ButtonModule,
-  ]
+        CardModule,
+        TableModule,
+        ScrollPanelModule,
+        ButtonModule,
+    ]
 })
 export class PositionsModule { }
