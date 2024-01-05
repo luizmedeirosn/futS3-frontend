@@ -17,7 +17,6 @@ export class DeletePositionFormComponent implements OnInit, OnDestroy {
 
     public $loadingDeletion: BehaviorSubject<boolean> = new BehaviorSubject(false);
     public positions!: Array<PositionMinDTO>;
-    public selectedPosition!: PositionMinDTO | undefined;
 
     public constructor(
         private positionService: PositionService,
@@ -83,7 +82,7 @@ export class DeletePositionFormComponent implements OnInit, OnDestroy {
                             this.messageService.add({
                                 severity: 'success',
                                 summary: 'Success',
-                                detail: 'Player deleted successfully!',
+                                detail: 'Position deleted successfully!',
                                 life: this.toastLife
                             });
                             this.positionService.setChangesOn(true);

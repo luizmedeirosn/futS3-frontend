@@ -17,7 +17,6 @@ export class DeleteParameterFormComponent implements OnInit, OnDestroy {
 
     public $loadingDeletion: BehaviorSubject<boolean> = new BehaviorSubject(false);
     public parameters!: ParameterDTO[];
-    public selectedParameter!: ParameterDTO | undefined;
 
     public constructor(
         private parameterService: ParameterService,

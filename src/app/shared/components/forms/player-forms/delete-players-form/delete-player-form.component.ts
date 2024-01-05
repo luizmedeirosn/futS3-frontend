@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { PlayerFullDTO } from 'src/app/models/dto/player/response/PlayerFullDTO';
 import { PlayerMinDTO } from 'src/app/models/dto/player/response/PlayerMinDTO';
 import { PlayerService } from 'src/app/services/player/player.service';
 
@@ -17,7 +16,6 @@ export class DeletePlayerFormComponent implements OnInit, OnDestroy {
     private readonly toastLife: number = 2000;
 
     public $loadingDeletion: BehaviorSubject<boolean> = new BehaviorSubject(false);
-    public selectedPlayer!: PlayerFullDTO | undefined;
     public players!: Array<PlayerMinDTO>;
 
     public constructor(

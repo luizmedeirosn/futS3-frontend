@@ -8,7 +8,8 @@
     }
 }
 
-.p-scrollpanel-bar {
-    background-color: var(--blue-400);
-    width: 0.5rem;
+.p-scrollpanel-content-custom {
+    .p-scrollpanel-content {
+        padding: 0.5rem;
+    }
 }
