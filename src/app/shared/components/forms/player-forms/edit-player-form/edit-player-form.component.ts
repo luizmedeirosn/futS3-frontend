@@ -242,23 +242,12 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                     parameters: this.playerParametersScore
                 };
 
-                this.playerForm.reset();
-
                 this.playerService.update(playerRequest)
                     .pipe(takeUntil(this.$destroy))
                     .subscribe({
-                        next: (playerResponse) => {
-                            const updatedPlayer = {
-                                name: playerResponse.name,
-                                position: playerResponse.position
-                            };
-
-                            this.players.forEach((p) => {
-                                if (p.id === this.selectedPlayer?.id) {
-                                    p.name = updatedPlayer.name;
-                                    p.position = updatedPlayer.position;
-                                }
-                            });
+                        next: (playerResponse: PlayerFullDTO) => {
+                            const updatedPlayer = this.players.find(p => p.id === this.selectedPlayer?.id);
+                            updatedPlayer && (updatedPlayer.name = playerResponse.name);
 
                             this.playerService.setChangesOn(true);
                             this.messageService.clear();
@@ -284,10 +273,13 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
             }
             this.playerForm.reset();
             this.playerParameterForm.reset();
+
             this.parametersOff.forEach(e => this.parameters.push(e));
             this.parameters.sort(this.compareParameters);
             this.parametersOff = new Array();
             this.playerParametersScore = [];
+
+            this.handleBackAction();
         }
     }
 

@@ -9,6 +9,7 @@ import { PositionRequestDTO } from 'src/app/models/dto/position/request/Position
 import { PositionDTO } from 'src/app/models/dto/position/response/PositionDTO';
 import { ParameterService } from 'src/app/services/parameter/parameter.service';
 import { PositionService } from 'src/app/services/position/position.service';
+import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
 
 
 
@@ -204,11 +205,13 @@ export class EditPositionFormComponent {
                 parameters: this.positionParameters
             }
 
-            this.editPositionForm.reset();
             this.selectedPosition && this.positionService.updateById(this.selectedPosition?.id, positionRequest)
                 .pipe(takeUntil(this.$destroy))
                 .subscribe({
-                    next: () => {
+                    next: (position: PositionMinDTO) => {
+                        const positionUpdated = this.positions.find(p => p.id === this.selectedPosition?.id);
+                        positionUpdated && (positionUpdated.name = position.name);
+
                         this.positionService.setChangesOn(true);
                         this.messageService.clear();
                         this.messageService.add({
@@ -233,10 +236,13 @@ export class EditPositionFormComponent {
         }
         this.editPositionForm.reset();
         this.positionParameterForm.reset();
+
         this.parametersOff.forEach(e => this.parameters.push(e));
         this.parameters.sort(this.compareParameters);
         this.parametersOff = new Array();
         this.positionParameters = new Array();
+
+        this.handleBackAction();
     }
 
     public ngOnDestroy(): void {

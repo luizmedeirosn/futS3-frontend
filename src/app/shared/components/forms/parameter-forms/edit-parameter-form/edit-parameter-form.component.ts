@@ -129,12 +129,14 @@ export class EditParameterFormComponent implements OnInit, OnDestroy {
             description: this.editParameterForm.value.description as string
         };
 
-        this.editParameterForm.reset();
         this.selectedParameter &&
             this.parameterService.updateById(this.selectedParameter?.id, parameterResquest)
                 .pipe(takeUntil(this.$destroy))
                 .subscribe({
                     next: (parameter: ParameterDTO) => {
+                        const parameterUpdated = this.parameters.find(p => p.id === this.selectedParameter?.id);
+                        parameterUpdated && (parameterUpdated.name = parameter.name);
+
                         this.parameterService.setChangesOn(true);
                         this.messageService.clear();
                         this.messageService.add({
@@ -156,6 +158,9 @@ export class EditParameterFormComponent implements OnInit, OnDestroy {
                         console.log(err);
                     }
                 });
+
+        this.editParameterForm.reset();
+        this.handleBackAction();
     }
 
     public ngOnDestroy(): void {
