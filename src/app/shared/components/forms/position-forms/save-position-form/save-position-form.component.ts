@@ -124,8 +124,10 @@ export class SavePositionFormComponent implements OnInit, OnDestroy {
                     }
                 });
         }
+
         this.newPositionForm.reset();
         this.positionParameterForm.reset();
+
         this.parametersOff.forEach(e => this.parameters.push(e));
         this.parameters.sort(this.compareParameters);
         this.parametersOff = new Array();

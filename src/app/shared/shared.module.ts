@@ -30,6 +30,7 @@ import { DeletePositionFormComponent } from './components/forms/position-forms/d
 import { SaveGamemodeFormComponent } from './components/forms/gamemode-forms/save-gamemode-form/save-gamemode-form.component';
 import { EditGamemodeFormComponent } from './components/forms/gamemode-forms/edit-gamemode-form/edit-gamemode-form.component';
 import { DeleteGamemodeFormComponent } from './components/forms/gamemode-forms/delete-gamemode-form/delete-gamemode-form.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 
 @NgModule({
@@ -54,6 +55,8 @@ import { DeleteGamemodeFormComponent } from './components/forms/gamemode-forms/d
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
+
+        FontAwesomeModule,
 
         MenubarModule,
         ButtonModule,

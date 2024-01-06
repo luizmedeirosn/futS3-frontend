@@ -137,7 +137,10 @@
         ></p-button>
     </form>
 
-    <div class="flex flex-column gap-2">
+    <div
+        *ngIf="positionParameters.length > 0; else withoutParameters"
+        class="flex flex-column gap-2"
+    >
         <div class="flex justify-content-between align-items-center">
             <span class="text-xl font-bold text-gray-900"
                 >Position parameters</span
@@ -214,7 +217,10 @@
                     <td>
                         {{ position.weight }}
                     </td>
-                    <td style="text-align: center">
+                    <td
+                        style="text-align: center"
+                        class="p-button-danger-focus"
+                    >
                         <p-button
                             severity="danger"
                             icon="pi pi-trash"
@@ -228,6 +234,12 @@
             </ng-template>
         </p-table>
     </div>
+
+    <ng-template #withoutParameters>
+        <h3 class="text-center text-large text-green-900">
+            No parameters for now!
+        </h3>
+    </ng-template>
 
     <div
         class="flex flex justify-content-center align-content-center align-items-center mt-4"

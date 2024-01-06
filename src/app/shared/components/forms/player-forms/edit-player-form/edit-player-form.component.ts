@@ -271,6 +271,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                         }
                     });
             }
+
             this.playerForm.reset();
             this.playerParameterForm.reset();
 

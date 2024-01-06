@@ -13,7 +13,7 @@ import { PositionService } from 'src/app/services/position/position.service';
 @Component({
     selector: 'app-players-form',
     templateUrl: './save-player-form.component.html',
-    styleUrls: []
+    styleUrls: [],
 })
 export class SavePlayerFormComponent implements OnInit, OnDestroy {
 
@@ -159,6 +159,7 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
             }
             this.newPlayerForm.reset();
             this.playerParameterForm.reset();
+
             this.parametersOff.forEach(e => this.parameters.push(e));
             this.parameters.sort(this.compareParameters);
             this.parametersOff = new Array();

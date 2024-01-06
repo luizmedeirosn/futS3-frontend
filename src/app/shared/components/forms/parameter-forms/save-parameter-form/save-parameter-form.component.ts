@@ -34,7 +34,6 @@ export class SaveParameterFormComponent implements OnDestroy {
             description: this.newParameterForm.value.description as string
         };
 
-        this.newParameterForm.reset();
         this.parameterService.save(parameterResquest)
             .pipe(takeUntil(this.$destroy))
             .subscribe({
@@ -60,6 +59,8 @@ export class SaveParameterFormComponent implements OnDestroy {
                     console.log(err);
                 }
             });
+
+        this.newParameterForm.reset();
     }
 
     public ngOnDestroy(): void {
