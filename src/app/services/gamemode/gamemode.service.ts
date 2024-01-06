@@ -6,6 +6,7 @@ import { GameModeFullDTO } from 'src/app/models/dto/gamemode/response/GameModeFu
 import { GameModeMinDTO } from 'src/app/models/dto/gamemode/response/GameModeMinDTO';
 import { PlayerFullScoreDTO } from 'src/app/models/dto/gamemode/response/PlayerFullScoreDTO';
 import { GameModePositionDTO } from '../../models/dto/gamemode/response/GameModePositonDTO';
+import { GameModeRequestDTO } from 'src/app/models/dto/gamemode/request/GameModeRequestDTO';
 
 @Injectable({
     providedIn: 'root'
@@ -59,6 +60,12 @@ export class GameModeService {
         );
     }
 
+    public save(gameModeRequest: GameModeRequestDTO): Observable<GameModeFullDTO> {
+        return this.httpClient.post<GameModeFullDTO>(
+            `${this.API_URL}/gamemodes`,
+            gameModeRequest
+        );
+    }
 
     public deleteById(id: number): Observable<void> {
         return this.httpClient.delete<void>(
