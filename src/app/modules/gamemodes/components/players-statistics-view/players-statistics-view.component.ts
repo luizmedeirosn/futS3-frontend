@@ -83,7 +83,7 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
     }
 
     private setPositionParameters(positionId: number): void {
-        this.positionService.findByIdPositionParameters(positionId)
+        this.positionService.findByIdWithParameters(positionId)
             .pipe(takeUntil(this.destroy$))
             .subscribe(
                 {

@@ -46,7 +46,7 @@ export class PositionService {
         );
     }
 
-    public findByIdPositionParameters(id: number): Observable<PositionDTO> {
+    public findByIdWithParameters(id: number): Observable<PositionDTO> {
         return this.httpClient.get<PositionDTO>(
             `${this.API_URL}/positions/${id}/parameters`
         );

@@ -115,7 +115,7 @@ export class EditPositionFormComponent {
     public handleSelectPosition($event: number): void {
         if ($event) {
             this.setParametersWithApi();
-            this.positionService.findByIdPositionParameters($event)
+            this.positionService.findByIdWithParameters($event)
                 .pipe(takeUntil(this.$destroy))
                 .subscribe({
                     next: (position) => {
