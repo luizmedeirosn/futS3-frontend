@@ -107,7 +107,7 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
             return 1;
         }
         return 0;
-    };
+    }
 
     public handleDeletePlayerParameter($event: string): void {
         this.playerParametersScore = this.playerParametersScore.filter(p => p.name !== $event);
@@ -140,7 +140,7 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
                             this.messageService.add({
                                 severity: 'success',
                                 summary: 'Success',
-                                detail: 'Player successfully registered!',
+                                detail: 'Player registered successfully!',
                                 life: this.toastLife
                             });
                         },

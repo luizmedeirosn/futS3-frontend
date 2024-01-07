@@ -93,7 +93,7 @@ export class DeleteGamemodeFormComponent implements OnInit, OnDestroy {
                         this.messageService.add({
                             severity: 'error',
                             summary: 'Error',
-                            detail: 'Unable to delete the Game mode!'
+                            detail: 'Unable to delete the game mode!'
                         });
                         this.gameModeService.setChangesOn(false);
                     }

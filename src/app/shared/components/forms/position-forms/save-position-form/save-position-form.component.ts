@@ -80,7 +80,7 @@ export class SavePositionFormComponent implements OnInit, OnDestroy {
             return 1;
         }
         return 0;
-    };
+    }
 
     public handleDeletePositionParameter($event: number): void {
         this.positionParameters = this.positionParameters.filter(p => p.id !== $event);
@@ -107,7 +107,7 @@ export class SavePositionFormComponent implements OnInit, OnDestroy {
                         this.messageService.add({
                             severity: 'success',
                             summary: 'Success',
-                            detail: 'Position successfully registered!',
+                            detail: 'Position registered successfully!',
                             life: this.toastLife
                         });
                     },

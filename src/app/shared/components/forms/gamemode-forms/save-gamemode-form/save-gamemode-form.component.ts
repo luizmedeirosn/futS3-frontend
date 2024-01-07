@@ -10,6 +10,7 @@ import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
 import { PositionService } from 'src/app/services/position/position.service';
 import { SavePositionFormComponent } from '../../position-forms/save-position-form/save-position-form.component';
 import { CustomDialogService } from './../../../../services/custom-dialog.service';
+import { EditPositionFormComponent } from '../../position-forms/edit-position-form/edit-position-form.component';
 
 @Component({
     selector: 'app-save-gamemode-form',
@@ -60,7 +61,7 @@ export class SaveGamemodeFormComponent implements OnInit, OnDestroy {
             });
     }
 
-    public createPositionEvent(): void {
+    public handleCreatePositionEvent(): void {
         this.dynamicDialogRef = this.customDialogService.open(
             SavePositionFormComponent,
             {
@@ -68,6 +69,25 @@ export class SaveGamemodeFormComponent implements OnInit, OnDestroy {
                 header: EnumPositionEventsCrud.ADD.valueOf(),
                 contentStyle: { overflow: 'auto' },
                 baseZIndex: 10000,
+            });
+
+        this.dynamicDialogRef.onClose
+            .pipe(takeUntil(this.$destroy))
+            .subscribe(() => this.setPositionsWithApi());
+    }
+
+    handleEditPositionEvent(id: number) {
+        this.dynamicDialogRef = this.customDialogService.open(
+            EditPositionFormComponent,
+            {
+                position: 'top',
+                header: EnumPositionEventsCrud.EDIT.valueOf(),
+                contentStyle: { overflow: 'auto' },
+                baseZIndex: 10000,
+                data: {
+                    $event: EnumPositionEventsCrud.EDIT,
+                    selectedPositionId: id
+                }
             });
 
         this.dynamicDialogRef.onClose
@@ -122,7 +142,7 @@ export class SaveGamemodeFormComponent implements OnInit, OnDestroy {
                         this.messageService.add({
                             severity: 'success',
                             summary: 'Success',
-                            detail: 'Game Mode successfully registered!',
+                            detail: 'Game mode registered successfully!',
                             life: this.toastLife
                         });
                     },

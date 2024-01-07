@@ -43,7 +43,7 @@ export class SaveParameterFormComponent implements OnDestroy {
                     this.messageService.add({
                         severity: 'success',
                         summary: 'Success',
-                        detail: 'Parameter successfully registered!',
+                        detail: 'Parameter registered successfully!',
                         life: this.toastLife
                     });
                 },

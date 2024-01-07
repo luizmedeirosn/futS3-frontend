@@ -65,7 +65,7 @@
             pTooltip="Create a new position"
             tooltipPosition="top"
             styleClass="flex justify-content-center align-content-center align-items-center gap-2 font-bold"
-            (onClick)="createPositionEvent()"
+            (onClick)="handleCreatePositionEvent()"
         >
         </p-button>
     </form>
@@ -118,9 +118,15 @@
             </ng-template>
             <ng-template pTemplate="body" let-position>
                 <tr>
-                    <td>{{ position.name }}</td>
                     <td
-                        style="text-align: center"
+                        style="cursor: pointer"
+                        (click)="handleEditPositionEvent(position.id)"
+                    >
+                        {{ position.name }}
+                    </td>
+                    <td
+                        (click)="handleEditPositionEvent(position.id)"
+                        style="text-align: center; cursor: pointer"
                         class="p-button-danger-focus"
                     >
                         <p-button

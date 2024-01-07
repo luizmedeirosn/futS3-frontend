@@ -10,6 +10,9 @@ import { PositionDTO } from 'src/app/models/dto/position/response/PositionDTO';
 import { ParameterService } from 'src/app/services/parameter/parameter.service';
 import { PositionService } from 'src/app/services/position/position.service';
 import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
+import { DynamicDialogConfig } from 'primeng/dynamicdialog';
+import { EnumPositionEventsCrud } from 'src/app/models/enums/EnumPositionEventsCrud';
+import { CustomDialogService } from 'src/app/shared/services/custom-dialog.service';
 
 
 
@@ -45,16 +48,26 @@ export class EditPositionFormComponent {
         weight: ['', [Validators.required, Validators.pattern(/^-?\d*\.?\d*$/), Validators.min(1), Validators.max(100)]],
     });
 
+    private closeable: boolean = false;
+
     public constructor(
         private formBuilder: FormBuilder,
         private messageService: MessageService,
         private positionService: PositionService,
         private parameterService: ParameterService,
+        private dynamicDialogConfig: DynamicDialogConfig,
+        private customDialogService: CustomDialogService
     ) { }
 
     public ngOnInit(): void {
         this.setPositionsWithApi();
         this.setParametersWithApi();
+
+        const action = this.dynamicDialogConfig.data;
+        if (action.$event === EnumPositionEventsCrud.EDIT) {
+            this.handleSelectPosition(action.selectedPositionId);
+            this.closeable = true;
+        }
     }
 
     private setPositionsWithApi(): void {
@@ -122,14 +135,16 @@ export class EditPositionFormComponent {
                     next: (position) => {
                         if (position) {
                             this.selectedPosition = position;
-                            this.$viewTable.next(false);
+
                             this.editPositionForm.setValue({
                                 name: position?.name,
                                 description: position?.description,
                             });
+
                             this.positionParameters = position?.parameters;
-                            console.log(this.positionParameters)
                             this.deleteIncludedPositionParameters();
+
+                            this.$viewTable.next(false);
                         }
                     },
                     error: (err) => {
@@ -188,7 +203,7 @@ export class EditPositionFormComponent {
             return 1;
         }
         return 0;
-    };
+    }
 
     public handleDeletePositionParameter($event: number): void {
         this.positionParameters = this.positionParameters.filter(p => p.id !== $event);
@@ -217,9 +232,11 @@ export class EditPositionFormComponent {
                         this.messageService.add({
                             severity: 'success',
                             summary: 'Success',
-                            detail: 'Position successfully registered!',
+                            detail: 'Position edited successfully.',
                             life: this.toastLife
                         });
+
+                        this.closeable && (this.customDialogService.close(false));
                     },
                     error: (err) => {
                         this.positionService.setChangesOn(false);

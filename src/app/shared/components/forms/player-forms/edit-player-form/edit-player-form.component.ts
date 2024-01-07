@@ -219,7 +219,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
             return 1;
         }
         return 0;
-    };
+    }
 
     public handleDeletePlayerParameter($event: string): void {
         this.playerParametersScore = this.playerParametersScore.filter(p => p.name !== $event);
@@ -254,7 +254,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                             this.messageService.add({
                                 severity: 'success',
                                 summary: 'Success',
-                                detail: 'Data edited successfully!',
+                                detail: 'Player datas edited successfully!',
                                 life: this.toastLife
                             });
                         },
