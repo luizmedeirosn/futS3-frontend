@@ -13,11 +13,6 @@
     background-color: #ffffff00;
     border: none;
 
-    .p-submenu-list {
-        background: linear-gradient(to bottom, #0f0725, #04f3a3);
-        background-size: 100% 200%;
-        background-repeat: no-repeat;
-    }
 
     span.p-menuitem-text {
         font-family: Arial, Helvetica, sans-serif;
@@ -30,19 +25,52 @@
         color: #fff;
     }
 
-    .p-menuitem {
-        .p-submenu-list {
-            display: none;
-        }
+    .p-submenu-list {
+        background: linear-gradient(to bottom, #0f0725, #04f3a3);
+        background-size: 100% 200%;
+        background-repeat: no-repeat;
+        border-radius: 10px;
+        height: 10.3rem;
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
     }
 
-    .p-menuitem:hover {
-        background-color: var(--blue-2);
-        border-radius: 10px;
+    .p-menuitem {
+        position: relative;
     }
 
     .p-menuitem:hover .p-submenu-list {
         display: block;
+        animation: slideDown 0.5s ease;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media screen and (max-width: 768px) {
+        .p-submenu-list {
+            position: static;
+        }
+
+        .p-menuitem:hover .p-submenu-list {
+            animation: none;
+        }
+    }
+
+
+    .p-menuitem:hover {
+        background-color: var(--blue-2);
+        border-radius: 10px;
     }
 
     .p-menuitem:not(.p-highlight):not(.p-disabled).p-focus>.p-menuitem-content {
