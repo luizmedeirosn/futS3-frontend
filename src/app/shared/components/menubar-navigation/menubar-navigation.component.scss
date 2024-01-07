@@ -26,19 +26,13 @@
     }
 
     .p-submenu-list {
+        display: none;
+        height: 10.27rem;
+        border-radius: 10px;
+
         background: linear-gradient(to bottom, #0f0725, #04f3a3);
         background-size: 100% 200%;
         background-repeat: no-repeat;
-        border-radius: 10px;
-        height: 10.3rem;
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-    }
-
-    .p-menuitem {
-        position: relative;
     }
 
     .p-menuitem:hover .p-submenu-list {
@@ -58,10 +52,6 @@
     }
 
     @media screen and (max-width: 768px) {
-        .p-submenu-list {
-            position: static;
-        }
-
         .p-menuitem:hover .p-submenu-list {
             animation: none;
         }

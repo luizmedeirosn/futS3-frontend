@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { IconDefinition, faTag } from '@fortawesome/free-solid-svg-icons';
 import { MessageService } from 'primeng/api';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
@@ -21,7 +20,6 @@ export class SaveGamemodeFormComponent implements OnInit, OnDestroy {
 
     private readonly $destroy: Subject<void> = new Subject();
     private readonly toastLife: number = 2000;
-    public readonly faNewPositionIcon: IconDefinition = faTag;
 
     public positions!: Array<PositionMinDTO>;
     public positionsOff: Array<PositionMinDTO> = new Array();
