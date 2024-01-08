@@ -11,9 +11,9 @@ import { PLAYERS_ROUTES } from './players.routing';
 
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
-import { FieldsetModule } from 'primeng/fieldset';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
+import { PanelModule } from 'primeng/panel';
 import { TooltipModule } from 'primeng/tooltip';
 
 
@@ -33,8 +33,8 @@ import { TooltipModule } from 'primeng/tooltip';
         TableModule,
         ToastModule,
         ButtonModule,
+        PanelModule,
         TooltipModule,
-        FieldsetModule
     ],
 })
 export class PlayersHomeModule { }

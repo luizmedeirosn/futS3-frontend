@@ -5,7 +5,7 @@
         border-radius: 0.375rem;
         border-style: solid;
         border-color: var(--green-700);
-        border-width: 0.200rem;
+        border-width: 0.2rem;
     }
 }
 
@@ -14,17 +14,4 @@
         width: 270px;
         height: 270px;
     }
-}
-
-.player-data-fieldset {
-    .p-fieldset legend {
-        padding: 0.5rem;
-    }
-}
-
-.player-data-field {
-    margin: 0;
-    font-size: 1.125rem;
-    white-space: nowrap;
-    min-width: 15rem;
 }

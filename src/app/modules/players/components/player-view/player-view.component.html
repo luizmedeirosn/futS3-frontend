@@ -1,7 +1,7 @@
 <div class="flex justify-content-center overflow-hidden">
     <p-card
-        styleClass="flipleft animation-duration-1000 animation-iteration-1 animation-ease-out"
-        [style]="{ width: '40rem' }"
+        styleClass="fadein animation-duration-300 animation-iteration-1 animation-ease-out"
+        [style]="{ width: '60rem' }"
         header="Player View"
     >
         <div
@@ -38,7 +38,7 @@
         </div>
 
         <div
-            class="flex justify-content-center align-content-center align-items-center mt-3 gap-4"
+            class="flex justify-content-center align-content-center align-items-center mt-3 gap-3"
         >
             <div
                 class="{{
@@ -56,61 +56,53 @@
                 />
             </div>
             <div
-                class="flex flex-column justify-content-center align-content-center align-items-end"
+                class="p-panel-custom flex flex-column align-items-center justify-content-center gap-3"
             >
-                <p-fieldset
-                    legend="Name"
-                    styleClass="m-1 mr-0 w-6 white-space-nowrap border-blue-400"
-                    class="player-data-fieldset"
+                <div
+                    class="p-panel-custom flex justify-content-center align-items-start gap-3"
                 >
-                    <p class="player-data-field">
-                        {{ player.name }}
-                    </p>
-                </p-fieldset>
-                <p-fieldset
-                    legend="Age"
-                    styleClass="m-1 mr-0 w-6 border-blue-400"
-                    class="player-data-fieldset"
+                    <p-panel header="Name">
+                        <p>
+                            {{ player.name }}
+                        </p>
+                    </p-panel>
+
+                    <p-panel header="Age">
+                        <p>
+                            {{
+                                player.age
+                                    ? player.age + " years"
+                                    : "Unregistered data"
+                            }}
+                        </p>
+                    </p-panel>
+
+                    <p-panel header="Height">
+                        <p>
+                            {{
+                                player.height
+                                    ? player.height + " cm"
+                                    : "Unregistered data"
+                            }}
+                        </p>
+                    </p-panel>
+                </div>
+
+                <div
+                    class="p-panel-custom flex justify-content-center align-items-start gap-3"
                 >
-                    <p class="player-data-field">
-                        {{
-                            player.age
-                                ? player.age + " years"
-                                : "Unregistered data"
-                        }}
-                    </p>
-                </p-fieldset>
-                <p-fieldset
-                    legend="Height"
-                    styleClass="m-1 mr-0 w-6 border-blue-400"
-                    class="player-data-fieldset"
-                >
-                    <p class="player-data-field">
-                        {{
-                            player.height
-                                ? player.height + " cm"
-                                : "Unregistered data"
-                        }}
-                    </p>
-                </p-fieldset>
-                <p-fieldset
-                    legend="Position"
-                    styleClass="m-1 mr-0 w-6 border-blue-400"
-                    class="player-data-fieldset"
-                >
-                    <p class="player-data-field">
-                        {{ player.position.name }}
-                    </p>
-                </p-fieldset>
-                <p-fieldset
-                    legend="Team"
-                    styleClass="m-1 mr-0 w-6 border-blue-400"
-                    class="player-data-fieldset"
-                >
-                    <p class="player-data-field">
-                        {{ player.team }}
-                    </p>
-                </p-fieldset>
+                    <p-panel header="Position">
+                        <p>
+                            {{ player.position.name }}
+                        </p>
+                    </p-panel>
+
+                    <p-panel header="Team">
+                        <p>
+                            {{ player.team }}
+                        </p>
+                    </p-panel>
+                </div>
             </div>
         </div>
 

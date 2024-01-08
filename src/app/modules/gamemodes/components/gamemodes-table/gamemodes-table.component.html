@@ -1,5 +1,5 @@
 <div class="flex justify-content-center">
-    <p-card *ngIf="gameModes" header="Game Modes">
+    <p-card *ngIf="gameModes" [style]="{ width: '60rem' }" header="Game Modes">
         <p-table
             [value]="gameModes"
             dataKey="id"
@@ -9,7 +9,6 @@
             [rowHover]="true"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} game modes"
             styleClass="fadein animation-duration-1000 animation-iteration-1 animation-ease-out"
-            [tableStyle]="{ width: '60rem' }"
         >
             <ng-template pTemplate="header">
                 <tr>

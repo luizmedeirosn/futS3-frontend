@@ -151,77 +151,33 @@
                                 </ng-template>
                                 <ng-template pTemplate="content">
                                     <div
-                                        class="flex justify-content-center align-content-center align-items-center gap-3"
+                                        class="p-panel-custom flex justify-content-center align-content-center align-items-center gap-3"
                                     >
-                                        <p-fieldset
-                                            *ngIf="
-                                                player.team.length <= 13;
-                                                else teamDiv
-                                            "
-                                            legend="Team"
-                                            styleClass="border-blue-400"
-                                            class="player-ranking-data-fieldset"
-                                        >
-                                            <p
-                                                class="player-ranking-data-field white-space-nowrap"
-                                            >
+                                        <p-panel header="Team">
+                                            <p>
                                                 {{ player.team }}
                                             </p>
-                                        </p-fieldset>
-                                        <ng-template #teamDiv>
-                                            <p-fieldset
-                                                legend="Team"
-                                                styleClass="border-blue-400"
-                                                class="player-ranking-data-fieldset"
-                                                pTooltip="{{ player.team }}"
-                                                tooltipPosition="bottom"
-                                            >
-                                                <p
-                                                    class="player-ranking-data-field white-space-nowrap"
-                                                    pTooltip="{{ player.team }}"
-                                                    tooltipPosition="bottom"
-                                                >
-                                                    {{
-                                                        player.team
-                                                            | shorten : 10
-                                                    }}
-                                                </p>
-                                            </p-fieldset>
-                                        </ng-template>
+                                        </p-panel>
 
-                                        <p-fieldset
-                                            legend="Age"
-                                            styleClass="border-blue-400"
-                                            class="player-ranking-data-fieldset"
-                                        >
-                                            <p
-                                                class="player-ranking-data-field white-space-nowrap"
-                                            >
+                                        <p-panel header="Age">
+                                            <p>
                                                 {{
                                                     player.age
                                                         ? player.age + " years"
-                                                        : ("Unregistered"
-                                                          | shorten : 13)
+                                                        : "Unregistered"
                                                 }}
                                             </p>
-                                        </p-fieldset>
+                                        </p-panel>
 
-                                        <p-fieldset
-                                            legend="Height"
-                                            styleClass="border-blue-400"
-                                            class="player-ranking-data-fieldset"
-                                        >
-                                            <p
-                                                class="player-ranking-data-field white-space-nowrap"
-                                            >
+                                        <p-panel header="Age">
+                                            <p>
                                                 {{
                                                     player.height
                                                         ? player.height + " cm"
-                                                        : ("Unregistered"
-                                                          | shorten : 13)
+                                                        : "Unregistered"
                                                 }}
                                             </p>
-                                        </p-fieldset>
+                                        </p-panel>
                                     </div>
                                     <p-table
                                         [value]="player.parameters"

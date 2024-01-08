@@ -17,7 +17,6 @@ import { AccordionModule } from 'primeng/accordion';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { DropdownModule } from 'primeng/dropdown';
-import { FieldsetModule } from 'primeng/fieldset';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
@@ -27,6 +26,7 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { ChartModule } from 'primeng/chart';
 import { PaginatorModule } from 'primeng/paginator';
+import { PanelModule } from 'primeng/panel';
 
 
 
@@ -51,7 +51,7 @@ import { PaginatorModule } from 'primeng/paginator';
         ToastModule,
         ButtonModule,
         TooltipModule,
-        FieldsetModule,
+        PanelModule,
         ScrollPanelModule,
         DropdownModule,
         AccordionModule,

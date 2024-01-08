@@ -12,6 +12,7 @@ import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { TableModule } from 'primeng/table';
 import { PositionViewComponent } from './components/position-view/position-view.component';
 import { PositionsTableComponent } from './components/positions-table/positions-table.component';
+import { PanelModule } from 'primeng/panel';
 
 
 
@@ -29,6 +30,7 @@ import { PositionsTableComponent } from './components/positions-table/positions-
 
         CardModule,
         TableModule,
+        PanelModule,
         ScrollPanelModule,
         ButtonModule,
     ]

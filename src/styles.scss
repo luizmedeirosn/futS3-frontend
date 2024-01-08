@@ -1,5 +1,5 @@
 :root {
-    --black-1: rgba(0, 0, 0, .87);
+    --black-1: rgba(0, 0, 0, 0.87);
     --blue-1: var(--blue-600);
     --blue-2: #18afdda9;
 }
@@ -14,12 +14,14 @@ body {
     overflow-y: scroll !important;
 }
 
-img, svg {
-    filter: brightness(1.0) contrast(1.0) saturate(1.2) grayscale(5%);
+img,
+svg {
+    filter: brightness(1) contrast(1) saturate(1.2) grayscale(5%);
     image-rendering: -webkit-optimize-contrast !important;
 }
 
-text, span {
+text,
+span {
     text-rendering: optimizelegibility !important;
 }
 
@@ -30,14 +32,12 @@ text, span {
     font-weight: 900;
     color: var(--gray-900);
     margin-bottom: 1rem;
-
 }
 
 .p-button {
-    caret-color: transparent ;
+    caret-color: transparent;
     caret-shape: block;
 }
-
 
 tr {
     color: var(--black-1);
@@ -46,14 +46,36 @@ tr {
     }
 }
 
-.p-fieldset {
-    background-color: var(--gray-50);
-    legend {
-        background-color: #e3e3e3;
-    }
-    .p-fieldset-content {
+.p-panel-custom {
+    .p-panel-header {
+        border: 2px solid var(--green-700);
+        border-bottom: none;
+        padding: 0.6rem;
+        background: var(--gray-300);
         color: var(--black-1);
-        padding: 0.1rem;
+        border-top-right-radius: 6px;
+        border-top-left-radius: 6px;
+        font-weight: bold;
+    }
+
+    .p-panel-content {
+        border: 2px solid var(--green-700);
+        border-top: none;
+        padding: 0.6rem;
+        background: var(--gray-100);
+        color: var(--black-1);
+        border-bottom-right-radius: 6px;
+        border-bottom-left-radius: 6px;
+        width: 11rem;
+        text-align: center;
+        font-weight: medium;
+        word-wrap: break-word;
+    }
+}
+
+.p-panel-custom-name {
+    .p-panel-content {
+        width: 18rem !important;
     }
 }
 
@@ -61,7 +83,6 @@ tr {
     background-color: var(--blue-400);
     width: 0.5rem;
 }
-
 
 .p-dropdown {
     border: solid;
@@ -76,14 +97,13 @@ tr {
 }
 
 .p-dropdown-filter-icon {
-    color: rgba(0, 0, 0, .87);
-
+    color: rgba(0, 0, 0, 0.87);
 }
 
 .p-dropdown-trigger {
     width: 30%;
     svg {
-        margin-left: 2rem
+        margin-left: 2rem;
     }
 }
 
@@ -122,6 +142,6 @@ tr {
 
 .p-button-danger-focus {
     .p-button:focus {
-        box-shadow: 0 0 0 2px #fff, 0 0 0 5px #DC2626, 0 1px 2px 0 rgb(0, 0, 0);
+        box-shadow: 0 0 0 2px #fff, 0 0 0 5px #dc2626, 0 1px 2px 0 rgb(0, 0, 0);
     }
 }
