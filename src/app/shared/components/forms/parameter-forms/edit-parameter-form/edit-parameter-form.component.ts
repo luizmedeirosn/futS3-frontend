@@ -145,6 +145,8 @@ export class EditParameterFormComponent implements OnInit, OnDestroy {
                             detail: 'Parameter successfully registered!',
                             life: this.toastLife
                         });
+
+                        this.handleBackAction();
                     },
                     error: (err) => {
                         this.parameterService.setChangesOn(false);
@@ -156,11 +158,12 @@ export class EditParameterFormComponent implements OnInit, OnDestroy {
                             life: this.toastLife
                         });
                         console.log(err);
+
+                        this.handleBackAction();
                     }
                 });
 
         this.editParameterForm.reset();
-        this.handleBackAction();
     }
 
     public ngOnDestroy(): void {

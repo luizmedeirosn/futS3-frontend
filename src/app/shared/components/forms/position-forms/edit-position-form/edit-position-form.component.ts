@@ -247,6 +247,8 @@ export class EditPositionFormComponent {
                             life: this.toastLife
                         });
                         console.log(err);
+
+                        this.handleBackAction();
                     }
                 });
         }

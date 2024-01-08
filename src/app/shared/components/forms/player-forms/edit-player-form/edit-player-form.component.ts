@@ -257,6 +257,8 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                                 detail: 'Player datas edited successfully!',
                                 life: this.toastLife
                             });
+
+                            this.handleBackAction();
                         },
                         error: (err) => {
                             this.playerService.setChangesOn(false);
@@ -268,6 +270,8 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                                 life: this.toastLife
                             });
                             console.log(err);
+
+                            this.handleBackAction();
                         }
                     });
             }
@@ -279,8 +283,6 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
             this.parameters.sort(this.compareParameters);
             this.parametersOff = new Array();
             this.playerParametersScore = [];
-
-            this.handleBackAction();
         }
     }
 
