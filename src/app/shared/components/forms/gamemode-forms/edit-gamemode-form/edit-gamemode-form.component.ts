@@ -229,7 +229,7 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
         this.positions.sort(this.comparePositions);
     }
 
-    public handleSubmitSaveGameModeForm(): void {
+    public handleSubmitEditGameModeForm(): void {
         if (this.editGameModeForm.valid && this.editGameModeForm.value) {
             const gameModeRequest: GameModeRequestDTO = {
                 formationName: this.editGameModeForm.value.formationName as string,
@@ -237,11 +237,13 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
                 positions: this.positionsOff.map(p => p.id)
             }
 
-            this.gameModeService.save(gameModeRequest)
+            this.selectedGameMode && this.gameModeService.updateById(this.selectedGameMode.id, gameModeRequest)
                 .pipe(takeUntil(this.$destroy))
                 .subscribe({
                     next: (gameMode) => {
-                        console.log(gameMode);
+                        const gameModeUpdated = this.gameModes.find(p => p.id === this.selectedGameMode?.id);
+                        gameModeUpdated && (gameModeUpdated.formationName = gameMode.formationName);
+
                         this.gameModeService.setChangesOn(true);
                         this.messageService.clear();
                         this.messageService.add({
@@ -250,6 +252,8 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
                             detail: 'Game mode registered successfully!',
                             life: this.toastLife
                         });
+
+                        this.handleBackAction();
                     },
                     error: (err) => {
                         this.gameModeService.setChangesOn(false);
@@ -261,6 +265,9 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
                             life: this.toastLife
                         });
                         console.log(err);
+
+                        this.handleBackAction();
+
                     }
                 });
         }

@@ -235,7 +235,7 @@ export class EditPositionFormComponent {
                             life: this.toastLife
                         });
 
-                        this.closeableDialog && (this.customDialogService.close(false));
+                        this.handleBackAction();
                     },
                     error: (err) => {
                         this.positionService.setChangesOn(false);
@@ -257,8 +257,6 @@ export class EditPositionFormComponent {
         this.parameters.sort(this.compareParameters);
         this.parametersOff = new Array();
         this.positionParameters = new Array();
-
-        this.handleBackAction();
     }
 
     public ngOnDestroy(): void {

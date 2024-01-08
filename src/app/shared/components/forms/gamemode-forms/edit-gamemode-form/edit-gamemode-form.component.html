@@ -58,9 +58,9 @@
 </div>
 
 <form
-    *ngIf="gameModes && !($viewTable | async)"
+    *ngIf="selectedGameMode && !($viewTable | async)"
     [formGroup]="editGameModeForm"
-    (ngSubmit)="handleSubmitSaveGameModeForm()"
+    (ngSubmit)="handleSubmitEditGameModeForm()"
     class="flex flex-column align-content-center m-3 gap-4"
 >
     <div class="flex justify-content-start align-content-center">

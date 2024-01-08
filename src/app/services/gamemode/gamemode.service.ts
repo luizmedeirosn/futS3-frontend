@@ -67,6 +67,13 @@ export class GameModeService {
         );
     }
 
+    public updateById(id: number, gameModeRequest: GameModeRequestDTO): Observable<GameModeFullDTO> {
+        return this.httpClient.put<GameModeFullDTO>(
+            `${this.API_URL}/gamemodes/${id}`,
+            gameModeRequest
+        );
+    }
+
     public deleteById(id: number): Observable<void> {
         return this.httpClient.delete<void>(
             `${this.API_URL}/gamemodes/${id}`
