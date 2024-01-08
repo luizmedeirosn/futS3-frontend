@@ -44,7 +44,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
         height: [this.selectedPlayer?.height, [Validators.min(65), Validators.max(250)]],
         position: [this.selectedPlayer?.position, Validators.required],
     });
-    public playerPicture!: File;
+    public playerPicture!: File | undefined;
 
     public playerParameterForm = this.formBuilder.group({
         parameter: ['', Validators.required],
@@ -181,6 +181,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                 }
             }
             this.selectedPlayer = undefined;
+            this.playerPicture = undefined;
         }, 10);
     }
 
