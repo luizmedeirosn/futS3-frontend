@@ -267,7 +267,6 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
                         console.log(err);
 
                         this.handleBackAction();
-
                     }
                 });
         }
