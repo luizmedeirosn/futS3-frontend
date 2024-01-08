@@ -20,7 +20,7 @@ const routes: Routes = [
     },
     {
         path: '**',
-        redirectTo: 'positions',
+        redirectTo: 'gamemodes',
         pathMatch: 'full'
     },
 ];

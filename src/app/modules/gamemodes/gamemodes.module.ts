@@ -18,6 +18,7 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { DropdownModule } from 'primeng/dropdown';
 import { FieldsetModule } from 'primeng/fieldset';
+import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
@@ -30,35 +31,36 @@ import { PaginatorModule } from 'primeng/paginator';
 
 
 @NgModule({
-  declarations: [
-    GameModesHomeComponent,
-    GameModesTableComponent,
-    GamemodeViewComponent,
-    PlayersStatisticsHomeComponent,
-    PlayersStatisticsViewComponent,
-],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(GAME_MODES_ROUTES),
-    FormsModule,
-    ReactiveFormsModule,
+    declarations: [
+        GameModesHomeComponent,
+        GameModesTableComponent,
+        GamemodeViewComponent,
+        PlayersStatisticsHomeComponent,
+        PlayersStatisticsViewComponent,
+    ],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(GAME_MODES_ROUTES),
+        FormsModule,
+        ReactiveFormsModule,
 
-    SharedModule,
+        SharedModule,
 
-    CardModule,
-    TableModule,
-    ToastModule,
-    ButtonModule,
-    TooltipModule,
-    FieldsetModule,
-    DropdownModule,
-    AccordionModule,
-    SkeletonModule,
-    FontAwesomeModule,
-    SelectButtonModule,
-    ChartModule,
-    PaginatorModule,
+        CardModule,
+        TableModule,
+        ToastModule,
+        ButtonModule,
+        TooltipModule,
+        FieldsetModule,
+        ScrollPanelModule,
+        DropdownModule,
+        AccordionModule,
+        SkeletonModule,
+        FontAwesomeModule,
+        SelectButtonModule,
+        ChartModule,
+        PaginatorModule,
 
-  ]
+    ]
 })
 export class GamemodesModule { }

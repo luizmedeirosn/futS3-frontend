@@ -8,6 +8,7 @@ import { IconDefinition, faMagnifyingGlassChart, faRankingStar } from '@fortawes
 import { PaginatorState } from 'primeng/paginator';
 import { PositionService } from 'src/app/services/position/position.service';
 import { ParameterWeightDTO } from 'src/app/models/dto/position/data/ParameterWeightDTO';
+import { PositionDTO } from 'src/app/models/dto/position/response/PositionDTO';
 
 @Component({
     selector: 'app-players-statistics-view',
@@ -82,12 +83,12 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
     }
 
     private setPositionParameters(positionId: number): void {
-        this.positionService.findByIdPositionParameters(positionId)
+        this.positionService.findByIdWithParameters(positionId)
             .pipe(takeUntil(this.destroy$))
             .subscribe(
                 {
-                    next: (positionParameters) => {
-                        this.positionParameters = positionParameters.parameters;
+                    next: (position: PositionDTO) => {
+                        this.positionParameters = position.parameters;
                     },
                     error: (err) => {
                         console.log(err);

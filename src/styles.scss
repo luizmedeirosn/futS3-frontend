@@ -47,7 +47,7 @@ tr {
 }
 
 .p-fieldset {
-    background-color: #fcfcfc;
+    background-color: var(--gray-50);
     legend {
         background-color: #e3e3e3;
     }
@@ -56,6 +56,12 @@ tr {
         padding: 0.1rem;
     }
 }
+
+.p-scrollpanel-bar {
+    background-color: var(--blue-400);
+    width: 0.5rem;
+}
+
 
 .p-dropdown {
     border: solid;
@@ -104,8 +110,18 @@ tr {
 .p-dialog-header-icon {
     color: #fff;
     caret-color: transparent;
+
+    &:focus {
+        box-shadow: none;
+    }
 }
 
 .p-dialog-header-icon:enabled:hover {
     background-color: var(--blue-2);
+}
+
+.p-button-danger-focus {
+    .p-button:focus {
+        box-shadow: 0 0 0 2px #fff, 0 0 0 5px #DC2626, 0 1px 2px 0 rgb(0, 0, 0);
+    }
 }

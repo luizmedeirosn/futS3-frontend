@@ -8,16 +8,20 @@ import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
 import { PlayerService } from 'src/app/services/player/player.service';
 import { PositionService } from 'src/app/services/position/position.service';
 import { CustomDialogService } from '../../services/custom-dialog.service';
-import { DeleteParameterFormComponent } from '../parameter-forms/delete-parameter-form/delete-parameter-form.component';
-import { DeletePlayerFormComponent } from '../player-forms/delete-players-form/delete-player-form.component';
-import { EditPlayerFormComponent } from '../player-forms/edit-player-form/edit-player-form.component';
-import { SavePlayerFormComponent } from '../player-forms/save-player-form/save-player-form.component';
-import { EditParameterFormComponent } from '../parameter-forms/edit-parameter-form/edit-parameter-form.component';
-import { SaveParameterFormComponent } from '../parameter-forms/save-parameter-form/save-parameter-form.component';
-import { SavePositionFormComponent } from '../position-forms/save-position-form/save-position-form.component';
-import { EditPositionFormComponent } from '../position-forms/edit-position-form/edit-position-form.component';
-import { DeletePositionFormComponent } from '../position-forms/delete-position-form/delete-position-form.component';
+import { DeleteParameterFormComponent } from '../forms/parameter-forms/delete-parameter-form/delete-parameter-form.component';
+import { DeletePlayerFormComponent } from '../forms/player-forms/delete-players-form/delete-player-form.component';
+import { EditPlayerFormComponent } from '../forms/player-forms/edit-player-form/edit-player-form.component';
+import { SavePlayerFormComponent } from '../forms/player-forms/save-player-form/save-player-form.component';
+import { EditParameterFormComponent } from '../forms/parameter-forms/edit-parameter-form/edit-parameter-form.component';
+import { SaveParameterFormComponent } from '../forms/parameter-forms/save-parameter-form/save-parameter-form.component';
+import { SavePositionFormComponent } from '../forms/position-forms/save-position-form/save-position-form.component';
+import { EditPositionFormComponent } from '../forms/position-forms/edit-position-form/edit-position-form.component';
+import { DeletePositionFormComponent } from '../forms/position-forms/delete-position-form/delete-position-form.component';
 import { EnumPositionEventsCrud } from 'src/app/models/enums/EnumPositionEventsCrud';
+import { DeleteGamemodeFormComponent } from '../forms/gamemode-forms/delete-gamemode-form/delete-gamemode-form.component';
+import { EditGamemodeFormComponent } from '../forms/gamemode-forms/edit-gamemode-form/edit-gamemode-form.component';
+import { SaveGamemodeFormComponent } from '../forms/gamemode-forms/save-gamemode-form/save-gamemode-form.component';
+import { EnumGameModeEventsCrud } from 'src/app/models/enums/EnumGameModeEventsCrud';
 
 @Component({
     selector: 'app-menubar-navigation',
@@ -60,14 +64,44 @@ export class MenubarNavigationComponent implements OnInit, OnDestroy {
                     {
                         label: 'Add',
                         icon: 'pi pi-fw pi-plus',
+                        command: () => {
+                            this.dynamicDialogRef = this.customDialogService.open(
+                                SaveGamemodeFormComponent,
+                                {
+                                    position: 'top',
+                                    header: EnumGameModeEventsCrud.ADD.valueOf(),
+                                    contentStyle: { overflow: 'auto' },
+                                    baseZIndex: 10000,
+                                });
+                        },
                     },
                     {
                         label: 'Edit',
-                        icon: 'pi pi-fw pi-pencil'
+                        icon: 'pi pi-fw pi-pencil',
+                        command: () => {
+                            this.dynamicDialogRef = this.customDialogService.open(
+                                EditGamemodeFormComponent,
+                                {
+                                    position: 'top',
+                                    header: EnumGameModeEventsCrud.EDIT.valueOf(),
+                                    contentStyle: { overflow: 'auto' },
+                                    baseZIndex: 10000,
+                                });
+                        },
                     },
                     {
                         label: 'Delete',
-                        icon: 'pi pi-fw pi-trash'
+                        icon: 'pi pi-fw pi-trash',
+                        command: () => {
+                            this.dynamicDialogRef = this.customDialogService.open(
+                                DeleteGamemodeFormComponent,
+                                {
+                                    position: 'top',
+                                    header: EnumGameModeEventsCrud.DELETE.valueOf(),
+                                    contentStyle: { overflow: 'auto' },
+                                    baseZIndex: 10000,
+                                });
+                        },
                     }
                 ]
             },
@@ -93,7 +127,6 @@ export class MenubarNavigationComponent implements OnInit, OnDestroy {
                                     contentStyle: { overflow: 'auto' },
                                     baseZIndex: 10000,
                                 });
-
                         },
                     },
                     {
@@ -108,7 +141,6 @@ export class MenubarNavigationComponent implements OnInit, OnDestroy {
                                     contentStyle: { overflow: 'auto' },
                                     baseZIndex: 10000,
                                 });
-
                         },
                     },
                     {
@@ -123,7 +155,6 @@ export class MenubarNavigationComponent implements OnInit, OnDestroy {
                                     contentStyle: { overflow: 'auto' },
                                     baseZIndex: 10000,
                                 });
-
                         },
                     }
                 ]
@@ -149,7 +180,6 @@ export class MenubarNavigationComponent implements OnInit, OnDestroy {
                                     contentStyle: { overflow: 'auto' },
                                     baseZIndex: 10000,
                                 });
-
                         },
                     },
                     {
@@ -164,7 +194,6 @@ export class MenubarNavigationComponent implements OnInit, OnDestroy {
                                     contentStyle: { overflow: 'auto' },
                                     baseZIndex: 10000,
                                 });
-
                         },
                     },
                     {
@@ -179,7 +208,6 @@ export class MenubarNavigationComponent implements OnInit, OnDestroy {
                                     contentStyle: { overflow: 'auto' },
                                     baseZIndex: 10000,
                                 });
-
                         }
                     }
                 ]
@@ -206,7 +234,6 @@ export class MenubarNavigationComponent implements OnInit, OnDestroy {
                                     contentStyle: { overflow: 'auto' },
                                     baseZIndex: 10000,
                                 });
-
                         }
                     },
                     {

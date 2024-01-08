@@ -84,7 +84,7 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
     public handleViewFullDataPositionAction($event: ViewPositionAction): void {
         this.messageService.clear();
         if ($event) {
-            this.positionService.findByIdPositionParameters($event.id)
+            this.positionService.findByIdWithParameters($event.id)
                 .pipe(takeUntil(this.$destroy))
                 .subscribe(
                     {
