@@ -14,8 +14,6 @@ import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { EnumPositionEventsCrud } from 'src/app/models/enums/EnumPositionEventsCrud';
 import { CustomDialogService } from 'src/app/shared/services/custom-dialog.service';
 
-
-
 @Component({
     selector: 'app-edit-position-form',
     templateUrl: './edit-position-form.component.html',
@@ -31,6 +29,7 @@ export class EditPositionFormComponent {
     private positionsTablePages: Array<Array<PositionDTO>> = new Array();
 
     public $viewTable: BehaviorSubject<boolean> = new BehaviorSubject(true);
+    private closeableDialog: boolean = false;
 
     public positions!: Array<PositionDTO>;
     public selectedPosition!: PositionDTO | undefined;
@@ -48,8 +47,6 @@ export class EditPositionFormComponent {
         weight: ['', [Validators.required, Validators.pattern(/^-?\d*\.?\d*$/), Validators.min(1), Validators.max(100)]],
     });
 
-    private closeable: boolean = false;
-
     public constructor(
         private formBuilder: FormBuilder,
         private messageService: MessageService,
@@ -66,7 +63,7 @@ export class EditPositionFormComponent {
         const action = this.dynamicDialogConfig.data;
         if (action.$event === EnumPositionEventsCrud.EDIT) {
             this.handleSelectPosition(action.selectedPositionId);
-            this.closeable = true;
+            this.closeableDialog = true;
         }
     }
 
@@ -155,6 +152,8 @@ export class EditPositionFormComponent {
     }
 
     public handleBackAction(): void {
+        this.closeableDialog && this.customDialogService.close(false);
+
         this.$viewTable.next(true); // Activate the view child before referencing the table
         setTimeout(() => {
             if (this.selectedPosition?.id !== undefined) {
@@ -236,7 +235,7 @@ export class EditPositionFormComponent {
                             life: this.toastLife
                         });
 
-                        this.closeable && (this.customDialogService.close(false));
+                        this.closeableDialog && (this.customDialogService.close(false));
                     },
                     error: (err) => {
                         this.positionService.setChangesOn(false);

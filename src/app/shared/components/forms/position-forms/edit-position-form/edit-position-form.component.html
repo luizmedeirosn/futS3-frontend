@@ -46,10 +46,10 @@
                     </th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-player>
+            <ng-template pTemplate="body" let-position>
                 <tr style="cursor: pointer">
-                    <td (click)="handleSelectPosition(player.id)">
-                        {{ player.name }}
+                    <td (click)="handleSelectPosition(position.id)">
+                        {{ position.name }}
                     </td>
                 </tr>
             </ng-template>

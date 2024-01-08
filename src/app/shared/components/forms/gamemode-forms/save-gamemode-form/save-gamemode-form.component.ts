@@ -76,7 +76,7 @@ export class SaveGamemodeFormComponent implements OnInit, OnDestroy {
             .subscribe(() => this.setPositionsWithApi());
     }
 
-    handleEditPositionEvent(id: number) {
+    public handleEditPositionEvent(id: number) {
         this.dynamicDialogRef = this.customDialogService.open(
             EditPositionFormComponent,
             {
@@ -130,7 +130,6 @@ export class SaveGamemodeFormComponent implements OnInit, OnDestroy {
                 description: this.newGameModeForm.value.description as string,
                 positions: this.positionsOff.map(p => p.id)
             }
-            this.newGameModeForm.reset();
 
             this.gameModeService.save(gameModeRequest)
                 .pipe(takeUntil(this.$destroy))
