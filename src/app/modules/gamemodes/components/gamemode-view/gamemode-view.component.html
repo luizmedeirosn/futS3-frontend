@@ -1,7 +1,7 @@
 <div class="flex justify-content-center overflow-hidden">
     <p-card
-        styleClass="flipleft animation-duration-1000 animation-iteration-1 animation-ease-out"
-        [style]="{ width: '40rem' }"
+        styleClass="fadein animation-duration-300 animation-iteration-1 animation-ease-out"
+        [style]="{ width: '60rem' }"
         header="Game Mode View"
     >
         <div
@@ -37,32 +37,17 @@
             </div>
         </div>
 
-        <div class="flex flex-column align-items-center mt-3 gap-2">
-            <div
-                class="flex flex-column border-solid border-blue-400 border-2 border-round-lg bg-gray-50 p-scrollpanel-content-custom"
-            >
-                <label
-                    class="text-gray-900 font-bold text-medium text-center bg-gray-300 p-3 border-round-top-lg"
-                    for="formationName"
-                    >Formation Name</label
-                >
-
-                <p-scrollPanel
-                    [style]="{
-                        width: '100%',
-                    }"
-                >
-                    <p
-                        class="text-lg text-center text-gray-900 m-3"
-                        style="width: 34rem"
-                    >
-                        {{ gameMode.formationName }}
-                    </p>
-                </p-scrollPanel>
-            </div>
+        <div
+            class="p-panel-custom p-panel-custom-name flex justify-content-between align-items-start mt-3 gap-3"
+        >
+            <p-panel header="Formation Name">
+                <p>
+                    {{ gameMode.formationName }}
+                </p>
+            </p-panel>
 
             <div
-                class="flex flex-column border-solid border-blue-400 border-2 border-round-lg m-1 pb-1 bg-gray-50"
+                class="flex flex-column border-solid border-green-700 border-2 border-round-lg pb-1 bg-gray-50"
             >
                 <label
                     class="text-gray-900 font-bold text-medium text-center bg-gray-300 p-3 border-round-top-lg"
@@ -70,10 +55,10 @@
                     >Description</label
                 >
 
-                <p-scrollPanel [style]="{ width: '100%', height: '150px' }">
+                <p-scrollPanel [style]="{ height: '150px' }">
                     <p
                         class="text-justify text-gray-900 m-3"
-                        style="width: 34rem"
+                        style="width: 35rem"
                     >
                         {{ gameMode.description || "No description for now!" }}
                     </p>
