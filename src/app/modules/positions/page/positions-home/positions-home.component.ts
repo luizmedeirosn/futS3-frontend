@@ -1,10 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
 import { FullDataPosition } from 'src/app/models/dto/position/data/FullDataPosition';
 import { ViewPositionAction } from 'src/app/models/dto/position/events/ViewPositionAction';
 import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
+import { EnumPositionEventsCrud } from 'src/app/models/enums/EnumPositionEventsCrud';
 import { PositionService } from 'src/app/services/position/position.service';
+import { EditPositionFormComponent } from 'src/app/shared/components/forms/position-forms/edit-position-form/edit-position-form.component';
+import { CustomDialogService } from 'src/app/shared/services/custom-dialog.service';
 
 @Component({
     selector: 'app-positions-home',
@@ -21,14 +25,17 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
     public positionView!: boolean;
     public position!: FullDataPosition;
 
-    constructor(
+    private dynamicDialogRef!: DynamicDialogRef;
+
+    public constructor(
         private positionService: PositionService,
         private messageService: MessageService,
+        private customDialogService: CustomDialogService
     ) {
     }
 
     public ngOnInit(): void {
-        this.setPositions();
+        this.setPositionsWithApi();
 
         this.positionService.$positionView
             .pipe(takeUntil(this.$destroy))
@@ -48,7 +55,8 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
             .subscribe({
                 next: (changesOn: boolean) => {
                     if (changesOn) {
-                        this.setPositions();
+                        this.setPositionsWithApi();
+                        this.handleBackAction();
                     }
                 },
                 error: (err) => {
@@ -57,7 +65,7 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
             });
     }
 
-    private setPositions(): void {
+    private setPositionsWithApi(): void {
         this.positionService.findAll()
             .pipe(takeUntil(this.$destroy))
             .subscribe(
@@ -118,6 +126,29 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
 
     public handleBackAction(): void {
         this.positionService.$positionView.next(false);
+    }
+
+    public handleEditPositionEvent($event: { id: number }): void {
+        this.dynamicDialogRef = this.customDialogService.open(
+            EditPositionFormComponent,
+            {
+                position: 'top',
+                header: EnumPositionEventsCrud.EDIT.valueOf(),
+                contentStyle: { overflow: 'auto' },
+                baseZIndex: 10000,
+                data: {
+                    $event: EnumPositionEventsCrud.EDIT,
+                    selectedPositionId: $event.id
+                }
+            });
+
+        this.dynamicDialogRef.onClose
+            .pipe(takeUntil(this.$destroy))
+            .subscribe(() => this.handleViewFullDataPositionAction({
+                id: $event.id,
+                name: '',
+                description: ''
+            }));
     }
 
     public ngOnDestroy(): void {

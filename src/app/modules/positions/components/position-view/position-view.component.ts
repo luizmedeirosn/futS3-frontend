@@ -15,9 +15,19 @@ export class PositionViewComponent {
     @Output()
     public backEvent: EventEmitter<void> = new EventEmitter();
 
+    @Output()
+    public editPositionEvent: EventEmitter<{ id: number }> = new EventEmitter();
+
 
     public handleBackEvent() {
         this.backEvent.emit();
     }
+
+    public handleEditPositionEvent(id: number) {
+        this.editPositionEvent.emit({
+            id
+        });
+    }
+
 
 }
