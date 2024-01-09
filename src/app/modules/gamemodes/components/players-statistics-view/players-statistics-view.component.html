@@ -1,6 +1,6 @@
 <div class="flex justify-content-center">
     <p-card
-        styleClass="flipleft animation-duration-1000 animation-iteration-1 animation-ease-out"
+        styleClass="fadein animation-duration-1000 animation-iteration-1 animation-ease-out"
         [style]="{ width: '80rem' }"
         header="Statistics"
     >
@@ -64,7 +64,9 @@
             </div>
         </form>
 
-        <div class="flex justify-content-end align-items-center mt-3 gap-2">
+        <div
+            class="flex justify-content-end align-items-center mt-3 mb-3 gap-2"
+        >
             <p-button
                 [disabled]="
                     playersRanking === undefined ||
@@ -76,12 +78,20 @@
                 label="Ranking"
                 [raised]="true"
                 (onClick)="activeViewPlayersRanking()"
-                ><fa-icon
-                    [icon]="faRankingStar"
-                    size="xl"
-                    [styles]="faIconsStyles"
-                ></fa-icon>
+                ><svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="30"
+                    width="30"
+                    viewBox="0 0 640 512"
+                    fill="white"
+                >
+                    <!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                    <path
+                        d="M353.8 54.1L330.2 6.3c-3.9-8.3-16.1-8.6-20.4 0L286.2 54.1l-52.3 7.5c-9.3 1.4-13.3 12.9-6.4 19.8l38 37-9 52.1c-1.4 9.3 8.2 16.5 16.8 12.2l46.9-24.8 46.6 24.4c8.6 4.3 18.3-2.9 16.8-12.2l-9-52.1 38-36.6c6.8-6.8 2.9-18.3-6.4-19.8l-52.3-7.5zM256 256c-17.7 0-32 14.3-32 32V480c0 17.7 14.3 32 32 32H384c17.7 0 32-14.3 32-32V288c0-17.7-14.3-32-32-32H256zM32 320c-17.7 0-32 14.3-32 32V480c0 17.7 14.3 32 32 32H160c17.7 0 32-14.3 32-32V352c0-17.7-14.3-32-32-32H32zm416 96v64c0 17.7 14.3 32 32 32H608c17.7 0 32-14.3 32-32V416c0-17.7-14.3-32-32-32H480c-17.7 0-32 14.3-32 32z"
+                    />
+                </svg>
             </p-button>
+
             <p-button
                 [disabled]="
                     playersRanking === undefined ||
@@ -93,11 +103,18 @@
                 label="Insights"
                 [raised]="true"
                 (onClick)="desactiveViewPlayersRanking()"
-                ><fa-icon
-                    [icon]="faMagnifyingGlassChart"
-                    size="xl"
-                    [styles]="faIconsStyles"
-                ></fa-icon>
+                ><svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="28"
+                    width="28"
+                    viewBox="0 0 512 512"
+                    fill="white"
+                >
+                    <!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                    <path
+                        d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zm-312 8v64c0 13.3 10.7 24 24 24s24-10.7 24-24l0-64c0-13.3-10.7-24-24-24s-24 10.7-24 24zm80-96V280c0 13.3 10.7 24 24 24s24-10.7 24-24V120c0-13.3-10.7-24-24-24s-24 10.7-24 24zm80 64v96c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24s-24 10.7-24 24z"
+                    />
+                </svg>
             </p-button>
         </div>
 
@@ -346,18 +363,14 @@
             >
                 <p-skeleton
                     [style]="{
-                        'min-width': '38rem',
-                        'max-width': '38rem',
-                        'min-height': '38rem',
-                        'max-height': '38rem'
+                        'width': '38rem',
+                        'height': '38rem',
                     }"
                 ></p-skeleton>
                 <p-skeleton
                     [style]="{
-                        'min-width': '38rem',
-                        'max-width': '38rem',
-                        'min-height': '38rem',
-                        'max-height': '38rem'
+                        'width': '38rem',
+                        'height': '38rem',
                     }"
                 ></p-skeleton>
             </div>
