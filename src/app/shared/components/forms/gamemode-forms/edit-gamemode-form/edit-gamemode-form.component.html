@@ -49,7 +49,7 @@
             <ng-template pTemplate="body" let-gamemode>
                 <tr style="cursor: pointer">
                     <td (click)="handleSelectGameMode(gamemode.id)">
-                        {{ gamemode.formationName }}
+                        {{ gamemode.formationName | shorten : 40 }}
                     </td>
                 </tr>
             </ng-template>

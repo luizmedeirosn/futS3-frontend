@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Validators, FormBuilder } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
@@ -10,7 +10,8 @@ import { ParameterService } from 'src/app/services/parameter/parameter.service';
 @Component({
     selector: 'app-edit-parameter-form',
     templateUrl: './edit-parameter-form.component.html',
-    styleUrls: ['./edit-parameter-form.component.scss']
+    styleUrls: ['./edit-parameter-form.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class EditParameterFormComponent implements OnInit, OnDestroy {
 

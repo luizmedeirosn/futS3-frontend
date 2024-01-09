@@ -3,8 +3,9 @@
         <p-table
             [value]="players"
             dataKey="id"
-            [paginator]="true"
             [rows]="10"
+            [globalFilterFields]="['id', 'name']"
+            [paginator]="true"
             [showCurrentPageReport]="true"
             [rowHover]="true"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} players"
@@ -123,10 +124,10 @@
                         />
                     </td>
                     <td (click)="handleViewFullDataPlayerEvent(player.id)">
-                        {{ player.name }}
+                        {{ player.name | shorten : 25 }}
                     </td>
                     <td (click)="handleViewFullDataPlayerEvent(player.id)">
-                        {{ player.position.name }}
+                        {{ player.position.name | shorten : 30 }}
                     </td>
                 </tr>
             </ng-template>

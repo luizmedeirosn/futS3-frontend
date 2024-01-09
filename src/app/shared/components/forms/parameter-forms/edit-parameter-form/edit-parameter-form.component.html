@@ -49,7 +49,7 @@
             <ng-template pTemplate="body" let-parameter>
                 <tr style="cursor: pointer">
                     <td (click)="handleSelectParameter(parameter.id)">
-                        {{ parameter.name }}
+                        {{ parameter.name | shorten : 40 }}
                     </td>
                 </tr>
             </ng-template>

@@ -99,11 +99,11 @@
                         {{ gameMode.id }}
                     </td>
                     <td (click)="handleViewFullDataGameModeEvent(gameMode.id)">
-                        {{ gameMode.formationName }}
+                        {{ gameMode.formationName | shorten : 30 }}
                     </td>
                     <td (click)="handleViewFullDataGameModeEvent(gameMode.id)">
                         {{
-                            (gameMode.description | shorten : 50) ||
+                            (gameMode.description | shorten : 40) ||
                                 "No description for now!"
                         }}
                     </td>
