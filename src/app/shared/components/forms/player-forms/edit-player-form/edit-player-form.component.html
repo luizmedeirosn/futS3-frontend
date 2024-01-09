@@ -74,7 +74,7 @@
                         />
                     </td>
                     <td (click)="handleSelectPlayer(player.id)">
-                        {{ player.name }}
+                        {{ player.name | shorten : 30 }}
                     </td>
                 </tr>
             </ng-template>

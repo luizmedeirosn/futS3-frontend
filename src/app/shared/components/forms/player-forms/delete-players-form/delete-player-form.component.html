@@ -83,7 +83,7 @@
                         />
                     </td>
                     <td>
-                        {{ player.name }}
+                        {{ player.name | shorten : 20 }}
                     </td>
                     <td
                         *ngIf="!($loadingDeletion | async)"

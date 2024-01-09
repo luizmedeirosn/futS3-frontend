@@ -13,30 +13,3 @@
     width: 6rem;
     height: 6rem;
 }
-
-
-// Smartphone
-@media screen and (max-width: 430px) {
-    .p-datatable-table {
-        max-width: 30rem !important;
-        min-width: 30rem !important;
-    }
-    .players-table-profile-picture {
-        width: 3rem;
-        height: 3rem;
-    }
-
-    .players-table-profile-without-picture {
-        width: 3rem;
-        height: 3rem;
-    }
-
-    .p-card-content {
-        min-width: 80vw !important;
-        max-width: 80vw !important;
-    }
-
-    .cell-text-player-table {
-        font-size: 0.9rem;
-    }
-}

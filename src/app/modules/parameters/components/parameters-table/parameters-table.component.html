@@ -95,11 +95,11 @@
             <ng-template pTemplate="body" let-parameter>
                 <tr>
                     <td>{{ parameter.id }}</td>
-                    <td>{{ parameter.name }}</td>
+                    <td>{{ parameter.name | shorten : 30 }}</td>
                     <td>
                         {{
                             parameter.description || "No description for now!"
-                                | shorten : 30
+                                | shorten : 40
                         }}
                     </td>
                 </tr>

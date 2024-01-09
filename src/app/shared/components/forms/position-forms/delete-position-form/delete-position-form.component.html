@@ -60,7 +60,7 @@
             <ng-template pTemplate="body" let-position>
                 <tr>
                     <td>
-                        {{ position.name }}
+                        {{ position.name | shorten : 30 }}
                     </td>
                     <td
                         *ngIf="!($loadingDeletion | async)"

@@ -49,7 +49,7 @@
             <ng-template pTemplate="body" let-position>
                 <tr style="cursor: pointer">
                     <td (click)="handleSelectPosition(position.id)">
-                        {{ position.name }}
+                        {{ position.name | shorten : 40 }}
                     </td>
                 </tr>
             </ng-template>

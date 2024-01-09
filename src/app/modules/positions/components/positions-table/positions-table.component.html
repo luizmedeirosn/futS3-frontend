@@ -3,10 +3,10 @@
         <p-table
             [value]="positions"
             dataKey="id"
-            [paginator]="true"
             [rows]="15"
-            [showCurrentPageReport]="true"
             [globalFilterFields]="['id', 'name']"
+            [paginator]="true"
+            [showCurrentPageReport]="true"
             [rowHover]="true"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} positions"
             styleClass="fadein animation-duration-1000 animation-iteration-1 animation-ease-out"
@@ -99,11 +99,11 @@
                         {{ position.id }}
                     </td>
                     <td (click)="handleViewFullDataPositionEvent(position)">
-                        {{ position.name }}
+                        {{ position.name | shorten : 30 }}
                     </td>
                     <td (click)="handleViewFullDataPositionEvent(position)">
                         {{
-                            (position.description | shorten : 50) ||
+                            (position.description | shorten : 40) ||
                                 "No description for now!"
                         }}
                     </td>
