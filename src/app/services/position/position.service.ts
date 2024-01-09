@@ -12,7 +12,9 @@ import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMin
 export class PositionService {
 
     private readonly API_URL: string = environment.API_URL;
+
     private $changesOn: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    public changedPositionId!: number;
 
     public $positionView: Subject<boolean> = new Subject();
 
@@ -22,9 +24,11 @@ export class PositionService {
         this.$positionView.next(false);
     };
 
-    public setChangesOn(status: boolean): void {
+    public setChangesOn(status: boolean, changedPositionId?: number): void {
         if (status !== null && status !== undefined) {
             this.$changesOn.next(status);
+            changedPositionId && (this.changedPositionId = changedPositionId);
+
         } else {
             console.error("Status is null or undefined");
         }

@@ -39,6 +39,7 @@
         </div>
 
         <div
+            *ngIf="position"
             class="p-panel-custom p-panel-custom-name flex justify-content-between align-items-start mt-3 gap-3"
         >
             <p-panel header="Name">
@@ -68,7 +69,10 @@
         </div>
 
         <p-table
-            *ngIf="position.parameters.length > 0; else withoutParameters"
+            *ngIf="
+                position && position.parameters.length > 0;
+                else withoutParameters
+            "
             [value]="position.parameters"
             dataKey="id"
             styleClass="mt-2"

@@ -61,7 +61,7 @@ export class EditPositionFormComponent {
         this.setParametersWithApi();
 
         const action = this.dynamicDialogConfig.data;
-        if (action.$event === EnumPositionEventsCrud.EDIT) {
+        if (action && action.$event === EnumPositionEventsCrud.EDIT) {
             this.handleSelectPosition(action.selectedPositionId);
             this.closeableDialog = true;
         }
@@ -166,8 +166,8 @@ export class EditPositionFormComponent {
                     const page = this.positionsTablePages.at(numPage);
                     const firstPositionPage: PositionDTO | undefined = page?.at(0);
 
-                    this.playersTable.first =
-                        firstPositionPage && this.positions.indexOf(firstPositionPage);
+                    this.playersTable &&
+                        (this.playersTable.first = firstPositionPage && this.positions.indexOf(firstPositionPage));
                 }
             }
             this.selectedPosition = undefined;
@@ -226,7 +226,7 @@ export class EditPositionFormComponent {
                         const positionUpdated = this.positions.find(p => p.id === this.selectedPosition?.id);
                         positionUpdated && (positionUpdated.name = position.name);
 
-                        this.positionService.setChangesOn(true);
+                        this.positionService.setChangesOn(true, this.selectedPosition?.id);
                         this.messageService.clear();
                         this.messageService.add({
                             severity: 'success',
