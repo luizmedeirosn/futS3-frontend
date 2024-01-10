@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { take } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
 })
 export class CustomDialogService {
 
-    private dynamicDialogRef!: DynamicDialogRef;
+    private dynamicDialogRefs: Array<DynamicDialogRef> = new Array();
 
     public constructor(
         private dialogService: DialogService,
@@ -14,12 +15,22 @@ export class CustomDialogService {
     }
 
     public open(component: any, styles: any): DynamicDialogRef {
-        this.dynamicDialogRef = this.dialogService.open(component, styles);
-        return this.dynamicDialogRef;
+        const ref: DynamicDialogRef = this.dialogService.open(component, styles);
+
+        this.dynamicDialogRefs.length > 0 && ref.onClose.pipe(take(1)).subscribe(() => this.closeEndDialog(false));
+
+        this.dynamicDialogRefs.push(ref);
+        return ref;
     }
 
-    public close(reload: boolean): void {
-        this.dynamicDialogRef?.close();
+    public closeEndDialog(reload: boolean): void {
+        const ref: DynamicDialogRef | undefined = this.dynamicDialogRefs.pop();
+        ref?.close();
+        reload && window.location.reload();
+    }
+
+    public closeAll(reload: boolean): void {
+        this.dynamicDialogRefs?.forEach(ref => ref.close());
         reload && window.location.reload();
     }
 

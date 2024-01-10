@@ -69,7 +69,7 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
         }
     }
 
-    public setGameModesWithApi(): void {
+    private setGameModesWithApi(): void {
         this.gameModeService.findAll()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
@@ -155,7 +155,7 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
     }
 
     public handleBackAction(): void {
-        this.closeableDialog && this.customDialogService.close(false);
+        this.closeableDialog && this.customDialogService.closeEndDialog(false);
 
         this.$viewTable.next(true); // Activate the view child before referencing the table
         setTimeout(() => {

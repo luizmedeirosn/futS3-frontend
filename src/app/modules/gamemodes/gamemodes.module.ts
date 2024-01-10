@@ -26,7 +26,6 @@ import { ChartModule } from 'primeng/chart';
 import { PaginatorModule } from 'primeng/paginator';
 import { PanelModule } from 'primeng/panel';
 import { SelectButtonModule } from 'primeng/selectbutton';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 
 
@@ -59,7 +58,6 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
         SelectButtonModule,
         ChartModule,
         PaginatorModule,
-        ConfirmDialogModule,
 
     ]
 })

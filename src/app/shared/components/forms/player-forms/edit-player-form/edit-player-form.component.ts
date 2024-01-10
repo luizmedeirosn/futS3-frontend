@@ -239,7 +239,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                     age: this.playerForm.value.age as string | undefined,
                     height: this.playerForm.value.height as string | undefined,
                     positionId: String(position.id),
-                    playerPicture: this.playerPicture || undefined,
+                    playerPicture: this.playerPicture ?? undefined,
                     parameters: this.playerParametersScore
                 };
 

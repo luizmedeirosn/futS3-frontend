@@ -1,3 +1,4 @@
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -24,6 +25,7 @@ import { DialogService } from 'primeng/dynamicdialog';
         HttpClientModule,
 
         ToastModule,
+        ConfirmDialogModule
     ],
     providers: [MessageService, DialogService, ConfirmationService],
     bootstrap: [AppComponent]
