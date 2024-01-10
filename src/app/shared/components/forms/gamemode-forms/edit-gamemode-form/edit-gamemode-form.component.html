@@ -1,6 +1,6 @@
 <div class="edit-gamemode-form flex justify-content-center">
     <p-card
-        *ngIf="gameModes && ($viewTable | async)"
+        *ngIf="!closeableDialog && gameModes && ($viewTable | async)"
         header="Game modes"
         styleClass="shadow-none justify-content-center align-content-center align-content-center"
     >

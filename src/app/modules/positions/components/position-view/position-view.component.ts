@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
 import { FullDataPosition } from 'src/app/models/dto/position/data/FullDataPosition';
+import { EditOrDeletePositionAction } from 'src/app/models/dto/position/events/EditOrDeletePositionAction';
+import { EnumPositionEventsCrud } from 'src/app/models/enums/EnumPositionEventsCrud';
 
 @Component({
     selector: 'app-position-view',
@@ -9,6 +11,8 @@ import { FullDataPosition } from 'src/app/models/dto/position/data/FullDataPosit
 })
 export class PositionViewComponent {
 
+    public readonly positionEvents = EnumPositionEventsCrud;
+
     @Input()
     public position!: FullDataPosition;
 
@@ -16,18 +20,14 @@ export class PositionViewComponent {
     public backEvent: EventEmitter<void> = new EventEmitter();
 
     @Output()
-    public editPositionEvent: EventEmitter<{ id: number }> = new EventEmitter();
-
+    public editOrDeletePositionEvent: EventEmitter<EditOrDeletePositionAction> = new EventEmitter();
 
     public handleBackEvent() {
         this.backEvent.emit();
     }
 
-    public handleEditPositionEvent(id: number) {
-        this.editPositionEvent.emit({
-            id
-        });
+    public handleEditOrDeletePositionEvent($event: EditOrDeletePositionAction) {
+        this.editOrDeletePositionEvent.emit($event);
     }
-
 
 }

@@ -22,6 +22,7 @@ import { DialogService } from 'primeng/dynamicdialog';
         FormsModule,
         ReactiveFormsModule,
         HttpClientModule,
+
         ToastModule,
     ],
     providers: [MessageService, DialogService, ConfirmationService],

@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
+import { EditOrDeleteGameModeAction } from 'src/app/models/dto/gamemode/event/EditOrDeleteGameModeAction';
 import { GameModeFullDTO } from 'src/app/models/dto/gamemode/response/GameModeFullDTO';
+import { EnumGameModeEventsCrud } from 'src/app/models/enums/EnumGameModeEventsCrud';
 
 @Component({
     selector: 'app-gamemode-view',
@@ -9,14 +11,23 @@ import { GameModeFullDTO } from 'src/app/models/dto/gamemode/response/GameModeFu
 })
 export class GamemodeViewComponent {
 
+    public readonly gameModeEvents = EnumGameModeEventsCrud;
+
     @Input()
     public gameMode!: GameModeFullDTO;
 
     @Output()
     public backEvent: EventEmitter<void> = new EventEmitter();
 
-    public handleBackEvent(): void {
+    @Output()
+    public editOrDeleteGameModeEvent: EventEmitter<EditOrDeleteGameModeAction> = new EventEmitter();
+
+    public handleBackEvent() {
         this.backEvent.emit();
+    }
+
+    public handleEditOrDeleteGameModeEvent($event: EditOrDeleteGameModeAction) {
+        this.editOrDeleteGameModeEvent.emit($event);
     }
 
 }

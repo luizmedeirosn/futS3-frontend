@@ -48,10 +48,10 @@ export class DeletePositionFormComponent implements OnInit, OnDestroy {
             });
     }
 
-    public handleDeletePositionEvent(event: PositionMinDTO): void {
-        if (event) {
+    public handleDeletePositionEvent($event: PositionMinDTO): void {
+        if ($event) {
             this.confirmationService.confirm({
-                message: `Confirm the deletion of position: ${event?.name}?`,
+                message: `Confirm the deletion of position: ${$event?.name}?`,
                 header: 'Confirmation',
                 icon: 'pi pi-exclamation-triangle',
                 acceptLabel: 'Yes',
@@ -60,7 +60,7 @@ export class DeletePositionFormComponent implements OnInit, OnDestroy {
                 rejectButtonStyleClass: 'p-button-text',
                 acceptIcon: "none",
                 rejectIcon: "none",
-                accept: () => this.handleDeletePositionAction(event?.id)
+                accept: () => this.handleDeletePositionAction($event?.id)
             });
         }
     }

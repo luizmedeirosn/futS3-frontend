@@ -48,10 +48,10 @@ export class DeleteGamemodeFormComponent implements OnInit, OnDestroy {
             });
     }
 
-    public handleDeleteGameModeEvent(event: GameModeMinDTO): void {
-        if (event) {
+    public handleDeleteGameModeEvent($event: GameModeMinDTO): void {
+        if ($event) {
             this.confirmationService.confirm({
-                message: `Confirm the deletion of game mode: ${event?.formationName}?`,
+                message: `Confirm the deletion of game mode: ${$event?.formationName}?`,
                 header: 'Confirmation',
                 icon: 'pi pi-exclamation-triangle',
                 acceptLabel: 'Yes',
@@ -60,7 +60,7 @@ export class DeleteGamemodeFormComponent implements OnInit, OnDestroy {
                 rejectButtonStyleClass: 'p-button-text',
                 acceptIcon: "none",
                 rejectIcon: "none",
-                accept: () => this.handleDeleteGameModeAction(event?.id)
+                accept: () => this.handleDeleteGameModeAction($event?.id)
             });
         }
     }
@@ -82,7 +82,8 @@ export class DeleteGamemodeFormComponent implements OnInit, OnDestroy {
                             this.messageService.add({
                                 severity: 'success',
                                 summary: 'Success',
-                                detail: 'Game mode deleted successfully!'
+                                detail: 'Game mode deleted successfully!',
+                                life: this.toastLife
                             });
                             this.gameModeService.setChangesOn(true);
                         }, 1000);
@@ -93,7 +94,8 @@ export class DeleteGamemodeFormComponent implements OnInit, OnDestroy {
                         this.messageService.add({
                             severity: 'error',
                             summary: 'Error',
-                            detail: 'Unable to delete the game mode!'
+                            detail: 'Unable to delete the game mode!',
+                            life: 6000
                         });
                         this.gameModeService.setChangesOn(false);
                     }

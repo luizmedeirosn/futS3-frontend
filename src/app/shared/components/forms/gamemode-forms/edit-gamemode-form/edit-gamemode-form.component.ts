@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { GameModeRequestDTO } from 'src/app/models/dto/gamemode/request/GameModeRequestDTO';
 import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
@@ -14,6 +14,7 @@ import { GameModeMinDTO } from 'src/app/models/dto/gamemode/response/GameModeMin
 import { Table } from 'primeng/table';
 import { GameModeFullDTO } from 'src/app/models/dto/gamemode/response/GameModeFullDTO';
 import { EditPositionFormComponent } from '../../position-forms/edit-position-form/edit-position-form.component';
+import { EnumGameModeEventsCrud } from 'src/app/models/enums/EnumGameModeEventsCrud';
 
 @Component({
     selector: 'app-edit-gamemode-form',
@@ -26,10 +27,11 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
     private readonly $destroy: Subject<void> = new Subject();
     private readonly toastLife: number = 2000;
 
-    @ViewChild('gameModesTable') public playersTable!: Table;
+    @ViewChild('gameModesTable') public gameModesTable!: Table;
     private gameModesTablePages: Array<Array<GameModeMinDTO>> = new Array();
 
     public $viewTable: BehaviorSubject<boolean> = new BehaviorSubject(true);
+    public closeableDialog: boolean = false;
 
     public gameModes!: Array<GameModeMinDTO>;
     public selectedGameMode!: GameModeMinDTO | undefined;
@@ -53,11 +55,18 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
         private positionService: PositionService,
         private gameModeService: GameModeService,
         private customDialogService: CustomDialogService,
+        private dynamicDialogConfig: DynamicDialogConfig,
     ) { }
 
     public ngOnInit(): void {
         this.setGameModesWithApi();
         this.setPositionsWithApi();
+
+        const action = this.dynamicDialogConfig.data;
+        if (action && action.$event === EnumGameModeEventsCrud.EDIT) {
+            this.handleSelectGameMode(action.selectedGameModeId);
+            this.closeableDialog = true;
+        }
     }
 
     public setGameModesWithApi(): void {
@@ -146,6 +155,8 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
     }
 
     public handleBackAction(): void {
+        this.closeableDialog && this.customDialogService.close(false);
+
         this.$viewTable.next(true); // Activate the view child before referencing the table
         setTimeout(() => {
             if (this.selectedGameMode?.id !== undefined) {
@@ -158,8 +169,9 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
                     const page = this.gameModesTablePages.at(numPage);
                     const firstGameModePage: GameModeMinDTO | undefined = page?.at(0);
 
-                    this.playersTable.first =
-                        firstGameModePage && this.gameModes.indexOf(firstGameModePage);
+                    this.gameModesTable &&
+                        (this.gameModesTable.first =
+                            firstGameModePage && this.gameModes.indexOf(firstGameModePage));
                 }
             }
             this.selectedGameMode = undefined;
@@ -220,7 +232,7 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
             return 1;
         }
         return 0;
-    };
+    }
 
     public handleDeletePosition($event: number): void {
         const position: PositionMinDTO | undefined = this.positionsOff.find((p) => p.id === $event);
@@ -244,7 +256,7 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
                         const gameModeUpdated = this.gameModes.find(p => p.id === this.selectedGameMode?.id);
                         gameModeUpdated && (gameModeUpdated.formationName = gameMode.formationName);
 
-                        this.gameModeService.setChangesOn(true);
+                        this.gameModeService.setChangesOn(true, this.selectedGameMode?.id);
                         this.messageService.clear();
                         this.messageService.add({
                             severity: 'success',

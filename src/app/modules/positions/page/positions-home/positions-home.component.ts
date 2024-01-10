@@ -1,13 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
 import { FullDataPosition } from 'src/app/models/dto/position/data/FullDataPosition';
+import { EditOrDeletePositionAction } from 'src/app/models/dto/position/events/EditOrDeletePositionAction';
 import { ViewPositionAction } from 'src/app/models/dto/position/events/ViewPositionAction';
 import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
 import { EnumPositionEventsCrud } from 'src/app/models/enums/EnumPositionEventsCrud';
 import { PositionService } from 'src/app/services/position/position.service';
-import { DeletePositionFormComponent } from 'src/app/shared/components/forms/position-forms/delete-position-form/delete-position-form.component';
 import { EditPositionFormComponent } from 'src/app/shared/components/forms/position-forms/edit-position-form/edit-position-form.component';
 import { CustomDialogService } from 'src/app/shared/services/custom-dialog.service';
 
@@ -31,7 +31,8 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
     public constructor(
         private positionService: PositionService,
         private messageService: MessageService,
-        private customDialogService: CustomDialogService
+        private customDialogService: CustomDialogService,
+        private confirmationService: ConfirmationService,
     ) {
     }
 
@@ -59,7 +60,7 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
                         this.setPositionsWithApi();
 
                         const changedPositionId: number = this.positionService.changedPositionId;
-                        changedPositionId && this.handleSelectPositionAction(changedPositionId);
+                        changedPositionId && this.selectPosition(changedPositionId);
                     }
                 },
                 error: (err) => {
@@ -92,13 +93,13 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
             );
     }
 
-    private handleSelectPositionAction(id: number) {
-        this.positionService.findByIdWithParameters(id)
+    private selectPosition(id: number) {
+        id && this.positionService.findByIdWithParameters(id)
             .pipe(takeUntil(this.$destroy))
             .subscribe(
                 {
                     next: (position) => {
-                        this.position = position;
+                        position && (this.position = position);
                     },
                     error: (err) => {
                         this.messageService.clear();
@@ -118,7 +119,7 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
 
     public handleViewFullDataPositionAction($event: ViewPositionAction): void {
         if ($event) {
-            this.handleSelectPositionAction($event.id);
+            this.selectPosition($event.id);
             this.positionService.$positionView.next(true);
         }
     }
@@ -127,38 +128,73 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
         this.positionService.$positionView.next(false);
     }
 
-    public handleEditPositionEvent($event: { id: number }): void {
-        this.dynamicDialogRef = this.customDialogService.open(
-            EditPositionFormComponent,
-            {
-                position: 'top',
-                header: EnumPositionEventsCrud.EDIT.valueOf(),
-                contentStyle: { overflow: 'auto' },
-                baseZIndex: 10000,
-                data: {
-                    $event: EnumPositionEventsCrud.EDIT,
-                    selectedPositionId: $event.id
+    private deletePosition(id: number): void {
+        id && this.positionService.deleteById(id)
+            .pipe(takeUntil(this.$destroy))
+            .subscribe({
+                next: () => {
+                    this.messageService.clear();
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Success',
+                        detail: 'Position deleted successfully!',
+                        life: 2000
+                    });
+                    this.positionService.setChangesOn(true);
+                    this.handleBackAction();
+                },
+                error: (err) => {
+                    console.log(err);
+                    this.messageService.clear();
+                    this.messageService.add({
+                        key: 'deletion-error',
+                        severity: 'error',
+                        summary: 'Error',
+                        detail: 'Is the position part of a game mode or a player!',
+                        life: 6000
+                    });
+                    this.positionService.setChangesOn(false);
                 }
             });
-
-        this.dynamicDialogRef.onClose
-            .pipe(takeUntil(this.$destroy))
-            .subscribe(() => this.handleSelectPositionAction($event.id));
     }
 
-    public handleDeletePositionEvent($event: { id: number }): void {
-        this.dynamicDialogRef = this.customDialogService.open(
-            DeletePositionFormComponent,
-            {
-                position: 'top',
-                header: EnumPositionEventsCrud.DELETE.valueOf(),
-                contentStyle: { overflow: 'auto' },
-                baseZIndex: 10000,
-                data: {
-                    $event: EnumPositionEventsCrud.DELETE,
-                    selectedPositionId: $event.id
-                }
-            });
+    private deletePositionConfirmation(): void {
+        this.position && this.confirmationService.confirm({
+            message: `Confirm the deletion of position: ${this.position.name}?`,
+            header: 'Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            acceptLabel: 'Yes',
+            rejectLabel: 'No',
+            acceptButtonStyleClass: 'p-button-danger',
+            rejectButtonStyleClass: 'p-button-text',
+            acceptIcon: "none",
+            rejectIcon: "none",
+            accept: () => this.deletePosition(this.position.id)
+        });
+    }
+
+    public handleEditOrDeletePositionEvent($event: EditOrDeletePositionAction): void {
+        if ($event && $event.action === EnumPositionEventsCrud.EDIT) {
+            this.dynamicDialogRef = this.customDialogService.open(
+                EditPositionFormComponent,
+                {
+                    position: 'top',
+                    header: EnumPositionEventsCrud.EDIT.valueOf(),
+                    contentStyle: { overflow: 'auto' },
+                    baseZIndex: 10000,
+                    data: {
+                        $event: EnumPositionEventsCrud.EDIT,
+                        selectedPositionId: $event.id
+                    }
+                });
+
+            this.dynamicDialogRef.onClose
+                .pipe(takeUntil(this.$destroy))
+                .subscribe(() => this.selectPosition($event.id));
+        }
+
+        $event && $event.action === EnumPositionEventsCrud.DELETE && this.deletePositionConfirmation();
+
     }
 
     public ngOnDestroy(): void {

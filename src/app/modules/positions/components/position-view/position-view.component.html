@@ -25,7 +25,12 @@
                     class="p-button-warning"
                     pTooltip="Edit player data"
                     tooltipPosition="top"
-                    (click)="handleEditPositionEvent(position.id)"
+                    (click)="
+                        handleEditOrDeletePositionEvent({
+                            id: position.id,
+                            action: positionEvents.EDIT
+                        })
+                    "
                 ></button>
                 <button
                     pButton
@@ -34,6 +39,12 @@
                     class="p-button-danger"
                     pTooltip="Delete player"
                     tooltipPosition="top"
+                    (click)="
+                        handleEditOrDeletePositionEvent({
+                            id: position.id,
+                            action: positionEvents.DELETE
+                        })
+                    "
                 ></button>
             </div>
         </div>
@@ -182,3 +193,5 @@
         </ng-template>
     </p-card>
 </div>
+
+<p-confirmDialog></p-confirmDialog>

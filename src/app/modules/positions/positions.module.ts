@@ -8,13 +8,13 @@ import { POSITIONS_ROUTES } from './positions.routing';
 
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
+import { PanelModule } from 'primeng/panel';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { TableModule } from 'primeng/table';
 import { PositionViewComponent } from './components/position-view/position-view.component';
 import { PositionsTableComponent } from './components/positions-table/positions-table.component';
-import { PanelModule } from 'primeng/panel';
-
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @NgModule({
     declarations: [
@@ -25,6 +25,8 @@ import { PanelModule } from 'primeng/panel';
     imports: [
         CommonModule,
         RouterModule.forChild(POSITIONS_ROUTES),
+        FormsModule,
+        ReactiveFormsModule,
 
         SharedModule,
 
@@ -33,6 +35,7 @@ import { PanelModule } from 'primeng/panel';
         PanelModule,
         ScrollPanelModule,
         ButtonModule,
-    ]
+        ConfirmDialogModule,
+    ],
 })
 export class PositionsModule { }

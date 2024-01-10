@@ -48,10 +48,10 @@ export class DeleteParameterFormComponent implements OnInit, OnDestroy {
             });
     }
 
-    public handleDeleteParameterEvent(event: ParameterDTO): void {
-        if (event) {
+    public handleDeleteParameterEvent($event: ParameterDTO): void {
+        if ($event) {
             this.confirmationService.confirm({
-                message: `Confirm the deletion of parameter: ${event?.name}?`,
+                message: `Confirm the deletion of parameter: ${$event?.name}?`,
                 header: 'Confirmation',
                 icon: 'pi pi-exclamation-triangle',
                 acceptLabel: 'Yes',
@@ -60,7 +60,7 @@ export class DeleteParameterFormComponent implements OnInit, OnDestroy {
                 rejectButtonStyleClass: 'p-button-text',
                 acceptIcon: "none",
                 rejectIcon: "none",
-                accept: () => this.handleDeleteParameterAction(event?.id)
+                accept: () => this.handleDeleteParameterAction($event?.id)
             });
         }
     }

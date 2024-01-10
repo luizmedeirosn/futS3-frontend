@@ -29,7 +29,7 @@ export class EditPositionFormComponent {
     private positionsTablePages: Array<Array<PositionDTO>> = new Array();
 
     public $viewTable: BehaviorSubject<boolean> = new BehaviorSubject(true);
-    private closeableDialog: boolean = false;
+    public closeableDialog: boolean = false;
 
     public positions!: Array<PositionDTO>;
     public selectedPosition!: PositionDTO | undefined;
@@ -52,8 +52,8 @@ export class EditPositionFormComponent {
         private messageService: MessageService,
         private positionService: PositionService,
         private parameterService: ParameterService,
+        private customDialogService: CustomDialogService,
         private dynamicDialogConfig: DynamicDialogConfig,
-        private customDialogService: CustomDialogService
     ) { }
 
     public ngOnInit(): void {
@@ -167,7 +167,8 @@ export class EditPositionFormComponent {
                     const firstPositionPage: PositionDTO | undefined = page?.at(0);
 
                     this.playersTable &&
-                        (this.playersTable.first = firstPositionPage && this.positions.indexOf(firstPositionPage));
+                        (this.playersTable.first =
+                            firstPositionPage && this.positions.indexOf(firstPositionPage));
                 }
             }
             this.selectedPosition = undefined;

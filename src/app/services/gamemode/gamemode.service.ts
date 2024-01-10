@@ -14,7 +14,9 @@ import { GameModeRequestDTO } from 'src/app/models/dto/gamemode/request/GameMode
 export class GameModeService {
 
     private readonly API_URL: string = environment.API_URL;
+
     private $changesOn: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    public changedGameModeId!: number;
 
     public $gameModeView: Subject<boolean> = new Subject();
 
@@ -24,9 +26,11 @@ export class GameModeService {
         this.$gameModeView.next(false);
     }
 
-    public setChangesOn(status: boolean): void {
+    public setChangesOn(status: boolean, changedGameModeId?: number): void {
         if (status !== null && status !== undefined) {
             this.$changesOn.next(status);
+            changedGameModeId && (this.changedGameModeId = changedGameModeId);
+
         } else {
             console.error("Status is null or undefined");
         }
