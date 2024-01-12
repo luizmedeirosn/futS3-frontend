@@ -1,6 +1,6 @@
 <div class="edit-player-form flex justify-content-center">
     <p-card
-        *ngIf="players && ($viewTable | async)"
+        *ngIf="!closeableDialog && players && ($viewTable | async)"
         header="Players"
         styleClass="shadow-none justify-content-center align-content-center align-content-center"
     >

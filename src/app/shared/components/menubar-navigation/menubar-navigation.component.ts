@@ -251,22 +251,8 @@ export class MenubarNavigationComponent implements OnInit, OnDestroy {
 
                             this.dynamicDialogRef.onClose
                                 .pipe(takeUntil(this.$destroy))
-                                .subscribe({
-                                    next: () => {
-                                        this.playerService.getChangesOn()
-                                            .pipe(takeUntil(this.$destroy))
-                                            .subscribe({
-                                                next: (changesOn) => {
-                                                    if (changesOn) {
-                                                        window.location.reload();
-                                                    }
-                                                }
-                                            });
-                                    },
-                                    error: (err) => {
-                                        console.log(err);
-                                    }
-                                });
+                                .subscribe(() =>
+                                    this.playerService.changedPlayerPicture && window.location.reload())
                         }
                     },
                     {

@@ -195,7 +195,6 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
         }
 
         $event && $event.action === EnumGameModeEventsCrud.DELETE && this.deleteGameModeConfirmation();
-
     }
 
     public ngOnDestroy(): void {

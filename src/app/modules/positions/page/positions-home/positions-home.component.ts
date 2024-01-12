@@ -194,7 +194,6 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
         }
 
         $event && $event.action === EnumPositionEventsCrud.DELETE && this.deletePositionConfirmation();
-
     }
 
     public ngOnDestroy(): void {

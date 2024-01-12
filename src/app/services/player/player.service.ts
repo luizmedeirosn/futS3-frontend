@@ -13,7 +13,10 @@ import { PlayerMinDTO } from 'src/app/models/dto/player/response/PlayerMinDTO';
 export class PlayerService {
 
     private readonly API_URL: string = environment.API_URL;
+
     private $changesOn: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    public changedPlayerId!: number;
+    public changedPlayerPicture!: boolean;
 
     public $playerView: Subject<boolean> = new Subject();
 
@@ -24,9 +27,11 @@ export class PlayerService {
         this.$playerView.next(false);
     };
 
-    public setChangesOn(status: boolean): void {
+    public setChangesOn(status: boolean, changedPlayerId?: number): void {
         if (status !== null && status !== undefined) {
             this.$changesOn.next(status);
+            changedPlayerId && (this.changedPlayerId = changedPlayerId);
+
         } else {
             console.error("Status is null or undefined");
         }
