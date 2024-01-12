@@ -7,6 +7,7 @@ import { ParameterWeightDTO } from 'src/app/models/dto/position/data/ParameterWe
 import { PositionRequestDTO } from 'src/app/models/dto/position/request/PositionRequestDTO';
 import { ParameterService } from 'src/app/services/parameter/parameter.service';
 import { PositionService } from 'src/app/services/position/position.service';
+import { ChangesOnService } from 'src/app/shared/services/changed-on/changes-on.service';
 
 @Component({
     selector: 'app-save-position-form',
@@ -37,6 +38,7 @@ export class SavePositionFormComponent implements OnInit, OnDestroy {
         private messageService: MessageService,
         private positionService: PositionService,
         private parameterService: ParameterService,
+        private changesOnService: ChangesOnService,
     ) { }
 
     public ngOnInit(): void {
@@ -102,7 +104,7 @@ export class SavePositionFormComponent implements OnInit, OnDestroy {
                 .pipe(takeUntil(this.$destroy))
                 .subscribe({
                     next: () => {
-                        this.positionService.setChangesOn(true);
+                        this.changesOnService.setChangesOn(true);
                         this.messageService.clear();
                         this.messageService.add({
                             severity: 'success',
@@ -112,7 +114,7 @@ export class SavePositionFormComponent implements OnInit, OnDestroy {
                         });
                     },
                     error: (err) => {
-                        this.positionService.setChangesOn(false);
+                        this.changesOnService.setChangesOn(false);
                         this.messageService.clear();
                         this.messageService.add({
                             severity: 'error',

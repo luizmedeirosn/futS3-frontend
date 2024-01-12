@@ -14,7 +14,7 @@ import { EnumPlayerEventsCrud } from 'src/app/models/enums/EnumPlayerEventsCrud'
 import { ParameterService } from 'src/app/services/parameter/parameter.service';
 import { PlayerService } from 'src/app/services/player/player.service';
 import { PositionService } from 'src/app/services/position/position.service';
-import { CustomDialogService } from 'src/app/shared/services/custom-dialog.service';
+import { CustomDialogService } from 'src/app/shared/services/custom-dialog/custom-dialog.service';
 
 @Component({
     selector: 'app-edit-player-form',

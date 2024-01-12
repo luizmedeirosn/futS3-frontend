@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/app/environments/environment.prod';
 import { PositionRequestDTO } from 'src/app/models/dto/position/request/PositionRequestDTO';
 import { PositionDTO } from 'src/app/models/dto/position/response/PositionDTO';
@@ -13,30 +13,11 @@ export class PositionService {
 
     private readonly API_URL: string = environment.API_URL;
 
-    private $changesOn: BehaviorSubject<boolean> = new BehaviorSubject(false);
-    public changedPositionId!: number;
-
-    public $positionView: Subject<boolean> = new Subject();
+    public readonly $positionView: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
     public constructor(
         private httpClient: HttpClient
-    ) {
-        this.$positionView.next(false);
-    };
-
-    public setChangesOn(status: boolean, changedPositionId?: number): void {
-        if (status !== null && status !== undefined) {
-            this.$changesOn.next(status);
-            changedPositionId && (this.changedPositionId = changedPositionId);
-
-        } else {
-            console.error("Status is null or undefined");
-        }
-    }
-
-    public getChangesOn(): BehaviorSubject<boolean> {
-        return this.$changesOn;
-    }
+    ) { }
 
     public findAll(): Observable<Array<PositionMinDTO>> {
         return this.httpClient.get<Array<PositionMinDTO>>(

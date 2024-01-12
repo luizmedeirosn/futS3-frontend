@@ -8,7 +8,7 @@ import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMin
 import { EnumPositionEventsCrud } from 'src/app/models/enums/EnumPositionEventsCrud';
 import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
 import { PositionService } from 'src/app/services/position/position.service';
-import { CustomDialogService } from 'src/app/shared/services/custom-dialog.service';
+import { CustomDialogService } from 'src/app/shared/services/custom-dialog/custom-dialog.service';
 import { SavePositionFormComponent } from '../../position-forms/save-position-form/save-position-form.component';
 import { GameModeMinDTO } from 'src/app/models/dto/gamemode/response/GameModeMinDTO';
 import { Table } from 'primeng/table';

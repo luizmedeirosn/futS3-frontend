@@ -1,3 +1,4 @@
+import { ChangesOnService } from './../../../../shared/services/changed-on/changes-on.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -7,9 +8,10 @@ import { EditOrDeletePositionAction } from 'src/app/models/dto/position/events/E
 import { ViewPositionAction } from 'src/app/models/dto/position/events/ViewPositionAction';
 import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
 import { EnumPositionEventsCrud } from 'src/app/models/enums/EnumPositionEventsCrud';
+import { ChangesOn } from 'src/app/models/events/ChangesOn';
 import { PositionService } from 'src/app/services/position/position.service';
 import { EditPositionFormComponent } from 'src/app/shared/components/forms/position-forms/edit-position-form/edit-position-form.component';
-import { CustomDialogService } from 'src/app/shared/services/custom-dialog.service';
+import { CustomDialogService } from 'src/app/shared/services/custom-dialog/custom-dialog.service';
 
 @Component({
     selector: 'app-positions-home',
@@ -33,8 +35,8 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
         private messageService: MessageService,
         private customDialogService: CustomDialogService,
         private confirmationService: ConfirmationService,
-    ) {
-    }
+        private changesOnService: ChangesOnService,
+    ) { }
 
     public ngOnInit(): void {
         this.setPositionsWithApi();
@@ -52,15 +54,13 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
                 }
             );
 
-        this.positionService.getChangesOn()
+        this.changesOnService.getChangesOn()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
-                next: (changesOn: boolean) => {
-                    if (changesOn) {
+                next: (changesOn: ChangesOn) => {
+                    if (changesOn?.status) {
                         this.setPositionsWithApi();
-
-                        const changedPositionId: number = this.positionService.changedPositionId;
-                        changedPositionId && this.selectPosition(changedPositionId);
+                        changesOn.entityId && this.selectPosition(changesOn.entityId);
                     }
                 },
                 error: (err) => {
@@ -140,7 +140,7 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
                         detail: 'Position deleted successfully!',
                         life: 2000
                     });
-                    this.positionService.setChangesOn(true);
+                    this.changesOnService.setChangesOn(true);
                     this.handleBackAction();
                 },
                 error: (err) => {
@@ -153,7 +153,7 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
                         detail: 'Is the position part of a game mode or a player!',
                         life: 6000
                     });
-                    this.positionService.setChangesOn(false);
+                    this.changesOnService.setChangesOn(false);
                 }
             });
     }

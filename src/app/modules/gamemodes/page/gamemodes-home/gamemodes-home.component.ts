@@ -9,7 +9,7 @@ import { GameModeMinDTO } from 'src/app/models/dto/gamemode/response/GameModeMin
 import { EnumGameModeEventsCrud } from 'src/app/models/enums/EnumGameModeEventsCrud';
 import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
 import { EditGamemodeFormComponent } from 'src/app/shared/components/forms/gamemode-forms/edit-gamemode-form/edit-gamemode-form.component';
-import { CustomDialogService } from 'src/app/shared/services/custom-dialog.service';
+import { CustomDialogService } from 'src/app/shared/services/custom-dialog/custom-dialog.service';
 
 @Component({
     selector: 'app-gamemodes-home',

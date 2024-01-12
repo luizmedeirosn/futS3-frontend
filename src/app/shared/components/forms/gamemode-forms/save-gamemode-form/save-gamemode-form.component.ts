@@ -9,7 +9,7 @@ import { EnumPositionEventsCrud } from 'src/app/models/enums/EnumPositionEventsC
 import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
 import { PositionService } from 'src/app/services/position/position.service';
 import { SavePositionFormComponent } from '../../position-forms/save-position-form/save-position-form.component';
-import { CustomDialogService } from './../../../../services/custom-dialog.service';
+import { CustomDialogService } from '../../../../services/custom-dialog/custom-dialog.service';
 import { EditPositionFormComponent } from '../../position-forms/edit-position-form/edit-position-form.component';
 
 @Component({
@@ -134,8 +134,7 @@ export class SaveGamemodeFormComponent implements OnInit, OnDestroy {
             this.gameModeService.save(gameModeRequest)
                 .pipe(takeUntil(this.$destroy))
                 .subscribe({
-                    next: (gameMode) => {
-                        console.log(gameMode);
+                    next: () => {
                         this.gameModeService.setChangesOn(true);
                         this.messageService.clear();
                         this.messageService.add({

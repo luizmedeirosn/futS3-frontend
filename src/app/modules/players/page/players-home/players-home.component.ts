@@ -9,7 +9,7 @@ import { PlayerMinDTO } from 'src/app/models/dto/player/response/PlayerMinDTO';
 import { EnumPlayerEventsCrud } from 'src/app/models/enums/EnumPlayerEventsCrud';
 import { PlayerService } from 'src/app/services/player/player.service';
 import { EditPlayerFormComponent } from 'src/app/shared/components/forms/player-forms/edit-player-form/edit-player-form.component';
-import { CustomDialogService } from 'src/app/shared/services/custom-dialog.service';
+import { CustomDialogService } from 'src/app/shared/services/custom-dialog/custom-dialog.service';
 
 @Component({
     selector: 'app-players-home',
