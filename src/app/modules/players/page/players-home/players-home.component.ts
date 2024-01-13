@@ -9,6 +9,7 @@ import { PlayerMinDTO } from 'src/app/models/dto/player/response/PlayerMinDTO';
 import { EnumPlayerEventsCrud } from 'src/app/models/enums/EnumPlayerEventsCrud';
 import { PlayerService } from 'src/app/services/player/player.service';
 import { EditPlayerFormComponent } from 'src/app/shared/components/forms/player-forms/edit-player-form/edit-player-form.component';
+import { ChangesOnService } from 'src/app/shared/services/changed-on/changes-on.service';
 import { CustomDialogService } from 'src/app/shared/services/custom-dialog/custom-dialog.service';
 
 @Component({
@@ -32,6 +33,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
         private messageService: MessageService,
         private customDialogService: CustomDialogService,
         private confirmationService: ConfirmationService,
+        private changesOnService: ChangesOnService,
     ) {
     }
 
@@ -51,7 +53,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                 }
             );
 
-        this.playerService.getChangesOn()
+        this.changesOnService.getChangesOn()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
                 next: (changesOn: boolean) => {
@@ -143,7 +145,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                     });
 
                     this.playerService.changedPlayerId = undefined;
-                    this.playerService.setChangesOn(true);
+                    this.changesOnService.setChangesOn(true);
 
                     this.handleBackAction();
                 },
@@ -158,7 +160,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                         life: 6000
                     });
 
-                    this.playerService.setChangesOn(false);
+                    this.changesOnService.setChangesOn(false);
                 }
             });
     }

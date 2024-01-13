@@ -14,6 +14,7 @@ import { EnumPlayerEventsCrud } from 'src/app/models/enums/EnumPlayerEventsCrud'
 import { ParameterService } from 'src/app/services/parameter/parameter.service';
 import { PlayerService } from 'src/app/services/player/player.service';
 import { PositionService } from 'src/app/services/position/position.service';
+import { ChangesOnService } from 'src/app/shared/services/changed-on/changes-on.service';
 import { CustomDialogService } from 'src/app/shared/services/custom-dialog/custom-dialog.service';
 
 @Component({
@@ -64,6 +65,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
         private parameterService: ParameterService,
         private customDialogService: CustomDialogService,
         private dynamicDialogConfig: DynamicDialogConfig,
+        private changesOnService: ChangesOnService,
     ) { }
 
     public ngOnInit(): void {
@@ -272,7 +274,8 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                             const updatedPlayer = this.players.find(p => p.id === this.selectedPlayer?.id);
                             updatedPlayer && (updatedPlayer.name = playerResponse.name);
 
-                            this.playerService.setChangesOn(true, this.selectedPlayer?.id);
+                            this.changesOnService.setChangesOn(true);
+
                             this.messageService.clear();
                             this.messageService.add({
                                 severity: 'success',
@@ -284,7 +287,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                             this.handleBackAction();
                         },
                         error: (err) => {
-                            this.playerService.setChangesOn(false);
+                            this.changesOnService.setChangesOn(false);
                             this.messageService.clear();
                             this.messageService.add({
                                 severity: 'error',

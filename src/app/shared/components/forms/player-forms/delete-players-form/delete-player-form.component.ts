@@ -3,6 +3,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { PlayerMinDTO } from 'src/app/models/dto/player/response/PlayerMinDTO';
 import { PlayerService } from 'src/app/services/player/player.service';
+import { ChangesOnService } from 'src/app/shared/services/changed-on/changes-on.service';
 
 @Component({
     selector: 'app-delete-players-form',
@@ -22,6 +23,7 @@ export class DeletePlayerFormComponent implements OnInit, OnDestroy {
         private playerService: PlayerService,
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
+        private changesOnService: ChangesOnService,
     ) { }
 
     public ngOnInit(): void {
@@ -84,7 +86,8 @@ export class DeletePlayerFormComponent implements OnInit, OnDestroy {
                                 summary: 'Success',
                                 detail: 'Player deleted successfully!'
                             });
-                            this.playerService.setChangesOn(true);
+
+                            this.changesOnService.setChangesOn(true);
                         }, 1000);
                     },
                     error: (err) => {
@@ -95,7 +98,8 @@ export class DeletePlayerFormComponent implements OnInit, OnDestroy {
                             summary: 'Error',
                             detail: 'Unable to delete the player!'
                         });
-                        this.playerService.setChangesOn(false);
+
+                        this.changesOnService.setChangesOn(false);
                     }
                 });
         }
