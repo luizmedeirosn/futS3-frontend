@@ -69,6 +69,21 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
             this.handleSelectGameMode(action.selectedGameModeId);
             this.closeableDialog = true;
         }
+
+        this.changesOnService.getChangesOn()
+            .pipe(takeUntil(this.$destroy))
+            .subscribe({
+                next: (changesOn: boolean) => {
+                    if (changesOn) {
+                        const changedGameModeId: number | undefined = this.gameModeService.changedGameModeId;
+                        this.positionsOff = new Array();
+                        changedGameModeId && this.handleSelectGameMode(changedGameModeId);
+                    }
+                },
+                error: (err) => {
+                    console.log(err);
+                }
+            });
     }
 
     private setGameModesWithApi(): void {
