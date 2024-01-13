@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
+import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { Table } from 'primeng/table';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { ParameterDTO } from 'src/app/models/dto/parameter/response/ParameterDTO';
@@ -9,9 +10,12 @@ import { PlayerFullDTO } from 'src/app/models/dto/player/response/PlayerFullDTO'
 import { PlayerMinDTO } from 'src/app/models/dto/player/response/PlayerMinDTO';
 import { PlayerParameterScoreDTO } from 'src/app/models/dto/player/response/PlayerParameterScoreDTO';
 import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
+import { EnumPlayerEventsCrud } from 'src/app/models/enums/EnumPlayerEventsCrud';
 import { ParameterService } from 'src/app/services/parameter/parameter.service';
 import { PlayerService } from 'src/app/services/player/player.service';
 import { PositionService } from 'src/app/services/position/position.service';
+import { ChangesOnService } from 'src/app/shared/services/changed-on/changes-on.service';
+import { CustomDialogService } from 'src/app/shared/services/custom-dialog/custom-dialog.service';
 
 @Component({
     selector: 'app-edit-player-form',
@@ -28,6 +32,8 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
     private playersTablePages: PlayerMinDTO[][] = [];
 
     public $viewTable: BehaviorSubject<boolean> = new BehaviorSubject(true);
+    public closeableDialog: boolean = false;
+
     public players!: PlayerMinDTO[];
     public selectedPlayer!: PlayerFullDTO | undefined;
 
@@ -57,11 +63,20 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
         private playerService: PlayerService,
         private positionService: PositionService,
         private parameterService: ParameterService,
+        private customDialogService: CustomDialogService,
+        private dynamicDialogConfig: DynamicDialogConfig,
+        private changesOnService: ChangesOnService,
     ) { }
 
     public ngOnInit(): void {
         this.setPlayersWithApi();
         this.setPositionWithApi();
+
+        const action = this.dynamicDialogConfig.data;
+        if (action && action.$event === EnumPlayerEventsCrud.EDIT) {
+            this.handleSelectPlayer(action.selectedPlayerId);
+            this.closeableDialog = true;
+        }
     }
 
     private setPlayersWithApi(): void {
@@ -124,13 +139,15 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
     }
 
     private deleteIncludedPlayerParameters(): void {
-        const parametersNames = this.playerParametersScore.map(p => p.name);
-        this.parameters.forEach(parameter => {
-            if (parametersNames.includes(parameter.name)) {
-                this.parametersOff.push(parameter);
-                this.parameters = this.parameters.filter(p => p.name != parameter.name);
-            }
-        });
+        if (this.parameters) {
+            const parametersNames = this.playerParametersScore.map(p => p.name);
+            this.parameters.forEach(parameter => {
+                if (parametersNames.includes(parameter.name)) {
+                    this.parametersOff.push(parameter);
+                    this.parameters = this.parameters.filter(p => p.name != parameter.name);
+                }
+            });
+        }
     }
 
     public handleSelectPlayer($event: number): void {
@@ -142,7 +159,6 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                     next: (player) => {
                         if (player) {
                             this.selectedPlayer = player;
-                            this.$viewTable.next(false);
                             this.playerForm.setValue({
                                 name: player?.name,
                                 team: player?.team,
@@ -151,6 +167,8 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                                 position: player?.position,
                             });
                             this.playerParametersScore = player?.parameters;
+
+                            this.$viewTable.next(false);
                             this.$viewSelectedPicture.next(true);
 
                             this.deleteIncludedPlayerParameters();
@@ -164,6 +182,10 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
     }
 
     public handleBackAction(): void {
+        if (this.closeableDialog) {
+            this.playerPicture ? this.customDialogService.closeEndDialog(true) : this.customDialogService.closeEndDialog(false);
+        }
+
         this.$viewTable.next(true); // Activate the view child before referencing the table
         setTimeout(() => {
             if (this.selectedPlayer?.id !== undefined) {
@@ -176,8 +198,9 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                     const page = this.playersTablePages.at(numPage);
                     const firstPlayerPage: PlayerMinDTO | undefined = page?.at(0);
 
-                    this.playersTable.first =
-                        firstPlayerPage && this.players.indexOf(firstPlayerPage);
+                    this.playersTable &&
+                        (this.playersTable.first =
+                            firstPlayerPage && this.players.indexOf(firstPlayerPage));
                 }
             }
             this.selectedPlayer = undefined;
@@ -239,9 +262,10 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                     age: this.playerForm.value.age as string | undefined,
                     height: this.playerForm.value.height as string | undefined,
                     positionId: String(position.id),
-                    playerPicture: this.playerPicture || undefined,
+                    playerPicture: this.playerPicture ?? undefined,
                     parameters: this.playerParametersScore
                 };
+                this.playerPicture && (this.playerService.changedPlayerPicture = true);
 
                 this.playerService.update(playerRequest)
                     .pipe(takeUntil(this.$destroy))
@@ -250,7 +274,8 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                             const updatedPlayer = this.players.find(p => p.id === this.selectedPlayer?.id);
                             updatedPlayer && (updatedPlayer.name = playerResponse.name);
 
-                            this.playerService.setChangesOn(true);
+                            this.changesOnService.setChangesOn(true);
+
                             this.messageService.clear();
                             this.messageService.add({
                                 severity: 'success',
@@ -262,7 +287,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                             this.handleBackAction();
                         },
                         error: (err) => {
-                            this.playerService.setChangesOn(false);
+                            this.changesOnService.setChangesOn(false);
                             this.messageService.clear();
                             this.messageService.add({
                                 severity: 'error',

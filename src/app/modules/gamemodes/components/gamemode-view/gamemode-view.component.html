@@ -23,22 +23,35 @@
                     pRipple
                     icon="pi pi-pencil"
                     class="p-button-warning"
-                    pTooltip="Edit player data"
+                    pTooltip="Edit game mode data"
                     tooltipPosition="top"
+                    (click)="
+                        handleEditOrDeleteGameModeEvent({
+                            id: gameMode.id,
+                            action: gameModeEvents.EDIT
+                        })
+                    "
                 ></button>
                 <button
                     pButton
                     pRipple
                     icon="pi pi-trash"
                     class="p-button-danger"
-                    pTooltip="Delete player"
+                    pTooltip="Delete game mode"
                     tooltipPosition="top"
+                    (click)="
+                        handleEditOrDeleteGameModeEvent({
+                            id: gameMode.id,
+                            action: gameModeEvents.DELETE
+                        })
+                    "
                 ></button>
             </div>
         </div>
 
         <div
-            class="p-panel-custom p-panel-custom-name flex justify-content-between align-items-start mt-3 gap-3"
+            *ngIf="gameMode"
+            class="panel-custom panel-custom-name flex justify-content-between align-items-start mt-3 gap-3"
         >
             <p-panel header="Formation Name">
                 <p>
@@ -67,7 +80,10 @@
         </div>
 
         <p-table
-            *ngIf="gameMode.fields.length > 0; else withoutPositions"
+            *ngIf="
+                gameMode && gameMode.fields.length > 0;
+                else withoutPositions
+            "
             [value]="gameMode.fields"
             dataKey="positionId"
             sortField="positionName"

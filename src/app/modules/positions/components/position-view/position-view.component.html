@@ -25,6 +25,12 @@
                     class="p-button-warning"
                     pTooltip="Edit player data"
                     tooltipPosition="top"
+                    (click)="
+                        handleEditOrDeletePositionEvent({
+                            id: position.id,
+                            action: positionEvents.EDIT
+                        })
+                    "
                 ></button>
                 <button
                     pButton
@@ -33,12 +39,19 @@
                     class="p-button-danger"
                     pTooltip="Delete player"
                     tooltipPosition="top"
+                    (click)="
+                        handleEditOrDeletePositionEvent({
+                            id: position.id,
+                            action: positionEvents.DELETE
+                        })
+                    "
                 ></button>
             </div>
         </div>
 
         <div
-            class="p-panel-custom p-panel-custom-name flex justify-content-between align-items-start mt-3 gap-3"
+            *ngIf="position"
+            class="panel-custom panel-custom-name flex justify-content-between align-items-start mt-3 gap-3"
         >
             <p-panel header="Name">
                 <p>
@@ -67,7 +80,10 @@
         </div>
 
         <p-table
-            *ngIf="position.parameters.length > 0; else withoutParameters"
+            *ngIf="
+                position && position.parameters.length > 0;
+                else withoutParameters
+            "
             [value]="position.parameters"
             dataKey="id"
             styleClass="mt-2"

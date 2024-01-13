@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/app/environments/environment.prod';
+import { GameModeRequestDTO } from 'src/app/models/dto/gamemode/request/GameModeRequestDTO';
 import { GameModeFullDTO } from 'src/app/models/dto/gamemode/response/GameModeFullDTO';
 import { GameModeMinDTO } from 'src/app/models/dto/gamemode/response/GameModeMinDTO';
 import { PlayerFullScoreDTO } from 'src/app/models/dto/gamemode/response/PlayerFullScoreDTO';
 import { GameModePositionDTO } from '../../models/dto/gamemode/response/GameModePositonDTO';
-import { GameModeRequestDTO } from 'src/app/models/dto/gamemode/request/GameModeRequestDTO';
 
 @Injectable({
     providedIn: 'root'
@@ -14,27 +14,15 @@ import { GameModeRequestDTO } from 'src/app/models/dto/gamemode/request/GameMode
 export class GameModeService {
 
     private readonly API_URL: string = environment.API_URL;
-    private $changesOn: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-    public $gameModeView: Subject<boolean> = new Subject();
+    public $gameModeView: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
+    public changedGameModeId!: number | undefined;
+
 
     public constructor(
         private httpClient: HttpClient
-    ) {
-        this.$gameModeView.next(false);
-    }
-
-    public setChangesOn(status: boolean): void {
-        if (status !== null && status !== undefined) {
-            this.$changesOn.next(status);
-        } else {
-            console.error("Status is null or undefined");
-        }
-    }
-
-    public getChangesOn(): BehaviorSubject<boolean> {
-        return this.$changesOn;
-    }
+    ) { }
 
     public findAll(): Observable<GameModeMinDTO[]> {
         return this.httpClient.get<GameModeMinDTO[]>(

@@ -9,6 +9,7 @@ import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMin
 import { ParameterService } from 'src/app/services/parameter/parameter.service';
 import { PlayerService } from 'src/app/services/player/player.service';
 import { PositionService } from 'src/app/services/position/position.service';
+import { ChangesOnService } from 'src/app/shared/services/changed-on/changes-on.service';
 
 @Component({
     selector: 'app-players-form',
@@ -46,6 +47,7 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
         private positionService: PositionService,
         private parameterService: ParameterService,
         private playerService: PlayerService,
+        private changesOnService: ChangesOnService,
     ) { }
 
     public ngOnInit(): void {
@@ -135,7 +137,8 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
                     .pipe(takeUntil(this.$destroy))
                     .subscribe({
                         next: () => {
-                            this.playerService.setChangesOn(true);
+                            this.changesOnService.setChangesOn(true);
+
                             this.messageService.clear();
                             this.messageService.add({
                                 severity: 'success',
@@ -145,7 +148,8 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
                             });
                         },
                         error: (err) => {
-                            this.playerService.setChangesOn(false);
+                            this.changesOnService.setChangesOn(false);
+
                             this.messageService.clear();
                             this.messageService.add({
                                 severity: 'error',

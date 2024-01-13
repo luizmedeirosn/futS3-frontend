@@ -7,7 +7,6 @@ import { MenubarModule } from 'primeng/menubar';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CardModule } from 'primeng/card';
-import { ConfirmDialogModule } from "primeng/confirmdialog";
 import { DropdownModule } from 'primeng/dropdown';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -65,7 +64,6 @@ import { ShortenPipe } from './pipes/shorten.pipe';
         TooltipModule,
         CardModule,
         ProgressBarModule,
-        ConfirmDialogModule,
         InputTextareaModule,
     ],
     exports: [MenubarNavigationComponent, ShortenPipe, FormControlAlertComponent],

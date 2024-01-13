@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
-import { ViewPlayerAction } from 'src/app/models/dto/player/events/ViewPlayerAction';
+import { ViewAction } from 'src/app/models/events/ViewAction';
 import { PlayerMinDTO } from 'src/app/models/dto/player/response/PlayerMinDTO';
 
 @Component({
@@ -14,7 +14,7 @@ export class PlayersTableComponent {
     public players!: Array<PlayerMinDTO>;
 
     @Output()
-    public viewEvent: EventEmitter<ViewPlayerAction> = new EventEmitter();
+    public viewEvent: EventEmitter<ViewAction> = new EventEmitter();
 
     public handleViewFullDataPlayerEvent(id: number): void {
         this.viewEvent.emit({ id });

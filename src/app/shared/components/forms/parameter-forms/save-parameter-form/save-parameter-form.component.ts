@@ -3,8 +3,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
 import { ParameterRequestDTO } from 'src/app/models/dto/parameter/request/ParameterRequestDTO';
-import { ParameterDTO } from 'src/app/models/dto/parameter/response/ParameterDTO';
 import { ParameterService } from 'src/app/services/parameter/parameter.service';
+import { ChangesOnService } from 'src/app/shared/services/changed-on/changes-on.service';
 
 @Component({
     selector: 'app-save-parameter-form',
@@ -24,7 +24,8 @@ export class SaveParameterFormComponent implements OnDestroy {
     public constructor(
         private formBuilder: FormBuilder,
         private messageService: MessageService,
-        private parameterService: ParameterService
+        private parameterService: ParameterService,
+        private changesOnService: ChangesOnService,
     ) {
     }
 
@@ -37,8 +38,9 @@ export class SaveParameterFormComponent implements OnDestroy {
         this.parameterService.save(parameterResquest)
             .pipe(takeUntil(this.$destroy))
             .subscribe({
-                next: (parameter: ParameterDTO) => {
-                    this.parameterService.setChangesOn(true);
+                next: () => {
+                    this.changesOnService.setChangesOn(true);
+
                     this.messageService.clear();
                     this.messageService.add({
                         severity: 'success',
@@ -48,7 +50,8 @@ export class SaveParameterFormComponent implements OnDestroy {
                     });
                 },
                 error: (err) => {
-                    this.parameterService.setChangesOn(false);
+                    this.changesOnService.setChangesOn(false);
+
                     this.messageService.clear();
                     this.messageService.add({
                         severity: 'error',

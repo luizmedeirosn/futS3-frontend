@@ -3,6 +3,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { ParameterDTO } from 'src/app/models/dto/parameter/response/ParameterDTO';
 import { ParameterService } from 'src/app/services/parameter/parameter.service';
+import { ChangesOnService } from 'src/app/shared/services/changed-on/changes-on.service';
 
 @Component({
     selector: 'app-delete-parameter-form',
@@ -22,6 +23,7 @@ export class DeleteParameterFormComponent implements OnInit, OnDestroy {
         private parameterService: ParameterService,
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
+        private changesOnService: ChangesOnService,
     ) { }
 
     public ngOnInit(): void {
@@ -48,10 +50,10 @@ export class DeleteParameterFormComponent implements OnInit, OnDestroy {
             });
     }
 
-    public handleDeleteParameterEvent(event: ParameterDTO): void {
-        if (event) {
+    public handleDeleteParameterEvent($event: ParameterDTO): void {
+        if ($event) {
             this.confirmationService.confirm({
-                message: `Confirm the deletion of parameter: ${event?.name}?`,
+                message: `Confirm the deletion of parameter: ${$event?.name}?`,
                 header: 'Confirmation',
                 icon: 'pi pi-exclamation-triangle',
                 acceptLabel: 'Yes',
@@ -60,7 +62,7 @@ export class DeleteParameterFormComponent implements OnInit, OnDestroy {
                 rejectButtonStyleClass: 'p-button-text',
                 acceptIcon: "none",
                 rejectIcon: "none",
-                accept: () => this.handleDeleteParameterAction(event?.id)
+                accept: () => this.handleDeleteParameterAction($event?.id)
             });
         }
     }
@@ -84,7 +86,7 @@ export class DeleteParameterFormComponent implements OnInit, OnDestroy {
                                 summary: 'Success',
                                 detail: 'Parameter deleted successfully!'
                             });
-                            this.parameterService.setChangesOn(true);
+                            this.changesOnService.setChangesOn(true);
                         }, 1000);
                     },
                     error: (err) => {
@@ -95,7 +97,7 @@ export class DeleteParameterFormComponent implements OnInit, OnDestroy {
                             summary: 'Error',
                             detail: 'Unable to delete the parameter!'
                         });
-                        this.parameterService.setChangesOn(false);
+                        this.changesOnService.setChangesOn(false);
                     }
                 });
         }

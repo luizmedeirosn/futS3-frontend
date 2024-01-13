@@ -10,4 +10,5 @@
     *ngIf="gameModeView"
     [gameMode]="gameMode"
     (backEvent)="handleBackAction()"
+    (editOrDeleteGameModeEvent)="handleEditOrDeleteGameModeEvent($event)"
 ></app-gamemode-view>

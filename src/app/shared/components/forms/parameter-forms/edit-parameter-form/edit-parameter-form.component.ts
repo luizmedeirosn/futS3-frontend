@@ -6,6 +6,7 @@ import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { ParameterRequestDTO } from 'src/app/models/dto/parameter/request/ParameterRequestDTO';
 import { ParameterDTO } from 'src/app/models/dto/parameter/response/ParameterDTO';
 import { ParameterService } from 'src/app/services/parameter/parameter.service';
+import { ChangesOnService } from 'src/app/shared/services/changed-on/changes-on.service';
 
 @Component({
     selector: 'app-edit-parameter-form',
@@ -33,7 +34,9 @@ export class EditParameterFormComponent implements OnInit, OnDestroy {
     public constructor(
         private formBuilder: FormBuilder,
         private messageService: MessageService,
-        private parameterService: ParameterService
+        private parameterService: ParameterService,
+        private changesOnService: ChangesOnService,
+
     ) {
     }
 
@@ -115,8 +118,6 @@ export class EditParameterFormComponent implements OnInit, OnDestroy {
                         const parameter: ParameterDTO | undefined = this.parameters.find(parameter => parameter.id === firstParameterPage.id);
 
                         this.parametersTable.first = parameter && this.parameters.indexOf(parameter);
-                        console.log(this.parameters)
-                        console.log(firstParameterPage);
                     }
                 }
             }
@@ -138,7 +139,8 @@ export class EditParameterFormComponent implements OnInit, OnDestroy {
                         const parameterUpdated = this.parameters.find(p => p.id === this.selectedParameter?.id);
                         parameterUpdated && (parameterUpdated.name = parameter.name);
 
-                        this.parameterService.setChangesOn(true);
+                        this.changesOnService.setChangesOn(true);
+
                         this.messageService.clear();
                         this.messageService.add({
                             severity: 'success',
@@ -150,7 +152,8 @@ export class EditParameterFormComponent implements OnInit, OnDestroy {
                         this.handleBackAction();
                     },
                     error: (err) => {
-                        this.parameterService.setChangesOn(false);
+                        this.changesOnService.setChangesOn(false);
+
                         this.messageService.clear();
                         this.messageService.add({
                             severity: 'error',

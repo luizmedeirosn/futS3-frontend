@@ -10,4 +10,5 @@
     *ngIf="playerView"
     [player]="player"
     (backEvent)="handleBackAction()"
+    (editOrDeletePlayerEvent)="handleEditOrDeletePlayerEvent($event)"
 ></app-player-view>

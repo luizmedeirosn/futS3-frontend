@@ -3,6 +3,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
 import { PositionService } from 'src/app/services/position/position.service';
+import { ChangesOnService } from 'src/app/shared/services/changed-on/changes-on.service';
 
 @Component({
     selector: 'app-delete-position-form',
@@ -22,6 +23,7 @@ export class DeletePositionFormComponent implements OnInit, OnDestroy {
         private positionService: PositionService,
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
+        private changesOnService: ChangesOnService,
     ) { }
 
     public ngOnInit(): void {
@@ -48,10 +50,10 @@ export class DeletePositionFormComponent implements OnInit, OnDestroy {
             });
     }
 
-    public handleDeletePositionEvent(event: PositionMinDTO): void {
-        if (event) {
+    public handleDeletePositionEvent($event: PositionMinDTO): void {
+        if ($event) {
             this.confirmationService.confirm({
-                message: `Confirm the deletion of position: ${event?.name}?`,
+                message: `Confirm the deletion of position: ${$event?.name}?`,
                 header: 'Confirmation',
                 icon: 'pi pi-exclamation-triangle',
                 acceptLabel: 'Yes',
@@ -60,7 +62,7 @@ export class DeletePositionFormComponent implements OnInit, OnDestroy {
                 rejectButtonStyleClass: 'p-button-text',
                 acceptIcon: "none",
                 rejectIcon: "none",
-                accept: () => this.handleDeletePositionAction(event?.id)
+                accept: () => this.handleDeletePositionAction($event?.id)
             });
         }
     }
@@ -85,13 +87,13 @@ export class DeletePositionFormComponent implements OnInit, OnDestroy {
                                 detail: 'Position deleted successfully!',
                                 life: this.toastLife
                             });
-                            this.positionService.setChangesOn(true);
+                            this.changesOnService.setChangesOn(true);
                         }, 1000);
                     },
                     error: (err) => {
                         setTimeout(() => {
                             console.log(err);
-                            this.positionService.setChangesOn(false);
+                            this.changesOnService.setChangesOn(false);
                             this.messageService.clear();
                             this.messageService.add({
                                 key: 'deletion-error',

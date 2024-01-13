@@ -1,18 +1,19 @@
-import { ParameterWeightDTO } from 'src/app/models/dto/position/data/ParameterWeightDTO';
 import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
+import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { Table } from 'primeng/table';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { ParameterDTO } from 'src/app/models/dto/parameter/response/ParameterDTO';
+import { ParameterWeightDTO } from 'src/app/models/dto/position/data/ParameterWeightDTO';
 import { PositionRequestDTO } from 'src/app/models/dto/position/request/PositionRequestDTO';
 import { PositionDTO } from 'src/app/models/dto/position/response/PositionDTO';
+import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
+import { EnumPositionEventsCrud } from 'src/app/models/enums/EnumPositionEventsCrud';
 import { ParameterService } from 'src/app/services/parameter/parameter.service';
 import { PositionService } from 'src/app/services/position/position.service';
-import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
-import { DynamicDialogConfig } from 'primeng/dynamicdialog';
-import { EnumPositionEventsCrud } from 'src/app/models/enums/EnumPositionEventsCrud';
-import { CustomDialogService } from 'src/app/shared/services/custom-dialog.service';
+import { ChangesOnService } from 'src/app/shared/services/changed-on/changes-on.service';
+import { CustomDialogService } from 'src/app/shared/services/custom-dialog/custom-dialog.service';
 
 @Component({
     selector: 'app-edit-position-form',
@@ -29,7 +30,7 @@ export class EditPositionFormComponent {
     private positionsTablePages: Array<Array<PositionDTO>> = new Array();
 
     public $viewTable: BehaviorSubject<boolean> = new BehaviorSubject(true);
-    private closeableDialog: boolean = false;
+    public closeableDialog: boolean = false;
 
     public positions!: Array<PositionDTO>;
     public selectedPosition!: PositionDTO | undefined;
@@ -52,8 +53,9 @@ export class EditPositionFormComponent {
         private messageService: MessageService,
         private positionService: PositionService,
         private parameterService: ParameterService,
+        private customDialogService: CustomDialogService,
         private dynamicDialogConfig: DynamicDialogConfig,
-        private customDialogService: CustomDialogService
+        private changesOnService: ChangesOnService,
     ) { }
 
     public ngOnInit(): void {
@@ -61,7 +63,7 @@ export class EditPositionFormComponent {
         this.setParametersWithApi();
 
         const action = this.dynamicDialogConfig.data;
-        if (action.$event === EnumPositionEventsCrud.EDIT) {
+        if (action && action.$event === EnumPositionEventsCrud.EDIT) {
             this.handleSelectPosition(action.selectedPositionId);
             this.closeableDialog = true;
         }
@@ -114,13 +116,15 @@ export class EditPositionFormComponent {
     }
 
     private deleteIncludedPositionParameters(): void {
-        const parametersNames = this.positionParameters.map(p => p.name);
-        this.parameters.forEach(parameter => {
-            if (parametersNames.includes(parameter.name)) {
-                this.parametersOff.push(parameter);
-                this.parameters = this.parameters.filter(p => p.name != parameter.name);
-            }
-        });
+        if (this.positionParameters) {
+            const parametersNames = this.positionParameters.map(p => p.name);
+            this.parameters.forEach(parameter => {
+                if (parametersNames.includes(parameter.name)) {
+                    this.parametersOff.push(parameter);
+                    this.parameters = this.parameters.filter(p => p.name != parameter.name);
+                }
+            });
+        }
     }
 
     public handleSelectPosition($event: number): void {
@@ -152,7 +156,7 @@ export class EditPositionFormComponent {
     }
 
     public handleBackAction(): void {
-        this.closeableDialog && this.customDialogService.close(false);
+        this.closeableDialog && this.customDialogService.closeEndDialog(false);
 
         this.$viewTable.next(true); // Activate the view child before referencing the table
         setTimeout(() => {
@@ -166,8 +170,9 @@ export class EditPositionFormComponent {
                     const page = this.positionsTablePages.at(numPage);
                     const firstPositionPage: PositionDTO | undefined = page?.at(0);
 
-                    this.playersTable.first =
-                        firstPositionPage && this.positions.indexOf(firstPositionPage);
+                    this.playersTable &&
+                        (this.playersTable.first =
+                            firstPositionPage && this.positions.indexOf(firstPositionPage));
                 }
             }
             this.selectedPosition = undefined;
@@ -226,7 +231,8 @@ export class EditPositionFormComponent {
                         const positionUpdated = this.positions.find(p => p.id === this.selectedPosition?.id);
                         positionUpdated && (positionUpdated.name = position.name);
 
-                        this.positionService.setChangesOn(true);
+                        this.changesOnService.setChangesOn(true);
+
                         this.messageService.clear();
                         this.messageService.add({
                             severity: 'success',
@@ -238,7 +244,8 @@ export class EditPositionFormComponent {
                         this.handleBackAction();
                     },
                     error: (err) => {
-                        this.positionService.setChangesOn(false);
+                        this.changesOnService.setChangesOn(false);
+
                         this.messageService.clear();
                         this.messageService.add({
                             severity: 'error',

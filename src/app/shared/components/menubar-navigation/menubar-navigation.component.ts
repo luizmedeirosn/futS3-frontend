@@ -7,7 +7,7 @@ import { EnumPlayerEventsCrud } from 'src/app/models/enums/EnumPlayerEventsCrud'
 import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
 import { PlayerService } from 'src/app/services/player/player.service';
 import { PositionService } from 'src/app/services/position/position.service';
-import { CustomDialogService } from '../../services/custom-dialog.service';
+import { CustomDialogService } from '../../services/custom-dialog/custom-dialog.service';
 import { DeleteParameterFormComponent } from '../forms/parameter-forms/delete-parameter-form/delete-parameter-form.component';
 import { DeletePlayerFormComponent } from '../forms/player-forms/delete-players-form/delete-player-form.component';
 import { EditPlayerFormComponent } from '../forms/player-forms/edit-player-form/edit-player-form.component';
@@ -251,22 +251,8 @@ export class MenubarNavigationComponent implements OnInit, OnDestroy {
 
                             this.dynamicDialogRef.onClose
                                 .pipe(takeUntil(this.$destroy))
-                                .subscribe({
-                                    next: () => {
-                                        this.playerService.getChangesOn()
-                                            .pipe(takeUntil(this.$destroy))
-                                            .subscribe({
-                                                next: (changesOn) => {
-                                                    if (changesOn) {
-                                                        window.location.reload();
-                                                    }
-                                                }
-                                            });
-                                    },
-                                    error: (err) => {
-                                        console.log(err);
-                                    }
-                                });
+                                .subscribe(() =>
+                                    this.playerService.changedPlayerPicture && window.location.reload())
                         }
                     },
                     {

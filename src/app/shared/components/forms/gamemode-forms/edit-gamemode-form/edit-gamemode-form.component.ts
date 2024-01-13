@@ -1,19 +1,21 @@
 import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { GameModeRequestDTO } from 'src/app/models/dto/gamemode/request/GameModeRequestDTO';
 import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
 import { EnumPositionEventsCrud } from 'src/app/models/enums/EnumPositionEventsCrud';
 import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
 import { PositionService } from 'src/app/services/position/position.service';
-import { CustomDialogService } from 'src/app/shared/services/custom-dialog.service';
+import { CustomDialogService } from 'src/app/shared/services/custom-dialog/custom-dialog.service';
 import { SavePositionFormComponent } from '../../position-forms/save-position-form/save-position-form.component';
 import { GameModeMinDTO } from 'src/app/models/dto/gamemode/response/GameModeMinDTO';
 import { Table } from 'primeng/table';
 import { GameModeFullDTO } from 'src/app/models/dto/gamemode/response/GameModeFullDTO';
 import { EditPositionFormComponent } from '../../position-forms/edit-position-form/edit-position-form.component';
+import { EnumGameModeEventsCrud } from 'src/app/models/enums/EnumGameModeEventsCrud';
+import { ChangesOnService } from 'src/app/shared/services/changed-on/changes-on.service';
 
 @Component({
     selector: 'app-edit-gamemode-form',
@@ -26,10 +28,11 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
     private readonly $destroy: Subject<void> = new Subject();
     private readonly toastLife: number = 2000;
 
-    @ViewChild('gameModesTable') public playersTable!: Table;
+    @ViewChild('gameModesTable') public gameModesTable!: Table;
     private gameModesTablePages: Array<Array<GameModeMinDTO>> = new Array();
 
     public $viewTable: BehaviorSubject<boolean> = new BehaviorSubject(true);
+    public closeableDialog: boolean = false;
 
     public gameModes!: Array<GameModeMinDTO>;
     public selectedGameMode!: GameModeMinDTO | undefined;
@@ -53,14 +56,37 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
         private positionService: PositionService,
         private gameModeService: GameModeService,
         private customDialogService: CustomDialogService,
+        private dynamicDialogConfig: DynamicDialogConfig,
+        private changesOnService: ChangesOnService,
     ) { }
 
     public ngOnInit(): void {
         this.setGameModesWithApi();
         this.setPositionsWithApi();
+
+        const action = this.dynamicDialogConfig.data;
+        if (action && action.$event === EnumGameModeEventsCrud.EDIT) {
+            this.handleSelectGameMode(action.selectedGameModeId);
+            this.closeableDialog = true;
+        }
+
+        this.changesOnService.getChangesOn()
+            .pipe(takeUntil(this.$destroy))
+            .subscribe({
+                next: (changesOn: boolean) => {
+                    if (changesOn) {
+                        const changedGameModeId: number | undefined = this.gameModeService.changedGameModeId;
+                        this.positionsOff = new Array();
+                        changedGameModeId && this.handleSelectGameMode(changedGameModeId);
+                    }
+                },
+                error: (err) => {
+                    console.log(err);
+                }
+            });
     }
 
-    public setGameModesWithApi(): void {
+    private setGameModesWithApi(): void {
         this.gameModeService.findAll()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
@@ -146,6 +172,8 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
     }
 
     public handleBackAction(): void {
+        this.closeableDialog && this.customDialogService.closeEndDialog(false);
+
         this.$viewTable.next(true); // Activate the view child before referencing the table
         setTimeout(() => {
             if (this.selectedGameMode?.id !== undefined) {
@@ -158,8 +186,9 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
                     const page = this.gameModesTablePages.at(numPage);
                     const firstGameModePage: GameModeMinDTO | undefined = page?.at(0);
 
-                    this.playersTable.first =
-                        firstGameModePage && this.gameModes.indexOf(firstGameModePage);
+                    this.gameModesTable &&
+                        (this.gameModesTable.first =
+                            firstGameModePage && this.gameModes.indexOf(firstGameModePage));
                 }
             }
             this.selectedGameMode = undefined;
@@ -220,7 +249,7 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
             return 1;
         }
         return 0;
-    };
+    }
 
     public handleDeletePosition($event: number): void {
         const position: PositionMinDTO | undefined = this.positionsOff.find((p) => p.id === $event);
@@ -244,7 +273,8 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
                         const gameModeUpdated = this.gameModes.find(p => p.id === this.selectedGameMode?.id);
                         gameModeUpdated && (gameModeUpdated.formationName = gameMode.formationName);
 
-                        this.gameModeService.setChangesOn(true);
+                        this.changesOnService.setChangesOn(true);
+
                         this.messageService.clear();
                         this.messageService.add({
                             severity: 'success',
@@ -256,7 +286,8 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
                         this.handleBackAction();
                     },
                     error: (err) => {
-                        this.gameModeService.setChangesOn(false);
+                        this.changesOnService.setChangesOn(false);
+
                         this.messageService.clear();
                         this.messageService.add({
                             severity: 'error',

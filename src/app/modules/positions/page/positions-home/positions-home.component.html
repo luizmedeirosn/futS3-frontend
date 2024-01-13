@@ -10,4 +10,5 @@
     *ngIf="positionView"
     [position]="position"
     (backEvent)="handleBackAction()"
+    (editOrDeletePositionEvent)="handleEditOrDeletePositionEvent($event)"
 ></app-position-view>
