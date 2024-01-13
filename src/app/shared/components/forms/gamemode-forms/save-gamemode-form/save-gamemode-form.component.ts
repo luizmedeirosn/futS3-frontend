@@ -11,7 +11,7 @@ import { PositionService } from 'src/app/services/position/position.service';
 import { SavePositionFormComponent } from '../../position-forms/save-position-form/save-position-form.component';
 import { CustomDialogService } from '../../../../services/custom-dialog/custom-dialog.service';
 import { EditPositionFormComponent } from '../../position-forms/edit-position-form/edit-position-form.component';
-import { ChangesOnService } from 'src/app/shared/services/changed-on/changes-on.service';
+import { ChangesOnService } from 'src/app/shared/services/changes-on/changes-on.service';
 
 @Component({
     selector: 'app-save-gamemode-form',

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { environment } from 'src/app/environments/environment.prod';
 import { PositionRequestDTO } from 'src/app/models/dto/position/request/PositionRequestDTO';
 import { PositionDTO } from 'src/app/models/dto/position/response/PositionDTO';
@@ -13,13 +13,15 @@ export class PositionService {
 
     private readonly API_URL: string = environment.API_URL;
 
-    public readonly $positionView: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    public $positionView: Subject<boolean> = new Subject();
 
     public changedPositionId!: number | undefined;
 
     public constructor(
         private httpClient: HttpClient
-    ) { }
+    ) {
+        this.$positionView.next(false);
+    }
 
     public findAll(): Observable<Array<PositionMinDTO>> {
         return this.httpClient.get<Array<PositionMinDTO>>(

@@ -9,7 +9,7 @@ import { PlayerMinDTO } from 'src/app/models/dto/player/response/PlayerMinDTO';
 import { EnumPlayerEventsCrud } from 'src/app/models/enums/EnumPlayerEventsCrud';
 import { PlayerService } from 'src/app/services/player/player.service';
 import { EditPlayerFormComponent } from 'src/app/shared/components/forms/player-forms/edit-player-form/edit-player-form.component';
-import { ChangesOnService } from 'src/app/shared/services/changed-on/changes-on.service';
+import { ChangesOnService } from 'src/app/shared/services/changes-on/changes-on.service';
 import { CustomDialogService } from 'src/app/shared/services/custom-dialog/custom-dialog.service';
 
 @Component({
@@ -185,7 +185,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
             this.dynamicDialogRef = this.customDialogService.open(
                 EditPlayerFormComponent,
                 {
-                    Player: 'top',
+                    position: 'top',
                     header: EnumPlayerEventsCrud.EDIT.valueOf(),
                     contentStyle: { overflow: 'auto' },
                     baseZIndex: 10000,

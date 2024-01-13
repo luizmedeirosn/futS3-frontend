@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { environment } from 'src/app/environments/environment.prod';
 import { PostPlayerDTO } from 'src/app/models/dto/player/request/PostPlayerDTO';
 import { UpdatePlayerDTO } from 'src/app/models/dto/player/request/UpdatePlayerDTO';
@@ -17,7 +17,7 @@ export class PlayerService {
     public changedPlayerId!: number | undefined;
     public changedPlayerPicture!: boolean;
 
-    public $playerView: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    public $playerView: Subject<boolean> = new Subject();
 
 
     public constructor(

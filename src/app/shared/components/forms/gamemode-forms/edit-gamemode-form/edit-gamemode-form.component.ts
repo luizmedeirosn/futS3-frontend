@@ -15,7 +15,7 @@ import { Table } from 'primeng/table';
 import { GameModeFullDTO } from 'src/app/models/dto/gamemode/response/GameModeFullDTO';
 import { EditPositionFormComponent } from '../../position-forms/edit-position-form/edit-position-form.component';
 import { EnumGameModeEventsCrud } from 'src/app/models/enums/EnumGameModeEventsCrud';
-import { ChangesOnService } from 'src/app/shared/services/changed-on/changes-on.service';
+import { ChangesOnService } from 'src/app/shared/services/changes-on/changes-on.service';
 
 @Component({
     selector: 'app-edit-gamemode-form',

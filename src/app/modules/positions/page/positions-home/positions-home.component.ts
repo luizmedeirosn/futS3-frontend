@@ -9,7 +9,7 @@ import { EnumPositionEventsCrud } from 'src/app/models/enums/EnumPositionEventsC
 import { PositionService } from 'src/app/services/position/position.service';
 import { EditPositionFormComponent } from 'src/app/shared/components/forms/position-forms/edit-position-form/edit-position-form.component';
 import { CustomDialogService } from 'src/app/shared/services/custom-dialog/custom-dialog.service';
-import { ChangesOnService } from './../../../../shared/services/changed-on/changes-on.service';
+import { ChangesOnService } from '../../../../shared/services/changes-on/changes-on.service';
 import { ViewAction } from 'src/app/models/events/ViewAction';
 
 @Component({
