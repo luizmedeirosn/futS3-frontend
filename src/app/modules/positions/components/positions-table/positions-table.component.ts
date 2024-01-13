@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ViewPositionAction } from 'src/app/models/dto/position/events/ViewPositionAction';
 import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
+import { ViewAction } from 'src/app/models/events/ViewAction';
 
 @Component({
     selector: 'app-positions-table',
@@ -13,7 +13,7 @@ export class PositionsTableComponent {
     public positions!: PositionMinDTO[];
 
     @Output()
-    public viewEvent: EventEmitter<ViewPositionAction> = new EventEmitter();
+    public viewEvent: EventEmitter<ViewAction> = new EventEmitter();
 
     public handleViewFullDataPositionEvent(position: PositionMinDTO): void {
         this.viewEvent.emit(

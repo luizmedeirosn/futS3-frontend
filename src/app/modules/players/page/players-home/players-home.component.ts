@@ -2,8 +2,8 @@ import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
-import { EditOrDeletePlayerAction } from 'src/app/models/dto/player/events/EditOrDeletePlayerAction';
-import { ViewPlayerAction } from 'src/app/models/dto/player/events/ViewPlayerAction';
+import { EditOrDeletePlayerAction } from 'src/app/models/events/EditOrDeletePlayerAction';
+import { ViewAction } from 'src/app/models/events/ViewAction';
 import { PlayerFullDTO } from 'src/app/models/dto/player/response/PlayerFullDTO';
 import { PlayerMinDTO } from 'src/app/models/dto/player/response/PlayerMinDTO';
 import { EnumPlayerEventsCrud } from 'src/app/models/enums/EnumPlayerEventsCrud';
@@ -120,7 +120,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
             );
     }
 
-    public handleViewFullDataPlayerAction($event: ViewPlayerAction): void {
+    public handleViewFullDataPlayerAction($event: ViewAction): void {
         if ($event) {
             this.selectPlayer($event.id)
             this.playerService.$playerView.next(true);

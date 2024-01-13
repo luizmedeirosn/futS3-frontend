@@ -3,14 +3,14 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
 import { FullDataPosition } from 'src/app/models/dto/position/data/FullDataPosition';
-import { EditOrDeletePositionAction } from 'src/app/models/dto/position/events/EditOrDeletePositionAction';
-import { ViewPositionAction } from 'src/app/models/dto/position/events/ViewPositionAction';
+import { EditOrDeletePositionAction } from 'src/app/models/events/EditOrDeletePositionAction';
 import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
 import { EnumPositionEventsCrud } from 'src/app/models/enums/EnumPositionEventsCrud';
 import { PositionService } from 'src/app/services/position/position.service';
 import { EditPositionFormComponent } from 'src/app/shared/components/forms/position-forms/edit-position-form/edit-position-form.component';
 import { CustomDialogService } from 'src/app/shared/services/custom-dialog/custom-dialog.service';
 import { ChangesOnService } from './../../../../shared/services/changed-on/changes-on.service';
+import { ViewAction } from 'src/app/models/events/ViewAction';
 
 @Component({
     selector: 'app-positions-home',
@@ -119,7 +119,7 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
             );
     }
 
-    public handleViewFullDataPositionAction($event: ViewPositionAction): void {
+    public handleViewFullDataPositionAction($event: ViewAction): void {
         if ($event) {
             this.selectPosition($event.id);
             this.positionService.$positionView.next(true);

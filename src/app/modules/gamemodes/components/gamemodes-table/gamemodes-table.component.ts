@@ -1,6 +1,6 @@
-import { GameModeMinDTO } from 'src/app/models/dto/gamemode/response/GameModeMinDTO';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ViewGameModeAction } from 'src/app/models/dto/gamemode/event/ViewGameModeAction';
+import { GameModeMinDTO } from 'src/app/models/dto/gamemode/response/GameModeMinDTO';
+import { ViewAction } from 'src/app/models/events/ViewAction';
 
 @Component({
     selector: 'app-gamemodes-table',
@@ -13,7 +13,7 @@ export class GameModesTableComponent {
     public gameModes!: GameModeMinDTO[];
 
     @Output()
-    public viewEvent: EventEmitter<ViewGameModeAction> = new EventEmitter();
+    public viewEvent: EventEmitter<ViewAction> = new EventEmitter();
 
     public handleViewFullDataGameModeEvent(id: number): void {
         this.viewEvent.emit(

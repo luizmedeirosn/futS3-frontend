@@ -2,11 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
-import { EditOrDeleteGameModeAction } from 'src/app/models/dto/gamemode/event/EditOrDeleteGameModeAction';
-import { ViewGameModeAction } from 'src/app/models/dto/gamemode/event/ViewGameModeAction';
 import { GameModeFullDTO } from 'src/app/models/dto/gamemode/response/GameModeFullDTO';
 import { GameModeMinDTO } from 'src/app/models/dto/gamemode/response/GameModeMinDTO';
 import { EnumGameModeEventsCrud } from 'src/app/models/enums/EnumGameModeEventsCrud';
+import { EditOrDeleteGameModeAction } from 'src/app/models/events/EditOrDeleteGameModeAction';
+import { ViewAction } from 'src/app/models/events/ViewAction';
 import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
 import { EditGamemodeFormComponent } from 'src/app/shared/components/forms/gamemode-forms/edit-gamemode-form/edit-gamemode-form.component';
 import { ChangesOnService } from 'src/app/shared/services/changed-on/changes-on.service';
@@ -121,7 +121,7 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
             );
     }
 
-    public handleViewFullDataGameModeAction($event: ViewGameModeAction): void {
+    public handleViewFullDataGameModeAction($event: ViewAction): void {
         if ($event) {
             this.selectGameMode($event.id);
         } this.gameModeService.$gameModeView.next(true);

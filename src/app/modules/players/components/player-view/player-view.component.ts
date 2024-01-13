@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
-import { EditOrDeletePlayerAction } from 'src/app/models/dto/player/events/EditOrDeletePlayerAction';
+import { EditOrDeletePlayerAction } from 'src/app/models/events/EditOrDeletePlayerAction';
 import { PlayerFullDTO } from 'src/app/models/dto/player/response/PlayerFullDTO';
 import { EnumPlayerEventsCrud } from 'src/app/models/enums/EnumPlayerEventsCrud';
 

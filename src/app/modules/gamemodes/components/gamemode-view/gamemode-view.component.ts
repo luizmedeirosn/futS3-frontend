@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
-import { EditOrDeleteGameModeAction } from 'src/app/models/dto/gamemode/event/EditOrDeleteGameModeAction';
 import { GameModeFullDTO } from 'src/app/models/dto/gamemode/response/GameModeFullDTO';
 import { EnumGameModeEventsCrud } from 'src/app/models/enums/EnumGameModeEventsCrud';
+import { EditOrDeleteGameModeAction } from 'src/app/models/events/EditOrDeleteGameModeAction';
 
 @Component({
     selector: 'app-gamemode-view',
