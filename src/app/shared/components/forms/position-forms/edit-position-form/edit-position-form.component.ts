@@ -116,13 +116,15 @@ export class EditPositionFormComponent {
     }
 
     private deleteIncludedPositionParameters(): void {
-        const parametersNames = this.positionParameters.map(p => p.name);
-        this.parameters.forEach(parameter => {
-            if (parametersNames.includes(parameter.name)) {
-                this.parametersOff.push(parameter);
-                this.parameters = this.parameters.filter(p => p.name != parameter.name);
-            }
-        });
+        if (this.positionParameters) {
+            const parametersNames = this.positionParameters.map(p => p.name);
+            this.parameters.forEach(parameter => {
+                if (parametersNames.includes(parameter.name)) {
+                    this.parametersOff.push(parameter);
+                    this.parameters = this.parameters.filter(p => p.name != parameter.name);
+                }
+            });
+        }
     }
 
     public handleSelectPosition($event: number): void {
@@ -230,6 +232,7 @@ export class EditPositionFormComponent {
                         positionUpdated && (positionUpdated.name = position.name);
 
                         this.changesOnService.setChangesOn(true);
+
                         this.messageService.clear();
                         this.messageService.add({
                             severity: 'success',
@@ -242,6 +245,7 @@ export class EditPositionFormComponent {
                     },
                     error: (err) => {
                         this.changesOnService.setChangesOn(false);
+
                         this.messageService.clear();
                         this.messageService.add({
                             severity: 'error',

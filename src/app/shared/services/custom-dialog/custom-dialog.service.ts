@@ -11,13 +11,12 @@ export class CustomDialogService {
 
     public constructor(
         private dialogService: DialogService,
-    ) {
-    }
+    ) { }
 
     public open(component: any, styles: any): DynamicDialogRef {
         const ref: DynamicDialogRef = this.dialogService.open(component, styles);
 
-        this.dynamicDialogRefs.length > 0 && ref.onClose.pipe(take(1)).subscribe(() => this.closeEndDialog(false));
+        ref.onClose.pipe(take(1)).subscribe(() => this.dynamicDialogRefs.includes(ref) && this.dynamicDialogRefs.pop());
 
         this.dynamicDialogRefs.push(ref);
         return ref;
