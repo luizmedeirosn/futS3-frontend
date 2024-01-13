@@ -3,7 +3,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
 import { PositionService } from 'src/app/services/position/position.service';
-import { ChangesOnService } from 'src/app/shared/services/changed-on/changes-on.service';
+import { ChangesOnService } from 'src/app/shared/services/changes-on/changes-on.service';
 
 @Component({
     selector: 'app-delete-position-form',

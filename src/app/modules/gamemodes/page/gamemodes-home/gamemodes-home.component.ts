@@ -9,7 +9,7 @@ import { EditOrDeleteGameModeAction } from 'src/app/models/events/EditOrDeleteGa
 import { ViewAction } from 'src/app/models/events/ViewAction';
 import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
 import { EditGamemodeFormComponent } from 'src/app/shared/components/forms/gamemode-forms/edit-gamemode-form/edit-gamemode-form.component';
-import { ChangesOnService } from 'src/app/shared/services/changed-on/changes-on.service';
+import { ChangesOnService } from 'src/app/shared/services/changes-on/changes-on.service';
 import { CustomDialogService } from 'src/app/shared/services/custom-dialog/custom-dialog.service';
 
 @Component({
@@ -24,7 +24,7 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
 
     public gameModes!: GameModeMinDTO[];
 
-    public gameModeView!: boolean;
+    public gameModeView: Subject<boolean> = this.gameModeService.$gameModeView;
     public gameMode!: GameModeFullDTO;
 
     private dynamicDialogRef!: DynamicDialogRef;
@@ -40,19 +40,6 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.setGameModesWithApi();
-
-        this.gameModeService.$gameModeView
-            .pipe(takeUntil(this.$destroy))
-            .subscribe(
-                {
-                    next: (gameModeView) => {
-                        this.gameModeView = gameModeView;
-                    },
-                    error: (err) => {
-                        console.log(err);
-                    }
-                }
-            );
 
         this.changesOnService.getChangesOn()
             .pipe(takeUntil(this.$destroy))

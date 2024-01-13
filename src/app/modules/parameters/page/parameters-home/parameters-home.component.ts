@@ -3,7 +3,7 @@ import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
 import { ParameterDTO } from 'src/app/models/dto/parameter/response/ParameterDTO';
 import { ParameterService } from 'src/app/services/parameter/parameter.service';
-import { ChangesOnService } from 'src/app/shared/services/changed-on/changes-on.service';
+import { ChangesOnService } from 'src/app/shared/services/changes-on/changes-on.service';
 
 @Component({
     selector: 'app-parameters-home',

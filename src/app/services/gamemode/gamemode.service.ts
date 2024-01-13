@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { environment } from 'src/app/environments/environment.prod';
 import { GameModeRequestDTO } from 'src/app/models/dto/gamemode/request/GameModeRequestDTO';
 import { GameModeFullDTO } from 'src/app/models/dto/gamemode/response/GameModeFullDTO';
@@ -15,14 +15,16 @@ export class GameModeService {
 
     private readonly API_URL: string = environment.API_URL;
 
-    public $gameModeView: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    public $gameModeView: Subject<boolean> = new Subject();
 
     public changedGameModeId!: number | undefined;
 
 
     public constructor(
         private httpClient: HttpClient
-    ) { }
+    ) {
+        this.$gameModeView.next(false);
+    }
 
     public findAll(): Observable<GameModeMinDTO[]> {
         return this.httpClient.get<GameModeMinDTO[]>(
