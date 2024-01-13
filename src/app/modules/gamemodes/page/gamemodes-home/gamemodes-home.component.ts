@@ -9,6 +9,7 @@ import { GameModeMinDTO } from 'src/app/models/dto/gamemode/response/GameModeMin
 import { EnumGameModeEventsCrud } from 'src/app/models/enums/EnumGameModeEventsCrud';
 import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
 import { EditGamemodeFormComponent } from 'src/app/shared/components/forms/gamemode-forms/edit-gamemode-form/edit-gamemode-form.component';
+import { ChangesOnService } from 'src/app/shared/services/changed-on/changes-on.service';
 import { CustomDialogService } from 'src/app/shared/services/custom-dialog/custom-dialog.service';
 
 @Component({
@@ -33,6 +34,7 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
         private messageService: MessageService,
         private customDialogService: CustomDialogService,
         private confirmationService: ConfirmationService,
+        private changesOnService: ChangesOnService,
     ) {
     }
 
@@ -52,14 +54,14 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
                 }
             );
 
-        this.gameModeService.getChangesOn()
+        this.changesOnService.getChangesOn()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
                 next: (changesOn: boolean) => {
                     if (changesOn) {
                         this.setGameModesWithApi();
 
-                        const changedGameModeId: number = this.gameModeService.changedGameModeId;
+                        const changedGameModeId: number | undefined = this.gameModeService.changedGameModeId;
                         changedGameModeId && this.selectGameMode(changedGameModeId);
                     }
                 },
@@ -102,6 +104,7 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
                 {
                     next: (gameMode) => {
                         gameMode && (this.gameMode = gameMode);
+                        this.gameModeService.changedGameModeId = id;
                     },
                     error: (err) => {
                         this.messageService.add(
@@ -141,7 +144,10 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
                         detail: 'Game mode deleted successfully!',
                         life: 2000
                     });
-                    this.gameModeService.setChangesOn(true);
+
+                    this.gameModeService.changedGameModeId = undefined;
+                    this.changesOnService.setChangesOn(true);
+
                     this.handleBackAction();
                 },
                 error: (err) => {
@@ -154,7 +160,8 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
                         detail: 'Unable to delete the game mode!',
                         life: 6000
                     });
-                    this.gameModeService.setChangesOn(false);
+
+                    this.changesOnService.setChangesOn(false);
                 }
             });
     }

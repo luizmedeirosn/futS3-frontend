@@ -229,7 +229,7 @@ export class EditPositionFormComponent {
                         const positionUpdated = this.positions.find(p => p.id === this.selectedPosition?.id);
                         positionUpdated && (positionUpdated.name = position.name);
 
-                        this.changesOnService.setChangesOn(true, this.selectedPosition?.id);
+                        this.changesOnService.setChangesOn(true);
                         this.messageService.clear();
                         this.messageService.add({
                             severity: 'success',

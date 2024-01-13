@@ -3,6 +3,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { GameModeMinDTO } from 'src/app/models/dto/gamemode/response/GameModeMinDTO';
 import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
+import { ChangesOnService } from 'src/app/shared/services/changed-on/changes-on.service';
 
 @Component({
     selector: 'app-delete-gamemode-form',
@@ -22,6 +23,7 @@ export class DeleteGamemodeFormComponent implements OnInit, OnDestroy {
         private gameModeService: GameModeService,
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
+        private changesOnService: ChangesOnService,
     ) { }
 
     public ngOnInit(): void {
@@ -85,7 +87,7 @@ export class DeleteGamemodeFormComponent implements OnInit, OnDestroy {
                                 detail: 'Game mode deleted successfully!',
                                 life: this.toastLife
                             });
-                            this.gameModeService.setChangesOn(true);
+                            this.changesOnService.setChangesOn(true);
                         }, 1000);
                     },
                     error: (err) => {
@@ -97,7 +99,7 @@ export class DeleteGamemodeFormComponent implements OnInit, OnDestroy {
                             detail: 'Unable to delete the game mode!',
                             life: 6000
                         });
-                        this.gameModeService.setChangesOn(false);
+                        this.changesOnService.setChangesOn(false);
                     }
                 });
         }

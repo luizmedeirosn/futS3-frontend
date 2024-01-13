@@ -11,6 +11,7 @@ import { PositionService } from 'src/app/services/position/position.service';
 import { SavePositionFormComponent } from '../../position-forms/save-position-form/save-position-form.component';
 import { CustomDialogService } from '../../../../services/custom-dialog/custom-dialog.service';
 import { EditPositionFormComponent } from '../../position-forms/edit-position-form/edit-position-form.component';
+import { ChangesOnService } from 'src/app/shared/services/changed-on/changes-on.service';
 
 @Component({
     selector: 'app-save-gamemode-form',
@@ -42,6 +43,7 @@ export class SaveGamemodeFormComponent implements OnInit, OnDestroy {
         private positionService: PositionService,
         private gameModeService: GameModeService,
         private customDialogService: CustomDialogService,
+        private changesOnService: ChangesOnService,
     ) { }
 
     public ngOnInit(): void {
@@ -135,7 +137,7 @@ export class SaveGamemodeFormComponent implements OnInit, OnDestroy {
                 .pipe(takeUntil(this.$destroy))
                 .subscribe({
                     next: () => {
-                        this.gameModeService.setChangesOn(true);
+                        this.changesOnService.setChangesOn(true);
                         this.messageService.clear();
                         this.messageService.add({
                             severity: 'success',
@@ -145,7 +147,7 @@ export class SaveGamemodeFormComponent implements OnInit, OnDestroy {
                         });
                     },
                     error: (err) => {
-                        this.gameModeService.setChangesOn(false);
+                        this.changesOnService.setChangesOn(false);
                         this.messageService.clear();
                         this.messageService.add({
                             severity: 'error',

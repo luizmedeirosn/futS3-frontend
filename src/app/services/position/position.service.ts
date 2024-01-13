@@ -15,6 +15,8 @@ export class PositionService {
 
     public readonly $positionView: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
+    public changedPositionId!: number | undefined;
+
     public constructor(
         private httpClient: HttpClient
     ) { }

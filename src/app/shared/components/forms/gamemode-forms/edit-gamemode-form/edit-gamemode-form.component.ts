@@ -15,6 +15,7 @@ import { Table } from 'primeng/table';
 import { GameModeFullDTO } from 'src/app/models/dto/gamemode/response/GameModeFullDTO';
 import { EditPositionFormComponent } from '../../position-forms/edit-position-form/edit-position-form.component';
 import { EnumGameModeEventsCrud } from 'src/app/models/enums/EnumGameModeEventsCrud';
+import { ChangesOnService } from 'src/app/shared/services/changed-on/changes-on.service';
 
 @Component({
     selector: 'app-edit-gamemode-form',
@@ -56,6 +57,7 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
         private gameModeService: GameModeService,
         private customDialogService: CustomDialogService,
         private dynamicDialogConfig: DynamicDialogConfig,
+        private changesOnService: ChangesOnService,
     ) { }
 
     public ngOnInit(): void {
@@ -256,7 +258,8 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
                         const gameModeUpdated = this.gameModes.find(p => p.id === this.selectedGameMode?.id);
                         gameModeUpdated && (gameModeUpdated.formationName = gameMode.formationName);
 
-                        this.gameModeService.setChangesOn(true, this.selectedGameMode?.id);
+                        this.changesOnService.setChangesOn(true);
+
                         this.messageService.clear();
                         this.messageService.add({
                             severity: 'success',
@@ -268,7 +271,8 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
                         this.handleBackAction();
                     },
                     error: (err) => {
-                        this.gameModeService.setChangesOn(false);
+                        this.changesOnService.setChangesOn(false);
+
                         this.messageService.clear();
                         this.messageService.add({
                             severity: 'error',

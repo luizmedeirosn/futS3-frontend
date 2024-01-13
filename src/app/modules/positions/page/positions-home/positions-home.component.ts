@@ -1,4 +1,3 @@
-import { ChangesOnService } from './../../../../shared/services/changed-on/changes-on.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -8,10 +7,10 @@ import { EditOrDeletePositionAction } from 'src/app/models/dto/position/events/E
 import { ViewPositionAction } from 'src/app/models/dto/position/events/ViewPositionAction';
 import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
 import { EnumPositionEventsCrud } from 'src/app/models/enums/EnumPositionEventsCrud';
-import { ChangesOn } from 'src/app/models/events/ChangesOn';
 import { PositionService } from 'src/app/services/position/position.service';
 import { EditPositionFormComponent } from 'src/app/shared/components/forms/position-forms/edit-position-form/edit-position-form.component';
 import { CustomDialogService } from 'src/app/shared/services/custom-dialog/custom-dialog.service';
+import { ChangesOnService } from './../../../../shared/services/changed-on/changes-on.service';
 
 @Component({
     selector: 'app-positions-home',
@@ -57,10 +56,12 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
         this.changesOnService.getChangesOn()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
-                next: (changesOn: ChangesOn) => {
-                    if (changesOn?.status) {
+                next: (changesOn: boolean) => {
+                    if (changesOn) {
                         this.setPositionsWithApi();
-                        changesOn.entityId && this.selectPosition(changesOn.entityId);
+
+                        const changedPositionId: number | undefined = this.positionService.changedPositionId;
+                        changedPositionId && this.selectPosition(changedPositionId);
                     }
                 },
                 error: (err) => {
@@ -100,6 +101,7 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
                 {
                     next: (position) => {
                         position && (this.position = position);
+                        this.positionService.changedPositionId = id;
                     },
                     error: (err) => {
                         this.messageService.clear();
@@ -140,7 +142,10 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
                         detail: 'Position deleted successfully!',
                         life: 2000
                     });
+
+                    this.positionService.changedPositionId = undefined;
                     this.changesOnService.setChangesOn(true);
+
                     this.handleBackAction();
                 },
                 error: (err) => {
@@ -153,6 +158,7 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
                         detail: 'Is the position part of a game mode or a player!',
                         life: 6000
                     });
+
                     this.changesOnService.setChangesOn(false);
                 }
             });

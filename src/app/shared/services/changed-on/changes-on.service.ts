@@ -1,33 +1,23 @@
-import { Injectable, OnDestroy } from '@angular/core';
-import { Subject } from 'rxjs';
-import { ChangesOn } from 'src/app/models/events/ChangesOn';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
 })
-export class ChangesOnService implements OnDestroy {
+export class ChangesOnService {
 
-    private readonly $destroy: Subject<void> = new Subject();
-    private readonly $changesOn: Subject<ChangesOn> = new Subject();
+    private readonly $changesOn: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-    public setChangesOn(status: boolean, changedPositionId?: number): void {
+    public setChangesOn(status: boolean): void {
         if (status !== null && status !== undefined) {
-            this.$changesOn.next({
-                status,
-                entityId: changedPositionId
-            });
+            this.$changesOn.next(true);
         } else {
             console.error("Status is null or undefined");
         }
     }
 
-    public getChangesOn(): Subject<ChangesOn> {
+    public getChangesOn(): BehaviorSubject<boolean> {
         return this.$changesOn;
-    }
-
-    public ngOnDestroy(): void {
-        this.$destroy.next();
-        this.$destroy.complete();
     }
 
 }

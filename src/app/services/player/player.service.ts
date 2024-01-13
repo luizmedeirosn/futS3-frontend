@@ -15,7 +15,8 @@ export class PlayerService {
     private readonly API_URL: string = environment.API_URL;
 
     private $changesOn: BehaviorSubject<boolean> = new BehaviorSubject(false);
-    public changedPlayerId!: number;
+
+    public changedPlayerId!: number | undefined;
     public changedPlayerPicture!: boolean;
 
     public $playerView: Subject<boolean> = new Subject();

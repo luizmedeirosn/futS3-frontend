@@ -3,6 +3,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { ParameterDTO } from 'src/app/models/dto/parameter/response/ParameterDTO';
 import { ParameterService } from 'src/app/services/parameter/parameter.service';
+import { ChangesOnService } from 'src/app/shared/services/changed-on/changes-on.service';
 
 @Component({
     selector: 'app-delete-parameter-form',
@@ -22,6 +23,7 @@ export class DeleteParameterFormComponent implements OnInit, OnDestroy {
         private parameterService: ParameterService,
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
+        private changesOnService: ChangesOnService,
     ) { }
 
     public ngOnInit(): void {
@@ -84,7 +86,7 @@ export class DeleteParameterFormComponent implements OnInit, OnDestroy {
                                 summary: 'Success',
                                 detail: 'Parameter deleted successfully!'
                             });
-                            this.parameterService.setChangesOn(true);
+                            this.changesOnService.setChangesOn(true);
                         }, 1000);
                     },
                     error: (err) => {
@@ -95,7 +97,7 @@ export class DeleteParameterFormComponent implements OnInit, OnDestroy {
                             summary: 'Error',
                             detail: 'Unable to delete the parameter!'
                         });
-                        this.parameterService.setChangesOn(false);
+                        this.changesOnService.setChangesOn(false);
                     }
                 });
         }

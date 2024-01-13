@@ -58,7 +58,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                     if (changesOn) {
                         this.setPlayerWithApi();
 
-                        const changedPlayerId: number = this.playerService.changedPlayerId;
+                        const changedPlayerId: number | undefined = this.playerService.changedPlayerId;
                         changedPlayerId && this.selectPlayer(changedPlayerId);
                     }
                 },
@@ -101,6 +101,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                 {
                     next: (player) => {
                         player && (this.player = player);
+                        this.playerService.changedPlayerId = id;
                     },
                     error: (err) => {
                         this.messageService.add(
@@ -140,7 +141,10 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                         detail: 'Player deleted successfully!',
                         life: 2000
                     });
+
+                    this.playerService.changedPlayerId = undefined;
                     this.playerService.setChangesOn(true);
+
                     this.handleBackAction();
                 },
                 error: (err) => {
@@ -153,6 +157,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                         detail: 'Unable to delete the player!',
                         life: 6000
                     });
+
                     this.playerService.setChangesOn(false);
                 }
             });
