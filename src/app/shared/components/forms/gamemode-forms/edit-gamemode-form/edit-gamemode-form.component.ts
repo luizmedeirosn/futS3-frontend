@@ -2,20 +2,20 @@ import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@ang
 import { FormBuilder, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { Table } from 'primeng/table';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { GameModeRequestDTO } from 'src/app/models/dto/gamemode/request/GameModeRequestDTO';
+import { GameModeFullDTO } from 'src/app/models/dto/gamemode/response/GameModeFullDTO';
+import { GameModeMinDTO } from 'src/app/models/dto/gamemode/response/GameModeMinDTO';
 import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
+import { EnumGameModeEventsCrud } from 'src/app/models/enums/EnumGameModeEventsCrud';
 import { EnumPositionEventsCrud } from 'src/app/models/enums/EnumPositionEventsCrud';
 import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
 import { PositionService } from 'src/app/services/position/position.service';
-import { CustomDialogService } from 'src/app/shared/services/custom-dialog/custom-dialog.service';
-import { SavePositionFormComponent } from '../../position-forms/save-position-form/save-position-form.component';
-import { GameModeMinDTO } from 'src/app/models/dto/gamemode/response/GameModeMinDTO';
-import { Table } from 'primeng/table';
-import { GameModeFullDTO } from 'src/app/models/dto/gamemode/response/GameModeFullDTO';
-import { EditPositionFormComponent } from '../../position-forms/edit-position-form/edit-position-form.component';
-import { EnumGameModeEventsCrud } from 'src/app/models/enums/EnumGameModeEventsCrud';
 import { ChangesOnService } from 'src/app/shared/services/changes-on/changes-on.service';
+import { CustomDialogService } from 'src/app/shared/services/custom-dialog/custom-dialog.service';
+import { EditPositionFormComponent } from '../../position-forms/edit-position-form/edit-position-form.component';
+import { SavePositionFormComponent } from '../../position-forms/save-position-form/save-position-form.component';
 
 @Component({
     selector: 'app-edit-gamemode-form',
@@ -38,6 +38,7 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
     public selectedGameMode!: GameModeMinDTO | undefined;
     public positions!: Array<PositionMinDTO>;
     public positionsOff: Array<PositionMinDTO> = new Array();
+    private reset: boolean = true;
 
     public editGameModeForm: any = this.formBuilder.group({
         formationName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
@@ -76,8 +77,7 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
                 next: (changesOn: boolean) => {
                     if (changesOn) {
                         const changedGameModeId: number | undefined = this.gameModeService.changedGameModeId;
-                        this.positionsOff = new Array();
-                        changedGameModeId && this.handleSelectGameMode(changedGameModeId);
+                        (changedGameModeId && this.closeableDialog && changedGameModeId === this.gameModeService.gameModeIdInPreview) && this.handleSelectGameMode(changedGameModeId);
                     }
                 },
                 error: (err) => {
@@ -132,6 +132,10 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
             });
     }
 
+    private deleteIncludedPositionParameters(): void {
+        this.positionsOff.forEach(pOff => this.positions = this.positions.filter(p => p.id !== pOff.id));
+    }
+
     public handleSelectGameMode($event: number): void {
         if ($event) {
             this.setPositionsWithApi();
@@ -157,10 +161,14 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
                                     name: e.positionName,
                                     description: ''
                                 }
-
-                                this.positionsOff.find(p => p.id === position.id) === undefined && (this.positionsOff.push(position));
+                                const positionOff = this.positionsOff.find(p => p.id === position.id);
+                                positionOff && (positionOff.name = e.positionName);
+                                this.reset && !positionOff && (this.positionsOff.push(position));
                             });
 
+                            this.deleteIncludedPositionParameters();
+
+                            this.reset && (this.reset = false);
                             this.$viewTable.next(false);
                         }
                     },
@@ -174,7 +182,10 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
     public handleBackAction(): void {
         this.closeableDialog && this.customDialogService.closeEndDialog(false);
 
-        this.$viewTable.next(true); // Activate the view child before referencing the table
+        // Activate the view child before referencing the table
+        this.$viewTable.next(true);
+
+        // Delay until activating the viewChild
         setTimeout(() => {
             if (this.selectedGameMode?.id !== undefined) {
                 const selectedGameMode: GameModeMinDTO | undefined =
@@ -191,8 +202,11 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
                             firstGameModePage && this.gameModes.indexOf(firstGameModePage));
                 }
             }
+
             this.selectedGameMode = undefined;
             this.positionsOff = new Array();
+            this.reset = true;
+
         }, 10);
     }
 
@@ -252,14 +266,19 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
     }
 
     public handleDeletePosition($event: number): void {
-        const position: PositionMinDTO | undefined = this.positionsOff.find((p) => p.id === $event);
-        position && this.positions.push(position);
-        this.positionsOff = position && this.positionsOff.filter(p => p.id !== position.id) || new Array();
-        this.positions.sort(this.comparePositions);
+        if ($event) {
+            const position: PositionMinDTO | undefined = this.positionsOff.find((p) => p.id === $event);
+            position && this.positions.push(position);
+            this.positionsOff = position && this.positionsOff.filter(p => p.id !== position.id) || new Array();
+            this.positions.sort(this.comparePositions);
+        }
     }
 
     public handleSubmitEditGameModeForm(): void {
         if (this.editGameModeForm.valid && this.editGameModeForm.value) {
+
+            this.gameModeService.changedGameModeId = this.selectedGameMode?.id;
+
             const gameModeRequest: GameModeRequestDTO = {
                 formationName: this.editGameModeForm.value.formationName as string,
                 description: this.editGameModeForm.value.description as string,

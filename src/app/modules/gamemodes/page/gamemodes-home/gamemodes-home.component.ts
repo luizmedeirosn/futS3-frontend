@@ -48,8 +48,8 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
                     if (changesOn) {
                         this.setGameModesWithApi();
 
-                        const changedGameModeId: number | undefined = this.gameModeService.changedGameModeId;
-                        changedGameModeId && this.selectGameMode(changedGameModeId);
+                        const gameModeIdInPreview: number | undefined = this.gameModeService.gameModeIdInPreview;
+                        gameModeIdInPreview && this.selectGameMode(gameModeIdInPreview);
                     }
                 },
                 error: (err) => {
@@ -92,6 +92,7 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
                     next: (gameMode) => {
                         gameMode && (this.gameMode = gameMode);
                         this.gameModeService.changedGameModeId = id;
+                        this.gameModeService.gameModeIdInPreview = id;
                     },
                     error: (err) => {
                         this.messageService.add(

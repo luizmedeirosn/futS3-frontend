@@ -158,7 +158,10 @@ export class EditPositionFormComponent {
     public handleBackAction(): void {
         this.closeableDialog && this.customDialogService.closeEndDialog(false);
 
-        this.$viewTable.next(true); // Activate the view child before referencing the table
+        // Activate the view child before referencing the table
+        this.$viewTable.next(true);
+
+        // Delay until activating the viewChild
         setTimeout(() => {
             if (this.selectedPosition?.id !== undefined) {
                 const selectedPosition: PositionDTO | undefined =

@@ -103,7 +103,10 @@ export class EditParameterFormComponent implements OnInit, OnDestroy {
     }
 
     public handleBackAction(): void {
-        this.$viewTable.next(true); // Ativar a view child antes de referenciar a tabela.
+        // Activate the view child before referencing the table
+        this.$viewTable.next(true);
+
+        // Delay until activating the viewChild
         setTimeout(() => {
             if (this.selectedParameter?.id) {
                 const selectedParameter: ParameterDTO | undefined = this.parameters.find(parameter => parameter.id === this.selectedParameter?.id);
