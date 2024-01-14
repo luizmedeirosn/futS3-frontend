@@ -134,6 +134,7 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
                     });
 
                     this.gameModeService.changedGameModeId = undefined;
+                    this.gameModeService.gameModeIdInPreview = undefined;
                     this.changesOnService.setChangesOn(true);
 
                     this.handleBackAction();

@@ -248,29 +248,26 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
         const position = this.addPositionForm.value?.position as PositionMinDTO | undefined;
 
         if (position) {
-            const positionId: number = this.positions.filter((p) => p.id === position.id)[0].id;
-
             this.positionsOff.push(position);
+            this.positionsOff.sort((p1, p2) =>
+                p1.name.toUpperCase().localeCompare(p2.name.toUpperCase())
+            );
+
+            const positionId: number = this.positions.filter((p) => p.id === position.id)[0].id;
             this.positions = this.positions.filter(p => p.id !== positionId);
         }
         this.addPositionForm.reset();
     }
 
-    private comparePositions = (p1: any, p2: any) => {
-        if (p1.name < p2.name) {
-            return -1;
-        } else if (p1.name > p2.name) {
-            return 1;
-        }
-        return 0;
-    }
-
     public handleDeletePosition($event: number): void {
         if ($event) {
-            const position: PositionMinDTO | undefined = this.positionsOff.find((p) => p.id === $event);
+            const position: PositionMinDTO | undefined =
+                this.positionsOff.find((p) => p.id === $event);
             position && this.positions.push(position);
             this.positionsOff = position && this.positionsOff.filter(p => p.id !== position.id) || new Array();
-            this.positions.sort(this.comparePositions);
+            this.positionsOff.sort((p1, p2) =>
+                p1.name.toUpperCase().localeCompare(p2.name.toUpperCase())
+            );
         }
     }
 
@@ -325,8 +322,9 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
         this.addPositionForm.reset();
 
         this.positionsOff.forEach(e => this.positions.push(e));
-        this.positions.sort(this.comparePositions);
-        this.positionsOff = new Array();
+        this.positionsOff.sort((p1, p2) =>
+            p1.name.toUpperCase().localeCompare(p2.name.toUpperCase())
+        ); this.positionsOff = new Array();
     }
 
     public ngOnDestroy(): void {

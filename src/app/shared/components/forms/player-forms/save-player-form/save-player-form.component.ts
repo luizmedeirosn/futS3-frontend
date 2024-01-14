@@ -98,24 +98,21 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
             };
 
             this.playerParametersScore.push(playerParameterScore);
+            this.playerParametersScore.sort((p1, p2) => p1.name.toUpperCase().localeCompare(p2.name.toUpperCase()));
+
         }
+
         this.playerParameterForm.reset();
     }
 
-    private compareParameters = (p1: any, p2: any) => {
-        if (p1.name < p2.name) {
-            return -1;
-        } else if (p1.name > p2.name) {
-            return 1;
-        }
-        return 0;
-    }
+    public handleDeletePlayerParameter(name: string): void {
+        if (name) {
+            this.playerParametersScore = this.playerParametersScore.filter(p => p.name !== name);
 
-    public handleDeletePlayerParameter($event: string): void {
-        this.playerParametersScore = this.playerParametersScore.filter(p => p.name !== $event);
-        const parameter: ParameterDTO | undefined = this.parametersOff.find((p) => p.name === $event);
-        parameter && this.parameters.push(parameter);
-        this.parameters.sort(this.compareParameters);
+            const parameter: ParameterDTO | undefined = this.parametersOff.find((p) => p.name === name);
+            parameter && this.parameters.push(parameter);
+            this.parameters.sort((p1, p2) => p1.name.toUpperCase().localeCompare(p2.name.toUpperCase()));
+        }
     }
 
     public handleSubmitSavePlayerForm(): void {
@@ -165,7 +162,7 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
             this.playerParameterForm.reset();
 
             this.parametersOff.forEach(e => this.parameters.push(e));
-            this.parameters.sort(this.compareParameters);
+            this.parameters.sort((p1, p2) => p1.name.toUpperCase().localeCompare(p2.name.toUpperCase()));
             this.parametersOff = new Array();
             this.playerParametersScore = [];
         }

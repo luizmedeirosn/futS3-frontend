@@ -71,24 +71,20 @@ export class SavePositionFormComponent implements OnInit, OnDestroy {
             };
 
             this.positionParameters.push(parameterWeight);
+            this.positionParameters.sort((p1, p2) => p1.name.toUpperCase().localeCompare(p2.name.toUpperCase()));
         }
+
         this.positionParameterForm.reset();
     }
 
-    private compareParameters = (p1: any, p2: any) => {
-        if (p1.name < p2.name) {
-            return -1;
-        } else if (p1.name > p2.name) {
-            return 1;
-        }
-        return 0;
-    }
+    public handleDeletePositionParameter(id: number): void {
+        if (id) {
+            this.positionParameters = this.positionParameters.filter(p => p.id !== id);
 
-    public handleDeletePositionParameter($event: number): void {
-        this.positionParameters = this.positionParameters.filter(p => p.id !== $event);
-        const parameter: ParameterDTO | undefined = this.parametersOff.find((p) => p.id === $event);
-        parameter && this.parameters.push(parameter);
-        this.parameters.sort(this.compareParameters);
+            const parameter: ParameterDTO | undefined = this.parametersOff.find((p) => p.id === id);
+            parameter && this.parameters.push(parameter);
+            this.parameters.sort((p1, p2) => p1.name.toUpperCase().localeCompare(p2.name.toUpperCase()));
+        }
     }
 
     public handleSubmitSavePositionForm(): void {
@@ -131,7 +127,7 @@ export class SavePositionFormComponent implements OnInit, OnDestroy {
         this.positionParameterForm.reset();
 
         this.parametersOff.forEach(e => this.parameters.push(e));
-        this.parameters.sort(this.compareParameters);
+        this.parameters.sort((p1, p2) => p1.name.toUpperCase().localeCompare(p2.name.toUpperCase()));
         this.parametersOff = new Array();
         this.positionParameters = new Array();
     }
