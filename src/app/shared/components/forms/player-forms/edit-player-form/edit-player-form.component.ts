@@ -186,7 +186,10 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
             this.playerPicture ? this.customDialogService.closeEndDialog(true) : this.customDialogService.closeEndDialog(false);
         }
 
-        this.$viewTable.next(true); // Activate the view child before referencing the table
+        // Activate the view child before referencing the table
+        this.$viewTable.next(true);
+
+        // Delay until activating the viewChild
         setTimeout(() => {
             if (this.selectedPlayer?.id !== undefined) {
                 const selectedPlayer: PlayerMinDTO | undefined =

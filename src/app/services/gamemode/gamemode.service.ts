@@ -18,6 +18,7 @@ export class GameModeService {
     public $gameModeView: Subject<boolean> = new Subject();
 
     public changedGameModeId!: number | undefined;
+    public gameModeIdInPreview!: number;
 
 
     public constructor(
