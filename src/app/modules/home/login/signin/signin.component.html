@@ -1,0 +1,62 @@
+<div
+    class="flex flex-column align-items-center justify-content-center"
+    style="height: 100vh"
+>
+    <div
+        class="flex justify-content-center align-items-center bg-gray-100 p-3 pl-5 pr-5 border-round-xl"
+    >
+        <div class="flex flex-column align-items-center gap-2">
+            <h1 class="w-20rem text-left m-0 p-0">
+                <span>Build your formations</span>
+                <i
+                    class="pi pi-key ml-1 slidedown-icon"
+                    style="color: var(--green-600); font-size: 2rem"
+                ></i>
+            </h1>
+            <img
+                id="home-logo"
+                src="./../../../../../assets/logo-3.png"
+                alt="logo"
+            />
+        </div>
+
+        <p-card
+            styleClass="shadow-none border-none bg-gray-100 text-gray-900"
+            header="Login"
+            subheader="Enter a valid account:"
+        >
+            <form
+                [formGroup]="signinForm"
+                (ngSubmit)="onSubmitSigninForm()"
+                class="flex flex-column align-items-center gap-2"
+            >
+                <div class="flex justify-content-center align-content-center">
+                    <input
+                        type="email"
+                        pInputText
+                        placeholder="Username"
+                        formControlName="username"
+                        class="text-gray-900"
+                    />
+                </div>
+                <div class="flex justify-content-center align-content-center">
+                    <input
+                        type="password"
+                        pInputText
+                        placeholder="Password"
+                        formControlName="password"
+                        class="text-gray-900"
+                    />
+                </div>
+                <div class="cursor-pointer mt-2 w-full">
+                    <p-button
+                        type="submit"
+                        label="Sign in"
+                        styleClass="p-button-success w-full"
+                        [disabled]="!this.signinForm.valid"
+                    ></p-button>
+                </div>
+            </form>
+        </p-card>
+    </div>
+</div>

@@ -3,6 +3,15 @@ import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
     {
+        path: '',
+        redirectTo: 'login',
+        pathMatch: 'full',
+    },
+    {
+        path: 'login',
+        loadChildren: () => import('./modules/home/home.module').then((module) => module.HomeModule)
+    },
+    {
         path: 'gamemodes',
         loadChildren: () => import('./modules/gamemodes/gamemodes.module').then((module) => module.GamemodesModule)
     },
