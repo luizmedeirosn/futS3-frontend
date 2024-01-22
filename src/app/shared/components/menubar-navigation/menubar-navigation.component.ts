@@ -22,6 +22,7 @@ import { DeleteGamemodeFormComponent } from '../forms/gamemode-forms/delete-game
 import { EditGamemodeFormComponent } from '../forms/gamemode-forms/edit-gamemode-form/edit-gamemode-form.component';
 import { SaveGamemodeFormComponent } from '../forms/gamemode-forms/save-gamemode-form/save-gamemode-form.component';
 import { EnumGameModeEventsCrud } from 'src/app/models/enums/EnumGameModeEventsCrud';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
     selector: 'app-menubar-navigation',
@@ -41,6 +42,7 @@ export class MenubarNavigationComponent implements OnInit, OnDestroy {
         private positionService: PositionService,
         private gameModeService: GameModeService,
         private customDialogService: CustomDialogService,
+        private authService: AuthService
     ) {
     }
 
@@ -276,7 +278,8 @@ export class MenubarNavigationComponent implements OnInit, OnDestroy {
             },
             {
                 label: 'Sign out',
-                icon: 'pi pi-sign-out'
+                icon: 'pi pi-sign-out',
+                command: () => this.authService.logout()
             }
         ]
     }

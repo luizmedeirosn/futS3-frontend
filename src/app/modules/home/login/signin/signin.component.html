@@ -28,7 +28,7 @@
             <form
                 [formGroup]="signinForm"
                 (ngSubmit)="onSubmitSigninForm()"
-                class="flex flex-column align-items-center gap-2"
+                class="flex flex-column align-items-center gap-4"
             >
                 <div class="flex justify-content-center align-content-center">
                     <input
@@ -49,12 +49,17 @@
                     />
                 </div>
                 <div class="cursor-pointer mt-2 w-full">
-                    <p-button
+                    <button
+                        [disabled]="
+                            !this.signinForm.valid &&
+                            !($enabledSubmitButton | async)
+                        "
+                        pRipple
+                        pButton
                         type="submit"
                         label="Sign in"
-                        styleClass="p-button-success w-full"
-                        [disabled]="!this.signinForm.valid"
-                    ></p-button>
+                        class="p-button-success w-full"
+                    ></button>
                 </div>
             </form>
         </p-card>

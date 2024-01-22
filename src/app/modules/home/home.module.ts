@@ -1,14 +1,13 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { HOME_ROUTES } from './home.routing';
+import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
+import { InputTextModule } from 'primeng/inputtext';
+import { HOME_ROUTES } from './home.routing';
 import { SigninComponent } from './login/signin/signin.component';
 import { HomeComponent } from './page/home.component';
-import { InputTextModule } from 'primeng/inputtext';
-import { ButtonModule } from 'primeng/button';
-import { AnimateOnScrollModule } from 'primeng/animateonscroll';
 
 
 @NgModule({
@@ -22,7 +21,6 @@ import { AnimateOnScrollModule } from 'primeng/animateonscroll';
         FormsModule,
         ReactiveFormsModule,
 
-        AnimateOnScrollModule,
         CardModule,
         InputTextModule,
         ButtonModule,
