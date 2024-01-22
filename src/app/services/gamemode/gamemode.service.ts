@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { environment } from 'src/app/environments/environment.prod';
+import { environment } from 'src/environments/environment.prod';
 import { GameModeRequestDTO } from 'src/app/models/dto/gamemode/request/GameModeRequestDTO';
 import { GameModeFullDTO } from 'src/app/models/dto/gamemode/response/GameModeFullDTO';
 import { GameModeMinDTO } from 'src/app/models/dto/gamemode/response/GameModeMinDTO';
