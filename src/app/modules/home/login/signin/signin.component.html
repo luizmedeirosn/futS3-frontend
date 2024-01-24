@@ -51,7 +51,7 @@
                 <div class="cursor-pointer mt-2 w-full">
                     <button
                         [disabled]="
-                            !this.signinForm.valid &&
+                            !this.signinForm.valid ||
                             !($enabledSubmitButton | async)
                         "
                         pRipple

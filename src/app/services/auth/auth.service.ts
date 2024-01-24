@@ -1,11 +1,11 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment.prod';
 import { SigninRequestDTO } from 'src/app/models/dto/auth/SigninRequestDTO';
 import { SigninResponseDTO } from 'src/app/models/dto/auth/SigninResponseDTO';
-import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment.prod';
 
 @Injectable({
     providedIn: 'root'
@@ -23,7 +23,10 @@ export class AuthService {
     public signin(signin: SigninRequestDTO): Observable<SigninResponseDTO> {
         return this.httpClient.post<SigninResponseDTO>(
             `${this.API_URL}/auth/signin`,
-            signin
+            signin,
+            {
+                withCredentials: true
+            }
         );
     }
 
@@ -41,7 +44,7 @@ export class AuthService {
     }
 
     public isLoggedIn(): boolean {
-        return !!this.cookieService.get('ACCESS_TOKEN');
+        return !!this.cookieService.get('REFRESH_ACCESS_TOKEN');
     }
 
     public logout(): void {

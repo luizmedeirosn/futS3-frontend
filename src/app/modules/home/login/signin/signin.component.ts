@@ -1,12 +1,13 @@
-import { CookieService } from 'ngx-cookie-service';
-import { SigninResponseDTO } from './../../../../models/dto/auth/SigninResponseDTO';
 import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 import { MessageService } from 'primeng/api';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { SigninRequestDTO } from 'src/app/models/dto/auth/SigninRequestDTO';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { Router } from '@angular/router';
+import { SigninResponseDTO } from './../../../../models/dto/auth/SigninResponseDTO';
+import { AuthInterceptor } from 'src/app/interceptors/auth/auth.interceptor';
 
 @Component({
     selector: 'app-signin',
@@ -41,7 +42,8 @@ export class SigninComponent implements OnDestroy {
                         if (response) {
                             this.cookieService.set('ACCESS_TOKEN', response.ACCESS_TOKEN);
                             this.cookieService.set('REFRESH_ACCESS_TOKEN', response.REFRESH_ACCESS_TOKEN);
-                            this.signinForm.reset();
+                            AuthInterceptor.ACCESS_TOKEN = response.ACCESS_TOKEN;
+                            AuthInterceptor.REFRESH_ACCESS_TOKEN = response.REFRESH_ACCESS_TOKEN;
                             this.router.navigate(['/gamemodes']);
                         }
                     },
