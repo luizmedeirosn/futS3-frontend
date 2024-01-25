@@ -10,6 +10,16 @@
 ></p-toast>
 
 <p-toast
+    key="warn-session-expired"
+    position="top-center"
+    [showTransformOptions]="'translateY(-100%)'"
+    [showTransitionOptions]="'1000ms'"
+    [hideTransitionOptions]="'300ms'"
+    styleClass="w-5 opacity-100"
+    [breakpoints]="{ '920px': { width: '100vw', right: '0' } }"
+></p-toast>
+
+<p-toast
     key="info-statistics-section"
     position="bottom-center"
     [showTransformOptions]="'translateY(100%)'"

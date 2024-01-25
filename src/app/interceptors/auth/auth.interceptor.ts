@@ -10,43 +10,53 @@ import {
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable, catchError, switchMap, throwError } from 'rxjs';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { environment } from 'src/environments/environment.prod';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
+
+    private readonly API_URL = environment.API_URL;
+
     public static ACCESS_TOKEN = '';
     public static REFRESH_ACCESS_TOKEN = '';
     private refresh = false;
 
-    constructor(private http: HttpClient, private cookieService: CookieService) {
+    public constructor(
+        private http: HttpClient,
+        private cookieService: CookieService,
+        private authService: AuthService,
+
+    ) {
         AuthInterceptor.ACCESS_TOKEN = this.cookieService.get('ACCESS_TOKEN');
         AuthInterceptor.REFRESH_ACCESS_TOKEN = this.cookieService.get('REFRESH_ACCESS_TOKEN');
-        console.log(AuthInterceptor.ACCESS_TOKEN);
     }
 
-    intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-        console.log('token', AuthInterceptor.ACCESS_TOKEN);
+    public intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
 
-        const req = request.clone({
+        if (request.url === `${this.API_URL}/auth/signin`) {
+            return next.handle(request);
+        }
+
+        const clone = request.clone({
             setHeaders: {
                 Authorization: `Bearer ${AuthInterceptor.ACCESS_TOKEN}`
             }
         });
 
-        return next.handle(req).pipe(catchError((err: HttpErrorResponse) => {
-            if (err.status === 401 && !this.refresh) {
+        return next.handle(clone).pipe(catchError((err: HttpErrorResponse) => {
+            if (err.status === 403 && !this.refresh) {
                 this.refresh = true;
 
-                console.log('refresh token', AuthInterceptor.REFRESH_ACCESS_TOKEN);
                 return this.http.put('http://localhost:8080/auth/refresh-token', {}, {
                     headers: new HttpHeaders({
                         Authorization: `Bearer ${AuthInterceptor.REFRESH_ACCESS_TOKEN}`
                     })
                 }).pipe(
                     switchMap((res: any) => {
-                        console.log('new access token', res.ACCESS_TOKEN);
                         AuthInterceptor.ACCESS_TOKEN = res.ACCESS_TOKEN;
 
-                        return next.handle(request.clone({
+                        return next.handle(clone.clone({
                             setHeaders: {
                                 Authorization: `Bearer ${AuthInterceptor.ACCESS_TOKEN}`
                             }
@@ -54,6 +64,7 @@ export class AuthInterceptor implements HttpInterceptor {
                     }),
                     catchError((refreshErr: any) => {
                         this.refresh = false;
+                        this.authService.logout();
                         return throwError(() => refreshErr);
                     })
                 );

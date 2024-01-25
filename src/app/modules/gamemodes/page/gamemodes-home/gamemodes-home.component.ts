@@ -70,14 +70,13 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
                     },
                     error: (err) => {
                         this.messageService.clear();
-                        this.messageService.add(
-                            {
-                                severity: 'error',
-                                summary: 'Error',
-                                detail: 'Please check your internet connection!',
-                                life: this.messageLife
-                            }
-                        );
+                        this.messageService.add({
+                            key: 'warn-session-expired',
+                            severity: 'warn',
+                            summary: 'Warn',
+                            detail: 'Your session has expired, please log in again to continue!',
+                            life: 6000
+                        });
                         console.log(err);
                     }
                 }

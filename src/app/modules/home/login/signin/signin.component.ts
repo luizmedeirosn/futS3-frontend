@@ -49,15 +49,15 @@ export class SigninComponent implements OnDestroy {
                     },
                     error: (err) => {
                         console.log(err);
-                        this.messageService.clear();
 
+                        this.messageService.clear();
                         const message: string = err.status === 403 ? 'Invalid credentials!' : 'Unexpected error!'
                         this.messageService.add({
                             key: 'login-error',
                             severity: 'error',
                             summary: 'Error',
                             detail: message,
-                            life: 5000
+                            life: 3000
                         });
                     }
                 });
