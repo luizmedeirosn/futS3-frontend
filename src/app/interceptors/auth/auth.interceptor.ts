@@ -18,8 +18,8 @@ export class AuthInterceptor implements HttpInterceptor {
 
     private readonly API_URL = environment.API_URL;
 
-    public static ACCESS_TOKEN = '';
-    public static REFRESH_ACCESS_TOKEN = '';
+    public static accessToken = '';
+    public static refreshToken = '';
     private refresh = false;
 
     public constructor(
@@ -28,19 +28,18 @@ export class AuthInterceptor implements HttpInterceptor {
         private authService: AuthService,
 
     ) {
-        AuthInterceptor.ACCESS_TOKEN = this.cookieService.get('ACCESS_TOKEN');
-        AuthInterceptor.REFRESH_ACCESS_TOKEN = this.cookieService.get('REFRESH_ACCESS_TOKEN');
+        AuthInterceptor.accessToken = this.cookieService.get('_accessToken');
+        AuthInterceptor.refreshToken = this.cookieService.get('_refreshToken');
     }
 
     public intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-
         if (request.url === `${this.API_URL}/auth/signin`) {
             return next.handle(request);
         }
 
         const clone = request.clone({
             setHeaders: {
-                Authorization: `Bearer ${AuthInterceptor.ACCESS_TOKEN}`
+                Authorization: `Bearer ${AuthInterceptor.accessToken}`
             }
         });
 
@@ -50,21 +49,21 @@ export class AuthInterceptor implements HttpInterceptor {
 
                 return this.http.put('http://localhost:8080/auth/refresh-token', {}, {
                     headers: new HttpHeaders({
-                        Authorization: `Bearer ${AuthInterceptor.REFRESH_ACCESS_TOKEN}`
+                        Authorization: `Bearer ${AuthInterceptor.refreshToken}`
                     })
                 }).pipe(
-                    switchMap((res: any) => {
-                        AuthInterceptor.ACCESS_TOKEN = res.ACCESS_TOKEN;
+                    switchMap((response: any) => {
+                        AuthInterceptor.accessToken = response.accessToken;
 
                         return next.handle(clone.clone({
                             setHeaders: {
-                                Authorization: `Bearer ${AuthInterceptor.ACCESS_TOKEN}`
+                                Authorization: `Bearer ${AuthInterceptor.accessToken}`
                             }
                         }));
                     }),
                     catchError((refreshErr: any) => {
                         this.refresh = false;
-                        this.authService.logout();
+                        this.authService.logout(true);
                         return throwError(() => refreshErr);
                     })
                 );

@@ -35,8 +35,7 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
         private customDialogService: CustomDialogService,
         private confirmationService: ConfirmationService,
         private changesOnService: ChangesOnService,
-    ) {
-    }
+    ) { }
 
     public ngOnInit(): void {
         this.setGameModesWithApi();
@@ -69,14 +68,14 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
                         }
                     },
                     error: (err) => {
-                        this.messageService.clear();
-                        this.messageService.add({
-                            key: 'warn-session-expired',
-                            severity: 'warn',
-                            summary: 'Warn',
-                            detail: 'Your session has expired, please log in again to continue!',
-                            life: 6000
-                        });
+                        err.status != 403 && this.messageService.add(
+                            {
+                                severity: 'error',
+                                summary: 'Error',
+                                detail: 'Unexpected error!',
+                                life: this.messageLife
+                            }
+                        );
                         console.log(err);
                     }
                 }

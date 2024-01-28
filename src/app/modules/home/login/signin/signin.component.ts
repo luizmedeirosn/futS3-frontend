@@ -40,10 +40,10 @@ export class SigninComponent implements OnDestroy {
                 .subscribe({
                     next: (response: SigninResponseDTO) => {
                         if (response) {
-                            this.cookieService.set('ACCESS_TOKEN', response.ACCESS_TOKEN);
-                            this.cookieService.set('REFRESH_ACCESS_TOKEN', response.REFRESH_ACCESS_TOKEN);
-                            AuthInterceptor.ACCESS_TOKEN = response.ACCESS_TOKEN;
-                            AuthInterceptor.REFRESH_ACCESS_TOKEN = response.REFRESH_ACCESS_TOKEN;
+                            this.cookieService.set('_accessToken', response.accessToken);
+                            this.cookieService.set('_refreshToken', response.refreshToken);
+                            AuthInterceptor.accessToken = response.accessToken;
+                            AuthInterceptor.refreshToken = response.refreshToken;
                             this.router.navigate(['/gamemodes']);
                         }
                     },
@@ -51,7 +51,7 @@ export class SigninComponent implements OnDestroy {
                         console.log(err);
 
                         this.messageService.clear();
-                        const message: string = err.status === 403 ? 'Invalid credentials!' : 'Unexpected error!'
+                        const message: string = err.status === 401 ? 'Invalid credentials!' : 'Unexpected error!'
                         this.messageService.add({
                             key: 'login-error',
                             severity: 'error',

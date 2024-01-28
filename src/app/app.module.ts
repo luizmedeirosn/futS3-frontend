@@ -1,17 +1,17 @@
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
 
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
 import { DialogService } from 'primeng/dynamicdialog';
+import { ToastModule } from 'primeng/toast';
 import { AuthInterceptor } from './interceptors/auth/auth.interceptor';
+import { AppComponent } from './app.component';
 
 @NgModule({
     declarations: [

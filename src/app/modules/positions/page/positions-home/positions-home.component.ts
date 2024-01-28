@@ -79,12 +79,11 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
                         this.positions = positions;
                     },
                     error: (err) => {
-                        this.messageService.clear();
-                        this.messageService.add(
+                        err.status != 403 && this.messageService.add(
                             {
                                 severity: 'error',
                                 summary: 'Error',
-                                detail: 'Please check your internet connection!',
+                                detail: 'Unexpected error!',
                                 life: this.messageLife
                             }
                         );

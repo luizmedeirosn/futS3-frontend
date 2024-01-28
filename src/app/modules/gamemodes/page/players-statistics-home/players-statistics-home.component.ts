@@ -70,7 +70,7 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
                             {
                                 severity: 'error',
                                 summary: 'Error',
-                                detail: 'Please check your internet connection!',
+                                detail: 'Unexpected error!',
                                 life: this.messageLife
                             }
                         );
@@ -112,7 +112,7 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
                                 {
                                     severity: 'error',
                                     summary: 'Error',
-                                    detail: 'Please check your internet connection!',
+                                    detail: 'Unexpected error!',
                                     life: this.messageLife,
                                 }
                             );
