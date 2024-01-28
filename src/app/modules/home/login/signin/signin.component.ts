@@ -44,6 +44,16 @@ export class SigninComponent implements OnDestroy {
                             this.cookieService.set('_refreshToken', response.refreshToken);
                             AuthInterceptor.accessToken = response.accessToken;
                             AuthInterceptor.refreshToken = response.refreshToken;
+
+                            this.messageService.clear();
+                            this.messageService.add({
+                                key: 'welcome-back',
+                                severity: 'success',
+                                summary: 'Success',
+                                detail: 'Welcome back!',
+                                life: 3000
+                            });
+
                             this.router.navigate(['/gamemodes']);
                         }
                     },
