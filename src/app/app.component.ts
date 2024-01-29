@@ -12,7 +12,7 @@ export class AppComponent implements OnInit {
     public title = 'futS3-frontend';
 
     public constructor(
-        private primeNGConfig: PrimeNGConfig
+        private primeNGConfig: PrimeNGConfig,
     ) {
     }
 

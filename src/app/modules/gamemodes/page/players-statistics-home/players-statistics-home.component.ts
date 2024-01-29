@@ -70,7 +70,7 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
                             {
                                 severity: 'error',
                                 summary: 'Error',
-                                detail: 'Please check your internet connection!',
+                                detail: 'Unexpected error!',
                                 life: this.messageLife
                             }
                         );
@@ -112,7 +112,7 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
                                 {
                                     severity: 'error',
                                     summary: 'Error',
-                                    detail: 'Please check your internet connection!',
+                                    detail: 'Unexpected error!',
                                     life: this.messageLife,
                                 }
                             );
@@ -133,16 +133,16 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
                 .subscribe(
                     {
                         next: (playersRanking) => {
-                            this.playersRanking = playersRanking;
-                            this.playersRanking && (
-                                this.playersRankingPage =
-                                this.playersRanking.filter((element, index) => index >= 0 && index < 6)
-                            );
-
-                            this.playerStatisticsViewComponentRef.setChartBarData(0, 6, playersRanking);
-                            this.playerStatisticsViewComponentRef.setCharRadarData(0, 3, playersRanking);
-
                             if (playersRanking.length > 0) {
+                                this.playersRanking = playersRanking;
+                                this.playersRanking && (
+                                    this.playersRankingPage =
+                                    this.playersRanking.filter((element, index) => index >= 0 && index < 6)
+                                );
+
+                                this.playerStatisticsViewComponentRef.setChartBarData(0, 6, playersRanking);
+                                this.playerStatisticsViewComponentRef.setCharRadarData(0, 3, playersRanking);
+
                                 this.messageService.add(
                                     {
                                         severity: 'success',
@@ -151,6 +151,7 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
                                         life: this.messageLife
                                     }
                                 );
+
                             } else {
                                 setTimeout(() => {
                                     this.viewActivate$.next(false);

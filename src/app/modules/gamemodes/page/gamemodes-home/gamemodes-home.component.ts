@@ -35,8 +35,7 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
         private customDialogService: CustomDialogService,
         private confirmationService: ConfirmationService,
         private changesOnService: ChangesOnService,
-    ) {
-    }
+    ) { }
 
     public ngOnInit(): void {
         this.setGameModesWithApi();
@@ -69,12 +68,11 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
                         }
                     },
                     error: (err) => {
-                        this.messageService.clear();
-                        this.messageService.add(
+                        err.status != 403 && this.messageService.add(
                             {
                                 severity: 'error',
                                 summary: 'Error',
-                                detail: 'Please check your internet connection!',
+                                detail: 'Unexpected error!',
                                 life: this.messageLife
                             }
                         );

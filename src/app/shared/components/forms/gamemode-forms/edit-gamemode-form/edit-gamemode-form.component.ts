@@ -180,7 +180,7 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
     }
 
     public handleBackAction(): void {
-        this.closeableDialog && this.customDialogService.closeEndDialog(false);
+        this.closeableDialog && this.customDialogService.closeEndDialog();
 
         // Activate the view child before referencing the table
         this.$viewTable.next(true);
