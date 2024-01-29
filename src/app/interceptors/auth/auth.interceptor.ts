@@ -47,7 +47,7 @@ export class AuthInterceptor implements HttpInterceptor {
             if (err.status === 403 && !this.refresh) {
                 this.refresh = true;
 
-                return this.http.put('http://localhost:8080/auth/refresh-token', {}, {
+                return this.http.put(`${this.API_URL}/auth/refresh-token`, {}, {
                     headers: new HttpHeaders({
                         Authorization: `Bearer ${AuthInterceptor.refreshToken}`
                     })

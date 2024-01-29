@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject } from 'rxjs';
 import { EnumGameModeEventsCrud } from 'src/app/models/enums/EnumGameModeEventsCrud';
 import { EnumParameterEventsCrud } from 'src/app/models/enums/EnumParameterEventsCrud';
 import { EnumPlayerEventsCrud } from 'src/app/models/enums/EnumPlayerEventsCrud';
@@ -253,11 +253,6 @@ export class MenubarNavigationComponent implements OnInit, OnDestroy {
                                     contentStyle: { overflow: 'auto' },
                                     baseZIndex: 10000,
                                 });
-
-                            this.dynamicDialogRef.onClose
-                                .pipe(takeUntil(this.$destroy))
-                                .subscribe(() =>
-                                    this.playerService.changedPlayerPicture && window.location.reload())
                         }
                     },
                     {

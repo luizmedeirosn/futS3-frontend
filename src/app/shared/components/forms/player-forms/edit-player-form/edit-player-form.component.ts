@@ -182,9 +182,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
     }
 
     public handleBackAction(): void {
-        if (this.closeableDialog) {
-            this.playerPicture ? this.customDialogService.closeEndDialog(true) : this.customDialogService.closeEndDialog(false);
-        }
+        this.closeableDialog && this.customDialogService.closeEndDialog();
 
         // Activate the view child before referencing the table
         this.$viewTable.next(true);

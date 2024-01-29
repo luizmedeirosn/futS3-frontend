@@ -196,7 +196,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
 
             this.dynamicDialogRef.onClose
                 .pipe(takeUntil(this.$destroy))
-                .subscribe(() => this.selectPlayer($event.id));
+                .subscribe(() => $event.id && this.selectPlayer($event.id));
         }
 
         $event && $event.action === EnumPlayerEventsCrud.DELETE && this.deletePlayerConfirmation();

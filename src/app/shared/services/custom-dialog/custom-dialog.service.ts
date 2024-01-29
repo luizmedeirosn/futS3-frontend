@@ -22,15 +22,13 @@ export class CustomDialogService {
         return ref;
     }
 
-    public closeEndDialog(reload: boolean): void {
+    public closeEndDialog(): void {
         const ref: DynamicDialogRef | undefined = this.dynamicDialogRefs.pop();
         ref?.close();
-        reload && window.location.reload();
     }
 
-    public closeAll(reload: boolean): void {
+    public closeAll(): void {
         this.dynamicDialogRefs?.forEach(ref => ref.close());
-        reload && window.location.reload();
     }
 
 }
