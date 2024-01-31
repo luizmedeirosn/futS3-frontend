@@ -359,20 +359,10 @@
             </div>
             <div
                 *ngIf="!playersRanking || (playersRankingLoading$ | async)"
-                class="flex align-content-center align-items-center mt-3 gap-3 fadein animation-duration-1000 animation-iteration-1 animation-ease-out"
+                class="flex justify-content-center align-items-center mt-3 gap-3 fadein animation-duration-1000 animation-iteration-1 animation-ease-out"
             >
-                <p-skeleton
-                    [style]="{
-                        'width': '38rem',
-                        'height': '38rem',
-                    }"
-                ></p-skeleton>
-                <p-skeleton
-                    [style]="{
-                        'width': '38rem',
-                        'height': '38rem',
-                    }"
-                ></p-skeleton>
+                <p-skeleton width="38rem" height="38rem"></p-skeleton>
+                <p-skeleton width="38rem" height="38rem"></p-skeleton>
             </div>
         </div>
     </p-card>
