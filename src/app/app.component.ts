@@ -9,7 +9,7 @@ import { PrimeNGConfig } from 'primeng/api';
 })
 export class AppComponent implements OnInit {
 
-    public title = 'futS3-frontend';
+    public title = 'futs3-frontend';
 
     public constructor(
         private primeNGConfig: PrimeNGConfig,

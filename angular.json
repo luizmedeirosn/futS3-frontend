@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "futS3-frontend": {
+    "futs3-frontend": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -69,10 +69,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "futS3-frontend:build:production"
+              "browserTarget": "futs3-frontend:build:production"
             },
             "development": {
-              "browserTarget": "futS3-frontend:build:development"
+              "browserTarget": "futs3-frontend:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -80,7 +80,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "futS3-frontend:build"
+            "browserTarget": "futs3-frontend:build"
           }
         },
         "test": {
