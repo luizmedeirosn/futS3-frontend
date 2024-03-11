@@ -173,7 +173,7 @@
                             </div>
                         </div>
                     </th>
-                    <th id="" pSortableColumn="playerScore">
+                    <th id="" pSortableColumn="score">
                         <div
                             class="flex justify-content-between align-items-center"
                         >
@@ -185,10 +185,10 @@
                             <div
                                 class="flex justify-content-between align-items-center"
                             >
-                                <p-sortIcon field="playerScore"></p-sortIcon>
+                                <p-sortIcon field="score"></p-sortIcon>
                                 <p-columnFilter
                                     type="text"
-                                    field="playerScore"
+                                    field="score"
                                     display="menu"
                                     matchMode="contains"
                                     [showMatchModes]="false"
@@ -212,7 +212,7 @@
                 <tr>
                     <td>{{ parameter.name }}</td>
                     <td>
-                        {{ parameter.playerScore }}
+                        {{ parameter.score }}
                     </td>
                     <td
                         style="text-align: center"

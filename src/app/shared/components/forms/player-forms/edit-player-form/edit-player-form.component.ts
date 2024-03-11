@@ -229,7 +229,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
             const playerParameterScore: PlayerParameterScoreDTO = {
                 id: parameter.id,
                 name: parameterName,
-                playerScore: Number(this.playerParameterForm.value.score),
+                score: Number(this.playerParameterForm.value.score),
             };
 
             this.playerParametersScore.push(playerParameterScore);

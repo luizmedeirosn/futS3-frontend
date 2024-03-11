@@ -47,7 +47,7 @@ export class PlayerService {
         playerRequest.height && body.set('height', playerRequest.height);
         playerRequest.playerPicture && body.set('playerPicture', playerRequest.playerPicture);
 
-        const parameters = playerRequest.parameters.map(element => `${element.id} ${element.playerScore}`).join(',');
+        const parameters = playerRequest.parameters.map(element => `${element.id} ${element.score}`).join(',');
         body.set('parameters', parameters);
 
         return this.httpClient.post<PlayerFullDTO>(
@@ -65,7 +65,7 @@ export class PlayerService {
         playerRequest.height && body.set('height', playerRequest.height);
         playerRequest.playerPicture && body.set('playerPicture', playerRequest.playerPicture);
 
-        const parameters = playerRequest.parameters.map(element => `${element.id} ${element.playerScore}`).join(',');
+        const parameters = playerRequest.parameters.map(element => `${element.id} ${element.score}`).join(',');
         body.set('parameters', parameters);
 
         return this.httpClient.put<PlayerFullDTO>(

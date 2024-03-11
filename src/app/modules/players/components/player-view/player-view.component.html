@@ -187,7 +187,7 @@
                             </div>
                         </div>
                     </th>
-                    <th id="3" pSortableColumn="playerScore">
+                    <th id="3" pSortableColumn="score">
                         <div
                             class="flex justify-content-between align-items-center"
                         >
@@ -199,10 +199,10 @@
                             <div
                                 class="flex justify-content-between align-items-center"
                             >
-                                <p-sortIcon field="playerScore"></p-sortIcon>
+                                <p-sortIcon field="score"></p-sortIcon>
                                 <p-columnFilter
                                     type="text"
-                                    field="playerScore"
+                                    field="score"
                                     display="menu"
                                     matchMode="contains"
                                     [showMatchModes]="false"
@@ -219,7 +219,7 @@
                 <tr>
                     <td>{{ parameter.id }}</td>
                     <td>{{ parameter.name }}</td>
-                    <td>{{ parameter.playerScore }}</td>
+                    <td>{{ parameter.score }}</td>
                 </tr>
             </ng-template>
         </p-table>
