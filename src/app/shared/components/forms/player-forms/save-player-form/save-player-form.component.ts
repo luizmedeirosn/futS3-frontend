@@ -4,7 +4,7 @@ import { MessageService } from 'primeng/api';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { ParameterDTO } from 'src/app/models/dto/parameter/response/ParameterDTO';
 import { PostPlayerDTO } from 'src/app/models/dto/player/request/PostPlayerDTO';
-import { PlayerParameterScoreDTO } from 'src/app/models/dto/player/response/PlayerParameterScoreDTO';
+import { PlayerParameterDataDTO } from 'src/app/models/dto/player/response/PlayerParameterDataDTO';
 import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
 import { ParameterService } from 'src/app/services/parameter/parameter.service';
 import { PlayerService } from 'src/app/services/player/player.service';
@@ -25,7 +25,7 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
     public positions!: PositionMinDTO[];
     public parameters!: ParameterDTO[];
     private parametersOff: ParameterDTO[] = [];
-    public playerParametersScore: PlayerParameterScoreDTO[] = [];
+    public playerParametersScore: PlayerParameterDataDTO[] = [];
 
     public newPlayerForm: any = this.formBuilder.group({
         name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
@@ -91,7 +91,7 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
             this.parametersOff.push(parameter);
             this.parameters = this.parameters.filter(p => p.name !== parameterName);
 
-            const playerParameterScore: PlayerParameterScoreDTO = {
+            const playerParameterScore: PlayerParameterDataDTO = {
                 id: parameter.id,
                 name: parameterName,
                 score: Number(this.playerParameterForm.value.score),

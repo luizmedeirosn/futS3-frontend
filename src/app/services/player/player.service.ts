@@ -4,7 +4,7 @@ import { Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
 import { PostPlayerDTO } from 'src/app/models/dto/player/request/PostPlayerDTO';
 import { UpdatePlayerDTO } from 'src/app/models/dto/player/request/UpdatePlayerDTO';
-import { PlayerFullDTO } from 'src/app/models/dto/player/response/PlayerFullDTO';
+import { PlayerFullDTO } from 'src/app/models/dto/player/response/PlayerDTO';
 import { PlayerMinDTO } from 'src/app/models/dto/player/response/PlayerMinDTO';
 
 @Injectable({

@@ -1,5 +1,5 @@
 import { PositionMinDTO } from "../../position/response/PositionMinDTO";
-import { PlayerParameterScoreDTO } from "./PlayerParameterScoreDTO";
+import { PlayerParameterDataDTO } from "./PlayerParameterDataDTO";
 
 export interface PlayerFullDTO {
 
@@ -7,9 +7,9 @@ export interface PlayerFullDTO {
     name: string;
     age: number;
     height: number;
-    position: PositionMinDTO;
-    profilePictureLink: string;
     team: string;
-    parameters: Array<PlayerParameterScoreDTO>
+    pictureUrl: string;
+    position: PositionMinDTO;
+    parameters: Array<PlayerParameterDataDTO>
 
 }

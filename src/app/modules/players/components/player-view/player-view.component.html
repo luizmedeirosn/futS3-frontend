@@ -55,14 +55,14 @@
         >
             <div
                 class="{{
-                    player.profilePictureLink
+                    player.pictureUrl
                         ? 'player-profile-picture'
                         : 'player-profile-without-picture'
                 }}"
             >
                 <img
                     src="{{
-                        player.profilePictureLink ||
+                        player.pictureUrl ||
                             '../../../../../assets/without-picture.png'
                     }}"
                     alt="profile-picture"
