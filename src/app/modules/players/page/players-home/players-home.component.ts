@@ -96,7 +96,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
     }
 
     private selectPlayer(id: number): void {
-        id && this.playerService.findFullById(id)
+        id && this.playerService.findById(id)
             .pipe(takeUntil(this.$destroy))
             .subscribe(
                 {

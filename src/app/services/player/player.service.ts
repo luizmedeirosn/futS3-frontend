@@ -32,9 +32,9 @@ export class PlayerService {
         );
     }
 
-    public findFullById(id: number): Observable<PlayerFullDTO> {
+    public findById(id: number): Observable<PlayerFullDTO> {
         return this.httpClient.get<PlayerFullDTO>(
-            `${this.API_URL}/players/${id}/full`,
+            `${this.API_URL}/players/${id}`,
         );
     }
 

@@ -153,7 +153,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
     public handleSelectPlayer($event: number): void {
         if ($event) {
             this.setParametersWithApi();
-            this.playerService.findFullById($event)
+            this.playerService.findById($event)
                 .pipe(takeUntil(this.$destroy))
                 .subscribe({
                     next: (player) => {
