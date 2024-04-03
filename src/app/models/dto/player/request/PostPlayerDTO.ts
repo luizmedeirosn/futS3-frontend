@@ -1,4 +1,4 @@
-import { PlayerParameterDataDTO } from "../response/PlayerParameterDataDTO";
+import { PlayerParameterIdScoreDTO } from "./PlayerParameterIdScoreDTO";
 
 export interface PostPlayerDTO {
 
@@ -8,5 +8,5 @@ export interface PostPlayerDTO {
     height: string | undefined;
     positionId: string;
     playerPicture: File | undefined;
-    parameters: Array<PlayerParameterDataDTO>
+    parameters: Array<PlayerParameterIdScoreDTO>
 }

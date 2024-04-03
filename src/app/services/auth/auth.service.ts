@@ -6,6 +6,7 @@ import { MessageService } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { SigninRequestDTO } from 'src/app/models/dto/auth/SigninRequestDTO';
 import { SigninResponseDTO } from 'src/app/models/dto/auth/SigninResponseDTO';
+import { CustomDialogService } from 'src/app/shared/services/custom-dialog/custom-dialog.service';
 import { environment } from 'src/environments/environment.prod';
 
 @Injectable({
@@ -19,7 +20,8 @@ export class AuthService {
         private httpClient: HttpClient,
         private cookieService: CookieService,
         private router: Router,
-        private messageService: MessageService
+        private messageService: MessageService,
+        private customDialogService: CustomDialogService
     ) { }
 
     public signin(signin: SigninRequestDTO): Observable<SigninResponseDTO> {
@@ -60,6 +62,7 @@ export class AuthService {
                 life: 6000
             });
         }
+        this.customDialogService.closeAll();
         this.cookieService.deleteAll();
         this.router.navigate(['/home']);
     }

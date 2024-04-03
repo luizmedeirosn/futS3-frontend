@@ -47,8 +47,8 @@ export class PlayerService {
         playerRequest.height && body.set('height', playerRequest.height);
         playerRequest.playerPicture && body.set('playerPicture', playerRequest.playerPicture);
 
-        const parameters = playerRequest.parameters.map(element => `${element.id} ${element.score}`).join(',');
-        body.set('parameters', parameters);
+        const parametersJson = JSON.stringify(playerRequest.parameters);
+        body.set('parameters', parametersJson);
 
         return this.httpClient.post<PlayerFullDTO>(
             `${this.API_URL}/players`,
