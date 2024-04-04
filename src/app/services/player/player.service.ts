@@ -39,6 +39,22 @@ export class PlayerService {
     }
 
     public save(playerRequest: PostPlayerDTO): Observable<PlayerFullDTO> {
+        const body = this.convertPlayerRequestToFormData(playerRequest);
+        return this.httpClient.post<PlayerFullDTO>(
+            `${this.API_URL}/players`,
+            body
+        );
+    }
+
+    public update(playerRequest: UpdatePlayerDTO): Observable<PlayerFullDTO> {
+        const body = this.convertPlayerRequestToFormData(playerRequest);
+        return this.httpClient.put<PlayerFullDTO>(
+            `${this.API_URL}/players/${playerRequest.id}`,
+            body
+        );
+    }
+
+    private convertPlayerRequestToFormData(playerRequest: PostPlayerDTO | UpdatePlayerDTO) : FormData {
         const body: FormData = new FormData();
         body.set('name', playerRequest.name);
         body.set('team', playerRequest.team);
@@ -50,28 +66,7 @@ export class PlayerService {
         const parametersJson = JSON.stringify(playerRequest.parameters);
         body.set('parameters', parametersJson);
 
-        return this.httpClient.post<PlayerFullDTO>(
-            `${this.API_URL}/players`,
-            body
-        );
-    }
-
-    public update(playerRequest: UpdatePlayerDTO): Observable<PlayerFullDTO> {
-        const body: FormData = new FormData();
-        body.set('name', playerRequest.name);
-        body.set('team', playerRequest.team);
-        body.set('positionId', playerRequest.positionId);
-        playerRequest.age && body.set('age', playerRequest.age);
-        playerRequest.height && body.set('height', playerRequest.height);
-        playerRequest.playerPicture && body.set('playerPicture', playerRequest.playerPicture);
-
-        const parameters = playerRequest.parameters.map(element => `${element.id} ${element.score}`).join(',');
-        body.set('parameters', parameters);
-
-        return this.httpClient.put<PlayerFullDTO>(
-            `${this.API_URL}/players/${playerRequest.id}`,
-            body
-        );
+        return body;
     }
 
     public deleteById(id: number): Observable<void> {
