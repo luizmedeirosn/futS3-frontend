@@ -87,6 +87,8 @@ export class DeleteGamemodeFormComponent implements OnInit, OnDestroy {
                                 detail: 'Game mode deleted successfully!',
                                 life: this.toastLife
                             });
+
+                            this.gameModeService.gameModeIdInPreview = undefined;
                             this.changesOnService.setChangesOn(true);
                         }, 1000);
                     },
