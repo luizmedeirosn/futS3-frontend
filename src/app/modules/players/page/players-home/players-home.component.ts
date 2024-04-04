@@ -4,7 +4,7 @@ import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
 import { EditOrDeletePlayerAction } from 'src/app/models/events/EditOrDeletePlayerAction';
 import { ViewAction } from 'src/app/models/events/ViewAction';
-import { PlayerFullDTO } from 'src/app/models/dto/player/response/PlayerFullDTO';
+import { PlayerFullDTO } from 'src/app/models/dto/player/response/PlayerDTO';
 import { PlayerMinDTO } from 'src/app/models/dto/player/response/PlayerMinDTO';
 import { EnumPlayerEventsCrud } from 'src/app/models/enums/EnumPlayerEventsCrud';
 import { PlayerService } from 'src/app/services/player/player.service';
@@ -96,7 +96,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
     }
 
     private selectPlayer(id: number): void {
-        id && this.playerService.findFullById(id)
+        id && this.playerService.findById(id)
             .pipe(takeUntil(this.$destroy))
             .subscribe(
                 {

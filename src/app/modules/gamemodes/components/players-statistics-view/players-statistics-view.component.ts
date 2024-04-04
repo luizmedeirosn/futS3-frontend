@@ -253,7 +253,7 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
                             ),
                         pointBorderWidth: 3,
                         data: player.parameters.map(
-                            (element) => element.playerScore
+                            (element) => element.score
                         ),
                     });
                 }

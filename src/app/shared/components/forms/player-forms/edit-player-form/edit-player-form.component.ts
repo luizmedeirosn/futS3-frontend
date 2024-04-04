@@ -6,9 +6,9 @@ import { Table } from 'primeng/table';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { ParameterDTO } from 'src/app/models/dto/parameter/response/ParameterDTO';
 import { UpdatePlayerDTO } from 'src/app/models/dto/player/request/UpdatePlayerDTO';
-import { PlayerFullDTO } from 'src/app/models/dto/player/response/PlayerFullDTO';
+import { PlayerFullDTO } from 'src/app/models/dto/player/response/PlayerDTO';
 import { PlayerMinDTO } from 'src/app/models/dto/player/response/PlayerMinDTO';
-import { PlayerParameterScoreDTO } from 'src/app/models/dto/player/response/PlayerParameterScoreDTO';
+import { PlayerParameterDataDTO } from 'src/app/models/dto/player/response/PlayerParameterDataDTO';
 import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
 import { EnumPlayerEventsCrud } from 'src/app/models/enums/EnumPlayerEventsCrud';
 import { ParameterService } from 'src/app/services/parameter/parameter.service';
@@ -41,7 +41,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
     public positions!: PositionMinDTO[];
     public parameters!: ParameterDTO[];
     private parametersOff: ParameterDTO[] = [];
-    public playerParametersScore: PlayerParameterScoreDTO[] = [];
+    public playerParametersScore: PlayerParameterDataDTO[] = [];
 
     public playerForm = this.formBuilder.group({
         name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
@@ -153,7 +153,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
     public handleSelectPlayer($event: number): void {
         if ($event) {
             this.setParametersWithApi();
-            this.playerService.findFullById($event)
+            this.playerService.findById($event)
                 .pipe(takeUntil(this.$destroy))
                 .subscribe({
                     next: (player) => {
@@ -226,10 +226,10 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
             this.parametersOff.push(parameter);
             this.parameters = this.parameters.filter(p => p.name !== parameterName);
 
-            const playerParameterScore: PlayerParameterScoreDTO = {
+            const playerParameterScore: PlayerParameterDataDTO = {
                 id: parameter.id,
                 name: parameterName,
-                playerScore: Number(this.playerParameterForm.value.score),
+                score: Number(this.playerParameterForm.value.score),
             };
 
             this.playerParametersScore.push(playerParameterScore);

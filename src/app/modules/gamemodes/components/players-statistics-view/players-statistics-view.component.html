@@ -150,11 +150,11 @@
                                         <img
                                             alt=""
                                             src="{{
-                                                player.profilePictureLink ||
+                                                player.pictureUrl ||
                                                     '../../../../../../../assets/without-picture.png'
                                             }}"
                                             class="{{
-                                                player.profilePictureLink
+                                                player.pictureUrl
                                                     ? 'players-ranking-profile-picture'
                                                     : 'players-ranking-profile-without-picture'
                                             }}"
@@ -247,7 +247,7 @@
                                                 </th>
                                                 <th
                                                     id=""
-                                                    pSortableColumn="playerScore"
+                                                    pSortableColumn="score"
                                                 >
                                                     <div
                                                         class="flex justify-content-between align-items-center"
@@ -261,7 +261,7 @@
                                                             class="flex justify-content-between align-items-center"
                                                         >
                                                             <p-sortIcon
-                                                                field="playerScore"
+                                                                field="score"
                                                             ></p-sortIcon>
                                                         </div>
                                                     </div>
@@ -275,7 +275,7 @@
                                             <tr>
                                                 <td>{{ parameter.name }}</td>
                                                 <td>
-                                                    {{ parameter.playerScore }}
+                                                    {{ parameter.score }}
                                                 </td>
                                             </tr>
                                         </ng-template>

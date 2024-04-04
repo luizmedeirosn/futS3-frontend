@@ -4,7 +4,7 @@ import { Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
 import { PostPlayerDTO } from 'src/app/models/dto/player/request/PostPlayerDTO';
 import { UpdatePlayerDTO } from 'src/app/models/dto/player/request/UpdatePlayerDTO';
-import { PlayerFullDTO } from 'src/app/models/dto/player/response/PlayerFullDTO';
+import { PlayerFullDTO } from 'src/app/models/dto/player/response/PlayerDTO';
 import { PlayerMinDTO } from 'src/app/models/dto/player/response/PlayerMinDTO';
 
 @Injectable({
@@ -32,24 +32,14 @@ export class PlayerService {
         );
     }
 
-    public findFullById(id: number): Observable<PlayerFullDTO> {
+    public findById(id: number): Observable<PlayerFullDTO> {
         return this.httpClient.get<PlayerFullDTO>(
-            `${this.API_URL}/players/${id}/full`,
+            `${this.API_URL}/players/${id}`,
         );
     }
 
     public save(playerRequest: PostPlayerDTO): Observable<PlayerFullDTO> {
-        const body: FormData = new FormData();
-        body.set('name', playerRequest.name);
-        body.set('team', playerRequest.team);
-        body.set('positionId', playerRequest.positionId);
-        playerRequest.age && body.set('age', playerRequest.age);
-        playerRequest.height && body.set('height', playerRequest.height);
-        playerRequest.playerPicture && body.set('playerPicture', playerRequest.playerPicture);
-
-        const parameters = playerRequest.parameters.map(element => `${element.id} ${element.playerScore}`).join(',');
-        body.set('parameters', parameters);
-
+        const body = this.convertPlayerRequestToFormData(playerRequest);
         return this.httpClient.post<PlayerFullDTO>(
             `${this.API_URL}/players`,
             body
@@ -57,6 +47,14 @@ export class PlayerService {
     }
 
     public update(playerRequest: UpdatePlayerDTO): Observable<PlayerFullDTO> {
+        const body = this.convertPlayerRequestToFormData(playerRequest);
+        return this.httpClient.put<PlayerFullDTO>(
+            `${this.API_URL}/players/${playerRequest.id}`,
+            body
+        );
+    }
+
+    private convertPlayerRequestToFormData(playerRequest: PostPlayerDTO | UpdatePlayerDTO) : FormData {
         const body: FormData = new FormData();
         body.set('name', playerRequest.name);
         body.set('team', playerRequest.team);
@@ -65,13 +63,10 @@ export class PlayerService {
         playerRequest.height && body.set('height', playerRequest.height);
         playerRequest.playerPicture && body.set('playerPicture', playerRequest.playerPicture);
 
-        const parameters = playerRequest.parameters.map(element => `${element.id} ${element.playerScore}`).join(',');
-        body.set('parameters', parameters);
+        const parametersJson = JSON.stringify(playerRequest.parameters);
+        body.set('parameters', parametersJson);
 
-        return this.httpClient.put<PlayerFullDTO>(
-            `${this.API_URL}/players/${playerRequest.id}`,
-            body
-        );
+        return body;
     }
 
     public deleteById(id: number): Observable<void> {

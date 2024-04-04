@@ -3,8 +3,9 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { ParameterDTO } from 'src/app/models/dto/parameter/response/ParameterDTO';
+import { PlayerParameterIdScoreDTO } from 'src/app/models/dto/player/request/PlayerParameterIdScoreDTO';
 import { PostPlayerDTO } from 'src/app/models/dto/player/request/PostPlayerDTO';
-import { PlayerParameterScoreDTO } from 'src/app/models/dto/player/response/PlayerParameterScoreDTO';
+import { PlayerParameterDataDTO } from 'src/app/models/dto/player/response/PlayerParameterDataDTO';
 import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
 import { ParameterService } from 'src/app/services/parameter/parameter.service';
 import { PlayerService } from 'src/app/services/player/player.service';
@@ -25,7 +26,7 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
     public positions!: PositionMinDTO[];
     public parameters!: ParameterDTO[];
     private parametersOff: ParameterDTO[] = [];
-    public playerParametersScore: PlayerParameterScoreDTO[] = [];
+    public playerParametersScore: PlayerParameterDataDTO[] = [];
 
     public newPlayerForm: any = this.formBuilder.group({
         name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
@@ -91,10 +92,10 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
             this.parametersOff.push(parameter);
             this.parameters = this.parameters.filter(p => p.name !== parameterName);
 
-            const playerParameterScore: PlayerParameterScoreDTO = {
+            const playerParameterScore: PlayerParameterDataDTO = {
                 id: parameter.id,
                 name: parameterName,
-                playerScore: Number(this.playerParameterForm.value.score),
+                score: Number(this.playerParameterForm.value.score),
             };
 
             this.playerParametersScore.push(playerParameterScore);
@@ -119,6 +120,12 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
         if (this.newPlayerForm.valid && this.newPlayerForm.value) {
             const position = this.newPlayerForm.value.position as PositionMinDTO | undefined;
             if (position) {
+                const parameters: PlayerParameterIdScoreDTO[] =
+                    this.playerParametersScore.map(p => ({
+                        id: p.id,
+                        score: p.score
+                    }));                
+
                 const playerRequest: PostPlayerDTO = {
                     name: this.newPlayerForm.value.name as string,
                     team: this.newPlayerForm.value.team as string,
@@ -126,7 +133,7 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
                     height: this.newPlayerForm.value.height as string | undefined,
                     positionId: String(position.id),
                     playerPicture: this.playerPicture,
-                    parameters: this.playerParametersScore
+                    parameters
                 };
 
                 this.$viewSelectedPicture.next(false);
