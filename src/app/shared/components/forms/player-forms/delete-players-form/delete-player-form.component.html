@@ -72,11 +72,11 @@
                         <img
                             alt="{{ player.name }}"
                             src="{{
-                                player.profilePictureLink ||
+                                player.pictureUrl ||
                                     '../../../../../../../assets/without-picture.png'
                             }}"
                             class="{{
-                                player.profilePictureLink
+                                player.pictureUrl
                                     ? 'players-table-profile-picture'
                                     : 'players-table-profile-without-picture'
                             }}"
