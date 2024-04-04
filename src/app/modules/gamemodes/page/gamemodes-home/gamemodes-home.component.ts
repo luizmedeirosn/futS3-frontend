@@ -48,7 +48,7 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
                         this.setGameModesWithApi();
 
                         const gameModeIdInPreview: number | undefined = this.gameModeService.gameModeIdInPreview;
-                        gameModeIdInPreview && this.selectGameMode(gameModeIdInPreview);
+                        gameModeIdInPreview ? this.selectGameMode(gameModeIdInPreview) : this.handleBackAction();
                     }
                 },
                 error: (err) => {

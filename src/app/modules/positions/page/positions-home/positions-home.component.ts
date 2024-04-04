@@ -61,7 +61,7 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
                         this.setPositionsWithApi();
 
                         const changedPositionId: number | undefined = this.positionService.changedPositionId;
-                        changedPositionId && this.selectPosition(changedPositionId);
+                        changedPositionId ? this.selectPosition(changedPositionId) : this.handleBackAction();
                     }
                 },
                 error: (err) => {

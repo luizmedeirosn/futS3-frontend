@@ -86,7 +86,8 @@ export class DeletePlayerFormComponent implements OnInit, OnDestroy {
                                 summary: 'Success',
                                 detail: 'Player deleted successfully!'
                             });
-
+                            
+                            this.playerService.changedPlayerId = undefined;
                             this.changesOnService.setChangesOn(true);
                         }, 1000);
                     },

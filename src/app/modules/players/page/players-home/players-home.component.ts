@@ -61,7 +61,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                         this.setPlayerWithApi();
 
                         const changedPlayerId: number | undefined = this.playerService.changedPlayerId;
-                        changedPlayerId && this.selectPlayer(changedPlayerId);
+                        changedPlayerId ? this.selectPlayer(changedPlayerId) : this.handleBackAction();
                     }
                 },
                 error: (err) => {

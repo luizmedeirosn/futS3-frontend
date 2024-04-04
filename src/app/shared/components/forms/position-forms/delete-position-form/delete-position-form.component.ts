@@ -87,6 +87,8 @@ export class DeletePositionFormComponent implements OnInit, OnDestroy {
                                 detail: 'Position deleted successfully!',
                                 life: this.toastLife
                             });
+
+                            this.positionService.changedPositionId = undefined;
                             this.changesOnService.setChangesOn(true);
                         }, 1000);
                     },
