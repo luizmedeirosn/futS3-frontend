@@ -87,14 +87,14 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                     this.players = players;
 
                     let increment: number = 0;
-                    let page: Array<PlayerMinDTO> = new Array();
+                    let page: Array<PlayerMinDTO> = [];
 
                     players.forEach((player, index, array) => {
                         page.push(player);
                         increment += 1;
                         if (increment === 5 || index === array.length - 1) {
                             this.playersTablePages.push(page);
-                            page = new Array();
+                            page = [];
                             increment = 0;
                         }
                     });
@@ -306,7 +306,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
 
             this.parametersOff.forEach(e => this.parameters.push(e));
             this.parameters.sort((p1, p2) => p1.name.toUpperCase().localeCompare(p2.name.toUpperCase()));
-            this.parametersOff = new Array();
+            this.parametersOff = [];
             this.playerParametersScore = [];
         }
     }

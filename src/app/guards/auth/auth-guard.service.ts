@@ -16,7 +16,7 @@ export class AuthGuardService {
     public canActivate():
         Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | UrlTree | boolean {
         if (!this.authService.isLoggedIn()) {
-            this.router.navigate(['/home'])
+            this.router.navigate(['/home']).then(r => {})
             return false;
 
         } else {

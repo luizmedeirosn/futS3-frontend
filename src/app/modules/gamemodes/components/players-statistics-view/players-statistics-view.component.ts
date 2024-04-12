@@ -57,11 +57,9 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
 
     public chartRadarData: any;
     public chartRadarOptions: any;
-    private readonly colors: Array<string> = new Array(
-        '--blue-600',
+    private readonly colors: Array<string> = ['--blue-600',
         '--green-600',
-        '--red-600'
-    );
+        '--red-600'];
 
     public constructor(private positionService: PositionService) { }
 

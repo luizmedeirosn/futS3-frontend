@@ -27,7 +27,7 @@ export class EditPositionFormComponent {
     private readonly toastLife: number = 2000;
 
     @ViewChild('positionsTable') public playersTable!: Table;
-    private positionsTablePages: Array<Array<PositionDTO>> = new Array();
+    private positionsTablePages: Array<Array<PositionDTO>> = [];
 
     public $viewTable: BehaviorSubject<boolean> = new BehaviorSubject(true);
     public closeableDialog: boolean = false;
@@ -35,8 +35,8 @@ export class EditPositionFormComponent {
     public positions!: Array<PositionDTO>;
     public selectedPosition!: PositionDTO | undefined;
     public parameters!: Array<ParameterDTO>;
-    private parametersOff: Array<ParameterDTO> = new Array();
-    public positionParameters: Array<ParameterWeightDTO> = new Array();
+    private parametersOff: Array<ParameterDTO> = [];
+    public positionParameters: Array<ParameterWeightDTO> = [];
 
     public editPositionForm: any = this.formBuilder.group({
         name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
@@ -77,14 +77,14 @@ export class EditPositionFormComponent {
                     this.positions = positions;
 
                     let increment: number = 0;
-                    let page: Array<PositionDTO> = new Array();
+                    let page: Array<PositionDTO> = [];
 
                     positions.forEach((position, index, array) => {
                         page.push(position);
                         increment += 1;
                         if (increment === 5 || index === array.length - 1) {
                             this.positionsTablePages.push(page);
-                            page = new Array();
+                            page = [];
                             increment = 0;
                         }
                     });
@@ -263,8 +263,8 @@ export class EditPositionFormComponent {
 
         this.parametersOff.forEach(e => this.parameters.push(e));
         this.parameters.sort((p1, p2) => p1.name.toUpperCase().localeCompare(p2.name.toUpperCase()));
-        this.parametersOff = new Array();
-        this.positionParameters = new Array();
+        this.parametersOff = [];
+        this.positionParameters = [];
     }
 
     public ngOnDestroy(): void {

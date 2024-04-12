@@ -33,7 +33,6 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
     public playersRankingLoading$: BehaviorSubject<boolean> = new BehaviorSubject(true);
     public playersRanking!: PlayerFullScoreDTO[] | undefined;
     public playersRankingPage!: PlayerFullScoreDTO[];
-    setChatBarDataRef: any;
 
     public constructor(
         private gameModeService: GameModeService,

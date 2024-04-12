@@ -20,7 +20,7 @@ export class LoggedInGuardService {
             return true;
 
         } else {
-            this.router.navigate(['/gamemodes']);
+            this.router.navigate(['/gamemodes']).then(r => {});
             return false;
         }
     }

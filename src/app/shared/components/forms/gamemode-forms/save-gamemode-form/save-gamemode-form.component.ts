@@ -24,7 +24,7 @@ export class SaveGamemodeFormComponent implements OnInit, OnDestroy {
     private readonly toastLife: number = 2000;
 
     public positions!: Array<PositionMinDTO>;
-    public positionsOff: Array<PositionMinDTO> = new Array();
+    public positionsOff: Array<PositionMinDTO> = [];
 
     public newGameModeForm: any = this.formBuilder.group({
         formationName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
@@ -115,7 +115,7 @@ export class SaveGamemodeFormComponent implements OnInit, OnDestroy {
     public handleDeletePosition($event: number): void {
         const position: PositionMinDTO | undefined = this.positionsOff.find((p) => p.id === $event);
         position && this.positions.push(position);
-        this.positionsOff = position && this.positionsOff.filter(p => p.id !== position.id) || new Array();
+        this.positionsOff = position && this.positionsOff.filter(p => p.id !== position.id) || [];
         this.positionsOff.sort((p1, p2) =>
             p1.name.toUpperCase().localeCompare(p2.name.toUpperCase())
         );
@@ -162,7 +162,7 @@ export class SaveGamemodeFormComponent implements OnInit, OnDestroy {
         this.positionsOff.forEach(e => this.positions.push(e));
         this.positionsOff.sort((p1, p2) =>
             p1.name.toUpperCase().localeCompare(p2.name.toUpperCase())
-        ); this.positionsOff = new Array();
+        ); this.positionsOff = [];
     }
 
     public ngOnDestroy(): void {

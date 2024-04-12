@@ -124,7 +124,7 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
                     this.playerParametersScore.map(p => ({
                         id: p.id,
                         score: p.score
-                    }));                
+                    }));
 
                 const playerRequest: PostPlayerDTO = {
                     name: this.newPlayerForm.value.name as string,
@@ -170,7 +170,7 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
 
             this.parametersOff.forEach(e => this.parameters.push(e));
             this.parameters.sort((p1, p2) => p1.name.toUpperCase().localeCompare(p2.name.toUpperCase()));
-            this.parametersOff = new Array();
+            this.parametersOff = [];
             this.playerParametersScore = [];
         }
     }

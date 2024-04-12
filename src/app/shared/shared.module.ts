@@ -29,6 +29,7 @@ import { EditPositionFormComponent } from './components/forms/position-forms/edi
 import { SavePositionFormComponent } from './components/forms/position-forms/save-position-form/save-position-form.component';
 import { MenubarNavigationComponent } from './components/menubar-navigation/menubar-navigation.component';
 import { ShortenPipe } from './pipes/shorten.pipe';
+import {RippleModule} from "primeng/ripple";
 
 
 @NgModule({
@@ -65,6 +66,7 @@ import { ShortenPipe } from './pipes/shorten.pipe';
         CardModule,
         ProgressBarModule,
         InputTextareaModule,
+        RippleModule,
     ],
     exports: [MenubarNavigationComponent, ShortenPipe, FormControlAlertComponent],
 })

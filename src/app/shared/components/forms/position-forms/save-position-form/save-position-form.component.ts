@@ -20,8 +20,8 @@ export class SavePositionFormComponent implements OnInit, OnDestroy {
     private readonly toastLife: number = 2000;
 
     public parameters!: Array<ParameterDTO>;
-    private parametersOff: Array<ParameterDTO> = new Array();
-    public positionParameters: Array<ParameterWeightDTO> = new Array();
+    private parametersOff: Array<ParameterDTO> = [];
+    public positionParameters: Array<ParameterWeightDTO> = [];
 
     public newPositionForm: any = this.formBuilder.group({
         name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
@@ -128,8 +128,8 @@ export class SavePositionFormComponent implements OnInit, OnDestroy {
 
         this.parametersOff.forEach(e => this.parameters.push(e));
         this.parameters.sort((p1, p2) => p1.name.toUpperCase().localeCompare(p2.name.toUpperCase()));
-        this.parametersOff = new Array();
-        this.positionParameters = new Array();
+        this.parametersOff = [];
+        this.positionParameters = [];
     }
 
     public ngOnDestroy(): void {

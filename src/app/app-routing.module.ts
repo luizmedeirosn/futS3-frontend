@@ -31,7 +31,7 @@ const routes: Routes = [
     },
     {
         path: '**',
-        redirectTo: 'gamemodes',
+        redirectTo: 'home',
         pathMatch: 'full'
     },
 ];

@@ -7,7 +7,7 @@ import { take } from 'rxjs';
 })
 export class CustomDialogService {
 
-    private dynamicDialogRefs: Array<DynamicDialogRef> = new Array();
+    private dynamicDialogRefs: Array<DynamicDialogRef> = [];
 
     public constructor(
         private dialogService: DialogService,

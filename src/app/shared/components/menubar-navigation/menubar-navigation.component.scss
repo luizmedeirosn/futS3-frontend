@@ -1,8 +1,8 @@
-.menubar {
+#menubar {
     border: none;
 }
 
-.logo {
+#logo {
     img {
         width: 100px;
         height: 100px;
@@ -30,9 +30,8 @@
         height: 10.27rem;
         border-radius: 10px;
 
-        background: linear-gradient(to bottom, #0f0725, #04f3a3);
         background-size: 100% 200%;
-        background-repeat: no-repeat;
+        background: linear-gradient(to bottom, #0f0725, #02c986) no-repeat;
     }
 
     .p-menuitem:hover .p-submenu-list {
@@ -90,7 +89,7 @@
 .p-menubar-button {
     &:focus {
         box-shadow: 0 0 0 3px #ffffff, 0 0 0 8px #2563eb,
-            0 0 0 2px rgba(0, 0, 0, 0);
+        0 0 0 2px rgba(0, 0, 0, 0);
     }
     transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
 }
@@ -98,9 +97,8 @@
 @media screen and (max-width: 960px) {
     .p-menubar-root-list {
         min-width: 55vw;
-        background: linear-gradient(to bottom, #0f0725, #04f3a3);
         background-size: 100% 200%;
-        background-repeat: no-repeat;
+        background: linear-gradient(to bottom, #0f0725, #04f3a3) no-repeat;
     }
 }
 

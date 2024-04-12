@@ -20,7 +20,7 @@ export class EditParameterFormComponent implements OnInit, OnDestroy {
     private readonly toastLife: number = 2000;
 
     @ViewChild('parametersTable') public parametersTable!: Table;
-    private parametersTablePages: Array<Array<ParameterDTO>> = new Array();
+    private parametersTablePages: Array<Array<ParameterDTO>> = [];
 
     public $viewTable: BehaviorSubject<boolean> = new BehaviorSubject(true);
     public parameters!: Array<ParameterDTO>;
@@ -53,14 +53,14 @@ export class EditParameterFormComponent implements OnInit, OnDestroy {
                         this.parameters = parameters;
 
                         let increment: number = 0;
-                        let page: Array<ParameterDTO> = new Array();
+                        let page: Array<ParameterDTO> = [];
 
                         parameters.forEach((parameter, index, array) => {
                             page.push(parameter);
                             increment += 1;
                             if (increment === 5 || index === array.length - 1) {
                                 this.parametersTablePages.push(page);
-                                page = new Array();
+                                page = [];
                                 increment = 0;
                             }
                         });

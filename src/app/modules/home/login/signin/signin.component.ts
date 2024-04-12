@@ -6,7 +6,7 @@ import { MessageService } from 'primeng/api';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { SigninRequestDTO } from 'src/app/models/dto/auth/SigninRequestDTO';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { SigninResponseDTO } from './../../../../models/dto/auth/SigninResponseDTO';
+import { SigninResponseDTO } from '../../../../models/dto/auth/SigninResponseDTO';
 import { AuthInterceptor } from 'src/app/interceptors/auth/auth.interceptor';
 
 @Component({
@@ -35,6 +35,9 @@ export class SigninComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.messageService.clear();
+        if (this.authService.isLoggedIn()) {
+            this.router.navigate(['/gamemodes']).then(r => {});
+        }
     }
 
     public onSubmitSigninForm(): void {
@@ -58,7 +61,8 @@ export class SigninComponent implements OnInit, OnDestroy {
                                 life: 3000
                             });
 
-                            this.router.navigate(['/gamemodes']);
+                            this.router.navigate(['/gamemodes']).then(r => {
+                            });
                         }
                     },
                     error: (err) => {

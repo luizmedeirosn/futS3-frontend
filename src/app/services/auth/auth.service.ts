@@ -64,7 +64,7 @@ export class AuthService {
         }
         this.customDialogService.closeAll();
         this.cookieService.deleteAll();
-        this.router.navigate(['/home']);
+        this.router.navigate(['/home']).then(r => {});
     }
 
 }
