@@ -9,6 +9,7 @@ import { HOME_ROUTES } from './home.routing';
 import { SigninComponent } from './login/signin/signin.component';
 import { HomeComponent } from './page/home.component';
 import {RippleModule} from "primeng/ripple";
+import {SharedModule} from "../../shared/shared.module";
 
 
 @NgModule({
@@ -26,6 +27,7 @@ import {RippleModule} from "primeng/ripple";
         InputTextModule,
         ButtonModule,
         RippleModule,
+        SharedModule,
     ]
 })
 export class HomeModule { }
