@@ -1,5 +1,5 @@
 <div class="flex justify-content-center">
-    <p-card [style]="{ width: '60rem' }" header="Players">
+    <p-card [style]="{ width: '65rem' }" header="Players">
         <p-table
             #playersTable
             [value]="page.content"
@@ -12,40 +12,12 @@
             [loading] = "loading"
             [showCurrentPageReport]="true"
             [rowHover]="true"
-            [globalFilterFields]="['id', 'name']"
             dataKey="id"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} players"
-            styleClass="fadein animation-duration-1000 animation-iteration-1 animation-ease-out"
         >
             <ng-template pTemplate="header">
                 <tr>
-                    <th id="1" pSortableColumn="id">
-                        <div
-                            class="flex justify-content-between align-items-center"
-                        >
-                            <div
-                                class="flex justify-content-center align-items-center text-lg mt-1"
-                            >
-                                ID
-                            </div>
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
-                                <p-sortIcon field="id"></p-sortIcon>
-                                <p-columnFilter
-                                    type="text"
-                                    field="id"
-                                    display="menu"
-                                    matchMode="contains"
-                                    [showMatchModes]="false"
-                                    [showOperator]="false"
-                                    [showAddButton]="false"
-                                    style="height: 1.7rem"
-                                ></p-columnFilter>
-                            </div>
-                        </div>
-                    </th>
-                    <th id="2" pSortableColumn="" style="cursor: default">
+                    <th pSortableColumn="" style="cursor: default">
                         <div
                             class="flex justify-content-between align-items-center"
                         >
@@ -56,7 +28,7 @@
                             </div>
                         </div>
                     </th>
-                    <th id="3" pSortableColumn="name">
+                    <th pSortableColumn="name">
                         <div
                             class="flex justify-content-between align-items-center"
                         >
@@ -82,7 +54,7 @@
                             </div>
                         </div>
                     </th>
-                    <th id="4" pSortableColumn="position.name">
+                    <th pSortableColumn="position.name">
                         <div
                             class="flex justify-content-between align-items-center"
                         >
@@ -108,13 +80,36 @@
                             </div>
                         </div>
                     </th>
+                    <th pSortableColumn="team">
+                        <div
+                            class="flex justify-content-between align-items-center"
+                        >
+                            <div
+                                class="flex justify-content-center align-items-center text-lg mt-1"
+                            >
+                                Team
+                            </div>
+                            <div
+                                class="flex justify-content-between align-items-center"
+                            >
+                                <p-sortIcon field="team"></p-sortIcon>
+                                <p-columnFilter
+                                    type="text"
+                                    field="team"
+                                    display="menu"
+                                    matchMode="contains"
+                                    [showMatchModes]="false"
+                                    [showOperator]="false"
+                                    [showAddButton]="false"
+                                    style="height: 1.8rem"
+                                ></p-columnFilter>
+                            </div>
+                        </div>
+                    </th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-player>
                 <tr style="cursor: pointer">
-                    <td (click)="handleViewFullDataPlayerEvent(player.id)">
-                        {{ player.id }}
-                    </td>
                     <td (click)="handleViewFullDataPlayerEvent(player.id)">
                         <img
                             alt=""
@@ -124,16 +119,19 @@
                             }}"
                             class="{{
                                 player.pictureUrl
-                                    ? 'players-table-profile-picture'
-                                    : 'players-table-profile-without-picture'
+                                    ? 'home-players-table-profile-picture'
+                                    : 'home-players-table-profile-without-picture'
                             }}"
                         />
                     </td>
                     <td (click)="handleViewFullDataPlayerEvent(player.id)">
-                        {{ player.name | shorten : 25 }}
+                        {{ player.name | shorten : 20 }}
                     </td>
                     <td (click)="handleViewFullDataPlayerEvent(player.id)">
-                        {{ player.position.name | shorten : 30 }}
+                        {{ player.position.name | shorten : 15 }}
+                    </td>
+                    <td (click)="handleViewFullDataPlayerEvent(player.id)">
+                        {{ player.team | shorten : 20 }}
                     </td>
                 </tr>
             </ng-template>

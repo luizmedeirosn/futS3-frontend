@@ -272,7 +272,10 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                     .subscribe({
                         next: (playerResponse: PlayerFullDTO) => {
                             const updatedPlayer = this.players.find(p => p.id === this.selectedPlayer?.id);
-                            updatedPlayer && (updatedPlayer.name = playerResponse.name);
+                            if(updatedPlayer) {
+                                updatedPlayer.name = playerResponse.name;
+                                updatedPlayer.team = playerResponse.team;
+                            }
 
                             this.changesOnService.setChangesOn(true);
 
@@ -316,5 +319,4 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
         this.$destroy.next();
         this.$destroy.complete();
     }
-
 }

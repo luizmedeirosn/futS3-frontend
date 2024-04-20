@@ -14,10 +14,14 @@ body {
     overflow-y: scroll !important;
 }
 
+* {
+    user-select: none !important;
+}
+
 img,
 svg {
     filter: brightness(1) contrast(1) saturate(1.2) grayscale(5%);
-    image-rendering: optimizeQuality !important;
+    image-rendering: high-quality;
 }
 
 text,
@@ -74,6 +78,7 @@ span {
 .p-button {
     caret-color: transparent;
     caret-shape: block;
+    user-select: none;
 }
 
 tr {

@@ -55,6 +55,32 @@
                             </div>
                         </div>
                     </th>
+                    <th id="" pSortableColumn="team">
+                        <div
+                            class="flex justify-content-between align-items-center"
+                        >
+                            <div
+                                class="flex justify-content-between align-items-center text-lg mt-1"
+                            >
+                                Team
+                            </div>
+                            <div
+                                class="flex justify-content-between align-items-center"
+                            >
+                                <p-sortIcon field="team"></p-sortIcon>
+                                <p-columnFilter
+                                    type="text"
+                                    field="team"
+                                    display="menu"
+                                    matchMode="contains"
+                                    [showMatchModes]="false"
+                                    [showOperator]="false"
+                                    [showAddButton]="false"
+                                    style="height: 1.8rem"
+                                ></p-columnFilter>
+                            </div>
+                        </div>
+                    </th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-player>
@@ -68,13 +94,16 @@
                             }}"
                             class="{{
                                 player.pictureUrl
-                                    ? 'players-table-profile-picture'
-                                    : 'players-table-profile-without-picture'
+                                    ? 'edit-players-table-profile-picture'
+                                    : 'edit-players-table-profile-without-picture'
                             }}"
                         />
                     </td>
                     <td (click)="handleSelectPlayer(player.id)">
-                        {{ player.name | shorten : 30 }}
+                        {{ player.name | shorten : 15 }}
+                    </td>
+                    <td (click)="handleSelectPlayer(player.id)">
+                        {{ player.team | shorten : 25 }}
                     </td>
                 </tr>
             </ng-template>

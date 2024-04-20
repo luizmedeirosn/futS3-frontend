@@ -63,6 +63,7 @@ export class PlayersTableComponent implements OnInit {
 
     public changePlayersPage($event: TableLazyLoadEvent): void {
         if ($event && $event.first !== undefined && $event.rows) {
+            console.log($event);
             this.$tableLazyLoadEventPreview = $event;
             const pageNumber = Math.ceil($event.first / $event.rows);
             const pageSize = $event.rows !== 0 ? $event.rows : 5;
