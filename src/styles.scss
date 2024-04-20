@@ -35,8 +35,40 @@ span {
 }
 
 .p-card-subtitle {
-    color: var(--gray-700);
     font-size: 18px;
+    font-weight: 600;
+    color: var(--gray-700);
+}
+
+.p-datatable-loading-overlay {
+    border-radius: 10px;
+    .p-icon {
+        width: 5rem;
+        height: 10rem;
+    }
+}
+
+.p-element .p-paginator-current, .p-paginator-element {
+    color: var(--gray-900);
+}
+
+.p-dropdown {
+    border: 1px solid;
+    border-radius: 3px;
+    span {
+        color: var(--black-1);
+    }
+    &:hover {
+        background-color: whitesmoke;
+    }
+}
+
+.p-dropdown-filter-icon {
+    color: rgba(0, 0, 0, 0.87);
+}
+
+.p-dropdown-items-wrapper {
+    max-height: 150px !important;
 }
 
 .p-button {
@@ -73,7 +105,7 @@ tr {
         border-bottom-left-radius: 6px;
         width: 11rem;
         text-align: center;
-        font-weight: bold;
+        font-weight: 400;
         word-wrap: break-word;
     }
 }
@@ -87,32 +119,6 @@ tr {
 .p-scrollpanel-bar {
     background-color: var(--blue-400);
     width: 0.5rem;
-}
-
-.p-dropdown {
-    border: 1px solid;
-    border-radius: 3px;
-    span {
-        color: var(--black-1);
-    }
-    &:hover {
-        background-color: whitesmoke;
-    }
-}
-
-.p-dropdown-filter-icon {
-    color: rgba(0, 0, 0, 0.87);
-}
-
-.p-dropdown-trigger {
-    width: 30%;
-    svg {
-        margin-left: 2rem;
-    }
-}
-
-.p-dropdown-items-wrapper {
-    max-height: 150px !important;
 }
 
 .p-dialog {

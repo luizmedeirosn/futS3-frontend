@@ -1,4 +1,4 @@
-export interface PlayerParameterDataDTO {
+export default interface PlayerParameterDataDTO {
 
     id: number;
     name: string;

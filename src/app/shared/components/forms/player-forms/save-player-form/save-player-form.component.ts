@@ -5,7 +5,7 @@ import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { ParameterDTO } from 'src/app/models/dto/parameter/response/ParameterDTO';
 import { PlayerParameterIdScoreDTO } from 'src/app/models/dto/player/request/PlayerParameterIdScoreDTO';
 import { PostPlayerDTO } from 'src/app/models/dto/player/request/PostPlayerDTO';
-import { PlayerParameterDataDTO } from 'src/app/models/dto/player/response/PlayerParameterDataDTO';
+import PlayerParameterDataDTO from 'src/app/models/dto/player/response/PlayerParameterDataDTO';
 import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
 import { ParameterService } from 'src/app/services/parameter/parameter.service';
 import { PlayerService } from 'src/app/services/player/player.service';

@@ -1,21 +1,21 @@
-import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { MessageService } from 'primeng/api';
-import { DynamicDialogConfig } from 'primeng/dynamicdialog';
-import { Table } from 'primeng/table';
-import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { ParameterDTO } from 'src/app/models/dto/parameter/response/ParameterDTO';
-import { UpdatePlayerDTO } from 'src/app/models/dto/player/request/UpdatePlayerDTO';
-import { PlayerFullDTO } from 'src/app/models/dto/player/response/PlayerDTO';
-import { PlayerMinDTO } from 'src/app/models/dto/player/response/PlayerMinDTO';
-import { PlayerParameterDataDTO } from 'src/app/models/dto/player/response/PlayerParameterDataDTO';
-import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
-import { EnumPlayerEventsCrud } from 'src/app/models/enums/EnumPlayerEventsCrud';
-import { ParameterService } from 'src/app/services/parameter/parameter.service';
-import { PlayerService } from 'src/app/services/player/player.service';
-import { PositionService } from 'src/app/services/position/position.service';
-import { ChangesOnService } from 'src/app/shared/services/changes-on/changes-on.service';
-import { CustomDialogService } from 'src/app/shared/services/custom-dialog/custom-dialog.service';
+import {Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import {FormBuilder, Validators} from '@angular/forms';
+import {MessageService} from 'primeng/api';
+import {DynamicDialogConfig} from 'primeng/dynamicdialog';
+import {Table} from 'primeng/table';
+import {BehaviorSubject, Subject, takeUntil} from 'rxjs';
+import {ParameterDTO} from 'src/app/models/dto/parameter/response/ParameterDTO';
+import {UpdatePlayerDTO} from 'src/app/models/dto/player/request/UpdatePlayerDTO';
+import PlayerFullDTO from 'src/app/models/dto/player/response/PlayerDTO';
+import PlayerMinDTO from 'src/app/models/dto/player/response/PlayerMinDTO';
+import PlayerParameterDataDTO from 'src/app/models/dto/player/response/PlayerParameterDataDTO';
+import {PositionMinDTO} from 'src/app/models/dto/position/response/PositionMinDTO';
+import {EnumPlayerEventsCrud} from 'src/app/models/enums/EnumPlayerEventsCrud';
+import {ParameterService} from 'src/app/services/parameter/parameter.service';
+import {PlayerService} from 'src/app/services/player/player.service';
+import {PositionService} from 'src/app/services/position/position.service';
+import {ChangesOnService} from 'src/app/shared/services/changes-on/changes-on.service';
+import {CustomDialogService} from 'src/app/shared/services/custom-dialog/custom-dialog.service';
 
 @Component({
     selector: 'app-edit-player-form',
@@ -80,16 +80,16 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
     }
 
     private setPlayersWithApi(): void {
-        this.playerService.findAll()
+        this.playerService.findAll(0, 10)
             .pipe(takeUntil(this.$destroy))
             .subscribe({
                 next: (players) => {
-                    this.players = players;
+                    this.players = players.content;
 
                     let increment: number = 0;
                     let page: Array<PlayerMinDTO> = [];
 
-                    players.forEach((player, index, array) => {
+                    players.content.forEach((player, index, array) => {
                         page.push(player);
                         increment += 1;
                         if (increment === 5 || index === array.length - 1) {

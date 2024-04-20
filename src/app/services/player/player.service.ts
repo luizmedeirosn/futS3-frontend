@@ -1,11 +1,12 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
-import { environment } from 'src/environments/environment.prod';
-import { PostPlayerDTO } from 'src/app/models/dto/player/request/PostPlayerDTO';
-import { UpdatePlayerDTO } from 'src/app/models/dto/player/request/UpdatePlayerDTO';
-import { PlayerFullDTO } from 'src/app/models/dto/player/response/PlayerDTO';
-import { PlayerMinDTO } from 'src/app/models/dto/player/response/PlayerMinDTO';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable, Subject} from 'rxjs';
+import {environment} from 'src/environments/environment.prod';
+import {PostPlayerDTO} from 'src/app/models/dto/player/request/PostPlayerDTO';
+import {UpdatePlayerDTO} from 'src/app/models/dto/player/request/UpdatePlayerDTO';
+import PlayerFullDTO from 'src/app/models/dto/player/response/PlayerDTO';
+import PlayerMinDTO from 'src/app/models/dto/player/response/PlayerMinDTO';
+import Page from "../../models/dto/generics/response/Page";
 
 @Injectable({
     providedIn: 'root'
@@ -26,9 +27,9 @@ export class PlayerService {
         this.$playerView.next(false);
     };
 
-    public findAll(): Observable<Array<PlayerMinDTO>> {
-        return this.httpClient.get<Array<PlayerMinDTO>>(
-            `${this.API_URL}/players`,
+    public findAll(pageNumber: number, pageSize: number): Observable<Page<PlayerMinDTO>> {
+        return this.httpClient.get<Page<PlayerMinDTO>>(
+            `${this.API_URL}/players?pageNumber=${pageNumber}&pageSize=${pageSize}`
         );
     }
 

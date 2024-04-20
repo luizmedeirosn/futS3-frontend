@@ -1,13 +1,19 @@
 <div class="flex justify-content-center">
-    <p-card *ngIf="players" [style]="{ width: '60rem' }" header="Players">
+    <p-card [style]="{ width: '60rem' }" header="Players">
         <p-table
-            [value]="players"
-            dataKey="id"
-            [rows]="10"
-            [globalFilterFields]="['id', 'name']"
-            [paginator]="true"
+            #playersTable
+            [value]="page.content"
+            [rows]="page.pageSize"
+            [paginator]= "true"
+            [rowsPerPageOptions]="[5, 10, 20]"
+            [lazy] = true
+            [totalRecords]="page.totalElements"
+            (onLazyLoad)="changePlayersPage($event)"
+            [loading] = "loading"
             [showCurrentPageReport]="true"
             [rowHover]="true"
+            [globalFilterFields]="['id', 'name']"
+            dataKey="id"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} players"
             styleClass="fadein animation-duration-1000 animation-iteration-1 animation-ease-out"
         >

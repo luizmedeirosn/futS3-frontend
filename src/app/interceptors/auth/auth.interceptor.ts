@@ -7,11 +7,10 @@ import {
     HttpInterceptor,
     HttpRequest
 } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { CookieService } from 'ngx-cookie-service';
-import { Observable, catchError, switchMap, throwError } from 'rxjs';
-import { AuthService } from 'src/app/services/auth/auth.service';
-import { environment } from 'src/environments/environment.prod';
+import {Injectable} from '@angular/core';
+import {CookieService} from 'ngx-cookie-service';
+import {catchError, Observable, switchMap, throwError} from 'rxjs';
+import {environment} from 'src/environments/environment.prod';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -25,7 +24,6 @@ export class AuthInterceptor implements HttpInterceptor {
     public constructor(
         private http: HttpClient,
         private cookieService: CookieService,
-        private authService: AuthService,
 
     ) {
         AuthInterceptor.accessToken = this.cookieService.get('_accessToken');
@@ -68,11 +66,11 @@ export class AuthInterceptor implements HttpInterceptor {
                         }),
                         catchError((refreshErr: any) => {
                             this.refresh = false;
-                            this.authService.logout(true);
+                            // this.authService.logout(true);
                             return throwError(() => refreshErr);
                         })
                     );
-                    
+
                 }
 
                 this.refresh = false;

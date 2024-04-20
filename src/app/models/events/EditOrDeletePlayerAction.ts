@@ -4,5 +4,4 @@ export interface EditOrDeletePlayerAction {
 
     id: number;
     action: EnumPlayerEventsCrud;
-
 }

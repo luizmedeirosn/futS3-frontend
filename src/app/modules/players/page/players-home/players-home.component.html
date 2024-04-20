@@ -1,13 +1,17 @@
 <app-menubar-navigation></app-menubar-navigation>
 
 <app-players-table
-    *ngIf="!playerView"
-    [players]="players"
+    #playersTableComponent
+    *ngIf="!(playerView | async)"
+    [indexFirstRow]="indexFirstRow"
+    [page]="page"
+    [loading] = "loading"
+    (changePageEvent)="handleChangePageAction($event)"
     (viewEvent)="handleViewFullDataPlayerAction($event)"
 ></app-players-table>
 
 <app-player-view
-    *ngIf="playerView"
+    *ngIf="(playerView | async)"
     [player]="player"
     (backEvent)="handleBackAction()"
     (editOrDeletePlayerEvent)="handleEditOrDeletePlayerEvent($event)"

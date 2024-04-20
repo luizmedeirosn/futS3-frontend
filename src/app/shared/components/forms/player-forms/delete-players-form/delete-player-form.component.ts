@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { PlayerMinDTO } from 'src/app/models/dto/player/response/PlayerMinDTO';
+import PlayerMinDTO from 'src/app/models/dto/player/response/PlayerMinDTO';
 import { PlayerService } from 'src/app/services/player/player.service';
 import { ChangesOnService } from 'src/app/shared/services/changes-on/changes-on.service';
 
@@ -31,11 +31,11 @@ export class DeletePlayerFormComponent implements OnInit, OnDestroy {
     }
 
     private setPlayersWithApi(): void {
-        this.playerService.findAll()
+        this.playerService.findAll(0, 10)
             .pipe(takeUntil(this.$destroy))
             .subscribe({
                 next: (players) => {
-                    this.players = players;
+                    this.players = players.content;
                 },
                 error: (err) => {
                     this.messageService.clear();
@@ -86,7 +86,7 @@ export class DeletePlayerFormComponent implements OnInit, OnDestroy {
                                 summary: 'Success',
                                 detail: 'Player deleted successfully!'
                             });
-                            
+
                             this.playerService.changedPlayerId = undefined;
                             this.changesOnService.setChangesOn(true);
                         }, 1000);
