@@ -1,12 +1,13 @@
-import { Injectable } from '@angular/core';
+import {Injectable, OnDestroy} from '@angular/core';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { take } from 'rxjs';
+import {Subject, take, takeUntil} from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
 })
-export class CustomDialogService {
+export class CustomDialogService implements OnDestroy {
 
+    private readonly $destroy: Subject<void> = new Subject();
     private dynamicDialogRefs: Array<DynamicDialogRef> = [];
 
     public constructor(
@@ -16,7 +17,10 @@ export class CustomDialogService {
     public open(component: any, styles: any): DynamicDialogRef {
         const ref: DynamicDialogRef = this.dialogService.open(component, styles);
 
-        ref.onClose.pipe(take(1)).subscribe(() => this.dynamicDialogRefs.includes(ref) && this.dynamicDialogRefs.pop());
+        ref.onClose
+            .pipe(takeUntil(this.$destroy))
+            .subscribe(
+                () => this.dynamicDialogRefs.includes(ref) && this.dynamicDialogRefs.pop());
 
         this.dynamicDialogRefs.push(ref);
         return ref;
@@ -24,6 +28,7 @@ export class CustomDialogService {
 
     public closeEndDialog(): void {
         const ref: DynamicDialogRef | undefined = this.dynamicDialogRefs.pop();
+        console.log('closeEndDialong', ref);
         ref?.close();
     }
 
@@ -31,4 +36,8 @@ export class CustomDialogService {
         this.dynamicDialogRefs?.forEach(ref => ref.close());
     }
 
+    public ngOnDestroy() {
+        this.$destroy.next();
+        this.$destroy.complete();
+    }
 }

@@ -37,11 +37,11 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
     public indexFirstRow!: number;
     public loading!: boolean;
     public page: PageMin<PlayerMinDTO> = {
-        content: new Array<PlayerMinDTO>(),
+        content: [],
         pageNumber: 0,
-        pageSize: 0,
+        pageSize: 5,
         totalElements: 0
-    }
+    };
 
     public player!: PlayerFullDTO;
     public playerView: BehaviorSubject<boolean> = new BehaviorSubject(false);
@@ -49,11 +49,12 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
     public dynamicDialogRef!: DynamicDialogRef;
 
     public constructor(
-        private changeDetectorRef: ChangeDetectorRef,
-        private playerService: PlayerService,
         private messageService: MessageService,
-        private customDialogService: CustomDialogService,
+        private changeDetectorRef: ChangeDetectorRef,
         private confirmationService: ConfirmationService,
+
+        private playerService: PlayerService,
+        private customDialogService: CustomDialogService,
         private changesOnService: ChangesOnService,
     ) {
     }
@@ -125,7 +126,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                         }
                     }
                 );
-        }, 1000);
+        }, 500);
     }
 
     public handleChangePageAction($event: ChangePageAction) {

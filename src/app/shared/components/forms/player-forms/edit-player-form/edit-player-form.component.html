@@ -1,20 +1,20 @@
 <div class="edit-player-form flex justify-content-center">
     <p-card
-        *ngIf="!closeableDialog && players && ($viewTable | async)"
+        *ngIf="!closeableDialog && ($viewTable | async)"
         header="Players"
         styleClass="shadow-none justify-content-center align-content-center align-content-center"
     >
         <p-table
-            #playersTable
-            [value]="players"
-            dataKey="id"
-            [rows]="5"
+            #editPlayersTable
+            [value]="page.content"
+            [rows]="page.pageSize"
+            [paginator]= "true"
+            [lazy] = true
+            [totalRecords]="page.totalElements"
+            (onLazyLoad)="changePlayersPage($event)"
+            [loading] = "loading"
             [rowHover]="true"
-            [showCurrentPageReport]="true"
-            [paginator]="true"
-            [tableStyle]="{
-                width: 'w-full',
-            }"
+            dataKey="id"
         >
             <ng-template pTemplate="header">
                 <tr>

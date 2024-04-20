@@ -10,8 +10,8 @@
             [totalRecords]="page.totalElements"
             (onLazyLoad)="changePlayersPage($event)"
             [loading] = "loading"
-            [showCurrentPageReport]="true"
             [rowHover]="true"
+            [showCurrentPageReport]="true"
             dataKey="id"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} players"
         >
