@@ -1,5 +1,6 @@
 #menubar {
     border: none;
+    user-select: none !important;
 }
 
 #logo {
@@ -12,7 +13,6 @@
 .p-menubar {
     background-color: #ffffff00;
     border: none;
-
 
     span.p-menuitem-text {
         font-family: Arial, Helvetica, sans-serif;
