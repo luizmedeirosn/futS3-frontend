@@ -11,6 +11,7 @@ import { ParameterService } from 'src/app/services/parameter/parameter.service';
 import { PlayerService } from 'src/app/services/player/player.service';
 import { PositionService } from 'src/app/services/position/position.service';
 import { ChangesOnService } from 'src/app/shared/services/changes-on/changes-on.service';
+import Page from "../../../../../models/dto/generics/response/Page";
 
 @Component({
     selector: 'app-players-form',
@@ -55,8 +56,8 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
         this.positionService.findAll()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
-                next: (positions) => {
-                    this.positions = positions;
+                next: (positionsPage: Page<PositionMinDTO>) => {
+                    this.positions = positionsPage.content;
                 },
                 error: (err) => {
                     console.log(err);
@@ -66,8 +67,8 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
         this.parameterService.findAll()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
-                next: (parameters) => {
-                    this.parameters = parameters;
+                next: (parametersPage: Page<ParameterDTO>) => {
+                    this.parameters = parametersPage.content;
                 },
                 error: (err) => {
                     console.log(err);

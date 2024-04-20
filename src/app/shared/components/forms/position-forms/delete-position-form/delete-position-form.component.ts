@@ -1,9 +1,10 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
-import { PositionService } from 'src/app/services/position/position.service';
-import { ChangesOnService } from 'src/app/shared/services/changes-on/changes-on.service';
+import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import {ConfirmationService, MessageService} from 'primeng/api';
+import {BehaviorSubject, Subject, takeUntil} from 'rxjs';
+import {PositionMinDTO} from 'src/app/models/dto/position/response/PositionMinDTO';
+import {PositionService} from 'src/app/services/position/position.service';
+import {ChangesOnService} from 'src/app/shared/services/changes-on/changes-on.service';
+import Page from "../../../../../models/dto/generics/response/Page";
 
 @Component({
     selector: 'app-delete-position-form',
@@ -34,8 +35,8 @@ export class DeletePositionFormComponent implements OnInit, OnDestroy {
         this.positionService.findAll()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
-                next: (positions) => {
-                    this.positions = positions;
+                next: (positionsPage: Page<PositionMinDTO>) => {
+                    this.positions = positionsPage.content;
                 },
                 error: (err) => {
                     this.messageService.clear();

@@ -4,6 +4,7 @@ import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { ParameterDTO } from 'src/app/models/dto/parameter/response/ParameterDTO';
 import { ParameterService } from 'src/app/services/parameter/parameter.service';
 import { ChangesOnService } from 'src/app/shared/services/changes-on/changes-on.service';
+import Page from "../../../../../models/dto/generics/response/Page";
 
 @Component({
     selector: 'app-delete-parameter-form',
@@ -34,8 +35,8 @@ export class DeleteParameterFormComponent implements OnInit, OnDestroy {
         this.parameterService.findAll()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
-                next: (parameters) => {
-                    this.parameters = parameters;
+                next: (parametersPage: Page<ParameterDTO>) => {
+                    this.parameters = parametersPage.content;
                 },
                 error: (err) => {
                     this.messageService.clear();

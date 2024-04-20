@@ -11,6 +11,7 @@ import { EditPositionFormComponent } from 'src/app/shared/components/forms/posit
 import { CustomDialogService } from 'src/app/shared/services/custom-dialog/custom-dialog.service';
 import { ChangesOnService } from '../../../../shared/services/changes-on/changes-on.service';
 import { ViewAction } from 'src/app/models/events/ViewAction';
+import Page from "../../../../models/dto/generics/response/Page";
 
 @Component({
     selector: 'app-positions-home',
@@ -75,8 +76,8 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.$destroy))
             .subscribe(
                 {
-                    next: (positions) => {
-                        this.positions = positions;
+                    next: (positionsPage: Page<PositionMinDTO> ) => {
+                        this.positions = positionsPage.content;
                     },
                     error: (err) => {
                         err.status != 403 && this.messageService.add(

@@ -7,6 +7,7 @@ import { ParameterRequestDTO } from 'src/app/models/dto/parameter/request/Parame
 import { ParameterDTO } from 'src/app/models/dto/parameter/response/ParameterDTO';
 import { ParameterService } from 'src/app/services/parameter/parameter.service';
 import { ChangesOnService } from 'src/app/shared/services/changes-on/changes-on.service';
+import Page from "../../../../../models/dto/generics/response/Page";
 
 @Component({
     selector: 'app-edit-parameter-form',
@@ -48,14 +49,14 @@ export class EditParameterFormComponent implements OnInit, OnDestroy {
         this.parameterService.findAll()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
-                next: (parameters: Array<ParameterDTO>) => {
-                    if (parameters.length > 0) {
-                        this.parameters = parameters;
+                next: (parametersPage: Page<ParameterDTO>) => {
+                    if (parametersPage.content.length > 0) {
+                        this.parameters = parametersPage.content;
 
                         let increment: number = 0;
                         let page: Array<ParameterDTO> = [];
 
-                        parameters.forEach((parameter, index, array) => {
+                        parametersPage.content.forEach((parameter, index, array) => {
                             page.push(parameter);
                             increment += 1;
                             if (increment === 5 || index === array.length - 1) {

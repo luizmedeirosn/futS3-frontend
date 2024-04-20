@@ -92,7 +92,6 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
     }
 
     private setPlayersWithApi(pageNumber: number, pageSize: number): void {
-        console.log('setPlayersWithApi');
         this.loading = true;
         this.indexFirstRow = pageNumber * pageSize;
         setTimeout(() => {

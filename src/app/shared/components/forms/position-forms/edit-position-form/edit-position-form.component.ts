@@ -14,6 +14,7 @@ import { ParameterService } from 'src/app/services/parameter/parameter.service';
 import { PositionService } from 'src/app/services/position/position.service';
 import { ChangesOnService } from 'src/app/shared/services/changes-on/changes-on.service';
 import { CustomDialogService } from 'src/app/shared/services/custom-dialog/custom-dialog.service';
+import Page from "../../../../../models/dto/generics/response/Page";
 
 @Component({
     selector: 'app-edit-position-form',
@@ -106,8 +107,8 @@ export class EditPositionFormComponent {
         this.parameterService.findAll()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
-                next: (parameters) => {
-                    this.parameters = parameters;
+                next: (parametersPage: Page<ParameterDTO>) => {
+                    this.parameters = parametersPage.content;
                 },
                 error: (err) => {
                     console.log(err);

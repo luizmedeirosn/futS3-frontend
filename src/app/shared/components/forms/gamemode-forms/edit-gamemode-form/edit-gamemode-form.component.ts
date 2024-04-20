@@ -16,6 +16,7 @@ import { ChangesOnService } from 'src/app/shared/services/changes-on/changes-on.
 import { CustomDialogService } from 'src/app/shared/services/custom-dialog/custom-dialog.service';
 import { EditPositionFormComponent } from '../../position-forms/edit-position-form/edit-position-form.component';
 import { SavePositionFormComponent } from '../../position-forms/save-position-form/save-position-form.component';
+import Page from "../../../../../models/dto/generics/response/Page";
 
 @Component({
     selector: 'app-edit-gamemode-form',
@@ -123,8 +124,8 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
         this.positionService.findAll()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
-                next: (positions: Array<PositionMinDTO>) => {
-                    this.positions = positions.filter(p => !this.positionsOff.some(off => off.id === p.id));
+                next: (positionsPage: Page<PositionMinDTO>) => {
+                    this.positions = positionsPage.content.filter(p => !this.positionsOff.some(off => off.id === p.id));
                 },
                 error: (err) => {
                     console.log(err);
