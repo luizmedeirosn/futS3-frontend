@@ -1,6 +1,6 @@
 import {Injectable, OnDestroy} from '@angular/core';
-import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import {Subject, take, takeUntil} from 'rxjs';
+import {DialogService, DynamicDialogRef} from 'primeng/dynamicdialog';
+import {Subject, takeUntil} from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -28,7 +28,6 @@ export class CustomDialogService implements OnDestroy {
 
     public closeEndDialog(): void {
         const ref: DynamicDialogRef | undefined = this.dynamicDialogRefs.pop();
-        console.log('closeEndDialong', ref);
         ref?.close();
     }
 

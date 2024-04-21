@@ -1,8 +1,8 @@
-import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
 import {MessageService} from 'primeng/api';
 import {DynamicDialogConfig} from 'primeng/dynamicdialog';
-import {Table, TableLazyLoadEvent} from 'primeng/table';
+import {TableLazyLoadEvent} from 'primeng/table';
 import {BehaviorSubject, Subject, takeUntil} from 'rxjs';
 import {ParameterDTO} from 'src/app/models/dto/parameter/response/ParameterDTO';
 import {UpdatePlayerDTO} from 'src/app/models/dto/player/request/UpdatePlayerDTO';
@@ -30,11 +30,6 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
     private readonly $destroy: Subject<void> = new Subject();
     private readonly toastLife: number = 2000;
 
-
-    @ViewChild('editPlayersTable')
-    public editPlayersTable!: Table;
-
-    private $tableLazyLoadEventPreview!: TableLazyLoadEvent;
     public indexFirstRow!: number;
     public loading!: boolean;
     public page: PageMin<PlayerMinDTO> = {
@@ -84,21 +79,20 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
     ) { }
 
     public ngOnInit(): void {
+        this.page.totalElements === 0 &&
+            this.setPlayersWithApi(0, 10);
+        this.setPositionsWithApi();
+
         const action = this.dynamicDialogConfig.data;
         if (action && action.$event === EnumPlayerEventsCrud.EDIT) {
             this.handleSelectPlayer(action.selectedPlayerId);
             this.closeableDialog = true;
-            console.log('closeableDialog')
         }
-
-        this.page.totalElements === 0 && this.setPlayersWithApi(0, 10);
-        this.setPositionsWithApi();
     }
 
     private setPlayersWithApi(pageNumber: number, pageSize: number): void {
         this.loading = true;
         this.indexFirstRow = pageNumber * pageSize;
-        this.page.totalElements = 0;
         setTimeout(() => {
             this.playerService.findAll(pageNumber, pageSize)
                 .pipe(takeUntil(this.$destroy))
@@ -157,12 +151,11 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
             });
     }
 
-    public changePlayersPage($event: TableLazyLoadEvent) {
+    public handleChangePlayersPage($event: TableLazyLoadEvent) {
         if ($event && $event.first !== undefined && $event.rows) {
             const pageNumber = Math.ceil($event.first / $event.rows);
             const pageSize = $event.rows !== 0 ? $event.rows : 5;
             this.setPlayersWithApi(pageNumber, pageSize);
-
         }
     }
 
@@ -210,16 +203,12 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
     }
 
     public handleBackAction(): void {
-        if (this.closeableDialog) {
-            this.customDialogService.closeEndDialog()
-
-        } else {
-            this.$viewTable.next(true);
-            this.changePlayersPage(this.$tableLazyLoadEventPreview);
-        }
+        this.closeableDialog ?
+            this.customDialogService.closeEndDialog() : this.$viewTable.next(true);
 
         this.selectedPlayer = undefined;
         this.playerPicture = undefined;
+
         this.changeDetectorRef.detectChanges();
     }
 

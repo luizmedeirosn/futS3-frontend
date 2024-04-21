@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {DynamicDialogRef} from 'primeng/dynamicdialog';
 import {BehaviorSubject, Subject, takeUntil} from 'rxjs';
@@ -16,8 +16,6 @@ import {CustomDialogService} from 'src/app/shared/services/custom-dialog/custom-
 import Page from "../../../../models/dto/generics/response/Page";
 import PageMin from "../../../../models/dto/generics/response/PageMin";
 import ChangePageAction from "../../../../models/events/ChangePageAction";
-import {PlayersTableComponent} from "../../components/players-table/players-table.component";
-import {TableLazyLoadEvent} from "primeng/table";
 
 @Component({
     selector: 'app-players-home',
@@ -30,10 +28,6 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
     private readonly $destroy: Subject<void> = new Subject();
     private readonly messageLife: number = 3000;
 
-    @ViewChild('playersTableComponent')
-    public playersTableComponent!: PlayersTableComponent;
-
-    private $tableLazyLoadEventPreview!: TableLazyLoadEvent;
     public indexFirstRow!: number;
     public loading!: boolean;
     public page: PageMin<PlayerMinDTO> = {
@@ -137,7 +131,6 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
 
     public handleViewFullDataPlayerAction($event: ViewAction): void {
         if ($event) {
-            $event.tableLazyLoadEventPreview && (this.$tableLazyLoadEventPreview = $event.tableLazyLoadEventPreview);
             this.selectPlayer($event.id)
             this.playerService.$playerView.next(true);
         }
@@ -171,7 +164,6 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
         // Do not change the order of actions
         this.playerService.$playerView.next(false);
         this.changeDetectorRef.detectChanges();
-        this.playersTableComponent.changePlayersPage(this.$tableLazyLoadEventPreview);
     }
 
     public handleEditOrDeletePlayerEvent($event: EditOrDeletePlayerAction): void {

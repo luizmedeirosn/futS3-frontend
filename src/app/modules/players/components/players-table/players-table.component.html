@@ -1,9 +1,9 @@
 <div class="flex justify-content-center">
     <p-card [style]="{ width: '65rem' }" header="Players">
         <p-table
-            #playersTable
             [value]="page.content"
             [rows]="page.pageSize"
+            [first]="indexFirstRow"
             [paginator]= "true"
             [rowsPerPageOptions]="[5, 10, 20]"
             [lazy] = true
@@ -125,10 +125,10 @@
                         />
                     </td>
                     <td (click)="handleViewFullDataPlayerEvent(player.id)">
-                        {{ player.name | shorten : 20 }}
+                        {{ player.name | shorten : 25 }}
                     </td>
                     <td (click)="handleViewFullDataPlayerEvent(player.id)">
-                        {{ player.position.name | shorten : 15 }}
+                        {{ player.position.name | shorten : 20 }}
                     </td>
                     <td (click)="handleViewFullDataPlayerEvent(player.id)">
                         {{ player.team | shorten : 20 }}
