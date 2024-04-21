@@ -1,6 +1,7 @@
 #menubar {
     border: none;
-    user-select: none !important;
+    user-select: none;
+    caret-color: transparent !important;
 }
 
 #logo {

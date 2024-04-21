@@ -16,8 +16,8 @@ body {
 
 img,
 svg {
-    filter: brightness(1) contrast(1) saturate(1.2) grayscale(5%);
-    image-rendering: high-quality;
+    filter: brightness(1) contrast(1) saturate(1.2) grayscale(5%) !important;
+    image-rendering: high-quality !important;
 }
 
 text,
@@ -40,6 +40,10 @@ span {
     color: var(--gray-700);
 }
 
+.p-button {
+    caret-color: transparent !important;
+}
+
 .p-datatable-loading-overlay {
     border-radius: 10px;
     .p-icon {
@@ -49,10 +53,12 @@ span {
 }
 
 .p-element .p-paginator-current, .p-paginator-element {
+    caret-color: transparent !important;
     color: var(--gray-900);
 }
 
 .p-dropdown {
+    caret-color: transparent !important;
     border: 1px solid;
     border-radius: 3px;
     span {
@@ -69,12 +75,6 @@ span {
 
 .p-dropdown-items-wrapper {
     max-height: 150px !important;
-}
-
-.p-button {
-    caret-color: transparent;
-    caret-shape: block;
-    user-select: none !important;
 }
 
 tr {
