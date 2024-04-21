@@ -104,8 +104,6 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                                 this.page.pageNumber = pageNumber;
                                 this.page.pageSize = pageSize;
                                 this.page.totalElements = playersPage.totalElements;
-
-                                this.loading = false;
                             }
                         },
                         error: (err) => {
@@ -117,11 +115,11 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                                 life: this.toastLife
                             });
                             console.log(err);
-
-                            this.loading = false;
                         }
                     }
                 );
+
+            this.loading = false;
         }, 500);
     }
 

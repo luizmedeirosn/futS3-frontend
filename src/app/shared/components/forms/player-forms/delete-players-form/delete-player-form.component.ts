@@ -4,6 +4,9 @@ import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import PlayerMinDTO from 'src/app/models/dto/player/response/PlayerMinDTO';
 import { PlayerService } from 'src/app/services/player/player.service';
 import { ChangesOnService } from 'src/app/shared/services/changes-on/changes-on.service';
+import PageMin from "../../../../../models/dto/generics/response/PageMin";
+import Page from "../../../../../models/dto/generics/response/Page";
+import {TableLazyLoadEvent} from "primeng/table";
 
 @Component({
     selector: 'app-delete-players-form',
@@ -16,38 +19,68 @@ export class DeletePlayerFormComponent implements OnInit, OnDestroy {
     private readonly $destroy: Subject<void> = new Subject();
     private readonly toastLife: number = 2000;
 
-    public $loadingDeletion: BehaviorSubject<boolean> = new BehaviorSubject(false);
-    public players!: Array<PlayerMinDTO>;
+    public $loadingDeletion: BehaviorSubject<boolean> =
+        new BehaviorSubject(false);
+
+    public loading!: boolean;
+    public page: PageMin<PlayerMinDTO> = {
+        content: [],
+        pageNumber: 0,
+        pageSize: 10,
+        totalElements: 0
+    };
 
     public constructor(
-        private playerService: PlayerService,
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
+
+        private playerService: PlayerService,
         private changesOnService: ChangesOnService,
     ) { }
 
     public ngOnInit(): void {
-        this.setPlayersWithApi();
+        this.page.totalElements === 0 &&
+            this.setPlayersWithApi(0, 10);
     }
 
-    private setPlayersWithApi(): void {
-        this.playerService.findAll(0, 10)
-            .pipe(takeUntil(this.$destroy))
-            .subscribe({
-                next: (players) => {
-                    this.players = players.content;
-                },
-                error: (err) => {
-                    this.messageService.clear();
-                    this.messageService.add({
-                        severity: 'error',
-                        summary: 'Error',
-                        detail: 'Failed to retrieve the data!',
-                        life: this.toastLife
-                    });
-                    console.log(err);
-                }
-            });
+    private setPlayersWithApi(pageNumber: number, pageSize: number): void {
+        this.loading = true;
+        setTimeout(() => {
+            this.playerService.findAll(pageNumber, pageSize)
+                .pipe(takeUntil(this.$destroy))
+                .subscribe(
+                    {
+                        next: (playersPage: Page<PlayerMinDTO>) => {
+                            if (playersPage.size > 0) {
+                                this.page.content = playersPage.content;
+                                this.page.pageNumber = pageNumber;
+                                this.page.pageSize = pageSize;
+                                this.page.totalElements = playersPage.totalElements;
+                            }
+                        },
+                        error: (err) => {
+                            this.messageService.clear();
+                            this.messageService.add({
+                                severity: 'error',
+                                summary: 'Error',
+                                detail: 'Failed to retrieve the data!',
+                                life: this.toastLife
+                            });
+                            console.log(err);
+                        }
+                    }
+                );
+
+            this.loading = false;
+        }, 500);
+    }
+
+    public handleChangePlayersPage($event: TableLazyLoadEvent) {
+        if ($event && $event.first !== undefined && $event.rows) {
+            const pageNumber = Math.ceil($event.first / $event.rows);
+            const pageSize = $event.rows !== 0 ? $event.rows : 5;
+            this.setPlayersWithApi(pageNumber, pageSize);
+        }
     }
 
     public handleDeletePlayerEvent($event: PlayerMinDTO): void {
@@ -78,7 +111,7 @@ export class DeletePlayerFormComponent implements OnInit, OnDestroy {
                     next: () => {
                         setTimeout(() => {
                             this.$loadingDeletion.next(false);
-                            this.setPlayersWithApi();
+                            this.setPlayersWithApi(this.page.pageNumber, this.page.pageSize);
 
                             this.messageService.clear();
                             this.messageService.add({
@@ -111,5 +144,4 @@ export class DeletePlayerFormComponent implements OnInit, OnDestroy {
         this.$destroy.next();
         this.$destroy.complete();
     }
-
 }

@@ -46,7 +46,6 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
         private messageService: MessageService,
         private changeDetectorRef: ChangeDetectorRef,
         private confirmationService: ConfirmationService,
-
         private playerService: PlayerService,
         private customDialogService: CustomDialogService,
         private changesOnService: ChangesOnService,
@@ -106,14 +105,13 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                             }
                         },
                         error: (err) => {
-                            err.status != 403 && this.messageService.add(
-                                {
-                                    severity: 'error',
-                                    summary: 'Error',
-                                    detail: 'Unexpected error!',
-                                    life: this.messageLife
-                                }
-                            );
+                            this.messageService.clear();
+                            err.status != 403 && this.messageService.add({
+                                severity: 'error',
+                                summary: 'Error',
+                                detail: 'Unexpected error!',
+                                life: this.messageLife
+                            });
                             console.log(err);
 
                             this.loading = false;

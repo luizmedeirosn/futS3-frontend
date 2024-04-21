@@ -1,9 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MessageService } from 'primeng/api';
-import { Subject, takeUntil } from 'rxjs';
-import { ParameterDTO } from 'src/app/models/dto/parameter/response/ParameterDTO';
-import { ParameterService } from 'src/app/services/parameter/parameter.service';
-import { ChangesOnService } from 'src/app/shared/services/changes-on/changes-on.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {MessageService} from 'primeng/api';
+import {Subject, takeUntil} from 'rxjs';
+import {ParameterDTO} from 'src/app/models/dto/parameter/response/ParameterDTO';
+import {ParameterService} from 'src/app/services/parameter/parameter.service';
+import {ChangesOnService} from 'src/app/shared/services/changes-on/changes-on.service';
 import Page from "../../../../models/dto/generics/response/Page";
 
 @Component({
@@ -54,14 +54,13 @@ export class ParametersHomeComponent implements OnInit, OnDestroy {
                         }
                     },
                     error: (err) => {
-                        err.status != 403 && this.messageService.add(
-                            {
-                                severity: 'error',
-                                summary: 'Error',
-                                detail: 'Unexpected error!',
-                                life: this.messageLife
-                            }
-                        );
+                        this.messageService.clear();
+                        err.status != 403 && this.messageService.add({
+                            severity: 'error',
+                            summary: 'Error',
+                            detail: 'Unexpected error!',
+                            life: this.messageLife
+                        });
                         console.log(err);
                     }
                 }

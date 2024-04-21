@@ -11,16 +11,20 @@
         ></p-progressBar>
 
         <p-table
-            [value]="players"
-            dataKey="id"
-            [rows]="5"
+            [value]="page.content"
+            [rows]="page.pageSize"
+            [paginator]= "true"
+            [lazy] = true
+            [totalRecords]="page.totalElements"
+            (onLazyLoad)="handleChangePlayersPage($event)"
+            [loading] = "loading"
             [rowHover]="true"
             [showCurrentPageReport]="true"
-            [paginator]="true"
             [tableStyle]="{
                 width: 'w-full',
                 overflow: 'hidden',
             }"
+            dataKey="id"
         >
             <ng-template pTemplate="header">
                 <tr>
