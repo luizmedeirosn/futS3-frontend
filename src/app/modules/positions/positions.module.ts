@@ -14,6 +14,7 @@ import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { TableModule } from 'primeng/table';
 import { PositionViewComponent } from './components/position-view/position-view.component';
 import { PositionsTableComponent } from './components/positions-table/positions-table.component';
+import {RippleModule} from "primeng/ripple";
 
 @NgModule({
     declarations: [
@@ -34,6 +35,7 @@ import { PositionsTableComponent } from './components/positions-table/positions-
         PanelModule,
         ScrollPanelModule,
         ButtonModule,
+        RippleModule,
     ],
 })
 export class PositionsModule { }

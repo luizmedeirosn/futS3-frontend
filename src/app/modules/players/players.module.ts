@@ -15,6 +15,7 @@ import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { PanelModule } from 'primeng/panel';
 import { TooltipModule } from 'primeng/tooltip';
+import {RippleModule} from "primeng/ripple";
 
 
 @NgModule({
@@ -35,6 +36,7 @@ import { TooltipModule } from 'primeng/tooltip';
         ButtonModule,
         PanelModule,
         TooltipModule,
+        RippleModule,
     ],
 })
 export class PlayersHomeModule { }

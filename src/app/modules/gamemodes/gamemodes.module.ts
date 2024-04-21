@@ -26,6 +26,7 @@ import { ChartModule } from 'primeng/chart';
 import { PaginatorModule } from 'primeng/paginator';
 import { PanelModule } from 'primeng/panel';
 import { SelectButtonModule } from 'primeng/selectbutton';
+import {RippleModule} from "primeng/ripple";
 
 
 
@@ -58,6 +59,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
         SelectButtonModule,
         ChartModule,
         PaginatorModule,
+        RippleModule,
 
     ]
 })

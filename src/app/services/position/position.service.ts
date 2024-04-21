@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment.prod';
 import { PositionRequestDTO } from 'src/app/models/dto/position/request/PositionRequestDTO';
 import { PositionDTO } from 'src/app/models/dto/position/response/PositionDTO';
 import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
+import Page from "../../models/dto/generics/response/Page";
 
 @Injectable({
     providedIn: 'root'
@@ -23,15 +24,15 @@ export class PositionService {
         this.$positionView.next(false);
     }
 
-    public findAll(): Observable<Array<PositionMinDTO>> {
-        return this.httpClient.get<Array<PositionMinDTO>>(
-            `${this.API_URL}/positions`,
+    public findAll(): Observable<Page<PositionMinDTO>> {
+        return this.httpClient.get<Page<PositionMinDTO>>(
+            `${this.API_URL}/positions`
         );
     }
 
     public findAllWithParameters(): Observable<Array<PositionDTO>> {
         return this.httpClient.get<Array<PositionDTO>>(
-            `${this.API_URL}/positions/parameters`,
+            `${this.API_URL}/positions/parameters`
         );
     }
 

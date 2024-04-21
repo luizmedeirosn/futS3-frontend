@@ -12,6 +12,7 @@ import { SavePositionFormComponent } from '../../position-forms/save-position-fo
 import { CustomDialogService } from '../../../../services/custom-dialog/custom-dialog.service';
 import { EditPositionFormComponent } from '../../position-forms/edit-position-form/edit-position-form.component';
 import { ChangesOnService } from 'src/app/shared/services/changes-on/changes-on.service';
+import Page from "../../../../../models/dto/generics/response/Page";
 
 @Component({
     selector: 'app-save-gamemode-form',
@@ -24,7 +25,7 @@ export class SaveGamemodeFormComponent implements OnInit, OnDestroy {
     private readonly toastLife: number = 2000;
 
     public positions!: Array<PositionMinDTO>;
-    public positionsOff: Array<PositionMinDTO> = new Array();
+    public positionsOff: Array<PositionMinDTO> = [];
 
     public newGameModeForm: any = this.formBuilder.group({
         formationName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
@@ -54,8 +55,8 @@ export class SaveGamemodeFormComponent implements OnInit, OnDestroy {
         this.positionService.findAll()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
-                next: (positions: Array<PositionMinDTO>) => {
-                    this.positions = positions.filter(p => !this.positionsOff.some(off => off.id === p.id));
+                next: (positionsPage: Page<PositionMinDTO>) => {
+                    this.positions = positionsPage.content.filter(p => !this.positionsOff.some(off => off.id === p.id));
                 },
                 error: (err) => {
                     console.log(err);
@@ -115,7 +116,7 @@ export class SaveGamemodeFormComponent implements OnInit, OnDestroy {
     public handleDeletePosition($event: number): void {
         const position: PositionMinDTO | undefined = this.positionsOff.find((p) => p.id === $event);
         position && this.positions.push(position);
-        this.positionsOff = position && this.positionsOff.filter(p => p.id !== position.id) || new Array();
+        this.positionsOff = position && this.positionsOff.filter(p => p.id !== position.id) || [];
         this.positionsOff.sort((p1, p2) =>
             p1.name.toUpperCase().localeCompare(p2.name.toUpperCase())
         );
@@ -162,7 +163,7 @@ export class SaveGamemodeFormComponent implements OnInit, OnDestroy {
         this.positionsOff.forEach(e => this.positions.push(e));
         this.positionsOff.sort((p1, p2) =>
             p1.name.toUpperCase().localeCompare(p2.name.toUpperCase())
-        ); this.positionsOff = new Array();
+        ); this.positionsOff = [];
     }
 
     public ngOnDestroy(): void {

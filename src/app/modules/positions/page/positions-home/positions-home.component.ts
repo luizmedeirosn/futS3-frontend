@@ -1,16 +1,19 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { DynamicDialogRef } from 'primeng/dynamicdialog';
-import { Subject, takeUntil } from 'rxjs';
-import { FullDataPosition } from 'src/app/models/dto/position/data/FullDataPosition';
-import { EditOrDeletePositionAction } from 'src/app/models/events/EditOrDeletePositionAction';
-import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
-import { EnumPositionEventsCrud } from 'src/app/models/enums/EnumPositionEventsCrud';
-import { PositionService } from 'src/app/services/position/position.service';
-import { EditPositionFormComponent } from 'src/app/shared/components/forms/position-forms/edit-position-form/edit-position-form.component';
-import { CustomDialogService } from 'src/app/shared/services/custom-dialog/custom-dialog.service';
-import { ChangesOnService } from '../../../../shared/services/changes-on/changes-on.service';
-import { ViewAction } from 'src/app/models/events/ViewAction';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ConfirmationService, MessageService} from 'primeng/api';
+import {DynamicDialogRef} from 'primeng/dynamicdialog';
+import {Subject, takeUntil} from 'rxjs';
+import {FullDataPosition} from 'src/app/models/dto/position/data/FullDataPosition';
+import {EditOrDeletePositionAction} from 'src/app/models/events/EditOrDeletePositionAction';
+import {PositionMinDTO} from 'src/app/models/dto/position/response/PositionMinDTO';
+import {EnumPositionEventsCrud} from 'src/app/models/enums/EnumPositionEventsCrud';
+import {PositionService} from 'src/app/services/position/position.service';
+import {
+    EditPositionFormComponent
+} from 'src/app/shared/components/forms/position-forms/edit-position-form/edit-position-form.component';
+import {CustomDialogService} from 'src/app/shared/services/custom-dialog/custom-dialog.service';
+import {ChangesOnService} from '../../../../shared/services/changes-on/changes-on.service';
+import {ViewAction} from 'src/app/models/events/ViewAction';
+import Page from "../../../../models/dto/generics/response/Page";
 
 @Component({
     selector: 'app-positions-home',
@@ -35,7 +38,8 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
         private customDialogService: CustomDialogService,
         private confirmationService: ConfirmationService,
         private changesOnService: ChangesOnService,
-    ) { }
+    ) {
+    }
 
     public ngOnInit(): void {
         this.setPositionsWithApi();
@@ -75,18 +79,17 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.$destroy))
             .subscribe(
                 {
-                    next: (positions) => {
-                        this.positions = positions;
+                    next: (positionsPage: Page<PositionMinDTO>) => {
+                        this.positions = positionsPage.content;
                     },
                     error: (err) => {
-                        err.status != 403 && this.messageService.add(
-                            {
-                                severity: 'error',
-                                summary: 'Error',
-                                detail: 'Unexpected error!',
-                                life: this.messageLife
-                            }
-                        );
+                        this.messageService.clear();
+                        err.status != 403 && this.messageService.add({
+                            severity: 'error',
+                            summary: 'Error',
+                            detail: 'Unexpected error!',
+                            life: this.messageLife
+                        });
                         console.log(err);
                     }
                 }
@@ -185,7 +188,7 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
                 {
                     position: 'top',
                     header: EnumPositionEventsCrud.EDIT.valueOf(),
-                    contentStyle: { overflow: 'auto' },
+                    contentStyle: {overflow: 'auto'},
                     baseZIndex: 10000,
                     data: {
                         $event: EnumPositionEventsCrud.EDIT,

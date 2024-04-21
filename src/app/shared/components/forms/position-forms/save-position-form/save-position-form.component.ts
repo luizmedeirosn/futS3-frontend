@@ -1,13 +1,14 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { MessageService } from 'primeng/api';
-import { Subject, takeUntil } from 'rxjs';
-import { ParameterDTO } from 'src/app/models/dto/parameter/response/ParameterDTO';
-import { ParameterWeightDTO } from 'src/app/models/dto/position/data/ParameterWeightDTO';
-import { PositionRequestDTO } from 'src/app/models/dto/position/request/PositionRequestDTO';
-import { ParameterService } from 'src/app/services/parameter/parameter.service';
-import { PositionService } from 'src/app/services/position/position.service';
-import { ChangesOnService } from 'src/app/shared/services/changes-on/changes-on.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {FormBuilder, Validators} from '@angular/forms';
+import {MessageService} from 'primeng/api';
+import {Subject, takeUntil} from 'rxjs';
+import {ParameterDTO} from 'src/app/models/dto/parameter/response/ParameterDTO';
+import {ParameterWeightDTO} from 'src/app/models/dto/position/data/ParameterWeightDTO';
+import {PositionRequestDTO} from 'src/app/models/dto/position/request/PositionRequestDTO';
+import {ParameterService} from 'src/app/services/parameter/parameter.service';
+import {PositionService} from 'src/app/services/position/position.service';
+import {ChangesOnService} from 'src/app/shared/services/changes-on/changes-on.service';
+import Page from "../../../../../models/dto/generics/response/Page";
 
 @Component({
     selector: 'app-save-position-form',
@@ -20,8 +21,8 @@ export class SavePositionFormComponent implements OnInit, OnDestroy {
     private readonly toastLife: number = 2000;
 
     public parameters!: Array<ParameterDTO>;
-    private parametersOff: Array<ParameterDTO> = new Array();
-    public positionParameters: Array<ParameterWeightDTO> = new Array();
+    private parametersOff: Array<ParameterDTO> = [];
+    public positionParameters: Array<ParameterWeightDTO> = [];
 
     public newPositionForm: any = this.formBuilder.group({
         name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
@@ -45,8 +46,8 @@ export class SavePositionFormComponent implements OnInit, OnDestroy {
         this.parameterService.findAll()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
-                next: (parameters: Array<ParameterDTO>) => {
-                    this.parameters = parameters;
+                next: (parametersPage: Page<ParameterDTO>) => {
+                    this.parameters = parametersPage.content;
                 },
                 error: (err) => {
                     console.log(err);
@@ -128,8 +129,8 @@ export class SavePositionFormComponent implements OnInit, OnDestroy {
 
         this.parametersOff.forEach(e => this.parameters.push(e));
         this.parameters.sort((p1, p2) => p1.name.toUpperCase().localeCompare(p2.name.toUpperCase()));
-        this.parametersOff = new Array();
-        this.positionParameters = new Array();
+        this.parametersOff = [];
+        this.positionParameters = [];
     }
 
     public ngOnDestroy(): void {

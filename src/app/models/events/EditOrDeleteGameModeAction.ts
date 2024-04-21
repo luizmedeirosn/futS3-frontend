@@ -4,5 +4,4 @@ export interface EditOrDeleteGameModeAction {
 
     id: number;
     action: EnumGameModeEventsCrud;
-
 }

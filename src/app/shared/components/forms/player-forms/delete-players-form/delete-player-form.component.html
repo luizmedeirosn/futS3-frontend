@@ -11,20 +11,24 @@
         ></p-progressBar>
 
         <p-table
-            [value]="players"
-            dataKey="id"
-            [rows]="5"
+            [value]="page.content"
+            [rows]="page.pageSize"
+            [paginator]= "true"
+            [lazy] = true
+            [totalRecords]="page.totalElements"
+            (onLazyLoad)="handleChangePlayersPage($event)"
+            [loading] = "loading"
             [rowHover]="true"
             [showCurrentPageReport]="true"
-            [paginator]="true"
             [tableStyle]="{
                 width: 'w-full',
                 overflow: 'hidden',
             }"
+            dataKey="id"
         >
-            <ng-template pTemplate="header" let-player>
+            <ng-template pTemplate="header">
                 <tr>
-                    <th id="" pSortableColumn="" style="cursor: default">
+                    <th pSortableColumn="" style="cursor: default">
                         <div
                             class="flex justify-content-between align-items-center"
                         >
@@ -35,7 +39,7 @@
                             </div>
                         </div>
                     </th>
-                    <th id="" pSortableColumn="name">
+                    <th pSortableColumn="name">
                         <div
                             class="flex justify-content-between align-items-center"
                         >
@@ -61,7 +65,33 @@
                             </div>
                         </div>
                     </th>
-                    <th id="" pSortableColumn="" style="cursor: default">
+                    <th pSortableColumn="name">
+                        <div
+                            class="flex justify-content-between align-items-center"
+                        >
+                            <div
+                                class="flex justify-content-between align-items-center text-lg mt-1"
+                            >
+                                Name
+                            </div>
+                            <div
+                                class="flex justify-content-between align-items-center"
+                            >
+                                <p-sortIcon field="name"></p-sortIcon>
+                                <p-columnFilter
+                                    type="text"
+                                    field="name"
+                                    display="menu"
+                                    matchMode="contains"
+                                    [showMatchModes]="false"
+                                    [showOperator]="false"
+                                    [showAddButton]="false"
+                                    style="height: 1.8rem"
+                                ></p-columnFilter>
+                            </div>
+                        </div>
+                    </th>
+                    <th pSortableColumn="" style="cursor: default">
                         <div class="text-lg text-center mt-1">Delete</div>
                     </th>
                 </tr>
@@ -77,13 +107,16 @@
                             }}"
                             class="{{
                                 player.pictureUrl
-                                    ? 'players-table-profile-picture'
-                                    : 'players-table-profile-without-picture'
+                                    ? 'delete-players-table-profile-picture'
+                                    : 'delete-players-table-profile-without-picture'
                             }}"
                         />
                     </td>
                     <td>
-                        {{ player.name | shorten : 20 }}
+                        {{ player.name | shorten : 15 }}
+                    </td>
+                    <td>
+                        {{ player.team | shorten : 15 }}
                     </td>
                     <td
                         *ngIf="!($loadingDeletion | async)"

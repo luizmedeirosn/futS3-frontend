@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
 import { EditOrDeletePlayerAction } from 'src/app/models/events/EditOrDeletePlayerAction';
-import { PlayerFullDTO } from 'src/app/models/dto/player/response/PlayerDTO';
+import PlayerFullDTO from 'src/app/models/dto/player/response/PlayerDTO';
 import { EnumPlayerEventsCrud } from 'src/app/models/enums/EnumPlayerEventsCrud';
 
 @Component({
@@ -17,7 +17,7 @@ export class PlayerViewComponent {
     public player!: PlayerFullDTO;
 
     @Output()
-    public backEvent: EventEmitter<void> = new EventEmitter();
+    public backEvent: EventEmitter<number> = new EventEmitter();
 
     @Output()
     public editOrDeletePlayerEvent: EventEmitter<EditOrDeletePlayerAction> = new EventEmitter();
@@ -29,5 +29,4 @@ export class PlayerViewComponent {
     public handleEditOrDeletePlayerEvent($event: EditOrDeletePlayerAction) {
         this.editOrDeletePlayerEvent.emit($event);
     }
-
 }

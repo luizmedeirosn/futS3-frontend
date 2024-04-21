@@ -1,16 +1,18 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { DynamicDialogRef } from 'primeng/dynamicdialog';
-import { Subject, takeUntil } from 'rxjs';
-import { GameModeFullDTO } from 'src/app/models/dto/gamemode/response/GameModeFullDTO';
-import { GameModeMinDTO } from 'src/app/models/dto/gamemode/response/GameModeMinDTO';
-import { EnumGameModeEventsCrud } from 'src/app/models/enums/EnumGameModeEventsCrud';
-import { EditOrDeleteGameModeAction } from 'src/app/models/events/EditOrDeleteGameModeAction';
-import { ViewAction } from 'src/app/models/events/ViewAction';
-import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
-import { EditGamemodeFormComponent } from 'src/app/shared/components/forms/gamemode-forms/edit-gamemode-form/edit-gamemode-form.component';
-import { ChangesOnService } from 'src/app/shared/services/changes-on/changes-on.service';
-import { CustomDialogService } from 'src/app/shared/services/custom-dialog/custom-dialog.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ConfirmationService, MessageService} from 'primeng/api';
+import {DynamicDialogRef} from 'primeng/dynamicdialog';
+import {Subject, takeUntil} from 'rxjs';
+import {GameModeFullDTO} from 'src/app/models/dto/gamemode/response/GameModeFullDTO';
+import {GameModeMinDTO} from 'src/app/models/dto/gamemode/response/GameModeMinDTO';
+import {EnumGameModeEventsCrud} from 'src/app/models/enums/EnumGameModeEventsCrud';
+import {EditOrDeleteGameModeAction} from 'src/app/models/events/EditOrDeleteGameModeAction';
+import {ViewAction} from 'src/app/models/events/ViewAction';
+import {GameModeService} from 'src/app/services/gamemode/gamemode.service';
+import {
+    EditGamemodeFormComponent
+} from 'src/app/shared/components/forms/gamemode-forms/edit-gamemode-form/edit-gamemode-form.component';
+import {ChangesOnService} from 'src/app/shared/services/changes-on/changes-on.service';
+import {CustomDialogService} from 'src/app/shared/services/custom-dialog/custom-dialog.service';
 
 @Component({
     selector: 'app-gamemodes-home',
@@ -35,7 +37,8 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
         private customDialogService: CustomDialogService,
         private confirmationService: ConfirmationService,
         private changesOnService: ChangesOnService,
-    ) { }
+    ) {
+    }
 
     public ngOnInit(): void {
         this.setGameModesWithApi();
@@ -68,14 +71,13 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
                         }
                     },
                     error: (err) => {
-                        err.status != 403 && this.messageService.add(
-                            {
-                                severity: 'error',
-                                summary: 'Error',
-                                detail: 'Unexpected error!',
-                                life: this.messageLife
-                            }
-                        );
+                        this.messageService.clear();
+                        err.status != 403 && this.messageService.add({
+                            severity: 'error',
+                            summary: 'Error',
+                            detail: 'Unexpected error!',
+                            life: this.messageLife
+                        });
                         console.log(err);
                     }
                 }
@@ -110,7 +112,8 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
     public handleViewFullDataGameModeAction($event: ViewAction): void {
         if ($event) {
             this.selectGameMode($event.id);
-        } this.gameModeService.$gameModeView.next(true);
+        }
+        this.gameModeService.$gameModeView.next(true);
 
     }
 
@@ -175,7 +178,7 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
                 {
                     position: 'top',
                     header: EnumGameModeEventsCrud.EDIT.valueOf(),
-                    contentStyle: { overflow: 'auto' },
+                    contentStyle: {overflow: 'auto'},
                     baseZIndex: 10000,
                     data: {
                         $event: EnumGameModeEventsCrud.EDIT,

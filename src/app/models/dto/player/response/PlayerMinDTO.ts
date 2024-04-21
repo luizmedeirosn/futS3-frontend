@@ -1,9 +1,10 @@
 import { PositionMinDTO } from "../../position/response/PositionMinDTO";
 
-export interface PlayerMinDTO {
+export default interface PlayerMinDTO {
 
     id: number;
     name: string;
-    position: PositionMinDTO;
     pictureUrl: string;
+    team: string;
+    position: PositionMinDTO;
 }

@@ -5,12 +5,13 @@ import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { ParameterDTO } from 'src/app/models/dto/parameter/response/ParameterDTO';
 import { PlayerParameterIdScoreDTO } from 'src/app/models/dto/player/request/PlayerParameterIdScoreDTO';
 import { PostPlayerDTO } from 'src/app/models/dto/player/request/PostPlayerDTO';
-import { PlayerParameterDataDTO } from 'src/app/models/dto/player/response/PlayerParameterDataDTO';
+import PlayerParameterDataDTO from 'src/app/models/dto/player/response/PlayerParameterDataDTO';
 import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
 import { ParameterService } from 'src/app/services/parameter/parameter.service';
 import { PlayerService } from 'src/app/services/player/player.service';
 import { PositionService } from 'src/app/services/position/position.service';
 import { ChangesOnService } from 'src/app/shared/services/changes-on/changes-on.service';
+import Page from "../../../../../models/dto/generics/response/Page";
 
 @Component({
     selector: 'app-players-form',
@@ -55,8 +56,8 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
         this.positionService.findAll()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
-                next: (positions) => {
-                    this.positions = positions;
+                next: (positionsPage: Page<PositionMinDTO>) => {
+                    this.positions = positionsPage.content;
                 },
                 error: (err) => {
                     console.log(err);
@@ -66,8 +67,8 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
         this.parameterService.findAll()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
-                next: (parameters) => {
-                    this.parameters = parameters;
+                next: (parametersPage: Page<ParameterDTO>) => {
+                    this.parameters = parametersPage.content;
                 },
                 error: (err) => {
                     console.log(err);
@@ -124,7 +125,7 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
                     this.playerParametersScore.map(p => ({
                         id: p.id,
                         score: p.score
-                    }));                
+                    }));
 
                 const playerRequest: PostPlayerDTO = {
                     name: this.newPlayerForm.value.name as string,
@@ -170,7 +171,7 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
 
             this.parametersOff.forEach(e => this.parameters.push(e));
             this.parameters.sort((p1, p2) => p1.name.toUpperCase().localeCompare(p2.name.toUpperCase()));
-            this.parametersOff = new Array();
+            this.parametersOff = [];
             this.playerParametersScore = [];
         }
     }

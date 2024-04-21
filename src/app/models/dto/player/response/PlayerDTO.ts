@@ -1,7 +1,7 @@
 import { PositionMinDTO } from "../../position/response/PositionMinDTO";
-import { PlayerParameterDataDTO } from "./PlayerParameterDataDTO";
+import PlayerParameterDataDTO from "./PlayerParameterDataDTO";
 
-export interface PlayerFullDTO {
+export default interface PlayerFullDTO {
 
     id: number;
     name: string;
@@ -11,5 +11,4 @@ export interface PlayerFullDTO {
     pictureUrl: string;
     position: PositionMinDTO;
     parameters: Array<PlayerParameterDataDTO>
-
 }

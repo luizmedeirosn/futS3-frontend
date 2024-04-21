@@ -1,4 +1,4 @@
-import { PlayerParameterDataDTO } from "../response/PlayerParameterDataDTO";
+import PlayerParameterDataDTO from "../response/PlayerParameterDataDTO";
 
 export interface UpdatePlayerDTO {
 

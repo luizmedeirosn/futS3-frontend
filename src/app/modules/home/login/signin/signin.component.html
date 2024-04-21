@@ -5,60 +5,58 @@
     <div
         class="flex justify-content-center align-items-center bg-gray-100 p-3 pl-5 pr-5 border-round-xl"
     >
-        <div class="flex flex-column align-items-center gap-2">
-            <h1 class="w-20rem text-left m-0 p-0">
+        <div id="home-box" class="flex flex-column align-items-center gap-4">
+            <h1 class="w-20rem text-left m-0 p-0 line-height-1">
                 <span>Build your formations</span>
                 <i
-                    class="pi pi-key ml-1 slidedown-icon"
-                    style="color: var(--green-600); font-size: 2rem"
-                ></i>
+                    id="home-title-icon"
+                    class="pi pi-key ml-1 slidedown-icon text-6xl"
+                >
+                </i>
             </h1>
             <img
+                alt="logo"
                 id="home-logo"
                 src="./../../../../../assets/logo-3.png"
-                alt="logo"
             />
         </div>
 
         <p-card
-            styleClass="shadow-none border-none bg-gray-100 text-gray-900"
             header="Login"
+            styleClass="shadow-none border-none bg-gray-100 text-gray-900"
             subheader="Enter a valid account:"
         >
             <form
-                [formGroup]="signinForm"
                 (ngSubmit)="onSubmitSigninForm()"
+                [formGroup]="signinForm"
                 class="flex flex-column align-items-center gap-4"
             >
-                <div class="flex justify-content-center align-content-center">
+                <div class="flex flex-column align-items-start gap-3">
+                    <label class="font-bold">Username <span class="text-red-600">*</span></label>
                     <input
-                        type="email"
-                        pInputText
-                        placeholder="Username"
-                        formControlName="username"
                         class="text-gray-900"
+                        formControlName="username"
+                        pInputText
+                        type="email"
                     />
                 </div>
-                <div class="flex justify-content-center align-content-center">
+                <div class="flex flex-column align-items-start gap-3">
+                    <label class="font-bold">Password <span class="text-red-600">*</span></label>
                     <input
-                        type="password"
-                        pInputText
-                        placeholder="Password"
-                        formControlName="password"
                         class="text-gray-900"
+                        formControlName="password"
+                        pInputText
+                        type="password"
                     />
                 </div>
                 <div class="cursor-pointer mt-2 w-full">
                     <button
-                        [disabled]="
-                            !this.signinForm.valid ||
-                            !($enabledSubmitButton | async)
-                        "
-                        pRipple
-                        pButton
-                        type="submit"
-                        label="Sign in"
+                        [disabled]="!this.signinForm.valid || !($enabledSubmitButton | async)"
                         class="p-button-success w-full"
+                        label="Sign in"
+                        pButton
+                        pRipple
+                        type="submit"
                     ></button>
                 </div>
             </form>

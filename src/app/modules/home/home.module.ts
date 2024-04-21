@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import {CommonModule} from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -8,6 +8,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { HOME_ROUTES } from './home.routing';
 import { SigninComponent } from './login/signin/signin.component';
 import { HomeComponent } from './page/home.component';
+import {RippleModule} from "primeng/ripple";
+import {SharedModule} from "../../shared/shared.module";
 
 
 @NgModule({
@@ -24,6 +26,8 @@ import { HomeComponent } from './page/home.component';
         CardModule,
         InputTextModule,
         ButtonModule,
+        RippleModule,
+        SharedModule,
     ]
 })
 export class HomeModule { }

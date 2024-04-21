@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
 import { ParameterRequestDTO } from 'src/app/models/dto/parameter/request/ParameterRequestDTO';
 import { ParameterDTO } from 'src/app/models/dto/parameter/response/ParameterDTO';
+import Page from "../../models/dto/generics/response/Page";
 
 @Injectable({
     providedIn: 'root'
@@ -16,8 +17,8 @@ export class ParameterService {
         private httpClient: HttpClient
     ) { }
 
-    public findAll(): Observable<ParameterDTO[]> {
-        return this.httpClient.get<ParameterDTO[]>(
+    public findAll(): Observable<Page<ParameterDTO>> {
+        return this.httpClient.get<Page<ParameterDTO>>(
             `${this.API_URL}/parameters`
         );
     }

@@ -9,16 +9,15 @@ body {
     padding: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to bottom, #080414, #04f3a3) fixed;
     background-size: 100% 200%;
-    background-repeat: no-repeat;
+    background: linear-gradient(to bottom, #080414, #02c986) no-repeat fixed;
     overflow-y: scroll !important;
 }
 
 img,
 svg {
-    filter: brightness(1) contrast(1) saturate(1.2) grayscale(5%);
-    image-rendering: -webkit-optimize-contrast !important;
+    filter: brightness(1) contrast(1) saturate(1.2) grayscale(5%) !important;
+    image-rendering: high-quality !important;
 }
 
 text,
@@ -35,9 +34,47 @@ span {
     margin-bottom: 1rem;
 }
 
+.p-card-subtitle {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--gray-700);
+}
+
 .p-button {
-    caret-color: transparent;
-    caret-shape: block;
+    caret-color: transparent !important;
+}
+
+.p-datatable-loading-overlay {
+    border-radius: 10px;
+    .p-icon {
+        width: 5rem;
+        height: 10rem;
+    }
+}
+
+.p-element .p-paginator-current, .p-paginator-element {
+    caret-color: transparent !important;
+    color: var(--gray-900);
+}
+
+.p-dropdown {
+    caret-color: transparent !important;
+    border: 1px solid;
+    border-radius: 3px;
+    span {
+        color: var(--black-1);
+    }
+    &:hover {
+        background-color: whitesmoke;
+    }
+}
+
+.p-dropdown-filter-icon {
+    color: rgba(0, 0, 0, 0.87);
+}
+
+.p-dropdown-items-wrapper {
+    max-height: 150px !important;
 }
 
 tr {
@@ -69,7 +106,7 @@ tr {
         border-bottom-left-radius: 6px;
         width: 11rem;
         text-align: center;
-        font-weight: medium;
+        font-weight: 400;
         word-wrap: break-word;
     }
 }
@@ -85,41 +122,13 @@ tr {
     width: 0.5rem;
 }
 
-.p-dropdown {
-    border: solid;
-    border-width: 1px;
-    border-radius: 3px;
-    span {
-        color: var(--black-1);
-    }
-    &:hover {
-        background-color: whitesmoke;
-    }
-}
-
-.p-dropdown-filter-icon {
-    color: rgba(0, 0, 0, 0.87);
-}
-
-.p-dropdown-trigger {
-    width: 30%;
-    svg {
-        margin-left: 2rem;
-    }
-}
-
-.p-dropdown-items-wrapper {
-    max-height: 150px !important;
-}
-
 .p-dialog {
     width: 40rem;
 }
 
 .p-dialog-header {
-    background: linear-gradient(to bottom, #080414, #04f3a3) fixed;
     background-size: 100% 200%;
-    background-repeat: no-repeat;
+    background: linear-gradient(to bottom, #080414, #02c986) no-repeat fixed;
     color: #fff;
     font-weight: bold;
 }

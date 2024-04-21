@@ -1,21 +1,23 @@
-import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { MessageService } from 'primeng/api';
-import { DynamicDialogConfig } from 'primeng/dynamicdialog';
-import { Table } from 'primeng/table';
-import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { ParameterDTO } from 'src/app/models/dto/parameter/response/ParameterDTO';
-import { UpdatePlayerDTO } from 'src/app/models/dto/player/request/UpdatePlayerDTO';
-import { PlayerFullDTO } from 'src/app/models/dto/player/response/PlayerDTO';
-import { PlayerMinDTO } from 'src/app/models/dto/player/response/PlayerMinDTO';
-import { PlayerParameterDataDTO } from 'src/app/models/dto/player/response/PlayerParameterDataDTO';
-import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
-import { EnumPlayerEventsCrud } from 'src/app/models/enums/EnumPlayerEventsCrud';
-import { ParameterService } from 'src/app/services/parameter/parameter.service';
-import { PlayerService } from 'src/app/services/player/player.service';
-import { PositionService } from 'src/app/services/position/position.service';
-import { ChangesOnService } from 'src/app/shared/services/changes-on/changes-on.service';
-import { CustomDialogService } from 'src/app/shared/services/custom-dialog/custom-dialog.service';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import {FormBuilder, Validators} from '@angular/forms';
+import {MessageService} from 'primeng/api';
+import {DynamicDialogConfig} from 'primeng/dynamicdialog';
+import {TableLazyLoadEvent} from 'primeng/table';
+import {BehaviorSubject, Subject, takeUntil} from 'rxjs';
+import {ParameterDTO} from 'src/app/models/dto/parameter/response/ParameterDTO';
+import {UpdatePlayerDTO} from 'src/app/models/dto/player/request/UpdatePlayerDTO';
+import PlayerFullDTO from 'src/app/models/dto/player/response/PlayerDTO';
+import PlayerMinDTO from 'src/app/models/dto/player/response/PlayerMinDTO';
+import PlayerParameterDataDTO from 'src/app/models/dto/player/response/PlayerParameterDataDTO';
+import {PositionMinDTO} from 'src/app/models/dto/position/response/PositionMinDTO';
+import {EnumPlayerEventsCrud} from 'src/app/models/enums/EnumPlayerEventsCrud';
+import {ParameterService} from 'src/app/services/parameter/parameter.service';
+import {PlayerService} from 'src/app/services/player/player.service';
+import {PositionService} from 'src/app/services/position/position.service';
+import {ChangesOnService} from 'src/app/shared/services/changes-on/changes-on.service';
+import {CustomDialogService} from 'src/app/shared/services/custom-dialog/custom-dialog.service';
+import Page from "../../../../../models/dto/generics/response/Page";
+import PageMin from "../../../../../models/dto/generics/response/PageMin";
 
 @Component({
     selector: 'app-edit-player-form',
@@ -28,16 +30,22 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
     private readonly $destroy: Subject<void> = new Subject();
     private readonly toastLife: number = 2000;
 
-    @ViewChild('playersTable') public playersTable!: Table;
-    private playersTablePages: PlayerMinDTO[][] = [];
+    public indexFirstRow!: number;
+    public loading!: boolean;
+    public page: PageMin<PlayerMinDTO> = {
+        content: [],
+        pageNumber: 0,
+        pageSize: 10,
+        totalElements: 0
+    };
 
     public $viewTable: BehaviorSubject<boolean> = new BehaviorSubject(true);
     public closeableDialog: boolean = false;
 
-    public players!: PlayerMinDTO[];
     public selectedPlayer!: PlayerFullDTO | undefined;
 
-    public $viewSelectedPicture: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    public $viewSelectedPicture: BehaviorSubject<boolean> =
+        new BehaviorSubject(false);
     public positions!: PositionMinDTO[];
     public parameters!: ParameterDTO[];
     private parametersOff: ParameterDTO[] = [];
@@ -60,17 +68,20 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
     public constructor(
         private formBuilder: FormBuilder,
         private messageService: MessageService,
+        private changeDetectorRef: ChangeDetectorRef,
+        private dynamicDialogConfig: DynamicDialogConfig,
+
         private playerService: PlayerService,
         private positionService: PositionService,
         private parameterService: ParameterService,
         private customDialogService: CustomDialogService,
-        private dynamicDialogConfig: DynamicDialogConfig,
         private changesOnService: ChangesOnService,
     ) { }
 
     public ngOnInit(): void {
-        this.setPlayersWithApi();
-        this.setPositionWithApi();
+        this.page.totalElements === 0 &&
+            this.setPlayersWithApi(0, 10);
+        this.setPositionsWithApi();
 
         const action = this.dynamicDialogConfig.data;
         if (action && action.$event === EnumPlayerEventsCrud.EDIT) {
@@ -79,45 +90,45 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
         }
     }
 
-    private setPlayersWithApi(): void {
-        this.playerService.findAll()
-            .pipe(takeUntil(this.$destroy))
-            .subscribe({
-                next: (players) => {
-                    this.players = players;
-
-                    let increment: number = 0;
-                    let page: Array<PlayerMinDTO> = new Array();
-
-                    players.forEach((player, index, array) => {
-                        page.push(player);
-                        increment += 1;
-                        if (increment === 5 || index === array.length - 1) {
-                            this.playersTablePages.push(page);
-                            page = new Array();
-                            increment = 0;
+    private setPlayersWithApi(pageNumber: number, pageSize: number): void {
+        this.loading = true;
+        this.indexFirstRow = pageNumber * pageSize;
+        setTimeout(() => {
+            this.playerService.findAll(pageNumber, pageSize)
+                .pipe(takeUntil(this.$destroy))
+                .subscribe(
+                    {
+                        next: (playersPage: Page<PlayerMinDTO>) => {
+                            if (playersPage.size > 0) {
+                                this.page.content = playersPage.content;
+                                this.page.pageNumber = pageNumber;
+                                this.page.pageSize = pageSize;
+                                this.page.totalElements = playersPage.totalElements;
+                            }
+                        },
+                        error: (err) => {
+                            this.messageService.clear();
+                            this.messageService.add({
+                                severity: 'error',
+                                summary: 'Error',
+                                detail: 'Failed to retrieve the data!',
+                                life: this.toastLife
+                            });
+                            console.log(err);
                         }
-                    });
-                },
-                error: (err) => {
-                    this.messageService.clear();
-                    this.messageService.add({
-                        severity: 'error',
-                        summary: 'Error',
-                        detail: 'Failed to retrieve the data!',
-                        life: this.toastLife
-                    });
-                    console.log(err);
-                }
-            });
+                    }
+                );
+
+            this.loading = false;
+        }, 500);
     }
 
-    private setPositionWithApi(): void {
+    private setPositionsWithApi(): void {
         this.positionService.findAll()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
-                next: (positions) => {
-                    this.positions = positions;
+                next: (positionsPage: Page<PositionMinDTO>) => {
+                    this.positions = positionsPage.content;
                 },
                 error: (err) => {
                     console.log(err);
@@ -129,8 +140,8 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
         this.parameterService.findAll()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
-                next: (parameters) => {
-                    this.parameters = parameters;
+                next: (parametersPage: Page<ParameterDTO>) => {
+                    this.parameters = parametersPage.content;
                 },
                 error: (err) => {
                     console.log(err);
@@ -138,15 +149,11 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
             });
     }
 
-    private deleteIncludedPlayerParameters(): void {
-        if (this.parameters) {
-            const parametersNames = this.playerParametersScore.map(p => p.name);
-            this.parameters.forEach(parameter => {
-                if (parametersNames.includes(parameter.name)) {
-                    this.parametersOff.push(parameter);
-                    this.parameters = this.parameters.filter(p => p.name != parameter.name);
-                }
-            });
+    public handleChangePlayersPage($event: TableLazyLoadEvent) {
+        if ($event && $event.first !== undefined && $event.rows) {
+            const pageNumber = Math.ceil($event.first / $event.rows);
+            const pageSize = $event.rows !== 0 ? $event.rows : 5;
+            this.setPlayersWithApi(pageNumber, pageSize);
         }
     }
 
@@ -181,32 +188,26 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
         }
     }
 
-    public handleBackAction(): void {
-        this.closeableDialog && this.customDialogService.closeEndDialog();
-
-        // Activate the view child before referencing the table
-        this.$viewTable.next(true);
-
-        // Delay until activating the viewChild
-        setTimeout(() => {
-            if (this.selectedPlayer?.id !== undefined) {
-                const selectedPlayer: PlayerMinDTO | undefined =
-                    this.players.find(player => player.id === this.selectedPlayer?.id);
-
-                if (selectedPlayer) {
-                    const index = this.players.indexOf(selectedPlayer);
-                    const numPage: number = Math.floor(index / 5);
-                    const page = this.playersTablePages.at(numPage);
-                    const firstPlayerPage: PlayerMinDTO | undefined = page?.at(0);
-
-                    this.playersTable &&
-                        (this.playersTable.first =
-                            firstPlayerPage && this.players.indexOf(firstPlayerPage));
+    private deleteIncludedPlayerParameters(): void {
+        if (this.parameters) {
+            const parametersNames = this.playerParametersScore.map(p => p.name);
+            this.parameters.forEach(parameter => {
+                if (parametersNames.includes(parameter.name)) {
+                    this.parametersOff.push(parameter);
+                    this.parameters = this.parameters.filter(p => p.name != parameter.name);
                 }
-            }
-            this.selectedPlayer = undefined;
-            this.playerPicture = undefined;
-        }, 10);
+            });
+        }
+    }
+
+    public handleBackAction(): void {
+        this.closeableDialog ?
+            this.customDialogService.closeEndDialog() : this.$viewTable.next(true);
+
+        this.selectedPlayer = undefined;
+        this.playerPicture = undefined;
+
+        this.changeDetectorRef.detectChanges();
     }
 
     public handleUploadPicture($event: any): void {
@@ -270,8 +271,14 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                     .pipe(takeUntil(this.$destroy))
                     .subscribe({
                         next: (playerResponse: PlayerFullDTO) => {
-                            const updatedPlayer = this.players.find(p => p.id === this.selectedPlayer?.id);
-                            updatedPlayer && (updatedPlayer.name = playerResponse.name);
+                            const updatedPlayer =
+                                this.page.content.find(
+                                    p => p.id === this.selectedPlayer?.id
+                                );
+                            if(updatedPlayer) {
+                                updatedPlayer.name = playerResponse.name;
+                                updatedPlayer.team = playerResponse.team;
+                            }
 
                             this.changesOnService.setChangesOn(true);
 
@@ -306,7 +313,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
 
             this.parametersOff.forEach(e => this.parameters.push(e));
             this.parameters.sort((p1, p2) => p1.name.toUpperCase().localeCompare(p2.name.toUpperCase()));
-            this.parametersOff = new Array();
+            this.parametersOff = [];
             this.playerParametersScore = [];
         }
     }
@@ -315,5 +322,4 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
         this.$destroy.next();
         this.$destroy.complete();
     }
-
 }

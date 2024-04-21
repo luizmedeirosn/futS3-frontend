@@ -4,5 +4,4 @@ export interface EditOrDeletePositionAction {
 
     id: number;
     action: EnumPositionEventsCrud;
-
 }

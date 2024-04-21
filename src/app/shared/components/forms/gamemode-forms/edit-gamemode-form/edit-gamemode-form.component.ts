@@ -16,6 +16,7 @@ import { ChangesOnService } from 'src/app/shared/services/changes-on/changes-on.
 import { CustomDialogService } from 'src/app/shared/services/custom-dialog/custom-dialog.service';
 import { EditPositionFormComponent } from '../../position-forms/edit-position-form/edit-position-form.component';
 import { SavePositionFormComponent } from '../../position-forms/save-position-form/save-position-form.component';
+import Page from "../../../../../models/dto/generics/response/Page";
 
 @Component({
     selector: 'app-edit-gamemode-form',
@@ -29,7 +30,7 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
     private readonly toastLife: number = 2000;
 
     @ViewChild('gameModesTable') public gameModesTable!: Table;
-    private gameModesTablePages: Array<Array<GameModeMinDTO>> = new Array();
+    private gameModesTablePages: Array<Array<GameModeMinDTO>> = [];
 
     public $viewTable: BehaviorSubject<boolean> = new BehaviorSubject(true);
     public closeableDialog: boolean = false;
@@ -37,7 +38,7 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
     public gameModes!: Array<GameModeMinDTO>;
     public selectedGameMode!: GameModeMinDTO | undefined;
     public positions!: Array<PositionMinDTO>;
-    public positionsOff: Array<PositionMinDTO> = new Array();
+    public positionsOff: Array<PositionMinDTO> = [];
     private reset: boolean = true;
 
     public editGameModeForm: any = this.formBuilder.group({
@@ -94,14 +95,14 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
                     this.gameModes = gameModes;
 
                     let increment: number = 0;
-                    let page: Array<GameModeMinDTO> = new Array();
+                    let page: Array<GameModeMinDTO> = [];
 
                     gameModes.forEach((gameMode, index, array) => {
                         page.push(gameMode);
                         increment += 1;
                         if (increment === 5 || index === array.length - 1) {
                             this.gameModesTablePages.push(page);
-                            page = new Array();
+                            page = [];
                             increment = 0;
                         }
                     });
@@ -123,8 +124,8 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
         this.positionService.findAll()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
-                next: (positions: Array<PositionMinDTO>) => {
-                    this.positions = positions.filter(p => !this.positionsOff.some(off => off.id === p.id));
+                next: (positionsPage: Page<PositionMinDTO>) => {
+                    this.positions = positionsPage.content.filter(p => !this.positionsOff.some(off => off.id === p.id));
                 },
                 error: (err) => {
                     console.log(err);
@@ -204,7 +205,7 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
             }
 
             this.selectedGameMode = undefined;
-            this.positionsOff = new Array();
+            this.positionsOff = [];
             this.reset = true;
 
         }, 10);
@@ -264,7 +265,7 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
             const position: PositionMinDTO | undefined =
                 this.positionsOff.find((p) => p.id === $event);
             position && this.positions.push(position);
-            this.positionsOff = position && this.positionsOff.filter(p => p.id !== position.id) || new Array();
+            this.positionsOff = position && this.positionsOff.filter(p => p.id !== position.id) || [];
             this.positionsOff.sort((p1, p2) =>
                 p1.name.toUpperCase().localeCompare(p2.name.toUpperCase())
             );
@@ -324,7 +325,7 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
         this.positionsOff.forEach(e => this.positions.push(e));
         this.positionsOff.sort((p1, p2) =>
             p1.name.toUpperCase().localeCompare(p2.name.toUpperCase())
-        ); this.positionsOff = new Array();
+        ); this.positionsOff = [];
     }
 
     public ngOnDestroy(): void {

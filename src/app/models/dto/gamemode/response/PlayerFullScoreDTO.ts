@@ -1,4 +1,4 @@
-import { PlayerParameterDataDTO } from "../../player/response/PlayerParameterDataDTO";
+import PlayerParameterDataDTO from "../../player/response/PlayerParameterDataDTO";
 
 export interface PlayerFullScoreDTO {
 
