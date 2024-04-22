@@ -16,6 +16,7 @@ import {CustomDialogService} from 'src/app/shared/services/custom-dialog/custom-
 import Page from "../../../../models/dto/generics/response/Page";
 import PageMin from "../../../../models/dto/generics/response/PageMin";
 import ChangePageAction from "../../../../models/events/ChangePageAction";
+import Pageable from "../../../../models/dto/generics/request/Pageable";
 
 @Component({
     selector: 'app-players-home',
@@ -28,14 +29,10 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
     private readonly $destroy: Subject<void> = new Subject();
     private readonly messageLife: number = 3000;
 
+    private pageable!: Pageable;
     public indexFirstRow!: number;
     public loading!: boolean;
-    public page: PageMin<PlayerMinDTO> = {
-        content: [],
-        pageNumber: 0,
-        pageSize: 5,
-        totalElements: 0
-    };
+    public page!: PageMin<PlayerMinDTO>;
 
     public player!: PlayerFullDTO;
     public playerView: BehaviorSubject<boolean> = new BehaviorSubject(false);
@@ -50,10 +47,18 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
         private customDialogService: CustomDialogService,
         private changesOnService: ChangesOnService,
     ) {
+        this.page = {
+            content: [],
+            pageNumber: 0,
+            pageSize: 5,
+            totalElements: 0
+        };
+        this.pageable = new Pageable(0, 5, "name", 1);
     }
 
     public ngOnInit(): void {
-        this.page.totalElements === 0 && this.setPlayersWithApi(0, 5);
+        this.page.totalElements === 0 &&
+        this.setPlayersWithApi(this.pageable);
 
         this.playerService.$playerView
             .pipe(takeUntil(this.$destroy))
@@ -73,7 +78,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
             .subscribe({
                 next: (changesOn: boolean) => {
                     if (changesOn) {
-                        this.setPlayersWithApi(this.page.pageNumber, this.page.pageSize);
+                        this.setPlayersWithApi(this.pageable);
 
                         const changedPlayerId: number | undefined = this.playerService.changedPlayerId;
                         changedPlayerId ? this.selectPlayer(changedPlayerId) : this.handleBackAction();
@@ -85,24 +90,23 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
             });
     }
 
-    private setPlayersWithApi(pageNumber: number, pageSize: number): void {
+    private setPlayersWithApi(pageable: Pageable): void {
+        this.pageable = pageable;
         this.loading = true;
-        this.indexFirstRow = pageNumber * pageSize;
+        this.indexFirstRow = pageable.pageNumber * pageable.pageSize;
         setTimeout(() => {
-            this.playerService.findAll(pageNumber, pageSize)
+            this.playerService.findAll(pageable)
                 .pipe(takeUntil(this.$destroy))
                 .subscribe(
                     {
                         next: (playersPage: Page<PlayerMinDTO>) => {
-                            if (playersPage.size > 0) {
-                                this.page.content = playersPage.content;
-                                this.page.pageNumber = pageNumber;
-                                this.page.pageSize = pageSize;
-                                this.page.totalElements = playersPage.totalElements;
+                            this.page.content = playersPage.content;
+                            this.page.pageNumber = playersPage.pageable.pageNumber;
+                            this.page.pageSize = playersPage.pageable.pageSize;
+                            this.page.totalElements = playersPage.totalElements;
 
+                            this.loading = false;
 
-                                this.loading = false;
-                            }
                         },
                         error: (err) => {
                             this.messageService.clear();
@@ -122,8 +126,13 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
     }
 
     public handleChangePageAction($event: ChangePageAction) {
-        if ($event) {
-            this.setPlayersWithApi($event.pageNumber, $event.pageSize);
+        if ($event && $event.sortField && $event.sortDirection) {
+            this.setPlayersWithApi(new Pageable(
+                $event.pageNumber,
+                $event.pageSize,
+                $event.sortField,
+                $event.sortDirection
+            ));
         }
     }
 

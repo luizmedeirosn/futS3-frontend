@@ -7,6 +7,7 @@ import { ChangesOnService } from 'src/app/shared/services/changes-on/changes-on.
 import PageMin from "../../../../../models/dto/generics/response/PageMin";
 import Page from "../../../../../models/dto/generics/response/Page";
 import {TableLazyLoadEvent} from "primeng/table";
+import Pageable from "../../../../../models/dto/generics/request/Pageable";
 
 @Component({
     selector: 'app-delete-players-form',
@@ -22,13 +23,9 @@ export class DeletePlayerFormComponent implements OnInit, OnDestroy {
     public $loadingDeletion: BehaviorSubject<boolean> =
         new BehaviorSubject(false);
 
+    private pageable!: Pageable;
     public loading!: boolean;
-    public page: PageMin<PlayerMinDTO> = {
-        content: [],
-        pageNumber: 0,
-        pageSize: 10,
-        totalElements: 0
-    };
+    public page!: PageMin<PlayerMinDTO>;
 
     public constructor(
         private messageService: MessageService,
@@ -36,25 +33,34 @@ export class DeletePlayerFormComponent implements OnInit, OnDestroy {
 
         private playerService: PlayerService,
         private changesOnService: ChangesOnService,
-    ) { }
+    ) {
+        this.page = {
+            content: [],
+            pageNumber: 0,
+            pageSize: 5,
+            totalElements: 0
+        };
+        this.pageable = new Pageable(0, 10, "name", 1);
+    }
 
     public ngOnInit(): void {
         this.page.totalElements === 0 &&
-            this.setPlayersWithApi(0, 10);
+            this.setPlayersWithApi(this.pageable);
     }
 
-    private setPlayersWithApi(pageNumber: number, pageSize: number): void {
+    private setPlayersWithApi(pageable: Pageable): void {
+        this.pageable = pageable;
         this.loading = true;
         setTimeout(() => {
-            this.playerService.findAll(pageNumber, pageSize)
+            this.playerService.findAll(pageable)
                 .pipe(takeUntil(this.$destroy))
                 .subscribe(
                     {
                         next: (playersPage: Page<PlayerMinDTO>) => {
                             if (playersPage.size > 0) {
                                 this.page.content = playersPage.content;
-                                this.page.pageNumber = pageNumber;
-                                this.page.pageSize = pageSize;
+                                this.page.pageNumber = playersPage.pageable.pageNumber;
+                                this.page.pageSize = playersPage.pageable.pageSize;
                                 this.page.totalElements = playersPage.totalElements;
                             }
                         },
@@ -75,11 +81,17 @@ export class DeletePlayerFormComponent implements OnInit, OnDestroy {
         }, 500);
     }
 
-    public handleChangePlayersPage($event: TableLazyLoadEvent) {
+    public handleChangePageAction($event: TableLazyLoadEvent) {
         if ($event && $event.first !== undefined && $event.rows) {
             const pageNumber = Math.ceil($event.first / $event.rows);
-            const pageSize = $event.rows !== 0 ? $event.rows : 5;
-            this.setPlayersWithApi(pageNumber, pageSize);
+            const pageSize = $event.rows !== 0 ? $event.rows : 10;
+
+            const fields = $event.sortField ?? "name";
+            const sortField = Array.isArray(fields) ? fields[0]: fields;
+
+            const sortDirection = $event.sortOrder ?? 1;
+
+            this.setPlayersWithApi(new Pageable(pageNumber, pageSize, sortField, sortDirection));
         }
     }
 
@@ -111,7 +123,7 @@ export class DeletePlayerFormComponent implements OnInit, OnDestroy {
                     next: () => {
                         setTimeout(() => {
                             this.$loadingDeletion.next(false);
-                            this.setPlayersWithApi(this.page.pageNumber, this.page.pageSize);
+                            this.setPlayersWithApi(this.pageable);
 
                             this.messageService.clear();
                             this.messageService.add({

@@ -1,126 +1,63 @@
 <div class="flex justify-content-center mb-6">
     <p-card [style]="{ width: '65rem' }" header="Players">
         <p-table
-            [value]="page.content"
-            [rows]="page.pageSize"
+            (onLazyLoad)="handleChangePageEvent($event)"
+            (sortFunction)="handleChangePageEvent($event)"
+            [customSort]="true"
             [first]="indexFirstRow"
-            [paginator]= "true"
-            [rowsPerPageOptions]="[5, 10, 20]"
-            [lazy] = true
-            [totalRecords]="page.totalElements"
-            (onLazyLoad)="changePlayersPage($event)"
-            [loading] = "loading"
+            [lazy]="true"
+            [loading]="loading"
+            [paginator]="true"
+            [resetPageOnSort]="false"
             [rowHover]="true"
+            [rowsPerPageOptions]="[5, 10, 20]"
+            [rows]="page.pageSize"
             [showCurrentPageReport]="true"
-            dataKey="id"
+            [totalRecords]="page.totalElements"
+            [value]="page.content"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} players"
+            dataKey="id"
         >
             <ng-template pTemplate="header">
                 <tr>
                     <th pSortableColumn="" style="cursor: default">
-                        <div
-                            class="flex justify-content-between align-items-center"
-                        >
-                            <div
-                                class="flex justify-content-center align-items-center text-lg mt-1"
-                            >
-                                Picture
-                            </div>
+                        <div class="flex justify-content-between align-items-center text-lg mt-1">
+                            Picture
                         </div>
                     </th>
                     <th pSortableColumn="name">
-                        <div
-                            class="flex justify-content-between align-items-center"
-                        >
-                            <div
-                                class="flex justify-content-between align-items-center text-lg mt-1"
-                            >
-                                Name
-                            </div>
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
-                                <p-sortIcon field="name"></p-sortIcon>
-                                <p-columnFilter
-                                    type="text"
-                                    field="name"
-                                    display="menu"
-                                    matchMode="contains"
-                                    [showMatchModes]="false"
-                                    [showOperator]="false"
-                                    [showAddButton]="false"
-                                    style="height: 1.8rem"
-                                ></p-columnFilter>
-                            </div>
+                        <div class="flex justify-content-between align-items-center text-lg mt-1">
+                            Name
+                            <p-sortIcon field="name"></p-sortIcon>
                         </div>
                     </th>
                     <th pSortableColumn="position.name">
-                        <div
-                            class="flex justify-content-between align-items-center"
-                        >
-                            <div
-                                class="flex justify-content-center align-items-center text-lg mt-1"
-                            >
-                                Position
-                            </div>
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
-                                <p-sortIcon field="position.name"></p-sortIcon>
-                                <p-columnFilter
-                                    type="text"
-                                    field="position.name"
-                                    display="menu"
-                                    matchMode="contains"
-                                    [showMatchModes]="false"
-                                    [showOperator]="false"
-                                    [showAddButton]="false"
-                                    style="height: 1.8rem"
-                                ></p-columnFilter>
-                            </div>
+                        <div class="flex justify-content-between align-items-center text-lg mt-1">
+                            Position
+                            <p-sortIcon field="position.name"></p-sortIcon>
                         </div>
                     </th>
                     <th pSortableColumn="team">
-                        <div
-                            class="flex justify-content-between align-items-center"
-                        >
-                            <div
-                                class="flex justify-content-center align-items-center text-lg mt-1"
-                            >
-                                Team
-                            </div>
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
-                                <p-sortIcon field="team"></p-sortIcon>
-                                <p-columnFilter
-                                    type="text"
-                                    field="team"
-                                    display="menu"
-                                    matchMode="contains"
-                                    [showMatchModes]="false"
-                                    [showOperator]="false"
-                                    [showAddButton]="false"
-                                    style="height: 1.8rem"
-                                ></p-columnFilter>
-                            </div>
+                        <div class="flex justify-content-between align-items-center text-lg mt-1">
+                            Team
+                            <p-sortIcon field="team"></p-sortIcon>
                         </div>
                     </th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-player>
+            <ng-template let-player pTemplate="body">
                 <tr style="cursor: pointer">
                     <td (click)="handleViewFullDataPlayerEvent(player.id)">
                         <img
                             alt=""
-                            src="{{
-                                player.pictureUrl ||
-                                    '../../../../../../../assets/without-picture.png'
-                            }}"
                             class="{{
                                 player.pictureUrl
                                     ? 'home-players-table-profile-picture'
                                     : 'home-players-table-profile-without-picture'
+                            }}"
+                            src="{{
+                                player.pictureUrl ||
+                                    '../../../../../../../assets/without-picture.png'
                             }}"
                         />
                     </td>

@@ -36,14 +36,21 @@ export class PlayersTableComponent {
         }
     }
 
-    public changePlayersPage($event: TableLazyLoadEvent): void {
+    public handleChangePageEvent($event: TableLazyLoadEvent): void {
         if ($event && $event.first !== undefined && $event.rows) {
-            console.log($event);
             const pageNumber = Math.ceil($event.first / $event.rows);
             const pageSize = $event.rows !== 0 ? $event.rows : 5;
+
+            const fields = $event.sortField ?? "name";
+            const sortField = Array.isArray(fields) ? fields[0]: fields;
+            const sortDirection = $event.sortOrder ?? 1;
+
+            console.log($event)
             this.changePageEvent.emit({
                 pageNumber,
-                pageSize
+                pageSize,
+                sortField,
+                sortDirection
             });
         }
     }

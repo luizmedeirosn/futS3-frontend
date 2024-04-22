@@ -11,6 +11,7 @@ import {Injectable} from '@angular/core';
 import {CookieService} from 'ngx-cookie-service';
 import {catchError, Observable, switchMap, throwError} from 'rxjs';
 import {environment} from 'src/environments/environment.prod';
+import {AuthService} from "../../services/auth/auth.service";
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -25,6 +26,7 @@ export class AuthInterceptor implements HttpInterceptor {
         private http: HttpClient,
         private cookieService: CookieService,
 
+        private authService: AuthService
     ) {
         AuthInterceptor.accessToken = this.cookieService.get('_accessToken');
         AuthInterceptor.refreshToken = this.cookieService.get('_refreshToken');
@@ -66,7 +68,7 @@ export class AuthInterceptor implements HttpInterceptor {
                         }),
                         catchError((refreshErr: any) => {
                             this.refresh = false;
-                            // this.authService.logout(true);
+                            this.authService.logout(true);
                             return throwError(() => refreshErr);
                         })
                     );

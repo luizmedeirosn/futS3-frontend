@@ -11,7 +11,7 @@
             [paginator]= "true"
             [lazy] = true
             [totalRecords]="page.totalElements"
-            (onLazyLoad)="handleChangePlayersPage($event)"
+            (onLazyLoad)="handleChangePageAction($event)"
             [loading] = "loading"
             [rowHover]="true"
             [showCurrentPageReport]="true"
