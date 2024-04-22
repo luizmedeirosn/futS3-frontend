@@ -29,66 +29,20 @@
             <ng-template pTemplate="header">
                 <tr>
                     <th pSortableColumn="" style="cursor: default">
-                        <div
-                            class="flex justify-content-between align-items-center"
-                        >
-                            <div
-                                class="flex justify-content-center align-items-center text-lg mt-1"
-                            >
-                                Picture
-                            </div>
+                        <div class="flex justify-content-between align-items-center text-lg mt-1">
+                            Picture
                         </div>
                     </th>
                     <th pSortableColumn="name">
-                        <div
-                            class="flex justify-content-between align-items-center"
-                        >
-                            <div
-                                class="flex justify-content-between align-items-center text-lg mt-1"
-                            >
-                                Name
-                            </div>
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
-                                <p-sortIcon field="name"></p-sortIcon>
-                                <p-columnFilter
-                                    type="text"
-                                    field="name"
-                                    display="menu"
-                                    matchMode="contains"
-                                    [showMatchModes]="false"
-                                    [showOperator]="false"
-                                    [showAddButton]="false"
-                                    style="height: 1.8rem"
-                                ></p-columnFilter>
-                            </div>
+                        <div class="flex justify-content-between align-items-center text-lg mt-1">
+                            Name
+                            <p-sortIcon field="name"></p-sortIcon>
                         </div>
                     </th>
-                    <th pSortableColumn="name">
-                        <div
-                            class="flex justify-content-between align-items-center"
-                        >
-                            <div
-                                class="flex justify-content-between align-items-center text-lg mt-1"
-                            >
-                                Name
-                            </div>
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
-                                <p-sortIcon field="name"></p-sortIcon>
-                                <p-columnFilter
-                                    type="text"
-                                    field="name"
-                                    display="menu"
-                                    matchMode="contains"
-                                    [showMatchModes]="false"
-                                    [showOperator]="false"
-                                    [showAddButton]="false"
-                                    style="height: 1.8rem"
-                                ></p-columnFilter>
-                            </div>
+                    <th pSortableColumn="team">
+                        <div class="flex justify-content-between align-items-center text-lg mt-1">
+                            Team
+                            <p-sortIcon field="team"></p-sortIcon>
                         </div>
                     </th>
                     <th pSortableColumn="" style="cursor: default">

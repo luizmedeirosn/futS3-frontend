@@ -47,13 +47,13 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
         private customDialogService: CustomDialogService,
         private changesOnService: ChangesOnService,
     ) {
+        this.pageable = new Pageable(0, 5, "name", 1);
         this.page = {
             content: [],
             pageNumber: 0,
             pageSize: 5,
             totalElements: 0
         };
-        this.pageable = new Pageable(0, 5, "name", 1);
     }
 
     public ngOnInit(): void {

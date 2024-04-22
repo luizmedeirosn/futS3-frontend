@@ -34,18 +34,17 @@ export class DeletePlayerFormComponent implements OnInit, OnDestroy {
         private playerService: PlayerService,
         private changesOnService: ChangesOnService,
     ) {
+        this.pageable = new Pageable(0, 10, "name", 1);
         this.page = {
             content: [],
             pageNumber: 0,
-            pageSize: 5,
+            pageSize: 10,
             totalElements: 0
         };
-        this.pageable = new Pageable(0, 10, "name", 1);
     }
 
     public ngOnInit(): void {
-        this.page.totalElements === 0 &&
-            this.setPlayersWithApi(this.pageable);
+        this.page.totalElements === 0 && this.setPlayersWithApi(this.pageable);
     }
 
     private setPlayersWithApi(pageable: Pageable): void {

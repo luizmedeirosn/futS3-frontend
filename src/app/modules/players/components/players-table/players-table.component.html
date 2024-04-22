@@ -1,20 +1,20 @@
 <div class="flex justify-content-center mb-6">
     <p-card [style]="{ width: '65rem' }" header="Players">
         <p-table
-            (onLazyLoad)="handleChangePageEvent($event)"
-            (sortFunction)="handleChangePageEvent($event)"
-            [customSort]="true"
+            [value]="page.content"
+            [rows]="page.pageSize"
             [first]="indexFirstRow"
-            [lazy]="true"
-            [loading]="loading"
             [paginator]="true"
+            [totalRecords]="page.totalElements"
+            [lazy]="true"
+            (onLazyLoad)="handleChangePageEvent($event)"
+            [loading]="loading"
+            [customSort]="true"
+            (sortFunction)="handleChangePageEvent($event)"
             [resetPageOnSort]="false"
             [rowHover]="true"
             [rowsPerPageOptions]="[5, 10, 20]"
-            [rows]="page.pageSize"
             [showCurrentPageReport]="true"
-            [totalRecords]="page.totalElements"
-            [value]="page.content"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} players"
             dataKey="id"
         >
