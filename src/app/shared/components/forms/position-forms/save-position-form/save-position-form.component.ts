@@ -3,7 +3,7 @@ import {FormBuilder, Validators} from '@angular/forms';
 import {MessageService} from 'primeng/api';
 import {Subject, takeUntil} from 'rxjs';
 import {ParameterDTO} from 'src/app/models/dto/parameter/response/ParameterDTO';
-import {ParameterWeightDTO} from 'src/app/models/dto/position/data/ParameterWeightDTO';
+import {ParameterWeightDTO} from 'src/app/models/dto/position/aux/ParameterWeightDTO';
 import {PositionRequestDTO} from 'src/app/models/dto/position/request/PositionRequestDTO';
 import {ParameterService} from 'src/app/services/parameter/parameter.service';
 import {PositionService} from 'src/app/services/position/position.service';

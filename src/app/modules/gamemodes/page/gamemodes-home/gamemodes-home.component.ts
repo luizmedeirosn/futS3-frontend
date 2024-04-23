@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {DynamicDialogRef} from 'primeng/dynamicdialog';
 import {Subject, takeUntil} from 'rxjs';
-import {GameModeFullDTO} from 'src/app/models/dto/gamemode/response/GameModeFullDTO';
+import {GameModeDTO} from 'src/app/models/dto/gamemode/response/GameModeDTO';
 import {GameModeMinDTO} from 'src/app/models/dto/gamemode/response/GameModeMinDTO';
 import {EnumGameModeEventsCrud} from 'src/app/models/enums/EnumGameModeEventsCrud';
 import {EditOrDeleteGameModeAction} from 'src/app/models/events/EditOrDeleteGameModeAction';
@@ -13,6 +13,7 @@ import {
 } from 'src/app/shared/components/forms/gamemode-forms/edit-gamemode-form/edit-gamemode-form.component';
 import {ChangesOnService} from 'src/app/shared/services/changes-on/changes-on.service';
 import {CustomDialogService} from 'src/app/shared/services/custom-dialog/custom-dialog.service';
+import Page from "../../../../models/dto/generics/response/Page";
 
 @Component({
     selector: 'app-gamemodes-home',
@@ -27,7 +28,7 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
     public gameModes!: GameModeMinDTO[];
 
     public gameModeView: Subject<boolean> = this.gameModeService.$gameModeView;
-    public gameMode!: GameModeFullDTO;
+    public gameMode!: GameModeDTO;
 
     private dynamicDialogRef!: DynamicDialogRef;
 
@@ -65,10 +66,8 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.$destroy))
             .subscribe(
                 {
-                    next: (gameModes) => {
-                        if (gameModes.length > 0) {
-                            this.gameModes = gameModes;
-                        }
+                    next: (gameModesPage: Page<GameModeMinDTO>) => {
+                        this.gameModes = gameModesPage.content;
                     },
                     error: (err) => {
                         this.messageService.clear();
@@ -85,7 +84,7 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
     }
 
     private selectGameMode(id: number) {
-        id && this.gameModeService.findFullById(id)
+        id && this.gameModeService.findById(id)
             .pipe(takeUntil(this.$destroy))
             .subscribe(
                 {
@@ -198,5 +197,4 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
         this.$destroy.next();
         this.$destroy.complete();
     }
-
 }

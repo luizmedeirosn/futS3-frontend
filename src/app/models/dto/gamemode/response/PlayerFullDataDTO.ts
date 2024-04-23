@@ -1,6 +1,6 @@
-import PlayerParameterDataDTO from "../../player/response/PlayerParameterDataDTO";
+import PlayerParameterDataDTO from "../../player/aux/PlayerParameterDataDTO";
 
-export interface PlayerFullScoreDTO {
+export interface PlayerFullDataDTO {
 
     id: number;
     name: string;

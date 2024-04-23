@@ -1,12 +1,15 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { MessageService } from 'primeng/api';
-import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { GameModeMinDTO } from 'src/app/models/dto/gamemode/response/GameModeMinDTO';
-import { GameModePositionDTO } from 'src/app/models/dto/gamemode/response/GameModePositonDTO';
-import { PlayerFullScoreDTO } from 'src/app/models/dto/gamemode/response/PlayerFullScoreDTO';
-import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
-import { PlayersStatisticsViewComponent } from '../../components/players-statistics-view/players-statistics-view.component';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {FormBuilder, FormControl, Validators} from '@angular/forms';
+import {MessageService} from 'primeng/api';
+import {BehaviorSubject, Subject, takeUntil} from 'rxjs';
+import {GameModeMinDTO} from 'src/app/models/dto/gamemode/response/GameModeMinDTO';
+import {GameModePositionDTO} from 'src/app/models/dto/gamemode/response/GameModePositonDTO';
+import {PlayerFullDataDTO} from 'src/app/models/dto/gamemode/response/PlayerFullDataDTO';
+import {GameModeService} from 'src/app/services/gamemode/gamemode.service';
+import {
+    PlayersStatisticsViewComponent
+} from '../../components/players-statistics-view/players-statistics-view.component';
+import Page from "../../../../models/dto/generics/response/Page";
 
 @Component({
     selector: 'app-players-statistics-home',
@@ -25,14 +28,14 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
     public getPlayersRankingForm: any = this.formBuilder.group(
         {
             gameMode: new FormControl('', Validators.required),
-            position: new FormControl({ value: '', disabled: true }, Validators.required),
+            position: new FormControl({value: '', disabled: true}, Validators.required),
         }
     );
 
     public viewActivate$: BehaviorSubject<boolean> = new BehaviorSubject(false);
     public playersRankingLoading$: BehaviorSubject<boolean> = new BehaviorSubject(true);
-    public playersRanking!: PlayerFullScoreDTO[] | undefined;
-    public playersRankingPage!: PlayerFullScoreDTO[];
+    public playersRanking!: PlayerFullDataDTO[] | undefined;
+    public playersRankingPage!: PlayerFullDataDTO[];
 
     public constructor(
         private gameModeService: GameModeService,
@@ -51,18 +54,16 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe(
                 {
-                    next: (gameModes) => {
-                        if (gameModes.length > 0) {
-                            this.gameModes = gameModes;
-                            this.messageService.add(
-                                {
-                                    severity: 'success',
-                                    summary: 'Success',
-                                    detail: 'Data loaded successfully!',
-                                    life: this.messageLife
-                                }
-                            );
-                        }
+                    next: (gameModesPage: Page<GameModeMinDTO>) => {
+                        this.gameModes = gameModesPage.content;
+                        this.messageService.add(
+                            {
+                                severity: 'success',
+                                summary: 'Success',
+                                detail: 'Data loaded successfully!',
+                                life: this.messageLife
+                            }
+                        );
                     },
                     error: (err) => {
                         this.messageService.add(
@@ -83,14 +84,16 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
     public handleFindGameModePositionsAction($event: { id: number; }): void {
         this.messageService.clear();
         if ($event) {
-            this.gameModeService.findGameModePositions($event.id)
+            this.gameModeService.findById($event.id)
                 .pipe(takeUntil(this.destroy$))
                 .subscribe(
                     {
-                        next: (gameModePositions) => {
-                            this.selectedGameModePositions = gameModePositions;
-                            if (gameModePositions.length > 0) {
+                        next: (gameMode) => {
+                            this.selectedGameModePositions = gameMode.positions.map<GameModePositionDTO>(p => new GameModePositionDTO(p.id, p.name));
+
+                            if (gameMode.positions.length > 0) {
                                 this.getPlayersRankingForm.get('position').enable(true);
+
                             } else {
                                 this.getPlayersRankingForm.get('position').disable(true);
                                 this.messageService.clear();
@@ -127,20 +130,21 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
         this.viewActivate$.next(true);
         if ($event) {
             setTimeout(() => this.playersRankingLoading$.next(false), 1000);
-            this.gameModeService.getRanking($event.gameModeId, $event.positionId)
+            this.gameModeService.getPlayersRanking($event.gameModeId, $event.positionId)
                 .pipe(takeUntil(this.destroy$))
                 .subscribe(
                     {
-                        next: (playersRanking) => {
-                            if (playersRanking.length > 0) {
-                                this.playersRanking = playersRanking;
+                        next: (playersRankingPage: Page<PlayerFullDataDTO>) => {
+                            console.log(playersRankingPage)
+                            if (playersRankingPage.content.length > 0) {
+                                this.playersRanking = playersRankingPage.content;
                                 this.playersRanking && (
                                     this.playersRankingPage =
-                                    this.playersRanking.filter((element, index) => index >= 0 && index < 6)
+                                        this.playersRanking.filter((element, index) => index >= 0 && index < 6)
                                 );
 
-                                this.playerStatisticsViewComponentRef.setChartBarData(0, 6, playersRanking);
-                                this.playerStatisticsViewComponentRef.setCharRadarData(0, 3, playersRanking);
+                                this.playerStatisticsViewComponentRef.setChartBarData(0, 6, playersRankingPage.content);
+                                this.playerStatisticsViewComponentRef.setCharRadarData(0, 3, playersRankingPage.content);
 
                                 this.messageService.add(
                                     {
@@ -189,5 +193,4 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
         this.destroy$.next();
         this.destroy$.complete();
     }
-
 }

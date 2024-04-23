@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {DynamicDialogRef} from 'primeng/dynamicdialog';
 import {Subject, takeUntil} from 'rxjs';
-import {FullDataPosition} from 'src/app/models/dto/position/data/FullDataPosition';
+import {FullDataPosition} from 'src/app/models/dto/position/aux/FullDataPosition';
 import {EditOrDeletePositionAction} from 'src/app/models/events/EditOrDeletePositionAction';
 import {PositionMinDTO} from 'src/app/models/dto/position/response/PositionMinDTO';
 import {EnumPositionEventsCrud} from 'src/app/models/enums/EnumPositionEventsCrud';
@@ -97,7 +97,7 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
     }
 
     private selectPosition(id: number) {
-        id && this.positionService.findByIdWithParameters(id)
+        id && this.positionService.findById(id)
             .pipe(takeUntil(this.$destroy))
             .subscribe(
                 {

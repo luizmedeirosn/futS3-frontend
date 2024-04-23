@@ -11,10 +11,11 @@ import { PaginatorState } from 'primeng/paginator';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { GameModeMinDTO } from 'src/app/models/dto/gamemode/response/GameModeMinDTO';
 import { GameModePositionDTO } from 'src/app/models/dto/gamemode/response/GameModePositonDTO';
-import { PlayerFullScoreDTO } from 'src/app/models/dto/gamemode/response/PlayerFullScoreDTO';
-import { ParameterWeightDTO } from 'src/app/models/dto/position/data/ParameterWeightDTO';
+import { PlayerFullDataDTO } from 'src/app/models/dto/gamemode/response/PlayerFullDataDTO';
+import { ParameterWeightDTO } from 'src/app/models/dto/position/aux/ParameterWeightDTO';
 import { PositionDTO } from 'src/app/models/dto/position/response/PositionDTO';
 import { PositionService } from 'src/app/services/position/position.service';
+import {ViewAction} from "../../../../models/events/ViewAction";
 
 @Component({
     selector: 'app-players-statistics-view',
@@ -23,6 +24,7 @@ import { PositionService } from 'src/app/services/position/position.service';
     encapsulation: ViewEncapsulation.None,
 })
 export class PlayersStatisticsViewComponent implements OnDestroy {
+
     private readonly destroy$: Subject<void> = new Subject();
 
     @Input() public gameModes!: GameModeMinDTO[];
@@ -30,11 +32,10 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
     @Input() public getPlayersRankingForm: any;
     @Input() public viewActivate$!: BehaviorSubject<boolean>;
     @Input() public playersRankingLoading$!: BehaviorSubject<boolean>;
-    @Input() public playersRanking!: PlayerFullScoreDTO[] | undefined;
-    @Input() public playersRankingPage!: PlayerFullScoreDTO[];
+    @Input() public playersRanking!: PlayerFullDataDTO[] | undefined;
+    @Input() public playersRankingPage!: PlayerFullDataDTO[];
 
-    @Output() public findGameModePositionsEvent: EventEmitter<{ id: number }> =
-        new EventEmitter();
+    @Output() public findGameModePositionsEvent: EventEmitter<ViewAction> = new EventEmitter<ViewAction>();
     @Output() public getPlayersRankingEvent: EventEmitter<{
         gameModeId: number;
         positionId: number;
@@ -57,11 +58,16 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
 
     public chartRadarData: any;
     public chartRadarOptions: any;
-    private readonly colors: Array<string> = ['--blue-600',
+    private readonly colors: Array<string> = [
+        '--blue-600',
         '--green-600',
-        '--red-600'];
+        '--red-600'
+    ];
 
-    public constructor(private positionService: PositionService) { }
+    public constructor(
+        private positionService: PositionService
+    ) {
+    }
 
     public handleFindGameModePositionsEvent($event: DropdownChangeEvent): void {
         if (
@@ -93,7 +99,7 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
 
     private setPositionParameters(positionId: number): void {
         this.positionService
-            .findByIdWithParameters(positionId)
+            .findById(positionId)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (position: PositionDTO) => {
@@ -144,7 +150,7 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
     public setChartBarData(
         first: number,
         rows: number,
-        playersRanking?: Array<PlayerFullScoreDTO>
+        playersRanking?: Array<PlayerFullDataDTO>
     ): void {
         this.playersRanking = playersRanking ?? this.playersRanking;
 
@@ -222,7 +228,7 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
     public setCharRadarData(
         first: number,
         rows: number,
-        playersRanking?: Array<PlayerFullScoreDTO>
+        playersRanking?: Array<PlayerFullDataDTO>
     ): void {
         this.playersRanking = playersRanking ?? this.playersRanking;
 

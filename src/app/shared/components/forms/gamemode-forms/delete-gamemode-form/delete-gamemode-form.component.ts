@@ -4,6 +4,7 @@ import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { GameModeMinDTO } from 'src/app/models/dto/gamemode/response/GameModeMinDTO';
 import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
 import { ChangesOnService } from 'src/app/shared/services/changes-on/changes-on.service';
+import Page from "../../../../../models/dto/generics/response/Page";
 
 @Component({
     selector: 'app-delete-gamemode-form',
@@ -34,8 +35,8 @@ export class DeleteGamemodeFormComponent implements OnInit, OnDestroy {
         this.gameModeService.findAll()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
-                next: (gameModes) => {
-                    this.gameModes = gameModes;
+                next: (gameModesPage: Page<GameModeMinDTO>) => {
+                    this.gameModes = gameModesPage.content;
                 },
                 error: (err) => {
                     this.messageService.clear();

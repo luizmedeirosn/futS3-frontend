@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
-import { GameModeFullDTO } from 'src/app/models/dto/gamemode/response/GameModeFullDTO';
+import { GameModeDTO } from 'src/app/models/dto/gamemode/response/GameModeDTO';
 import { EnumGameModeEventsCrud } from 'src/app/models/enums/EnumGameModeEventsCrud';
 import { EditOrDeleteGameModeAction } from 'src/app/models/events/EditOrDeleteGameModeAction';
 
@@ -14,7 +14,7 @@ export class GamemodeViewComponent {
     public readonly gameModeEvents = EnumGameModeEventsCrud;
 
     @Input()
-    public gameMode!: GameModeFullDTO;
+    public gameMode!: GameModeDTO;
 
     @Output()
     public backEvent: EventEmitter<void> = new EventEmitter();

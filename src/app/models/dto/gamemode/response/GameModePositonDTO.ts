@@ -1,6 +1,8 @@
-export interface GameModePositionDTO {
+export class GameModePositionDTO {
 
-    positionId: number;
-    positionName: number;
-
+    public constructor(
+        public positionId: number,
+        public positionName: string
+    ) {
+    }
 }

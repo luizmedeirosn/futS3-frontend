@@ -30,15 +30,9 @@ export class PositionService {
         );
     }
 
-    public findAllWithParameters(): Observable<Array<PositionDTO>> {
-        return this.httpClient.get<Array<PositionDTO>>(
-            `${this.API_URL}/positions/parameters`
-        );
-    }
-
-    public findByIdWithParameters(id: number): Observable<PositionDTO> {
+    public findById(id: number): Observable<PositionDTO> {
         return this.httpClient.get<PositionDTO>(
-            `${this.API_URL}/positions/${id}/parameters`
+            `${this.API_URL}/positions/${id}`
         );
     }
 

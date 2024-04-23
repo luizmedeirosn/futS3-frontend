@@ -61,7 +61,7 @@ export class SigninComponent implements OnInit, OnDestroy {
                                 life: 3000
                             });
 
-                            this.router.navigate(['/players']).then(r => {
+                            this.router.navigate(['/gamemodes']).then(r => {
                             });
                         }
                     },

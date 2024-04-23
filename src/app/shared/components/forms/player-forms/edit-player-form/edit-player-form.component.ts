@@ -8,7 +8,7 @@ import {ParameterDTO} from 'src/app/models/dto/parameter/response/ParameterDTO';
 import {UpdatePlayerDTO} from 'src/app/models/dto/player/request/UpdatePlayerDTO';
 import PlayerFullDTO from 'src/app/models/dto/player/response/PlayerDTO';
 import PlayerMinDTO from 'src/app/models/dto/player/response/PlayerMinDTO';
-import PlayerParameterDataDTO from 'src/app/models/dto/player/response/PlayerParameterDataDTO';
+import PlayerParameterDataDTO from 'src/app/models/dto/player/aux/PlayerParameterDataDTO';
 import {PositionMinDTO} from 'src/app/models/dto/position/response/PositionMinDTO';
 import {EnumPlayerEventsCrud} from 'src/app/models/enums/EnumPlayerEventsCrud';
 import {ParameterService} from 'src/app/services/parameter/parameter.service';

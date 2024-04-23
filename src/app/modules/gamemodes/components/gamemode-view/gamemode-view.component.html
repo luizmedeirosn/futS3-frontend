@@ -81,22 +81,22 @@
 
         <p-table
             *ngIf="
-                gameMode && gameMode.fields.length > 0;
+                gameMode && gameMode.positions.length > 0;
                 else withoutPositions
             "
-            [value]="gameMode.fields"
-            dataKey="positionId"
-            sortField="positionName"
+            [value]="gameMode.positions"
+            dataKey="id"
+            sortField="name"
             sortMode="single"
             rowGroupMode="subheader"
-            groupRowsBy="positionName"
+            groupRowsBy="name"
             styleClass="mt-2"
             [rowHover]="true"
             [tableStyle]="{ width: '100%' }"
         >
             <ng-template pTemplate="header">
                 <tr>
-                    <th id="" pSortableColumn="fields.positionName">
+                    <th id="" pSortableColumn="positions.name">
                         <div
                             class="flex justify-content-between align-items-center"
                         >
@@ -109,11 +109,11 @@
                                 class="flex justify-content-between align-items-center"
                             >
                                 <p-sortIcon
-                                    field="fields.positionName"
+                                    field="positions.name"
                                 ></p-sortIcon>
                                 <p-columnFilter
                                     type="text"
-                                    field="positionName"
+                                    field="name"
                                     display="menu"
                                     matchMode="contains"
                                     [showMatchModes]="false"
@@ -201,7 +201,7 @@
                                 }}"
                                 tooltipPosition="top"
                             ></p-button>
-                            {{ position.positionName }}
+                            {{ position.name }}
                         </div>
                     </td>
                 </tr>

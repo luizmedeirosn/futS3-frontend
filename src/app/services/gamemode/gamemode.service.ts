@@ -3,10 +3,11 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
 import { GameModeRequestDTO } from 'src/app/models/dto/gamemode/request/GameModeRequestDTO';
-import { GameModeFullDTO } from 'src/app/models/dto/gamemode/response/GameModeFullDTO';
+import { GameModeDTO } from 'src/app/models/dto/gamemode/response/GameModeDTO';
 import { GameModeMinDTO } from 'src/app/models/dto/gamemode/response/GameModeMinDTO';
-import { PlayerFullScoreDTO } from 'src/app/models/dto/gamemode/response/PlayerFullScoreDTO';
+import { PlayerFullDataDTO } from 'src/app/models/dto/gamemode/response/PlayerFullDataDTO';
 import { GameModePositionDTO } from '../../models/dto/gamemode/response/GameModePositonDTO';
+import Page from "../../models/dto/generics/response/Page";
 
 @Injectable({
     providedIn: 'root'
@@ -27,39 +28,33 @@ export class GameModeService {
         this.$gameModeView.next(false);
     }
 
-    public findAll(): Observable<GameModeMinDTO[]> {
-        return this.httpClient.get<GameModeMinDTO[]>(
+    public findAll(): Observable<Page<GameModeMinDTO>> {
+        return this.httpClient.get<Page<GameModeMinDTO>>(
             `${this.API_URL}/gamemodes`
         );
     }
 
-    public findFullById(id: number): Observable<GameModeFullDTO> {
-        return this.httpClient.get<GameModeFullDTO>(
-            `${this.API_URL}/gamemodes/${id}/full`
+    public findById(id: number): Observable<GameModeDTO> {
+        return this.httpClient.get<GameModeDTO>(
+            `${this.API_URL}/gamemodes/${id}`
         );
     }
 
-    public findGameModePositions(id: number): Observable<GameModePositionDTO[]> {
-        return this.httpClient.get<GameModePositionDTO[]>(
-            `${this.API_URL}/gamemodes/${id}/positions`
-        );
-    }
-
-    public getRanking(gameModeId: number, positionId: number): Observable<PlayerFullScoreDTO[]> {
-        return this.httpClient.get<PlayerFullScoreDTO[]>(
+    public getPlayersRanking(gameModeId: number, positionId: number): Observable<Page<PlayerFullDataDTO>> {
+        return this.httpClient.get<Page<PlayerFullDataDTO>>(
             `${this.API_URL}/gamemodes/ranking?gameModeId=${gameModeId}&positionId=${positionId}`
         );
     }
 
-    public save(gameModeRequest: GameModeRequestDTO): Observable<GameModeFullDTO> {
-        return this.httpClient.post<GameModeFullDTO>(
+    public save(gameModeRequest: GameModeRequestDTO): Observable<GameModeDTO> {
+        return this.httpClient.post<GameModeDTO>(
             `${this.API_URL}/gamemodes`,
             gameModeRequest
         );
     }
 
-    public updateById(id: number, gameModeRequest: GameModeRequestDTO): Observable<GameModeFullDTO> {
-        return this.httpClient.put<GameModeFullDTO>(
+    public updateById(id: number, gameModeRequest: GameModeRequestDTO): Observable<GameModeDTO> {
+        return this.httpClient.put<GameModeDTO>(
             `${this.API_URL}/gamemodes/${id}`,
             gameModeRequest
         );

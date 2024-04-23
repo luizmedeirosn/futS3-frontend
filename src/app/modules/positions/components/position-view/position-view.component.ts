@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
-import { FullDataPosition } from 'src/app/models/dto/position/data/FullDataPosition';
+import { FullDataPosition } from 'src/app/models/dto/position/aux/FullDataPosition';
 import { EditOrDeletePositionAction } from 'src/app/models/events/EditOrDeletePositionAction';
 import { EnumPositionEventsCrud } from 'src/app/models/enums/EnumPositionEventsCrud';
 

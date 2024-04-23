@@ -1,7 +1,7 @@
-<div class="flex justify-content-center">
+<div class="flex justify-content-center mb-6">
     <p-card
         styleClass="fadein animation-duration-1000 animation-iteration-1 animation-ease-out"
-        [style]="{ width: '80rem' }"
+        [style]="{ width: '90vw' }"
         header="Statistics"
     >
         <form
@@ -27,11 +27,7 @@
                                 handleFindGameModePositionsEvent($event)
                             "
                         ></p-dropdown>
-                        <label
-                            for="float-label-gamemode"
-                            class="white-space-nowrap"
-                            >Select a Game Mode</label
-                        >
+                        <label class="white-space-nowrap">Select a Game Mode</label>
                     </span>
                     <span class="p-float-label">
                         <p-dropdown
@@ -43,11 +39,7 @@
                             placeholder="Select a Position"
                             inputId="float-label-position"
                         ></p-dropdown>
-                        <label
-                            for="float-label-position"
-                            class="white-space-nowrap"
-                            >Select a Position</label
-                        >
+                        <label class="white-space-nowrap">Select a Position</label>
                     </span>
                 </div>
                 <p-button
@@ -319,8 +311,8 @@
                 class="flex justify-content-between align-content-center mt-3 gap-3"
             >
                 <p-card
-                    styleClass="shadow-3 flex flex-column align-content-center"
-                    [style]="{ width: '38rem' }"
+                    styleClass="shadow-1 flex flex-column align-content-center"
+                    [style]="{ width: '38vw' }"
                     header="Total Score for Player"
                 >
                     <p-chart
@@ -338,8 +330,8 @@
                     ></p-paginator>
                 </p-card>
                 <p-card
-                    styleClass="shadow-3 flex flex-column align-content-center"
-                    [style]="{ width: '38rem' }"
+                    styleClass="shadow-1 flex flex-column align-content-center"
+                    [style]="{ width: '48vw' }"
                     header="Parameters for Player"
                 >
                     <p-chart
@@ -361,8 +353,8 @@
                 *ngIf="!playersRanking || (playersRankingLoading$ | async)"
                 class="flex justify-content-center align-items-center mt-3 gap-3 fadein animation-duration-1000 animation-iteration-1 animation-ease-out"
             >
-                <p-skeleton width="38rem" height="38rem"></p-skeleton>
-                <p-skeleton width="38rem" height="38rem"></p-skeleton>
+                <p-skeleton width="38vw" height="38rem"></p-skeleton>
+                <p-skeleton width="48vw" height="38rem"></p-skeleton>
             </div>
         </div>
     </p-card>

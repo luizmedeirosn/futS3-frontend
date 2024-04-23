@@ -5,7 +5,7 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Table } from 'primeng/table';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { GameModeRequestDTO } from 'src/app/models/dto/gamemode/request/GameModeRequestDTO';
-import { GameModeFullDTO } from 'src/app/models/dto/gamemode/response/GameModeFullDTO';
+import { GameModeDTO } from 'src/app/models/dto/gamemode/response/GameModeDTO';
 import { GameModeMinDTO } from 'src/app/models/dto/gamemode/response/GameModeMinDTO';
 import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
 import { EnumGameModeEventsCrud } from 'src/app/models/enums/EnumGameModeEventsCrud';
@@ -91,13 +91,13 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
         this.gameModeService.findAll()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
-                next: (gameModes: Array<GameModeMinDTO>) => {
-                    this.gameModes = gameModes;
+                next: (gameModesPage: Page<GameModeMinDTO>) => {
+                    this.gameModes = gameModesPage.content;
 
                     let increment: number = 0;
                     let page: Array<GameModeMinDTO> = [];
 
-                    gameModes.forEach((gameMode, index, array) => {
+                    gameModesPage.content.forEach((gameMode, index, array) => {
                         page.push(gameMode);
                         increment += 1;
                         if (increment === 5 || index === array.length - 1) {
@@ -140,10 +140,10 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
     public handleSelectGameMode($event: number): void {
         if ($event) {
             this.setPositionsWithApi();
-            this.gameModeService.findFullById($event)
+            this.gameModeService.findById($event)
                 .pipe(takeUntil(this.$destroy))
                 .subscribe({
-                    next: (gameMode: GameModeFullDTO) => {
+                    next: (gameMode: GameModeDTO) => {
                         if (gameMode) {
                             this.selectedGameMode = {
                                 id: gameMode.id,
@@ -156,14 +156,14 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
                                 description: gameMode?.description,
                             });
 
-                            gameMode.fields.forEach(e => {
+                            gameMode.positions.forEach(p => {
                                 const position: PositionMinDTO = {
-                                    id: e.positionId,
-                                    name: e.positionName,
+                                    id: p.id,
+                                    name: p.name,
                                     description: ''
                                 }
                                 const positionOff = this.positionsOff.find(p => p.id === position.id);
-                                positionOff && (positionOff.name = e.positionName);
+                                positionOff && (positionOff.name = p.name);
                                 this.reset && !positionOff && (this.positionsOff.push(position));
                             });
 
