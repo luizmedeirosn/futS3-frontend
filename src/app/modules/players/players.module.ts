@@ -16,6 +16,8 @@ import { ToastModule } from 'primeng/toast';
 import { PanelModule } from 'primeng/panel';
 import { TooltipModule } from 'primeng/tooltip';
 import {RippleModule} from "primeng/ripple";
+import {InputTextModule} from "primeng/inputtext";
+import {PaginatorModule} from "primeng/paginator";
 
 
 @NgModule({
@@ -37,6 +39,8 @@ import {RippleModule} from "primeng/ripple";
         PanelModule,
         TooltipModule,
         RippleModule,
+        InputTextModule,
+        PaginatorModule,
     ],
 })
 export class PlayersHomeModule { }

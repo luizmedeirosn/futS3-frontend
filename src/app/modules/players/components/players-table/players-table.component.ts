@@ -4,6 +4,8 @@ import PlayerMinDTO from 'src/app/models/dto/player/response/PlayerMinDTO';
 import PageMin from "../../../../models/dto/generics/response/PageMin";
 import {TableLazyLoadEvent} from "primeng/table";
 import ChangePageAction from "../../../../models/events/ChangePageAction";
+import Pageable from "../../../../models/dto/generics/request/Pageable";
+import {BehaviorSubject} from "rxjs";
 
 @Component({
     selector: 'app-players-table',
@@ -14,13 +16,16 @@ import ChangePageAction from "../../../../models/events/ChangePageAction";
 export class PlayersTableComponent {
 
     @Input()
-    public indexFirstRow!: number;
+    public pageable!: Pageable;
+
+    @Input()
+    public previousKeyword!: string;
+
+    @Input()
+    public $loading!: BehaviorSubject<boolean>;
 
     @Input()
     public page!: PageMin<PlayerMinDTO>;
-
-    @Input()
-    public loading!: boolean;
 
     @Output()
     public changePageEvent: EventEmitter<ChangePageAction> = new EventEmitter();
@@ -38,18 +43,34 @@ export class PlayersTableComponent {
 
     public handleChangePageEvent($event: TableLazyLoadEvent): void {
         if ($event && $event.first !== undefined && $event.rows) {
-            const pageNumber = Math.ceil($event.first / $event.rows);
-            const pageSize = $event.rows !== 0 ? $event.rows : 5;
+            const pageNumber: number = Math.ceil($event.first / $event.rows);
+            const pageSize: number = $event.rows !== 0 ? $event.rows : 10;
 
-            const fields = $event.sortField ?? "name";
-            const sortField = Array.isArray(fields) ? fields[0]: fields;
-            const sortDirection = $event.sortOrder ?? 1;
+            const fields: string | string[] = $event.sortField ?? "name";
+            const sortField: string = Array.isArray(fields) ? fields[0] : fields;
+
+            const sortDirection: number = $event.sortOrder ?? 1;
+
+            this.pageable = new Pageable(this.pageable.keyword, pageNumber, pageSize, sortField, sortDirection);
 
             this.changePageEvent.emit({
+                keyword : this.pageable.keyword,
                 pageNumber,
                 pageSize,
                 sortField,
                 sortDirection
+            });
+        }
+    }
+
+    public handleFindByKeywordEvent(): void {
+        if (this.pageable.keywordIsValid() && this.previousKeyword !== this.pageable.keyword.trim()) {
+            this.changePageEvent.emit({
+                keyword: this.pageable.keyword,
+                pageNumber: this.pageable.pageNumber,
+                pageSize: this.pageable.pageSize,
+                sortField: this.pageable.sortField,
+                sortDirection: this.pageable.sortDirection
             });
         }
     }

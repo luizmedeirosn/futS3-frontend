@@ -29,9 +29,9 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
     private readonly $destroy: Subject<void> = new Subject();
     private readonly messageLife: number = 3000;
 
-    private pageable!: Pageable;
-    public indexFirstRow!: number;
-    public loading!: boolean;
+    public pageable!: Pageable;
+    public previousKeyword!: string;
+    public $loading!: BehaviorSubject<boolean>;
     public page!: PageMin<PlayerMinDTO>;
 
     public player!: PlayerFullDTO;
@@ -47,7 +47,8 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
         private customDialogService: CustomDialogService,
         private changesOnService: ChangesOnService,
     ) {
-        this.pageable = new Pageable('',0, 5, "name", 1);
+        this.pageable = new Pageable('', 0, 5, "name", 1);
+        this.$loading = new BehaviorSubject(false);
         this.page = {
             content: [],
             pageNumber: 0,
@@ -91,9 +92,12 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
     }
 
     private setPlayersWithApi(pageable: Pageable): void {
+        pageable.keyword = pageable.keyword.trim();
+        this.previousKeyword = pageable.keyword;
         this.pageable = pageable;
-        this.loading = true;
-        this.indexFirstRow = pageable.pageNumber * pageable.pageSize;
+
+        this.$loading.next(true);
+
         setTimeout(() => {
             this.playerService.findAll(pageable)
                 .pipe(takeUntil(this.$destroy))
@@ -104,9 +108,6 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                             this.page.pageNumber = playersPage.pageable.pageNumber;
                             this.page.pageSize = playersPage.pageable.pageSize;
                             this.page.totalElements = playersPage.totalElements;
-
-                            this.loading = false;
-
                         },
                         error: (err) => {
                             this.messageService.clear();
@@ -117,18 +118,18 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                                 life: this.messageLife
                             });
                             console.log(err);
-
-                            this.loading = false;
                         }
                     }
                 );
+            this.$loading.next(false);
         }, 500);
     }
 
     public handleChangePageAction($event: ChangePageAction) {
-        if ($event && $event.sortField && $event.sortDirection) {
+        console.log($event);
+        if ($event && $event.keyword !== undefined && $event.sortField && $event.sortDirection) {
             this.setPlayersWithApi(new Pageable(
-                '',
+                $event.keyword,
                 $event.pageNumber,
                 $event.pageSize,
                 $event.sortField,

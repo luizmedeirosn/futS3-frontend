@@ -3,12 +3,12 @@
         <p-table
             [value]="page.content"
             [rows]="page.pageSize"
-            [first]="indexFirstRow"
+            [first]="pageable.indexFirstRow"
             [paginator]="true"
             [totalRecords]="page.totalElements"
             [lazy]="true"
             (onLazyLoad)="handleChangePageEvent($event)"
-            [loading]="loading"
+            [loading]="$loading.getValue()"
             [customSort]="true"
             (sortFunction)="handleChangePageEvent($event)"
             [resetPageOnSort]="false"
@@ -18,6 +18,21 @@
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} players"
             dataKey="id"
         >
+            <ng-template pTemplate="caption">
+                <div class="flex justify-content-center">
+                    <span class="p-input-icon-left w-full">
+                        <i class="pi pi-search"></i>
+                        <input
+                            pInputText
+                            type="text"
+                            class="w-full"
+                            placeholder="Find by name, team or position"
+                            [(ngModel)]="pageable.keyword"
+                            (input)="handleFindByKeywordEvent()"
+                        />
+                    </span>
+                </div>
+            </ng-template>
             <ng-template pTemplate="header">
                 <tr>
                     <th pSortableColumn="" style="cursor: default">

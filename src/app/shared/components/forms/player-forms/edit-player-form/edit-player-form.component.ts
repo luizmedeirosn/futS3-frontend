@@ -170,7 +170,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
         }
     }
 
-    public handleFindByKeyword(): void {
+    public handleFindByKeywordAction(): void {
         if (this.pageable.keywordIsValid() && this.previousKeyword !== this.pageable.keyword.trim()) {
             this.setPlayersWithApi(this.pageable);
         }
