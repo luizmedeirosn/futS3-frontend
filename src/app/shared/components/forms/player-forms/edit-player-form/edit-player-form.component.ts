@@ -32,7 +32,8 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
     private readonly toastLife: number = 2000;
 
     public pageable!: Pageable;
-    public loading!: boolean;
+    private previousKeyword!: string;
+    public $loading!: BehaviorSubject<boolean>;
     public page!: PageMin<PlayerMinDTO>;
 
     public $viewTable: BehaviorSubject<boolean> = new BehaviorSubject(true);
@@ -72,7 +73,8 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
         private customDialogService: CustomDialogService,
         private changesOnService: ChangesOnService,
     ) {
-        this.pageable = new Pageable('',0, 10, "name", 1);
+        this.pageable = new Pageable('', 0, 10, "name", 1);
+        this.$loading = new BehaviorSubject(false);
         this.page = {
             content: [],
             pageNumber: 0,
@@ -94,8 +96,11 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
 
     private setPlayersWithApi(pageable: Pageable): void {
         pageable.keyword = pageable.keyword.trim();
+        this.previousKeyword = pageable.keyword;
         this.pageable = pageable;
-        this.loading = true;
+
+        this.$loading.next(true);
+
         setTimeout(() => {
             this.playerService.findAll(pageable)
                 .pipe(takeUntil(this.$destroy))
@@ -120,7 +125,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                     }
                 );
 
-            this.loading = false;
+            this.$loading.next(false);
         }, 500);
     }
 
@@ -166,7 +171,9 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
     }
 
     public handleFindByKeyword(): void {
-        this.pageable.keywordIsValid() && this.setPlayersWithApi(this.pageable);
+        if (this.pageable.keywordIsValid() && this.previousKeyword !== this.pageable.keyword.trim()) {
+            this.setPlayersWithApi(this.pageable);
+        }
     }
 
     public handleSelectPlayer($event: number): void {

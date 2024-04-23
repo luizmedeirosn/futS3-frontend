@@ -15,7 +15,7 @@
             [customSort]="true"
             (sortFunction)="handleChangePageAction($event)"
             [resetPageOnSort]="false"
-            [loading] = "loading"
+            [loading] = "$loading.getValue()"
             [rowHover]="true"
             [showCurrentPageReport]="true"
             dataKey="id"
@@ -88,7 +88,7 @@
     *ngIf="selectedPlayer && !($viewTable | async)"
     [formGroup]="playerForm"
     (ngSubmit)="handleSubmitEditPlayerForm()"
-    class="flex flex-column align-content-center m-3 gap-4"
+    class="form-required-fields flex flex-column align-content-center m-3 gap-5"
     enctype="multipart/form-data"
 >
     <div class="flex justify-content-start align-content-center">
@@ -109,7 +109,7 @@
             [minNumberCharacters]="3"
             [maxNumberCharacters]="30"
         ></app-form-control-alert>
-        <label>Name</label>
+        <label>Name <span class="text-red-600">*</span></label>
     </span>
 
     <span class="p-float-label">
@@ -125,12 +125,10 @@
             [minNumberCharacters]="3"
             [maxNumberCharacters]="30"
         ></app-form-control-alert>
-        <label>Team</label>
+        <label>Team <span class="text-red-600">*</span></label>
     </span>
 
-    <div
-        class="flex justify-content-between align-items-center gap-3 pt-2 pb-2"
-    >
+    <div class="flex justify-content-between align-items-center gap-3">
         <span class="p-float-label">
             <p-inputNumber
                 formControlName="age"
@@ -163,7 +161,7 @@
                 styleClass="w-20rem"
                 formControlName="position"
             ></p-dropdown>
-            <label>Select a position</label>
+            <label>Select a position <span class="text-red-600">*</span></label>
         </span>
 
         <div

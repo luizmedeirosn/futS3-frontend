@@ -20,7 +20,6 @@ export class DeletePlayerFormComponent implements OnInit, OnDestroy {
     private readonly $destroy!: Subject<void>;
     private readonly toastLife!: number;
 
-
     public pageable!: Pageable;
     private previousKeyword!: string;
     public $loading!: BehaviorSubject<boolean>;
