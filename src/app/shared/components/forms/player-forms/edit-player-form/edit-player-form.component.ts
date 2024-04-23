@@ -32,7 +32,6 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
     private readonly toastLife: number = 2000;
 
     public pageable!: Pageable;
-    // public keyword!: string;
     public loading!: boolean;
     public page!: PageMin<PlayerMinDTO>;
 
@@ -67,14 +66,13 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
         private messageService: MessageService,
         private changeDetectorRef: ChangeDetectorRef,
         private dynamicDialogConfig: DynamicDialogConfig,
-
         private playerService: PlayerService,
         private positionService: PositionService,
         private parameterService: ParameterService,
         private customDialogService: CustomDialogService,
         private changesOnService: ChangesOnService,
     ) {
-        this.pageable = new Pageable(0, 10, "name", 1);
+        this.pageable = new Pageable('',0, 10, "name", 1);
         this.page = {
             content: [],
             pageNumber: 0,
@@ -95,6 +93,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
     }
 
     private setPlayersWithApi(pageable: Pageable): void {
+        pageable.keyword = pageable.keyword.trim();
         this.pageable = pageable;
         this.loading = true;
         setTimeout(() => {
@@ -103,12 +102,10 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                 .subscribe(
                     {
                         next: (playersPage: Page<PlayerMinDTO>) => {
-                            if (playersPage.size > 0) {
-                                this.page.content = playersPage.content;
-                                this.page.pageNumber = playersPage.pageable.pageNumber;
-                                this.page.pageSize = playersPage.pageable.pageSize;
-                                this.page.totalElements = playersPage.totalElements;
-                            }
+                            this.page.content = playersPage.content;
+                            this.page.pageNumber = playersPage.pageable.pageNumber;
+                            this.page.pageSize = playersPage.pageable.pageSize;
+                            this.page.totalElements = playersPage.totalElements;
                         },
                         error: (err) => {
                             this.messageService.clear();
@@ -159,17 +156,16 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
             const pageSize = $event.rows !== 0 ? $event.rows : 10;
 
             const fields = $event.sortField ?? "name";
-            const sortField = Array.isArray(fields) ? fields[0]: fields;
+            const sortField = Array.isArray(fields) ? fields[0] : fields;
 
             const sortDirection = $event.sortOrder ?? 1;
 
-            const pageable = new Pageable(pageNumber, pageSize, sortField, sortDirection);
+            const pageable = new Pageable(this.pageable.keyword, pageNumber, pageSize, sortField, sortDirection);
             this.setPlayersWithApi(pageable);
         }
     }
 
     public handleFindByKeyword(): void {
-        this.pageable.keyword = this.pageable.keyword.trim();
         this.pageable.keywordIsValid() && this.setPlayersWithApi(this.pageable);
     }
 
@@ -291,7 +287,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                                 this.page.content.find(
                                     p => p.id === this.selectedPlayer?.id
                                 );
-                            if(updatedPlayer) {
+                            if (updatedPlayer) {
                                 updatedPlayer.name = playerResponse.name;
                                 updatedPlayer.team = playerResponse.team;
                             }

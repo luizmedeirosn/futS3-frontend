@@ -1,9 +1,9 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
+import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import {ConfirmationService, MessageService} from 'primeng/api';
+import {BehaviorSubject, Subject, takeUntil} from 'rxjs';
 import PlayerMinDTO from 'src/app/models/dto/player/response/PlayerMinDTO';
-import { PlayerService } from 'src/app/services/player/player.service';
-import { ChangesOnService } from 'src/app/shared/services/changes-on/changes-on.service';
+import {PlayerService} from 'src/app/services/player/player.service';
+import {ChangesOnService} from 'src/app/shared/services/changes-on/changes-on.service';
 import PageMin from "../../../../../models/dto/generics/response/PageMin";
 import Page from "../../../../../models/dto/generics/response/Page";
 import {TableLazyLoadEvent} from "primeng/table";
@@ -17,24 +17,26 @@ import Pageable from "../../../../../models/dto/generics/request/Pageable";
 })
 export class DeletePlayerFormComponent implements OnInit, OnDestroy {
 
-    private readonly $destroy: Subject<void> = new Subject();
-    private readonly toastLife: number = 2000;
+    private readonly $destroy!: Subject<void>;
+    private readonly toastLife!: number;
 
-    public $loadingDeletion: BehaviorSubject<boolean> =
-        new BehaviorSubject(false);
 
-    private pageable!: Pageable;
-    public loading!: boolean;
+    public pageable!: Pageable;
+    private previousKeyword!: string;
+    public $loading!: BehaviorSubject<boolean>;
     public page!: PageMin<PlayerMinDTO>;
 
-    public constructor(
+    public constructor (
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
-
         private playerService: PlayerService,
         private changesOnService: ChangesOnService,
     ) {
-        this.pageable = new Pageable(0, 10, "name", 1);
+        this.$destroy = new Subject<void>();
+        this.toastLife = 2000;
+
+        this.pageable = new Pageable('', 0, 10, "name", 1);
+        this.$loading = new BehaviorSubject(false);
         this.page = {
             content: [],
             pageNumber: 0,
@@ -48,8 +50,12 @@ export class DeletePlayerFormComponent implements OnInit, OnDestroy {
     }
 
     private setPlayersWithApi(pageable: Pageable): void {
+        pageable.keyword = pageable.keyword.trim();
+        this.previousKeyword = pageable.keyword;
         this.pageable = pageable;
-        this.loading = true;
+
+        this.$loading.next(true);
+
         setTimeout(() => {
             this.playerService.findAll(pageable)
                 .pipe(takeUntil(this.$destroy))
@@ -76,7 +82,7 @@ export class DeletePlayerFormComponent implements OnInit, OnDestroy {
                     }
                 );
 
-            this.loading = false;
+            this.$loading.next(false);
         }, 500);
     }
 
@@ -86,11 +92,17 @@ export class DeletePlayerFormComponent implements OnInit, OnDestroy {
             const pageSize = $event.rows !== 0 ? $event.rows : 10;
 
             const fields = $event.sortField ?? "name";
-            const sortField = Array.isArray(fields) ? fields[0]: fields;
+            const sortField = Array.isArray(fields) ? fields[0] : fields;
 
             const sortDirection = $event.sortOrder ?? 1;
 
-            this.setPlayersWithApi(new Pageable(pageNumber, pageSize, sortField, sortDirection));
+            this.setPlayersWithApi(new Pageable(this.pageable.keyword, pageNumber, pageSize, sortField, sortDirection));
+        }
+    }
+
+    public handleFindByKeyword(): void {
+        if (this.pageable.keywordIsValid() && this.previousKeyword !== this.pageable.keyword.trim()) {
+            this.setPlayersWithApi(this.pageable);
         }
     }
 
@@ -113,15 +125,15 @@ export class DeletePlayerFormComponent implements OnInit, OnDestroy {
 
     public handleDeletePlayerAction($event: number): void {
         if ($event) {
-            this.$loadingDeletion.next(true);
             this.messageService.clear();
 
-            this.playerService.deleteById($event)
-                .pipe(takeUntil(this.$destroy))
-                .subscribe({
-                    next: () => {
-                        setTimeout(() => {
-                            this.$loadingDeletion.next(false);
+            this.$loading.next(true);
+
+            setTimeout(() => {
+                this.playerService.deleteById($event)
+                    .pipe(takeUntil(this.$destroy))
+                    .subscribe({
+                        next: () => {
                             this.setPlayersWithApi(this.pageable);
 
                             this.messageService.clear();
@@ -133,22 +145,24 @@ export class DeletePlayerFormComponent implements OnInit, OnDestroy {
 
                             this.playerService.changedPlayerId = undefined;
                             this.changesOnService.setChangesOn(true);
-                        }, 1000);
-                    },
-                    error: (err) => {
-                        console.log(err);
-                        this.messageService.clear();
-                        this.messageService.add({
-                            severity: 'error',
-                            summary: 'Error',
-                            detail: 'Unable to delete the player!'
-                        });
 
-                        this.changesOnService.setChangesOn(false);
-                    }
-                });
+                        },
+                        error: (err) => {
+                            console.log(err);
+                            this.messageService.clear();
+                            this.messageService.add({
+                                severity: 'error',
+                                summary: 'Error',
+                                detail: 'Unable to delete the player!'
+                            });
+
+                            this.changesOnService.setChangesOn(false);
+                        }
+                    });
+
+                this.$loading.next(true);
+            }, 1000);
         }
-
     }
 
     public ngOnDestroy(): void {

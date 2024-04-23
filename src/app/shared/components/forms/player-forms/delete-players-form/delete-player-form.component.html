@@ -3,13 +3,6 @@
         header="Players"
         styleClass="shadow-none justify-content-center align-content-center align-content-center"
     >
-        <p-progressBar
-            *ngIf="$loadingDeletion | async"
-            mode="indeterminate"
-            [style]="{ height: '6px' }"
-            color="var(--green-600)"
-        ></p-progressBar>
-
         <p-table
             [value]="page.content"
             [rows]="page.pageSize"
@@ -17,7 +10,7 @@
             [lazy] = true
             [totalRecords]="page.totalElements"
             (onLazyLoad)="handleChangePageAction($event)"
-            [loading] = "loading"
+            [loading] = "$loading.getValue()"
             [rowHover]="true"
             [showCurrentPageReport]="true"
             [tableStyle]="{
@@ -26,6 +19,21 @@
             }"
             dataKey="id"
         >
+            <ng-template pTemplate="caption">
+                <div class="flex justify-content-center">
+                    <span class="p-input-icon-left w-full">
+                        <i class="pi pi-search"></i>
+                        <input
+                            pInputText
+                            type="text"
+                            class="w-full"
+                            placeholder="Find by name, team or position"
+                            [(ngModel)]="pageable.keyword"
+                            (input)="handleFindByKeyword()"
+                        />
+                    </span>
+                </div>
+            </ng-template>
             <ng-template pTemplate="header">
                 <tr>
                     <th pSortableColumn="" style="cursor: default">
@@ -73,7 +81,7 @@
                         {{ player.team | shorten : 15 }}
                     </td>
                     <td
-                        *ngIf="!($loadingDeletion | async)"
+                        *ngIf="!($loading | async)"
                         style="text-align: center"
                         class="p-button-danger-focus"
                     >

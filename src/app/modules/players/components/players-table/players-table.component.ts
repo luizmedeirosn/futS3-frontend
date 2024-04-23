@@ -45,7 +45,6 @@ export class PlayersTableComponent {
             const sortField = Array.isArray(fields) ? fields[0]: fields;
             const sortDirection = $event.sortOrder ?? 1;
 
-            console.log($event)
             this.changePageEvent.emit({
                 pageNumber,
                 pageSize,
