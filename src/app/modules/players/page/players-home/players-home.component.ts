@@ -126,7 +126,6 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
     }
 
     public handleChangePageAction($event: ChangePageAction) {
-        console.log($event);
         if ($event && $event.keyword !== undefined && $event.sortField && $event.sortDirection) {
             this.setPlayersWithApi(new Pageable(
                 $event.keyword,

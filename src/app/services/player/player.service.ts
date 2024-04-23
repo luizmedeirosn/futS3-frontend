@@ -36,7 +36,6 @@ export class PlayerService {
         queryParams += `&_sortField=${pageable.sortField === 'position.name' ? 'position' : pageable.sortField}`;
         queryParams += `&_sortDirection=${pageable.sortDirection === 1 ? 'asc' : 'desc'}`;
 
-        console.log(queryParams);
         return this.httpClient.get<Page<PlayerMinDTO>>(
             `${this.API_URL}/players${queryParams}`
         );
