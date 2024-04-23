@@ -31,8 +31,8 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
     private readonly $destroy: Subject<void> = new Subject();
     private readonly toastLife: number = 2000;
 
-    private pageable!: Pageable;
-    public indexFirstRow!: number;
+    public pageable!: Pageable;
+    // public keyword!: string;
     public loading!: boolean;
     public page!: PageMin<PlayerMinDTO>;
 
@@ -97,7 +97,6 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
     private setPlayersWithApi(pageable: Pageable): void {
         this.pageable = pageable;
         this.loading = true;
-        this.indexFirstRow = pageable.pageNumber * pageable.pageSize;
         setTimeout(() => {
             this.playerService.findAll(pageable)
                 .pipe(takeUntil(this.$destroy))
@@ -164,8 +163,14 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
 
             const sortDirection = $event.sortOrder ?? 1;
 
-            this.setPlayersWithApi(new Pageable(pageNumber, pageSize, sortField, sortDirection));
+            const pageable = new Pageable(pageNumber, pageSize, sortField, sortDirection);
+            this.setPlayersWithApi(pageable);
         }
+    }
+
+    public handleFindByKeyword(): void {
+        this.pageable.keyword = this.pageable.keyword.trim();
+        this.pageable.keywordIsValid() && this.setPlayersWithApi(this.pageable);
     }
 
     public handleSelectPlayer($event: number): void {

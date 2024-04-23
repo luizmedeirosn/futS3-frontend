@@ -29,11 +29,14 @@ export class PlayerService {
     };
 
     public findAll(pageable: Pageable): Observable<Page<PlayerMinDTO>> {
-        let queryParams = `?_pageNumber=${pageable.pageNumber}`;
+        let queryParams = '';
+        queryParams += `?_keyword=${pageable.keyword}`;
+        queryParams += `&_pageNumber=${pageable.pageNumber}`;
         queryParams += `&_pageSize=${pageable.pageSize}`;
         queryParams += `&_sortField=${pageable.sortField === 'position.name' ? 'position' : pageable.sortField}`;
         queryParams += `&_sortDirection=${pageable.sortDirection === 1 ? 'asc' : 'desc'}`;
 
+        console.log(queryParams);
         return this.httpClient.get<Page<PlayerMinDTO>>(
             `${this.API_URL}/players${queryParams}`
         );
