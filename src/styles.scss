@@ -32,6 +32,7 @@ span {
     font-weight: 900;
     color: var(--gray-900);
     margin-bottom: 1rem;
+    caret-color: transparent !important;
 }
 
 .p-card-subtitle {
@@ -42,6 +43,19 @@ span {
 
 .p-button {
     caret-color: transparent !important;
+}
+
+.p-inputtext:enabled:hover {
+    box-shadow: 0 0 0.5rem var(--blue-2)
+}
+
+.p-datatable-header {
+    border: none;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    .pi {
+        font-size: 18px;
+    }
 }
 
 .p-datatable-loading-overlay {

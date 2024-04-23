@@ -7,6 +7,7 @@ import {UpdatePlayerDTO} from 'src/app/models/dto/player/request/UpdatePlayerDTO
 import PlayerFullDTO from 'src/app/models/dto/player/response/PlayerDTO';
 import PlayerMinDTO from 'src/app/models/dto/player/response/PlayerMinDTO';
 import Page from "../../models/dto/generics/response/Page";
+import Pageable from "../../models/dto/generics/request/Pageable";
 
 @Injectable({
     providedIn: 'root'
@@ -27,9 +28,16 @@ export class PlayerService {
         this.$playerView.next(false);
     };
 
-    public findAll(pageNumber: number, pageSize: number): Observable<Page<PlayerMinDTO>> {
+    public findAll(pageable: Pageable): Observable<Page<PlayerMinDTO>> {
+        let queryParams = '';
+        queryParams += `?_keyword=${pageable.keyword}`;
+        queryParams += `&_pageNumber=${pageable.pageNumber}`;
+        queryParams += `&_pageSize=${pageable.pageSize}`;
+        queryParams += `&_sortField=${pageable.sortField === 'position.name' ? 'position' : pageable.sortField}`;
+        queryParams += `&_sortDirection=${pageable.sortDirection === 1 ? 'asc' : 'desc'}`;
+
         return this.httpClient.get<Page<PlayerMinDTO>>(
-            `${this.API_URL}/players?pageNumber=${pageNumber}&pageSize=${pageSize}`
+            `${this.API_URL}/players${queryParams}`
         );
     }
 

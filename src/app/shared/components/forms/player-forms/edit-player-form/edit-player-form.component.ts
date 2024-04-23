@@ -18,6 +18,7 @@ import {ChangesOnService} from 'src/app/shared/services/changes-on/changes-on.se
 import {CustomDialogService} from 'src/app/shared/services/custom-dialog/custom-dialog.service';
 import Page from "../../../../../models/dto/generics/response/Page";
 import PageMin from "../../../../../models/dto/generics/response/PageMin";
+import Pageable from "../../../../../models/dto/generics/request/Pageable";
 
 @Component({
     selector: 'app-edit-player-form',
@@ -30,14 +31,10 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
     private readonly $destroy: Subject<void> = new Subject();
     private readonly toastLife: number = 2000;
 
-    public indexFirstRow!: number;
-    public loading!: boolean;
-    public page: PageMin<PlayerMinDTO> = {
-        content: [],
-        pageNumber: 0,
-        pageSize: 10,
-        totalElements: 0
-    };
+    public pageable!: Pageable;
+    private previousKeyword!: string;
+    public $loading!: BehaviorSubject<boolean>;
+    public page!: PageMin<PlayerMinDTO>;
 
     public $viewTable: BehaviorSubject<boolean> = new BehaviorSubject(true);
     public closeableDialog: boolean = false;
@@ -70,17 +67,24 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
         private messageService: MessageService,
         private changeDetectorRef: ChangeDetectorRef,
         private dynamicDialogConfig: DynamicDialogConfig,
-
         private playerService: PlayerService,
         private positionService: PositionService,
         private parameterService: ParameterService,
         private customDialogService: CustomDialogService,
         private changesOnService: ChangesOnService,
-    ) { }
+    ) {
+        this.pageable = new Pageable('', 0, 10, "name", 1);
+        this.$loading = new BehaviorSubject(false);
+        this.page = {
+            content: [],
+            pageNumber: 0,
+            pageSize: 10,
+            totalElements: 0
+        };
+    }
 
     public ngOnInit(): void {
-        this.page.totalElements === 0 &&
-            this.setPlayersWithApi(0, 10);
+        this.page.totalElements === 0 && this.setPlayersWithApi(this.pageable);
         this.setPositionsWithApi();
 
         const action = this.dynamicDialogConfig.data;
@@ -90,21 +94,23 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
         }
     }
 
-    private setPlayersWithApi(pageNumber: number, pageSize: number): void {
-        this.loading = true;
-        this.indexFirstRow = pageNumber * pageSize;
+    private setPlayersWithApi(pageable: Pageable): void {
+        pageable.keyword = pageable.keyword.trim();
+        this.previousKeyword = pageable.keyword;
+        this.pageable = pageable;
+
+        this.$loading.next(true);
+
         setTimeout(() => {
-            this.playerService.findAll(pageNumber, pageSize)
+            this.playerService.findAll(pageable)
                 .pipe(takeUntil(this.$destroy))
                 .subscribe(
                     {
                         next: (playersPage: Page<PlayerMinDTO>) => {
-                            if (playersPage.size > 0) {
-                                this.page.content = playersPage.content;
-                                this.page.pageNumber = pageNumber;
-                                this.page.pageSize = pageSize;
-                                this.page.totalElements = playersPage.totalElements;
-                            }
+                            this.page.content = playersPage.content;
+                            this.page.pageNumber = playersPage.pageable.pageNumber;
+                            this.page.pageSize = playersPage.pageable.pageSize;
+                            this.page.totalElements = playersPage.totalElements;
                         },
                         error: (err) => {
                             this.messageService.clear();
@@ -119,7 +125,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                     }
                 );
 
-            this.loading = false;
+            this.$loading.next(false);
         }, 500);
     }
 
@@ -149,11 +155,24 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
             });
     }
 
-    public handleChangePlayersPage($event: TableLazyLoadEvent) {
+    public handleChangePageAction($event: TableLazyLoadEvent): void {
         if ($event && $event.first !== undefined && $event.rows) {
             const pageNumber = Math.ceil($event.first / $event.rows);
-            const pageSize = $event.rows !== 0 ? $event.rows : 5;
-            this.setPlayersWithApi(pageNumber, pageSize);
+            const pageSize = $event.rows !== 0 ? $event.rows : 10;
+
+            const fields = $event.sortField ?? "name";
+            const sortField = Array.isArray(fields) ? fields[0] : fields;
+
+            const sortDirection = $event.sortOrder ?? 1;
+
+            const pageable = new Pageable(this.pageable.keyword, pageNumber, pageSize, sortField, sortDirection);
+            this.setPlayersWithApi(pageable);
+        }
+    }
+
+    public handleFindByKeywordAction(): void {
+        if (this.pageable.keywordIsValid() && this.previousKeyword !== this.pageable.keyword.trim()) {
+            this.setPlayersWithApi(this.pageable);
         }
     }
 
@@ -275,7 +294,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                                 this.page.content.find(
                                     p => p.id === this.selectedPlayer?.id
                                 );
-                            if(updatedPlayer) {
+                            if (updatedPlayer) {
                                 updatedPlayer.name = playerResponse.name;
                                 updatedPlayer.team = playerResponse.team;
                             }
