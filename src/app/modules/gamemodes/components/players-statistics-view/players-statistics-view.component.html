@@ -1,7 +1,7 @@
 <div class="flex justify-content-center mb-6">
     <p-card
         styleClass="fadein animation-duration-1000 animation-iteration-1 animation-ease-out"
-        [style]="{ width: '90vw' }"
+        [style]="{ width: '90rem' }"
         header="Statistics"
     >
         <form
@@ -128,7 +128,7 @@
                         class="mt-2 fadein animation-duration-300 animation-iteration-1"
                     >
                         <p-card
-                            styleClass="shadow-3 mt-3 ranking-text-accordion-header"
+                            styleClass="shadow-1 mt-3 ranking-text-accordion-header"
                             header="Ranking #{{
                                 playersRanking.indexOf(player) + 1
                             }}"
@@ -221,15 +221,9 @@
                                                                 field="name"
                                                                 display="menu"
                                                                 matchMode="contains"
-                                                                [showMatchModes]="
-                                                                    false
-                                                                "
-                                                                [showOperator]="
-                                                                    false
-                                                                "
-                                                                [showAddButton]="
-                                                                    false
-                                                                "
+                                                                [showMatchModes]="false"
+                                                                [showOperator]="false"
+                                                                [showAddButton]="false"
                                                                 style="
                                                                     height: 1.7rem;
                                                                 "
@@ -308,11 +302,11 @@
                     !(playersRankingLoading$ | async) &&
                     playersRanking.length > 0
                 "
-                class="flex justify-content-between align-content-center mt-3 gap-3"
+                class="flex justify-content-center align-content-center mt-3 gap-3"
             >
                 <p-card
                     styleClass="shadow-1 flex flex-column align-content-center"
-                    [style]="{ width: '38vw' }"
+                    [style]="{ width: '35rem' }"
                     header="Total Score for Player"
                 >
                     <p-chart
@@ -331,7 +325,7 @@
                 </p-card>
                 <p-card
                     styleClass="shadow-1 flex flex-column align-content-center"
-                    [style]="{ width: '48vw' }"
+                    [style]="{ width: '50rem' }"
                     header="Parameters for Player"
                 >
                     <p-chart
@@ -353,8 +347,8 @@
                 *ngIf="!playersRanking || (playersRankingLoading$ | async)"
                 class="flex justify-content-center align-items-center mt-3 gap-3 fadein animation-duration-1000 animation-iteration-1 animation-ease-out"
             >
-                <p-skeleton width="38vw" height="38rem"></p-skeleton>
-                <p-skeleton width="48vw" height="38rem"></p-skeleton>
+                <p-skeleton width="35rem" height="38rem"></p-skeleton>
+                <p-skeleton width="50rem" height="38rem"></p-skeleton>
             </div>
         </div>
     </p-card>
