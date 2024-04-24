@@ -1,22 +1,25 @@
-import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { MessageService } from 'primeng/api';
-import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { Table } from 'primeng/table';
-import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { GameModeRequestDTO } from 'src/app/models/dto/gamemode/request/GameModeRequestDTO';
-import { GameModeDTO } from 'src/app/models/dto/gamemode/response/GameModeDTO';
-import { GameModeMinDTO } from 'src/app/models/dto/gamemode/response/GameModeMinDTO';
-import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
-import { EnumGameModeEventsCrud } from 'src/app/models/enums/EnumGameModeEventsCrud';
-import { EnumPositionEventsCrud } from 'src/app/models/enums/EnumPositionEventsCrud';
-import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
-import { PositionService } from 'src/app/services/position/position.service';
-import { ChangesOnService } from 'src/app/shared/services/changes-on/changes-on.service';
-import { CustomDialogService } from 'src/app/shared/services/custom-dialog/custom-dialog.service';
-import { EditPositionFormComponent } from '../../position-forms/edit-position-form/edit-position-form.component';
-import { SavePositionFormComponent } from '../../position-forms/save-position-form/save-position-form.component';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import {FormBuilder, Validators} from '@angular/forms';
+import {MessageService} from 'primeng/api';
+import {DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
+import {BehaviorSubject, Subject, takeUntil} from 'rxjs';
+import {GameModeRequestDTO} from 'src/app/models/dto/gamemode/request/GameModeRequestDTO';
+import {GameModeDTO} from 'src/app/models/dto/gamemode/response/GameModeDTO';
+import {GameModeMinDTO} from 'src/app/models/dto/gamemode/response/GameModeMinDTO';
+import {PositionMinDTO} from 'src/app/models/dto/position/response/PositionMinDTO';
+import {EnumGameModeEventsCrud} from 'src/app/models/enums/EnumGameModeEventsCrud';
+import {EnumPositionEventsCrud} from 'src/app/models/enums/EnumPositionEventsCrud';
+import {GameModeService} from 'src/app/services/gamemode/gamemode.service';
+import {PositionService} from 'src/app/services/position/position.service';
+import {ChangesOnService} from 'src/app/shared/services/changes-on/changes-on.service';
+import {CustomDialogService} from 'src/app/shared/services/custom-dialog/custom-dialog.service';
+import {EditPositionFormComponent} from '../../position-forms/edit-position-form/edit-position-form.component';
+import {SavePositionFormComponent} from '../../position-forms/save-position-form/save-position-form.component';
 import Page from "../../../../../models/dto/generics/response/Page";
+import Pageable from "../../../../../models/dto/generics/request/Pageable";
+import PageMin from "../../../../../models/dto/generics/response/PageMin";
+import PlayerMinDTO from "../../../../../models/dto/player/response/PlayerMinDTO";
+import {TableLazyLoadEvent} from "primeng/table";
 
 @Component({
     selector: 'app-edit-gamemode-form',
@@ -29,13 +32,13 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
     private readonly $destroy: Subject<void> = new Subject();
     private readonly toastLife: number = 2000;
 
-    @ViewChild('gameModesTable') public gameModesTable!: Table;
-    private gameModesTablePages: Array<Array<GameModeMinDTO>> = [];
+    public pageable!: Pageable;
+    public $loading!: BehaviorSubject<boolean>;
+    public page!: PageMin<GameModeMinDTO>;
 
     public $viewTable: BehaviorSubject<boolean> = new BehaviorSubject(true);
     public closeableDialog: boolean = false;
 
-    public gameModes!: Array<GameModeMinDTO>;
     public selectedGameMode!: GameModeMinDTO | undefined;
     public positions!: Array<PositionMinDTO>;
     public positionsOff: Array<PositionMinDTO> = [];
@@ -55,15 +58,26 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
     public constructor(
         private formBuilder: FormBuilder,
         private messageService: MessageService,
-        private positionService: PositionService,
-        private gameModeService: GameModeService,
-        private customDialogService: CustomDialogService,
+        private changeDetectorRef: ChangeDetectorRef,
         private dynamicDialogConfig: DynamicDialogConfig,
+
+        private gameModeService: GameModeService,
+        private positionService: PositionService,
+        private customDialogService: CustomDialogService,
         private changesOnService: ChangesOnService,
-    ) { }
+    ) {
+        this.pageable = new Pageable('', 0, 10);
+        this.$loading = new BehaviorSubject(false);
+        this.page = {
+            content: [],
+            pageNumber: 0,
+            pageSize: 10,
+            totalElements: 0
+        };
+    }
 
     public ngOnInit(): void {
-        this.setGameModesWithApi();
+        this.page.totalElements === 0 && this.setGameModesWithApi(this.pageable);
         this.setPositionsWithApi();
 
         const action = this.dynamicDialogConfig.data;
@@ -87,37 +101,36 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
             });
     }
 
-    private setGameModesWithApi(): void {
-        this.gameModeService.findAll()
-            .pipe(takeUntil(this.$destroy))
-            .subscribe({
-                next: (gameModesPage: Page<GameModeMinDTO>) => {
-                    this.gameModes = gameModesPage.content;
+    private setGameModesWithApi(pageable: Pageable): void {
+        this.pageable = pageable;
 
-                    let increment: number = 0;
-                    let page: Array<GameModeMinDTO> = [];
+        this.$loading.next(true);
 
-                    gameModesPage.content.forEach((gameMode, index, array) => {
-                        page.push(gameMode);
-                        increment += 1;
-                        if (increment === 5 || index === array.length - 1) {
-                            this.gameModesTablePages.push(page);
-                            page = [];
-                            increment = 0;
-                        }
-                    });
-                },
-                error: (err) => {
-                    this.messageService.clear();
-                    this.messageService.add({
-                        severity: 'error',
-                        summary: 'Error',
-                        detail: 'Failed to retrieve the data!',
-                        life: this.toastLife
-                    });
-                    console.log(err);
-                }
-            });
+        setTimeout(() => {
+            this.gameModeService.findAllWithPageable(pageable)
+                .pipe(takeUntil(this.$destroy))
+                .subscribe({
+                    next: (gameModesPage: Page<GameModeMinDTO>) => {
+                        this.page.content = gameModesPage.content;
+                        this.page.pageNumber = gameModesPage.pageable.pageNumber;
+                        this.page.pageSize = gameModesPage.pageable.pageSize;
+                        this.page.totalElements = gameModesPage.totalElements;
+
+                    },
+                    error: (err) => {
+                        this.messageService.clear();
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: 'Error',
+                            detail: 'Failed to retrieve the data!',
+                            life: this.toastLife
+                        });
+                        console.log(err);
+                    }
+                });
+
+            this.$loading.next(false);
+        }, 500);
     }
 
     private setPositionsWithApi(): void {
@@ -133,8 +146,14 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
             });
     }
 
-    private deleteIncludedPositionParameters(): void {
-        this.positionsOff.forEach(pOff => this.positions = this.positions.filter(p => p.id !== pOff.id));
+    public handleChangePageAction($event: TableLazyLoadEvent): void {
+        if ($event && $event.first !== undefined && $event.rows) {
+            const pageNumber = Math.ceil($event.first / $event.rows);
+            const pageSize = $event.rows !== 0 ? $event.rows : 10;
+
+            const pageable = new Pageable(this.pageable.keyword, pageNumber, pageSize);
+            this.setGameModesWithApi(pageable);
+        }
     }
 
     public handleSelectGameMode($event: number): void {
@@ -180,35 +199,19 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
         }
     }
 
+    private deleteIncludedPositionParameters(): void {
+        this.positionsOff.forEach(pOff => this.positions = this.positions.filter(p => p.id !== pOff.id));
+    }
+
     public handleBackAction(): void {
-        this.closeableDialog && this.customDialogService.closeEndDialog();
+        this.closeableDialog ?
+            this.customDialogService.closeEndDialog() : this.$viewTable.next(true);
 
-        // Activate the view child before referencing the table
-        this.$viewTable.next(true);
+        this.selectedGameMode = undefined;
+        this.positionsOff = [];
+        this.reset = true;
 
-        // Delay until activating the viewChild
-        setTimeout(() => {
-            if (this.selectedGameMode?.id !== undefined) {
-                const selectedGameMode: GameModeMinDTO | undefined =
-                    this.gameModes.find(gameMode => gameMode.id === this.selectedGameMode?.id);
-
-                if (selectedGameMode) {
-                    const index = this.gameModes.indexOf(selectedGameMode);
-                    const numPage: number = Math.floor(index / 5);
-                    const page = this.gameModesTablePages.at(numPage);
-                    const firstGameModePage: GameModeMinDTO | undefined = page?.at(0);
-
-                    this.gameModesTable &&
-                        (this.gameModesTable.first =
-                            firstGameModePage && this.gameModes.indexOf(firstGameModePage));
-                }
-            }
-
-            this.selectedGameMode = undefined;
-            this.positionsOff = [];
-            this.reset = true;
-
-        }, 10);
+        this.changeDetectorRef.detectChanges();
     }
 
     public handleCreatePositionEvent(): void {
@@ -217,7 +220,7 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
             {
                 position: 'top',
                 header: EnumPositionEventsCrud.ADD.valueOf(),
-                contentStyle: { overflow: 'auto' },
+                contentStyle: {overflow: 'auto'},
                 baseZIndex: 10000,
             });
 
@@ -232,7 +235,7 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
             {
                 position: 'top',
                 header: EnumPositionEventsCrud.EDIT.valueOf(),
-                contentStyle: { overflow: 'auto' },
+                contentStyle: {overflow: 'auto'},
                 baseZIndex: 10000,
                 data: {
                     $event: EnumPositionEventsCrud.EDIT,
@@ -287,7 +290,8 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
                 .pipe(takeUntil(this.$destroy))
                 .subscribe({
                     next: (gameMode) => {
-                        const gameModeUpdated = this.gameModes.find(p => p.id === this.selectedGameMode?.id);
+                        const gameModeUpdated =
+                            this.page.content.find(p => p.id === this.selectedGameMode?.id);
                         gameModeUpdated && (gameModeUpdated.formationName = gameMode.formationName);
 
                         this.changesOnService.setChangesOn(true);
@@ -325,12 +329,12 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
         this.positionsOff.forEach(e => this.positions.push(e));
         this.positionsOff.sort((p1, p2) =>
             p1.name.toUpperCase().localeCompare(p2.name.toUpperCase())
-        ); this.positionsOff = [];
+        );
+        this.positionsOff = [];
     }
 
     public ngOnDestroy(): void {
         this.$destroy.next();
         this.$destroy.complete();
     }
-
 }

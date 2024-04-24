@@ -1,47 +1,27 @@
 <div class="edit-gamemode-form flex justify-content-center">
     <p-card
-        *ngIf="!closeableDialog && gameModes && ($viewTable | async)"
+        *ngIf="!closeableDialog && ($viewTable | async)"
         header="Game modes"
         styleClass="shadow-none justify-content-center align-content-center align-content-center"
     >
         <p-table
-            #gameModesTable
-            [value]="gameModes"
-            dataKey="id"
-            [rows]="5"
+            [value]="page.content"
+            [rows]="pageable.pageSize"
+            [first]="pageable.indexFirstRow"
+            [paginator]= "true"
+            [totalRecords]="page.totalElements"
+            [lazy] = true
+            (onLazyLoad)="handleChangePageAction($event)"
+            [loading] = "$loading.getValue()"
             [rowHover]="true"
             [showCurrentPageReport]="true"
-            [paginator]="true"
-            [tableStyle]="{
-                width: 'w-full',
-            }"
+            dataKey="id"
         >
             <ng-template pTemplate="header">
                 <tr>
-                    <th id="" pSortableColumn="formationName">
-                        <div
-                            class="flex justify-content-between align-items-center"
-                        >
-                            <div
-                                class="flex justify-content-between align-items-center text-lg mt-1"
-                            >
-                                Formation Name
-                            </div>
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
-                                <p-sortIcon field="formationName"></p-sortIcon>
-                                <p-columnFilter
-                                    type="text"
-                                    field="formationName"
-                                    display="menu"
-                                    matchMode="contains"
-                                    [showMatchModes]="false"
-                                    [showOperator]="false"
-                                    [showAddButton]="false"
-                                    style="height: 1.8rem"
-                                ></p-columnFilter>
-                            </div>
+                    <th>
+                        <div class="flex justify-content-start align-items-center text-lg mt-1">
+                            Formation Name
                         </div>
                     </th>
                 </tr>
@@ -80,7 +60,7 @@
             [minNumberCharacters]="3"
             [maxNumberCharacters]="30"
         ></app-form-control-alert>
-        <label for="formationName">Formation Name</label>
+        <label>Formation Name <span class="text-red-600">*</span></label>
     </span>
 
     <span class="p-float-label">
@@ -96,7 +76,7 @@
             [minNumberCharacters]="0"
             [maxNumberCharacters]="2000"
         ></app-form-control-alert>
-        <label for="description">Description</label>
+        <label>Description</label>
     </span>
 
     <form
@@ -115,7 +95,7 @@
                     placeholder="Add a position"
                     formControlName="position"
                 ></p-dropdown>
-                <label for="position">Add a Position</label>
+                <label>Add a Position</label>
             </span>
             <p-button
                 [disabled]="!addPositionForm.valid"

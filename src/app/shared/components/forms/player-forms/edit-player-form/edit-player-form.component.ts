@@ -66,6 +66,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
         private messageService: MessageService,
         private changeDetectorRef: ChangeDetectorRef,
         private dynamicDialogConfig: DynamicDialogConfig,
+
         private playerService: PlayerService,
         private positionService: PositionService,
         private parameterService: ParameterService,
@@ -111,6 +112,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                             this.page.pageNumber = playersPage.pageable.pageNumber;
                             this.page.pageSize = playersPage.pageable.pageSize;
                             this.page.totalElements = playersPage.totalElements;
+
                         },
                         error: (err) => {
                             this.messageService.clear();
@@ -289,9 +291,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                     .subscribe({
                         next: (playerResponse: PlayerDTO) => {
                             const updatedPlayer =
-                                this.page.content.find(
-                                    p => p.id === this.selectedPlayer?.id
-                                );
+                                this.page.content.find(p => p.id === this.selectedPlayer?.id);
                             if (updatedPlayer) {
                                 updatedPlayer.name = playerResponse.name;
                                 updatedPlayer.team = playerResponse.team;
