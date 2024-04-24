@@ -6,8 +6,8 @@ export default class Pageable {
         public keyword: string,
         public pageNumber: number,
         public pageSize: number,
-        public sortField: string,
-        public sortDirection: number
+        public sortField?: string,
+        public sortDirection?: number
     ) {
     }
 

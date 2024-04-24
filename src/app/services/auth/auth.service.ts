@@ -25,6 +25,7 @@ export class AuthService {
     ) { }
 
     public signin(signin: SigninRequestDTO): Observable<SigninResponseDTO> {
+        this.cookieService.deleteAll();
         return this.httpClient.post<SigninResponseDTO>(
             `${this.API_URL}/auth/signin`,
             signin,
@@ -62,8 +63,8 @@ export class AuthService {
                 life: 6000
             });
         }
-        this.customDialogService.closeAll();
         this.cookieService.deleteAll();
+        this.customDialogService.closeAll();
         this.router.navigate(['/home']).then(r => {});
     }
 

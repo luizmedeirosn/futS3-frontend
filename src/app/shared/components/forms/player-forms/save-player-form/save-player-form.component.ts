@@ -12,6 +12,7 @@ import { PlayerService } from 'src/app/services/player/player.service';
 import { PositionService } from 'src/app/services/position/position.service';
 import { ChangesOnService } from 'src/app/shared/services/changes-on/changes-on.service';
 import Page from "../../../../../models/dto/generics/response/Page";
+import {Dropdown} from "primeng/dropdown";
 
 @Component({
     selector: 'app-players-form',
@@ -50,7 +51,8 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
         private parameterService: ParameterService,
         private playerService: PlayerService,
         private changesOnService: ChangesOnService,
-    ) { }
+    ) {
+    }
 
     public ngOnInit(): void {
         this.positionService.findAll()

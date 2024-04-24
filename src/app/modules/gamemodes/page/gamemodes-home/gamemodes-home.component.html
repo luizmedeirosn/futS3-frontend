@@ -2,7 +2,10 @@
 
 <app-gamemodes-table
     *ngIf="!(gameModeView | async)"
-    [gameModes]="gameModes"
+    [pageable]="pageable"
+    [$loading] = "$loading"
+    [page]="page"
+    (changePageEvent)="handleChangePageAction($event)"
     (viewEvent)="handleViewFullDataGameModeAction($event)"
 ></app-gamemodes-table>
 

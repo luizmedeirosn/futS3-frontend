@@ -32,7 +32,7 @@ span {
     font-weight: 900;
     color: var(--gray-900);
     margin-bottom: 1rem;
-    caret-color: transparent !important;
+    caret-color: transparent;
 }
 
 .p-card-subtitle {
@@ -42,7 +42,11 @@ span {
 }
 
 .p-button {
-    caret-color: transparent !important;
+    caret-color: transparent;
+}
+
+.p-inputtext {
+    color: var(--gray-800);
 }
 
 .p-datatable-header {
@@ -68,7 +72,6 @@ span {
 }
 
 .p-dropdown {
-    caret-color: transparent !important;
     border: 1px solid;
     border-radius: 3px;
     span {

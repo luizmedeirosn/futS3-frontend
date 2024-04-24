@@ -1,7 +1,7 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {DynamicDialogRef} from 'primeng/dynamicdialog';
-import {Subject, takeUntil} from 'rxjs';
+import {BehaviorSubject, Subject, takeUntil} from 'rxjs';
 import {GameModeDTO} from 'src/app/models/dto/gamemode/response/GameModeDTO';
 import {GameModeMinDTO} from 'src/app/models/dto/gamemode/response/GameModeMinDTO';
 import {EnumGameModeEventsCrud} from 'src/app/models/enums/EnumGameModeEventsCrud';
@@ -14,6 +14,9 @@ import {
 import {ChangesOnService} from 'src/app/shared/services/changes-on/changes-on.service';
 import {CustomDialogService} from 'src/app/shared/services/custom-dialog/custom-dialog.service';
 import Page from "../../../../models/dto/generics/response/Page";
+import Pageable from "../../../../models/dto/generics/request/Pageable";
+import PageMin from "../../../../models/dto/generics/response/PageMin";
+import ChangePageAction from "../../../../models/events/ChangePageAction";
 
 @Component({
     selector: 'app-gamemodes-home',
@@ -25,31 +28,43 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
     private readonly $destroy: Subject<void> = new Subject();
     private readonly messageLife: number = 3000;
 
-    public gameModes!: GameModeMinDTO[];
+    public pageable!: Pageable;
+    public $loading!: BehaviorSubject<boolean>;
+    public page!: PageMin<GameModeMinDTO>;
 
-    public gameModeView: Subject<boolean> = this.gameModeService.$gameModeView;
     public gameMode!: GameModeDTO;
+    public gameModeView: Subject<boolean> = this.gameModeService.$gameModeView;
 
     private dynamicDialogRef!: DynamicDialogRef;
 
     public constructor(
-        private gameModeService: GameModeService,
         private messageService: MessageService,
-        private customDialogService: CustomDialogService,
+        private changeDetectorRef: ChangeDetectorRef,
         private confirmationService: ConfirmationService,
+
+        private gameModeService: GameModeService,
+        private customDialogService: CustomDialogService,
         private changesOnService: ChangesOnService,
     ) {
+        this.pageable = new Pageable('', 0, 5, "name", 1);
+        this.$loading = new BehaviorSubject(false);
+        this.page = {
+            content: [],
+            pageNumber: 0,
+            pageSize: 5,
+            totalElements: 0
+        };
     }
 
     public ngOnInit(): void {
-        this.setGameModesWithApi();
+        this.page.totalElements === 0 && this.setGameModesWithApi(this.pageable);
 
         this.changesOnService.getChangesOn()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
                 next: (changesOn: boolean) => {
                     if (changesOn) {
-                        this.setGameModesWithApi();
+                        this.setGameModesWithApi(this.pageable);
 
                         const gameModeIdInPreview: number | undefined = this.gameModeService.gameModeIdInPreview;
                         gameModeIdInPreview ? this.selectGameMode(gameModeIdInPreview) : this.handleBackAction();
@@ -61,26 +76,54 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
             });
     }
 
-    private setGameModesWithApi(): void {
-        this.gameModeService.findAll()
-            .pipe(takeUntil(this.$destroy))
-            .subscribe(
-                {
-                    next: (gameModesPage: Page<GameModeMinDTO>) => {
-                        this.gameModes = gameModesPage.content;
-                    },
-                    error: (err) => {
-                        this.messageService.clear();
-                        err.status != 403 && this.messageService.add({
-                            severity: 'error',
-                            summary: 'Error',
-                            detail: 'Unexpected error!',
-                            life: this.messageLife
-                        });
-                        console.log(err);
+    private setGameModesWithApi(pageable: Pageable): void {
+        this.pageable = pageable;
+        this.$loading.next(true);
+
+        setTimeout(() => {
+            this.gameModeService.findAllWithPageable(pageable)
+                .pipe(takeUntil(this.$destroy))
+                .subscribe(
+                    {
+                        next: (gameModesPage: Page<GameModeMinDTO>) => {
+                            this.page.content = gameModesPage.content;
+                            this.page.pageNumber = gameModesPage.pageable.pageNumber;
+                            this.page.pageSize = gameModesPage.pageable.pageSize;
+                            this.page.totalElements = gameModesPage.totalElements;
+
+                        },
+                        error: (err) => {
+                            this.messageService.clear();
+                            err.status != 403 && this.messageService.add({
+                                severity: 'error',
+                                summary: 'Error',
+                                detail: 'Unexpected error!',
+                                life: this.messageLife
+                            });
+                            console.log(err);
+                        }
                     }
-                }
-            );
+                );
+            this.$loading.next(false);
+        }, 500);
+    }
+
+    public handleChangePageAction($event: ChangePageAction) {
+        if ($event && $event.keyword !== undefined) {
+            this.setGameModesWithApi(new Pageable(
+                $event.keyword,
+                $event.pageNumber,
+                $event.pageSize,
+            ));
+        }
+    }
+
+    public handleViewFullDataGameModeAction($event: ViewAction): void {
+        if ($event) {
+            this.selectGameMode($event.id);
+            this.gameModeService.$gameModeView.next(true);
+        }
+
     }
 
     private selectGameMode(id: number) {
@@ -108,16 +151,10 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
             );
     }
 
-    public handleViewFullDataGameModeAction($event: ViewAction): void {
-        if ($event) {
-            this.selectGameMode($event.id);
-        }
-        this.gameModeService.$gameModeView.next(true);
-
-    }
-
     public handleBackAction() {
+        // Do not change the order of actions
         this.gameModeService.$gameModeView.next(false);
+        this.changeDetectorRef.detectChanges();
     }
 
     private deleteGameMode(id: number): void {

@@ -8,6 +8,8 @@ import { GameModeMinDTO } from 'src/app/models/dto/gamemode/response/GameModeMin
 import { PlayerFullDataDTO } from 'src/app/models/dto/gamemode/response/PlayerFullDataDTO';
 import { GameModePositionDTO } from '../../models/dto/gamemode/response/GameModePositonDTO';
 import Page from "../../models/dto/generics/response/Page";
+import Pageable from "../../models/dto/generics/request/Pageable";
+import PlayerMinDTO from "../../models/dto/player/response/PlayerMinDTO";
 
 @Injectable({
     providedIn: 'root'
@@ -31,6 +33,16 @@ export class GameModeService {
     public findAll(): Observable<Page<GameModeMinDTO>> {
         return this.httpClient.get<Page<GameModeMinDTO>>(
             `${this.API_URL}/gamemodes`
+        );
+    }
+
+    public findAllWithPageable(pageable: Pageable): Observable<Page<GameModeMinDTO>> {
+        let queryParams = '';
+        queryParams += `?_pageNumber=${pageable.pageNumber}`;
+        queryParams += `&_pageSize=${pageable.pageSize}`;
+
+        return this.httpClient.get<Page<GameModeMinDTO>>(
+            `${this.API_URL}/gamemodes${queryParams}`
         );
     }
 
@@ -65,5 +77,4 @@ export class GameModeService {
             `${this.API_URL}/gamemodes/${id}`
         );
     }
-
 }

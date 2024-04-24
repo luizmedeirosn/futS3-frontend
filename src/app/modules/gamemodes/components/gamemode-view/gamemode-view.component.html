@@ -4,9 +4,7 @@
         [style]="{ width: '60rem' }"
         header="Game Mode View"
     >
-        <div
-            class="flex justify-content-between align-content-center align-items-center"
-        >
+        <div class="flex justify-content-between align-content-center align-items-center">
             <button
                 pButton
                 pRipple
@@ -15,9 +13,8 @@
                 tooltipPosition="top"
                 (click)="handleBackEvent()"
             ></button>
-            <div
-                class="flex justify-content-between align-content-center align-items-center gap-3"
-            >
+
+            <div class="flex justify-content-between align-content-center align-items-center gap-3">
                 <button
                     pButton
                     pRipple
@@ -62,11 +59,9 @@
             <div
                 class="flex flex-column border-solid border-green-700 border-2 border-round-lg pb-1 bg-gray-50"
             >
-                <label
-                    class="text-gray-900 font-bold text-medium text-center bg-gray-300 p-3 border-round-top-lg"
-                    for="description"
-                    >Description</label
-                >
+                <label class="text-gray-900 font-bold text-medium text-center bg-gray-300 p-3 border-round-top-lg">
+                    Description
+                </label>
 
                 <p-scrollPanel [style]="{ height: '150px' }">
                     <p
@@ -96,18 +91,12 @@
         >
             <ng-template pTemplate="header">
                 <tr>
-                    <th id="" pSortableColumn="positions.name">
-                        <div
-                            class="flex justify-content-between align-items-center"
-                        >
-                            <div
-                                class="flex justify-content-center align-items-center text-lg mt-1"
-                            >
+                    <th pSortableColumn="positions.name">
+                        <div class="flex justify-content-between align-items-center">
+                            <div class="flex justify-content-center align-items-center text-lg mt-1">
                                 Position
                             </div>
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
+                            <div class="flex justify-content-between align-items-center">
                                 <p-sortIcon
                                     field="positions.name"
                                 ></p-sortIcon>
@@ -124,18 +113,12 @@
                             </div>
                         </div>
                     </th>
-                    <th id="" pSortableColumn="" style="cursor: default">
-                        <div
-                            class="flex justify-content-between align-items-center"
-                        >
-                            <div
-                                class="flex justify-content-center align-items-center text-lg mt-1"
-                            >
+                    <th pSortableColumn="" style="cursor: default">
+                        <div class="flex justify-content-between align-items-center">
+                            <div class="flex justify-content-center align-items-center text-lg mt-1">
                                 Parameter
                             </div>
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
+                            <div class="flex justify-content-between align-items-center">
                                 <p-columnFilter
                                     type="text"
                                     field="parameterName"
@@ -149,18 +132,12 @@
                             </div>
                         </div>
                     </th>
-                    <th id="" pSortableColumn="" style="cursor: default">
-                        <div
-                            class="flex justify-content-between align-items-center"
-                        >
-                            <div
-                                class="flex justify-content-center align-items-center text-lg mt-1"
-                            >
+                    <th pSortableColumn="" style="cursor: default">
+                        <div class="flex justify-content-between align-items-center">
+                            <div class="flex justify-content-center align-items-center text-lg mt-1">
                                 Weight
                             </div>
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
+                            <div class="flex justify-content-between align-items-center">
                                 <p-columnFilter
                                     type="text"
                                     field="parameterWeight"
@@ -183,9 +160,7 @@
             >
                 <tr>
                     <td colspan="3">
-                        <div
-                            class="flex align-items-center expand-button gap-1"
-                        >
+                        <div class="flex align-items-center expand-button gap-1">
                             <p-button
                                 pRipple
                                 [pRowToggler]="position"

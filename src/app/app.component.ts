@@ -19,5 +19,4 @@ export class AppComponent implements OnInit {
     public ngOnInit() {
         this.primeNGConfig.ripple = true;
     }
-
 }

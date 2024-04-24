@@ -35,7 +35,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
     public page!: PageMin<PlayerMinDTO>;
 
     public player!: PlayerFullDTO;
-    public playerView: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    public playerView: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     public dynamicDialogRef!: DynamicDialogRef;
 
@@ -43,6 +43,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
         private messageService: MessageService,
         private changeDetectorRef: ChangeDetectorRef,
         private confirmationService: ConfirmationService,
+
         private playerService: PlayerService,
         private customDialogService: CustomDialogService,
         private changesOnService: ChangesOnService,
@@ -58,8 +59,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        this.page.totalElements === 0 &&
-        this.setPlayersWithApi(this.pageable);
+        this.page.totalElements === 0 && this.setPlayersWithApi(this.pageable);
 
         this.playerService.$playerView
             .pipe(takeUntil(this.$destroy))
