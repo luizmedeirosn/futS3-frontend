@@ -90,7 +90,6 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
 
         if (selectedParameter && score) {
             const parameter: ParameterDTO | undefined = this.parameters.find(p => p.id === selectedParameter.id);
-            console.log('handleAddNewParameter', parameter);
             if (parameter) {
                 this.parametersOff.push(parameter);
                 this.parameters = this.parameters.filter(p => p.id !== parameter.id);
@@ -116,7 +115,6 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
 
             const parameter: ParameterDTO | undefined = this.parametersOff.find((p) => p.id === id);
             parameter && this.parameters.push(parameter);
-            console.log('handleDeletePlayerParameter', parameter);
             this.parameters.sort((p1, p2) => p1.name.toUpperCase().localeCompare(p2.name.toUpperCase()));
         }
     }

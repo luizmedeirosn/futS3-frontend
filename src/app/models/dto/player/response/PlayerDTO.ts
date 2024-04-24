@@ -1,7 +1,7 @@
 import { PositionMinDTO } from "../../position/response/PositionMinDTO";
 import PlayerParameterDataDTO from "../aux/PlayerParameterDataDTO";
 
-export default interface PlayerFullDTO {
+export default interface PlayerDTO {
 
     id: number;
     name: string;
