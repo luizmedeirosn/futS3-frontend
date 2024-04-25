@@ -4,7 +4,7 @@ import {DynamicDialogRef} from 'primeng/dynamicdialog';
 import {Subject, takeUntil} from 'rxjs';
 import {FullDataPosition} from 'src/app/models/dto/position/aux/FullDataPosition';
 import {EditOrDeletePositionAction} from 'src/app/models/events/EditOrDeletePositionAction';
-import {PositionMinDTO} from 'src/app/models/dto/position/response/PositionMinDTO';
+import PositionMinDTO from 'src/app/models/dto/position/response/PositionMinDTO';
 import {EnumPositionEventsCrud} from 'src/app/models/enums/EnumPositionEventsCrud';
 import {PositionService} from 'src/app/services/position/position.service';
 import {

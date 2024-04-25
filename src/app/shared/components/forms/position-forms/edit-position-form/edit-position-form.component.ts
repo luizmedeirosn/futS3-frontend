@@ -1,19 +1,19 @@
-import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { MessageService } from 'primeng/api';
-import { DynamicDialogConfig } from 'primeng/dynamicdialog';
-import { Table } from 'primeng/table';
-import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { ParameterDTO } from 'src/app/models/dto/parameter/response/ParameterDTO';
-import { ParameterWeightDTO } from 'src/app/models/dto/position/aux/ParameterWeightDTO';
-import { PositionRequestDTO } from 'src/app/models/dto/position/request/PositionRequestDTO';
-import { PositionDTO } from 'src/app/models/dto/position/response/PositionDTO';
-import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
-import { EnumPositionEventsCrud } from 'src/app/models/enums/EnumPositionEventsCrud';
-import { ParameterService } from 'src/app/services/parameter/parameter.service';
-import { PositionService } from 'src/app/services/position/position.service';
-import { ChangesOnService } from 'src/app/shared/services/changes-on/changes-on.service';
-import { CustomDialogService } from 'src/app/shared/services/custom-dialog/custom-dialog.service';
+import {Component, ViewChild, ViewEncapsulation} from '@angular/core';
+import {FormBuilder, Validators} from '@angular/forms';
+import {MessageService} from 'primeng/api';
+import {DynamicDialogConfig} from 'primeng/dynamicdialog';
+import {Table} from 'primeng/table';
+import {BehaviorSubject, Subject, takeUntil} from 'rxjs';
+import {ParameterDTO} from 'src/app/models/dto/parameter/response/ParameterDTO';
+import {ParameterWeightDTO} from 'src/app/models/dto/position/aux/ParameterWeightDTO';
+import {PositionRequestDTO} from 'src/app/models/dto/position/request/PositionRequestDTO';
+import {PositionDTO} from 'src/app/models/dto/position/response/PositionDTO';
+import PositionMinDTO from 'src/app/models/dto/position/response/PositionMinDTO';
+import {EnumPositionEventsCrud} from 'src/app/models/enums/EnumPositionEventsCrud';
+import {ParameterService} from 'src/app/services/parameter/parameter.service';
+import {PositionService} from 'src/app/services/position/position.service';
+import {ChangesOnService} from 'src/app/shared/services/changes-on/changes-on.service';
+import {CustomDialogService} from 'src/app/shared/services/custom-dialog/custom-dialog.service';
 import Page from "../../../../../models/dto/generics/response/Page";
 
 @Component({

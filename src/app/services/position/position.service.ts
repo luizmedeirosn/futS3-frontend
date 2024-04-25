@@ -1,10 +1,10 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
-import { environment } from 'src/environments/environment.prod';
-import { PositionRequestDTO } from 'src/app/models/dto/position/request/PositionRequestDTO';
-import { PositionDTO } from 'src/app/models/dto/position/response/PositionDTO';
-import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable, Subject} from 'rxjs';
+import {environment} from 'src/environments/environment.prod';
+import {PositionRequestDTO} from 'src/app/models/dto/position/request/PositionRequestDTO';
+import {PositionDTO} from 'src/app/models/dto/position/response/PositionDTO';
+import PositionMinDTO from 'src/app/models/dto/position/response/PositionMinDTO';
 import Page from "../../models/dto/generics/response/Page";
 
 @Injectable({

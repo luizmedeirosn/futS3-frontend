@@ -1,18 +1,17 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { MessageService } from 'primeng/api';
-import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { ParameterDTO } from 'src/app/models/dto/parameter/response/ParameterDTO';
-import { PlayerParameterIdScoreDTO } from 'src/app/models/dto/player/request/PlayerParameterIdScoreDTO';
-import { PostPlayerDTO } from 'src/app/models/dto/player/request/PostPlayerDTO';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {FormBuilder, Validators} from '@angular/forms';
+import {MessageService} from 'primeng/api';
+import {BehaviorSubject, Subject, takeUntil} from 'rxjs';
+import {ParameterDTO} from 'src/app/models/dto/parameter/response/ParameterDTO';
+import {PlayerParameterIdScoreDTO} from 'src/app/models/dto/player/request/PlayerParameterIdScoreDTO';
+import {PostPlayerDTO} from 'src/app/models/dto/player/request/PostPlayerDTO';
 import PlayerParameterDataDTO from 'src/app/models/dto/player/aux/PlayerParameterDataDTO';
-import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
-import { ParameterService } from 'src/app/services/parameter/parameter.service';
-import { PlayerService } from 'src/app/services/player/player.service';
-import { PositionService } from 'src/app/services/position/position.service';
-import { ChangesOnService } from 'src/app/shared/services/changes-on/changes-on.service';
+import PositionMinDTO from 'src/app/models/dto/position/response/PositionMinDTO';
+import {ParameterService} from 'src/app/services/parameter/parameter.service';
+import {PlayerService} from 'src/app/services/player/player.service';
+import {PositionService} from 'src/app/services/position/position.service';
+import {ChangesOnService} from 'src/app/shared/services/changes-on/changes-on.service';
 import Page from "../../../../../models/dto/generics/response/Page";
-import {Dropdown} from "primeng/dropdown";
 
 @Component({
     selector: 'app-players-form',

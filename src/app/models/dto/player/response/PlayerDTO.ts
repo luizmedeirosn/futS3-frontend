@@ -1,4 +1,4 @@
-import { PositionMinDTO } from "../../position/response/PositionMinDTO";
+import PositionMinDTO from "../../position/response/PositionMinDTO";
 import PlayerParameterDataDTO from "../aux/PlayerParameterDataDTO";
 
 export default interface PlayerDTO {

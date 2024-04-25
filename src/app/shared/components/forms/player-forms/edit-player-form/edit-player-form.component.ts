@@ -9,7 +9,7 @@ import {UpdatePlayerDTO} from 'src/app/models/dto/player/request/UpdatePlayerDTO
 import PlayerDTO from 'src/app/models/dto/player/response/PlayerDTO';
 import PlayerMinDTO from 'src/app/models/dto/player/response/PlayerMinDTO';
 import PlayerParameterDataDTO from 'src/app/models/dto/player/aux/PlayerParameterDataDTO';
-import {PositionMinDTO} from 'src/app/models/dto/position/response/PositionMinDTO';
+import PositionMinDTO from 'src/app/models/dto/position/response/PositionMinDTO';
 import {EnumPlayerEventsCrud} from 'src/app/models/enums/EnumPlayerEventsCrud';
 import {ParameterService} from 'src/app/services/parameter/parameter.service';
 import {PlayerService} from 'src/app/services/player/player.service';
@@ -187,6 +187,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
             .subscribe({
                 next: (player: PlayerDTO) => {
                     this.selectedPlayer = player;
+
                     this.playerForm.setValue({
                         name: player.name,
                         team: player.team,
@@ -196,10 +197,10 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                     });
                     this.playerParametersScore = player.parameters;
 
+                    this.deleteIncludedParameters();
+
                     this.$viewTable.next(false);
                     this.$viewSelectedPicture.next(true);
-
-                    this.deleteIncludedPlayerParameters();
                 },
                 error: (err) => {
                     console.log(err);
@@ -207,16 +208,13 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
             });
     }
 
-    private deleteIncludedPlayerParameters(): void {
+    private deleteIncludedParameters(): void {
         const playerParametersScoreIds = this.playerParametersScore.map(p => p.id);
         this.parameters.forEach(
             p => playerParametersScoreIds.includes(p.id) && this.parametersOff.push(p)
         );
 
         this.parameters = this.parameters.filter(p => !playerParametersScoreIds.includes(p.id));
-
-        console.log(this.parametersOff);
-        console.log(this.parameters);
     }
 
     public handleBackAction(): void {

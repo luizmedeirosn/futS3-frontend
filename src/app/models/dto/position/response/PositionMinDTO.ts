@@ -1,6 +1,9 @@
-export interface PositionMinDTO {
+export default class PositionMinDTO {
 
-    id: number;
-    name: string;
-    description: string;
+    public constructor(
+        public id: number,
+        public name: string,
+        public description: string
+    ) {
+    }
 }
