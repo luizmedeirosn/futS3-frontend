@@ -96,14 +96,20 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
             );
     }
 
+    public handleViewFullDataPositionAction($event: ViewAction): void {
+        this.selectPosition($event.id);
+    }
+
     private selectPosition(id: number) {
         id && this.positionService.findById(id)
             .pipe(takeUntil(this.$destroy))
             .subscribe(
                 {
                     next: (position) => {
-                        position && (this.position = position);
+                        this.position = position;
                         this.positionService.changedPositionId = id;
+
+                        this.positionService.$positionView.next(true);
                     },
                     error: (err) => {
                         this.messageService.clear();
@@ -121,15 +127,31 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
             );
     }
 
-    public handleViewFullDataPositionAction($event: ViewAction): void {
-        if ($event) {
-            this.selectPosition($event.id);
-            this.positionService.$positionView.next(true);
-        }
-    }
-
     public handleBackAction(): void {
         this.positionService.$positionView.next(false);
+    }
+
+    public handleEditOrDeletePositionEvent($event: EditOrDeletePositionAction): void {
+        if ($event && $event.action === EnumPositionEventsCrud.EDIT) {
+            this.dynamicDialogRef = this.customDialogService.open(
+                EditPositionFormComponent,
+                {
+                    position: 'top',
+                    header: EnumPositionEventsCrud.EDIT.valueOf(),
+                    contentStyle: {overflow: 'auto'},
+                    baseZIndex: 10000,
+                    data: {
+                        $event: EnumPositionEventsCrud.EDIT,
+                        selectedPositionId: $event.id
+                    }
+                });
+
+            this.dynamicDialogRef.onClose
+                .pipe(takeUntil(this.$destroy))
+                .subscribe(() => this.selectPosition($event.id));
+        }
+
+        $event && $event.action === EnumPositionEventsCrud.DELETE && this.deletePositionConfirmation();
     }
 
     private deletePosition(id: number): void {
@@ -181,32 +203,8 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
         });
     }
 
-    public handleEditOrDeletePositionEvent($event: EditOrDeletePositionAction): void {
-        if ($event && $event.action === EnumPositionEventsCrud.EDIT) {
-            this.dynamicDialogRef = this.customDialogService.open(
-                EditPositionFormComponent,
-                {
-                    position: 'top',
-                    header: EnumPositionEventsCrud.EDIT.valueOf(),
-                    contentStyle: {overflow: 'auto'},
-                    baseZIndex: 10000,
-                    data: {
-                        $event: EnumPositionEventsCrud.EDIT,
-                        selectedPositionId: $event.id
-                    }
-                });
-
-            this.dynamicDialogRef.onClose
-                .pipe(takeUntil(this.$destroy))
-                .subscribe(() => this.selectPosition($event.id));
-        }
-
-        $event && $event.action === EnumPositionEventsCrud.DELETE && this.deletePositionConfirmation();
-    }
-
     public ngOnDestroy(): void {
         this.$destroy.next();
         this.$destroy.complete();
     }
-
 }

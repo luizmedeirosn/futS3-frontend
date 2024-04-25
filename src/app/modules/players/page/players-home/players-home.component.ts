@@ -138,10 +138,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
     }
 
     public handleViewFullDataPlayerAction($event: ViewAction): void {
-        if ($event) {
-            this.selectPlayer($event.id)
-            this.playerService.$playerView.next(true);
-        }
+        this.selectPlayer($event.id)
     }
 
     private selectPlayer(id: number): void {
@@ -150,8 +147,10 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
             .subscribe(
                 {
                     next: (player) => {
-                        player && (this.player = player);
+                        this.player = player;
                         this.playerService.changedPlayerId = id;
+
+                        this.playerService.$playerView.next(true);
                     },
                     error: (err) => {
                         this.messageService.add(

@@ -90,7 +90,6 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
                             this.page.pageNumber = gameModesPage.pageable.pageNumber;
                             this.page.pageSize = gameModesPage.pageable.pageSize;
                             this.page.totalElements = gameModesPage.totalElements;
-
                         },
                         error: (err) => {
                             this.messageService.clear();
@@ -119,11 +118,7 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
     }
 
     public handleViewFullDataGameModeAction($event: ViewAction): void {
-        if ($event) {
-            this.selectGameMode($event.id);
-            this.gameModeService.$gameModeView.next(true);
-        }
-
+        this.selectGameMode($event.id);
     }
 
     private selectGameMode(id: number) {
@@ -135,6 +130,8 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
                         this.gameMode = gameMode;
                         this.gameModeService.changedGameModeId = id;
                         this.gameModeService.gameModeIdInPreview = id;
+
+                        this.gameModeService.$gameModeView.next(true);
                     },
                     error: (err) => {
                         this.messageService.add(
