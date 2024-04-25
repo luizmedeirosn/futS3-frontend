@@ -132,7 +132,7 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
             .subscribe(
                 {
                     next: (gameMode) => {
-                        gameMode && (this.gameMode = gameMode);
+                        this.gameMode = gameMode;
                         this.gameModeService.changedGameModeId = id;
                         this.gameModeService.gameModeIdInPreview = id;
                     },

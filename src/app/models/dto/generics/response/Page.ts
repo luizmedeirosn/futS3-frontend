@@ -1,4 +1,5 @@
 export default interface Page<T> {
+
     content: T[];
     pageable: {
         pageNumber: number,
