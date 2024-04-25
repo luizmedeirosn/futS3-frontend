@@ -81,7 +81,7 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
         this.$loading.next(true);
 
         setTimeout(() => {
-            this.gameModeService.findAllWithPageable(pageable)
+            this.gameModeService.findAll(pageable)
                 .pipe(takeUntil(this.$destroy))
                 .subscribe(
                     {

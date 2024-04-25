@@ -15,6 +15,7 @@
             [loading] = "$loading.getValue()"
             [rowHover]="true"
             [showCurrentPageReport]="true"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} game modes"
             dataKey="id"
         >
             <ng-template pTemplate="header">
@@ -160,6 +161,8 @@
             <ng-template pTemplate="body" let-position>
                 <tr>
                     <td
+                        pTooltip="Click to edit"
+                        tooltipPosition="top"
                         style="cursor: pointer"
                         (click)="handleEditPositionEvent(position.id)"
                     >

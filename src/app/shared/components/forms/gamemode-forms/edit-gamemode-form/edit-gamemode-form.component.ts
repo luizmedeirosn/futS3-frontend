@@ -111,7 +111,7 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
         this.$loading.next(true);
 
         setTimeout(() => {
-            this.gameModeService.findAllWithPageable(pageable)
+            this.gameModeService.findAll(pageable)
                 .pipe(takeUntil(this.$destroy))
                 .subscribe({
                     next: (gameModesPage: Page<GameModeMinDTO>) => {

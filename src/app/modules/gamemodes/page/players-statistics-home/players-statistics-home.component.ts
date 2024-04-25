@@ -10,6 +10,7 @@ import {
     PlayersStatisticsViewComponent
 } from '../../components/players-statistics-view/players-statistics-view.component';
 import Page from "../../../../models/dto/generics/response/Page";
+import Pageable from "../../../../models/dto/generics/request/Pageable";
 
 @Component({
     selector: 'app-players-statistics-home',
@@ -50,7 +51,7 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
 
     private setGameModes(): void {
         this.messageService.clear();
-        this.gameModeService.findAll()
+        this.gameModeService.findAllWithTotalRecords()
             .pipe(takeUntil(this.destroy$))
             .subscribe(
                 {

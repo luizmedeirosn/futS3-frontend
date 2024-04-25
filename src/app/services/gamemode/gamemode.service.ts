@@ -30,13 +30,13 @@ export class GameModeService {
         this.$gameModeView.next(false);
     }
 
-    public findAll(): Observable<Page<GameModeMinDTO>> {
+    public findAllWithTotalRecords(): Observable<Page<GameModeMinDTO>> {
         return this.httpClient.get<Page<GameModeMinDTO>>(
             `${this.API_URL}/gamemodes`
         );
     }
 
-    public findAllWithPageable(pageable: Pageable): Observable<Page<GameModeMinDTO>> {
+    public findAll(pageable: Pageable): Observable<Page<GameModeMinDTO>> {
         let queryParams = '';
         queryParams += `?_pageNumber=${pageable.pageNumber}`;
         queryParams += `&_pageSize=${pageable.pageSize}`;

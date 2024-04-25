@@ -1,10 +1,13 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { GameModeMinDTO } from 'src/app/models/dto/gamemode/response/GameModeMinDTO';
-import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
-import { ChangesOnService } from 'src/app/shared/services/changes-on/changes-on.service';
+import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import {ConfirmationService, MessageService} from 'primeng/api';
+import {BehaviorSubject, Subject, takeUntil} from 'rxjs';
+import {GameModeMinDTO} from 'src/app/models/dto/gamemode/response/GameModeMinDTO';
+import {GameModeService} from 'src/app/services/gamemode/gamemode.service';
+import {ChangesOnService} from 'src/app/shared/services/changes-on/changes-on.service';
 import Page from "../../../../../models/dto/generics/response/Page";
+import Pageable from "../../../../../models/dto/generics/request/Pageable";
+import PageMin from "../../../../../models/dto/generics/response/PageMin";
+import {TableLazyLoadEvent} from "primeng/table";
 
 @Component({
     selector: 'app-delete-gamemode-form',
@@ -17,38 +20,68 @@ export class DeleteGamemodeFormComponent implements OnInit, OnDestroy {
     private readonly $destroy: Subject<void> = new Subject();
     private readonly toastLife: number = 2000;
 
-    public $loadingDeletion: BehaviorSubject<boolean> = new BehaviorSubject(false);
-    public gameModes!: GameModeMinDTO[];
+    public pageable!: Pageable;
+    public $loading!: BehaviorSubject<boolean>;
+    public page!: PageMin<GameModeMinDTO>;
 
     public constructor(
         private gameModeService: GameModeService,
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
         private changesOnService: ChangesOnService,
-    ) { }
-
-    public ngOnInit(): void {
-        this.setGameModesWithApi();
+    ) {
+        this.pageable = new Pageable('', 0, 10, "name", 1);
+        this.$loading = new BehaviorSubject(false);
+        this.page = {
+            content: [],
+            pageNumber: 0,
+            pageSize: 10,
+            totalElements: 0
+        };
     }
 
-    private setGameModesWithApi(): void {
-        this.gameModeService.findAll()
-            .pipe(takeUntil(this.$destroy))
-            .subscribe({
-                next: (gameModesPage: Page<GameModeMinDTO>) => {
-                    this.gameModes = gameModesPage.content;
-                },
-                error: (err) => {
-                    this.messageService.clear();
-                    this.messageService.add({
-                        severity: 'error',
-                        summary: 'Error',
-                        detail: 'Failed to retrieve the data!',
-                        life: this.toastLife
-                    });
-                    console.log(err);
-                }
-            });
+    public ngOnInit(): void {
+        this.page.totalElements === 0 && this.setGameModesWithApi(this.pageable);
+    }
+
+    private setGameModesWithApi(pageable: Pageable): void {
+        this.pageable = pageable;
+
+        this.$loading.next(true);
+
+        setTimeout(() => {
+            this.gameModeService.findAll(pageable)
+                .pipe(takeUntil(this.$destroy))
+                .subscribe({
+                    next: (gameModesPage: Page<GameModeMinDTO>) => {
+                        this.page.content = gameModesPage.content;
+                        this.page.pageNumber = gameModesPage.pageable.pageNumber;
+                        this.page.pageSize = gameModesPage.pageable.pageSize;
+                        this.page.totalElements = gameModesPage.totalElements;
+                    },
+                    error: (err) => {
+                        this.messageService.clear();
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: 'Error',
+                            detail: 'Failed to retrieve the data!',
+                            life: this.toastLife
+                        });
+                        console.log(err);
+                    }
+                });
+
+            this.$loading.next(false);
+        }, 500);
+    }
+
+    public handleChangePageAction($event: TableLazyLoadEvent) {
+        if ($event && $event.first !== undefined && $event.rows) {
+            const pageNumber = Math.ceil($event.first / $event.rows);
+            const pageSize = $event.rows !== 0 ? $event.rows : 10;
+
+            this.setGameModesWithApi(new Pageable(this.pageable.keyword, pageNumber, pageSize));
+        }
     }
 
     public handleDeleteGameModeEvent($event: GameModeMinDTO): void {
@@ -70,16 +103,16 @@ export class DeleteGamemodeFormComponent implements OnInit, OnDestroy {
 
     public handleDeleteGameModeAction($event: number): void {
         if ($event) {
-            this.$loadingDeletion.next(true);
             this.messageService.clear();
 
-            this.gameModeService.deleteById($event)
-                .pipe(takeUntil(this.$destroy))
-                .subscribe({
-                    next: () => {
-                        setTimeout(() => {
-                            this.$loadingDeletion.next(false);
-                            this.setGameModesWithApi();
+            this.$loading.next(true);
+
+            setTimeout(() => {
+                this.gameModeService.deleteById($event)
+                    .pipe(takeUntil(this.$destroy))
+                    .subscribe({
+                        next: () => {
+                            this.setGameModesWithApi(this.pageable);
 
                             this.messageService.clear();
                             this.messageService.add({
@@ -91,20 +124,22 @@ export class DeleteGamemodeFormComponent implements OnInit, OnDestroy {
 
                             this.gameModeService.gameModeIdInPreview = undefined;
                             this.changesOnService.setChangesOn(true);
-                        }, 1000);
-                    },
-                    error: (err) => {
-                        console.log(err);
-                        this.messageService.clear();
-                        this.messageService.add({
-                            severity: 'error',
-                            summary: 'Error',
-                            detail: 'Unable to delete the game mode!',
-                            life: 6000
-                        });
-                        this.changesOnService.setChangesOn(false);
-                    }
-                });
+                        },
+                        error: (err) => {
+                            console.log(err);
+                            this.messageService.clear();
+                            this.messageService.add({
+                                severity: 'error',
+                                summary: 'Error',
+                                detail: 'Unable to delete the game mode!',
+                                life: this.toastLife
+                            });
+                            this.changesOnService.setChangesOn(false);
+                        }
+                    });
+
+                this.$loading.next(true);
+            }, 500);
         }
 
     }
