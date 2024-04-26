@@ -43,7 +43,6 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
         private messageService: MessageService,
         private changeDetectorRef: ChangeDetectorRef,
         private confirmationService: ConfirmationService,
-
         private playerService: PlayerService,
         private customDialogService: CustomDialogService,
         private changesOnService: ChangesOnService,
@@ -108,8 +107,14 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                             this.page.pageNumber = playersPage.pageable.pageNumber;
                             this.page.pageSize = playersPage.pageable.pageSize;
                             this.page.totalElements = playersPage.totalElements;
+
+                            this.$loading.next(false);
                         },
                         error: (err) => {
+                            console.log(err);
+
+                            this.$loading.next(false);
+
                             this.messageService.clear();
                             err.status != 403 && this.messageService.add({
                                 severity: 'error',
@@ -117,11 +122,9 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                                 detail: 'Unexpected error!',
                                 life: this.messageLife
                             });
-                            console.log(err);
                         }
                     }
                 );
-            this.$loading.next(false);
         }, 500);
     }
 
