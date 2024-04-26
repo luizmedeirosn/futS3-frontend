@@ -58,6 +58,8 @@ export class DeleteGamemodeFormComponent implements OnInit, OnDestroy {
                         this.page.pageNumber = gameModesPage.pageable.pageNumber;
                         this.page.pageSize = gameModesPage.pageable.pageSize;
                         this.page.totalElements = gameModesPage.totalElements;
+
+                        this.$loading.next(true);
                     },
                     error: (err) => {
                         this.messageService.clear();
@@ -67,12 +69,13 @@ export class DeleteGamemodeFormComponent implements OnInit, OnDestroy {
                             detail: 'Failed to retrieve the data!',
                             life: this.toastLife
                         });
+
                         console.log(err);
+
+                        this.$loading.next(true);
                     }
                 });
-
-            this.$loading.next(false);
-        }, 500);
+            }, 500);
     }
 
     public handleChangePageAction($event: TableLazyLoadEvent) {
@@ -124,9 +127,10 @@ export class DeleteGamemodeFormComponent implements OnInit, OnDestroy {
 
                             this.gameModeService.gameModeIdInPreview = undefined;
                             this.changesOnService.setChangesOn(true);
+
+                            this.$loading.next(true);
                         },
                         error: (err) => {
-                            console.log(err);
                             this.messageService.clear();
                             this.messageService.add({
                                 severity: 'error',
@@ -134,11 +138,14 @@ export class DeleteGamemodeFormComponent implements OnInit, OnDestroy {
                                 detail: 'Unable to delete the game mode!',
                                 life: this.toastLife
                             });
+
+                            console.log(err);
+
                             this.changesOnService.setChangesOn(false);
+
+                            this.$loading.next(true);
                         }
                     });
-
-                this.$loading.next(true);
             }, 500);
         }
 
@@ -148,5 +155,4 @@ export class DeleteGamemodeFormComponent implements OnInit, OnDestroy {
         this.$destroy.next();
         this.$destroy.complete();
     }
-
 }

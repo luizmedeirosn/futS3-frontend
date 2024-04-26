@@ -90,6 +90,8 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
                             this.page.pageNumber = gameModesPage.pageable.pageNumber;
                             this.page.pageSize = gameModesPage.pageable.pageSize;
                             this.page.totalElements = gameModesPage.totalElements;
+
+                            this.$loading.next(false);
                         },
                         error: (err) => {
                             this.messageService.clear();
@@ -99,11 +101,13 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
                                 detail: 'Unexpected error!',
                                 life: this.messageLife
                             });
+
                             console.log(err);
+
+                            this.$loading.next(false);
                         }
                     }
                 );
-            this.$loading.next(false);
         }, 500);
     }
 

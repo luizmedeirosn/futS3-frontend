@@ -111,10 +111,6 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                             this.$loading.next(false);
                         },
                         error: (err) => {
-                            console.log(err);
-
-                            this.$loading.next(false);
-
                             this.messageService.clear();
                             err.status != 403 && this.messageService.add({
                                 severity: 'error',
@@ -122,6 +118,10 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                                 detail: 'Unexpected error!',
                                 life: this.messageLife
                             });
+
+                            console.log(err);
+
+                            this.$loading.next(false);
                         }
                     }
                 );
@@ -164,6 +164,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                                 life: this.messageLife
                             }
                         );
+
                         console.log(err);
                     }
                 }

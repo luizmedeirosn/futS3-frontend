@@ -65,6 +65,8 @@ export class DeletePlayerFormComponent implements OnInit, OnDestroy {
                             this.page.pageNumber = playersPage.pageable.pageNumber;
                             this.page.pageSize = playersPage.pageable.pageSize;
                             this.page.totalElements = playersPage.totalElements;
+
+                            this.$loading.next(false);
                         },
                         error: (err) => {
                             this.messageService.clear();
@@ -74,12 +76,13 @@ export class DeletePlayerFormComponent implements OnInit, OnDestroy {
                                 detail: 'Failed to retrieve the data!',
                                 life: this.toastLife
                             });
+
                             console.log(err);
+
+                            this.$loading.next(false);
                         }
                     }
                 );
-
-            this.$loading.next(false);
         }, 500);
     }
 
@@ -143,9 +146,9 @@ export class DeletePlayerFormComponent implements OnInit, OnDestroy {
                             this.playerService.changedPlayerId = undefined;
                             this.changesOnService.setChangesOn(true);
 
+                            this.$loading.next(true);
                         },
                         error: (err) => {
-                            console.log(err);
                             this.messageService.clear();
                             this.messageService.add({
                                 severity: 'error',
@@ -153,12 +156,13 @@ export class DeletePlayerFormComponent implements OnInit, OnDestroy {
                                 detail: 'Unable to delete the player!',
                                 life: this.toastLife
                             });
+                            console.log(err);
 
                             this.changesOnService.setChangesOn(false);
+
+                            this.$loading.next(true);
                         }
                     });
-
-                this.$loading.next(true);
             }, 500);
         }
     }

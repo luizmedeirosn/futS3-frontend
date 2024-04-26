@@ -113,6 +113,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                             this.page.pageSize = playersPage.pageable.pageSize;
                             this.page.totalElements = playersPage.totalElements;
 
+                            this.$loading.next(false);
                         },
                         error: (err) => {
                             this.messageService.clear();
@@ -122,12 +123,13 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                                 detail: 'Failed to retrieve the data!',
                                 life: this.toastLife
                             });
+
                             console.log(err);
+
+                            this.$loading.next(false);
                         }
                     }
                 );
-
-            this.$loading.next(false);
         }, 500);
     }
 

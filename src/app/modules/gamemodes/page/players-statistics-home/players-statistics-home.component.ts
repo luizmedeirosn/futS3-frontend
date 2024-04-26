@@ -152,7 +152,7 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
                             }
                         },
                         error: (err) => {
-                            this.getPlayersRankingForm.get('positiod').disable(true);
+                            this.messageService.clear();
                             this.messageService.add(
                                 {
                                     severity: 'error',
@@ -161,7 +161,10 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
                                     life: this.messageLife,
                                 }
                             );
+
                             console.log(err);
+
+                            this.getPlayersRankingForm.get('positiod').disable(true);
                         }
                     }
                 );
@@ -218,18 +221,15 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
                                 );
 
                             } else {
-                                this.$viewActivate.next(false);
-
-                                this.messageService.clear();
-                                this.messageService.add(
-                                    {
+                                this.messageService.add({
                                         key: 'warn-statistics-section',
                                         severity: 'warn',
                                         summary: 'Warn',
                                         detail: 'Unable to list a ranking. Please update this position or register and edit players!',
                                         life: 10000,
-                                    }
-                                );
+                                    });
+
+                                this.$viewActivate.next(false);
                             }
 
                             this.$playersRankingLoading.next(false);
@@ -237,12 +237,6 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
                             this.$chartRadarLoading.next(false);
                         },
                         error: (err) => {
-                            console.log(err)
-
-                            this.$playersRankingLoading.next(false);
-                            this.$chartBarLoading.next(false);
-                            this.$chartRadarLoading.next(false);
-
                             this.messageService.clear();
                             this.messageService.add({
                                 severity: 'error',
@@ -250,6 +244,12 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
                                 detail: '"Error retrieving the ranking!',
                                 life: this.messageLife
                             });
+
+                            console.log(err)
+
+                            this.$playersRankingLoading.next(false);
+                            this.$chartBarLoading.next(false);
+                            this.$chartRadarLoading.next(false);
                         }
                     });
             }, 500);
@@ -281,10 +281,6 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
                             this.$playersRankingLoading.next(false);
                         },
                         error: (err) => {
-                            console.log(err);
-
-                            this.$playersRankingLoading.next(false);
-
                             this.messageService.clear();
                             err.status != 403 && this.messageService.add({
                                 severity: 'error',
@@ -292,6 +288,10 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
                                 detail: 'Unexpected error!',
                                 life: this.messageLife
                             });
+
+                            console.log(err);
+
+                            this.$playersRankingLoading.next(false);
                         }
                     });
             }, 500);
@@ -323,10 +323,6 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
                             this.$chartBarLoading.next(false);
                         },
                         error: (err) => {
-                            console.log(err);
-
-                            this.$chartBarLoading.next(false);
-
                             this.messageService.clear();
                             err.status != 403 && this.messageService.add({
                                 severity: 'error',
@@ -334,6 +330,10 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
                                 detail: 'Unexpected error!',
                                 life: this.messageLife
                             });
+
+                            console.log(err);
+
+                            this.$chartBarLoading.next(false);
                         }
                     });
             }, 500);
@@ -365,10 +365,6 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
                             this.$chartRadarLoading.next(false);
                         },
                         error: (err) => {
-                            console.log(err);
-
-                            this.$chartRadarLoading.next(false);
-
                             this.messageService.clear();
                             err.status != 403 && this.messageService.add({
                                 severity: 'error',
@@ -376,6 +372,10 @@ export class PlayersStatisticsHomeComponent implements OnInit, OnDestroy {
                                 detail: 'Unexpected error!',
                                 life: this.messageLife
                             });
+
+                            console.log(err);
+
+                            this.$chartRadarLoading.next(false);
                         }
                     });
             }, 500);
