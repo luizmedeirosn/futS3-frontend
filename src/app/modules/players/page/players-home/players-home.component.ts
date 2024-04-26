@@ -35,7 +35,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
     public page!: PageMin<PlayerMinDTO>;
 
     public player!: PlayerFullDTO;
-    public playerView: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    public playerView: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     public dynamicDialogRef!: DynamicDialogRef;
 
@@ -58,8 +58,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        this.page.totalElements === 0 &&
-        this.setPlayersWithApi(this.pageable);
+        this.page.totalElements === 0 && this.setPlayersWithApi(this.pageable);
 
         this.playerService.$playerView
             .pipe(takeUntil(this.$destroy))
@@ -108,8 +107,14 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                             this.page.pageNumber = playersPage.pageable.pageNumber;
                             this.page.pageSize = playersPage.pageable.pageSize;
                             this.page.totalElements = playersPage.totalElements;
+
+                            this.$loading.next(false);
                         },
                         error: (err) => {
+                            console.log(err);
+
+                            this.$loading.next(false);
+
                             this.messageService.clear();
                             err.status != 403 && this.messageService.add({
                                 severity: 'error',
@@ -117,11 +122,9 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                                 detail: 'Unexpected error!',
                                 life: this.messageLife
                             });
-                            console.log(err);
                         }
                     }
                 );
-            this.$loading.next(false);
         }, 500);
     }
 
@@ -138,10 +141,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
     }
 
     public handleViewFullDataPlayerAction($event: ViewAction): void {
-        if ($event) {
-            this.selectPlayer($event.id)
-            this.playerService.$playerView.next(true);
-        }
+        this.selectPlayer($event.id)
     }
 
     private selectPlayer(id: number): void {
@@ -150,8 +150,10 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
             .subscribe(
                 {
                     next: (player) => {
-                        player && (this.player = player);
+                        this.player = player;
                         this.playerService.changedPlayerId = id;
+
+                        this.playerService.$playerView.next(true);
                     },
                     error: (err) => {
                         this.messageService.add(

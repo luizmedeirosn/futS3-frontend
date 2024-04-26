@@ -1,10 +1,10 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
-import { environment } from 'src/environments/environment.prod';
-import { PositionRequestDTO } from 'src/app/models/dto/position/request/PositionRequestDTO';
-import { PositionDTO } from 'src/app/models/dto/position/response/PositionDTO';
-import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable, Subject} from 'rxjs';
+import {environment} from 'src/environments/environment.prod';
+import {PositionRequestDTO} from 'src/app/models/dto/position/request/PositionRequestDTO';
+import {PositionDTO} from 'src/app/models/dto/position/response/PositionDTO';
+import PositionMinDTO from 'src/app/models/dto/position/response/PositionMinDTO';
 import Page from "../../models/dto/generics/response/Page";
 
 @Injectable({
@@ -30,15 +30,9 @@ export class PositionService {
         );
     }
 
-    public findAllWithParameters(): Observable<Array<PositionDTO>> {
-        return this.httpClient.get<Array<PositionDTO>>(
-            `${this.API_URL}/positions/parameters`
-        );
-    }
-
-    public findByIdWithParameters(id: number): Observable<PositionDTO> {
+    public findById(id: number): Observable<PositionDTO> {
         return this.httpClient.get<PositionDTO>(
-            `${this.API_URL}/positions/${id}/parameters`
+            `${this.API_URL}/positions/${id}`
         );
     }
 

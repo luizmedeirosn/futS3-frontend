@@ -61,12 +61,10 @@ export class DeletePlayerFormComponent implements OnInit, OnDestroy {
                 .subscribe(
                     {
                         next: (playersPage: Page<PlayerMinDTO>) => {
-                            if (playersPage.size > 0) {
-                                this.page.content = playersPage.content;
-                                this.page.pageNumber = playersPage.pageable.pageNumber;
-                                this.page.pageSize = playersPage.pageable.pageSize;
-                                this.page.totalElements = playersPage.totalElements;
-                            }
+                            this.page.content = playersPage.content;
+                            this.page.pageNumber = playersPage.pageable.pageNumber;
+                            this.page.pageSize = playersPage.pageable.pageSize;
+                            this.page.totalElements = playersPage.totalElements;
                         },
                         error: (err) => {
                             this.messageService.clear();
@@ -152,7 +150,8 @@ export class DeletePlayerFormComponent implements OnInit, OnDestroy {
                             this.messageService.add({
                                 severity: 'error',
                                 summary: 'Error',
-                                detail: 'Unable to delete the player!'
+                                detail: 'Unable to delete the player!',
+                                life: this.toastLife
                             });
 
                             this.changesOnService.setChangesOn(false);
@@ -160,7 +159,7 @@ export class DeletePlayerFormComponent implements OnInit, OnDestroy {
                     });
 
                 this.$loading.next(true);
-            }, 1000);
+            }, 500);
         }
     }
 

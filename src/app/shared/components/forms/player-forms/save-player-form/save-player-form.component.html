@@ -1,7 +1,7 @@
 <form
     [formGroup]="newPlayerForm"
     (ngSubmit)="handleSubmitSavePlayerForm()"
-    class="p-button-danger-focus flex flex-column align-content-center m-3 gap-4"
+    class="p-button-danger-focus flex flex-column align-content-center m-3 gap-5"
     enctype="multipart/form-data"
 >
     <span class="p-float-label mt-3">
@@ -12,7 +12,7 @@
             [minNumberCharacters]="3"
             [maxNumberCharacters]="30"
         ></app-form-control-alert>
-        <label>Name</label>
+        <label>Name <span class="text-red-600">*</span></label>
     </span>
 
     <span class="p-float-label">
@@ -28,11 +28,11 @@
             [minNumberCharacters]="3"
             [maxNumberCharacters]="30"
         ></app-form-control-alert>
-        <label>Team</label>
+        <label>Team <span class="text-red-600">*</span></label>
     </span>
 
     <div
-        class="flex justify-content-between align-items-center gap-3 pt-2 pb-2"
+        class="flex justify-content-between align-items-center gap-3"
     >
         <span class="p-float-label">
             <p-inputNumber
@@ -54,7 +54,6 @@
             <label>Height in centimeters</label>
         </span>
     </div>
-
     <div class="flex justify-content-between align-items-start gap-3">
         <span class="p-float-label mt-1">
             <p-dropdown
@@ -66,12 +65,10 @@
                 styleClass="w-20rem"
                 formControlName="position"
             ></p-dropdown>
-            <label>Select a position</label>
+            <label>Select a position <span class="text-red-600">*</span></label>
         </span>
 
-        <div
-            class="flex flex-column justify-content-start align-items-center w-full gap-1"
-        >
+        <div class="flex flex-column justify-content-start align-items-center w-full gap-1">
             <label
                 pRipple
                 pButton
@@ -223,7 +220,7 @@
                             icon="pi pi-trash"
                             [rounded]="true"
                             (onClick)="
-                                handleDeletePlayerParameter(parameter.name)
+                                handleDeletePlayerParameter(parameter.id)
                             "
                         ></p-button>
                     </td>

@@ -1,20 +1,18 @@
-import {
-    Component,
-    EventEmitter,
-    Input,
-    OnDestroy,
-    Output,
-    ViewEncapsulation,
-} from '@angular/core';
-import { DropdownChangeEvent } from 'primeng/dropdown';
-import { PaginatorState } from 'primeng/paginator';
-import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { GameModeMinDTO } from 'src/app/models/dto/gamemode/response/GameModeMinDTO';
-import { GameModePositionDTO } from 'src/app/models/dto/gamemode/response/GameModePositonDTO';
-import { PlayerFullScoreDTO } from 'src/app/models/dto/gamemode/response/PlayerFullScoreDTO';
-import { ParameterWeightDTO } from 'src/app/models/dto/position/data/ParameterWeightDTO';
-import { PositionDTO } from 'src/app/models/dto/position/response/PositionDTO';
-import { PositionService } from 'src/app/services/position/position.service';
+import {Component, EventEmitter, Input, OnDestroy, Output, ViewEncapsulation,} from '@angular/core';
+import {DropdownChangeEvent} from 'primeng/dropdown';
+import {PaginatorState} from 'primeng/paginator';
+import {BehaviorSubject, Subject, takeUntil} from 'rxjs';
+import {GameModeMinDTO} from 'src/app/models/dto/gamemode/response/GameModeMinDTO';
+import {GameModePositionDTO} from 'src/app/models/dto/gamemode/response/GameModePositonDTO';
+import {PlayerFullDataDTO} from 'src/app/models/dto/gamemode/response/PlayerFullDataDTO';
+import {ParameterWeightDTO} from 'src/app/models/dto/position/aux/ParameterWeightDTO';
+import {PositionDTO} from 'src/app/models/dto/position/response/PositionDTO';
+import {PositionService} from 'src/app/services/position/position.service';
+import {ViewAction} from "../../../../models/events/ViewAction";
+import GetPlayersRankingAction from "../../../../models/events/GetPlayersRankingAction";
+import Pageable from "../../../../models/dto/generics/request/Pageable";
+import PageMin from "../../../../models/dto/generics/response/PageMin";
+import ChangePageAction from "../../../../models/events/ChangePageAction";
 
 @Component({
     selector: 'app-players-statistics-view',
@@ -23,25 +21,36 @@ import { PositionService } from 'src/app/services/position/position.service';
     encapsulation: ViewEncapsulation.None,
 })
 export class PlayersStatisticsViewComponent implements OnDestroy {
-    private readonly destroy$: Subject<void> = new Subject();
+
+    private readonly $destroy: Subject<void> = new Subject();
 
     @Input() public gameModes!: GameModeMinDTO[];
     @Input() public selectedGameModePositions!: GameModePositionDTO[];
+
     @Input() public getPlayersRankingForm: any;
-    @Input() public viewActivate$!: BehaviorSubject<boolean>;
-    @Input() public playersRankingLoading$!: BehaviorSubject<boolean>;
-    @Input() public playersRanking!: PlayerFullScoreDTO[] | undefined;
-    @Input() public playersRankingPage!: PlayerFullScoreDTO[];
+    @Input() public $viewActivate!: BehaviorSubject<boolean>;
 
-    @Output() public findGameModePositionsEvent: EventEmitter<{ id: number }> =
-        new EventEmitter();
-    @Output() public getPlayersRankingEvent: EventEmitter<{
-        gameModeId: number;
-        positionId: number;
-    }> = new EventEmitter();
+    // Save page data as the index of the first element of the page
+    @Input() public playersRankingPageable!: Pageable;
+    @Input() public chartBarPageable!: Pageable;
+    @Input() public chartRadarPageable!: Pageable;
 
-    public playersRankingViewEnable$: BehaviorSubject<boolean> =
-        new BehaviorSubject(true);
+    @Input() public $playersRankingLoading!: BehaviorSubject<boolean>;
+    @Input() public $chartBarLoading!: BehaviorSubject<boolean>;
+    @Input() public $chartRadarLoading!: BehaviorSubject<boolean>;
+
+    @Input() public playersRankingPage!: PageMin<PlayerFullDataDTO>;
+    @Input() public chartBarPage!: PageMin<PlayerFullDataDTO>;
+    @Input() public chartRadarPage!: PageMin<PlayerFullDataDTO>;
+
+    @Output() public findGameModePositionsEvent: EventEmitter<ViewAction> = new EventEmitter<ViewAction>();
+    @Output() public getPlayersRankingEvent: EventEmitter<GetPlayersRankingAction> = new EventEmitter();
+
+    @Output() public changePagePlayersRankingEvent: EventEmitter<ChangePageAction> = new EventEmitter();
+    @Output() public changePageChartBarEvent: EventEmitter<ChangePageAction> = new EventEmitter();
+    @Output() public changePageChartRadarEvent: EventEmitter<ChangePageAction> = new EventEmitter();
+
+    public $playersRankingViewEnable: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
     private positionParameters!: ParameterWeightDTO[];
 
     private readonly documentStyle = getComputedStyle(document.documentElement);
@@ -57,44 +66,52 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
 
     public chartRadarData: any;
     public chartRadarOptions: any;
-    private readonly colors: Array<string> = ['--blue-600',
+    private readonly colors: Array<string> = [
+        '--blue-600',
         '--green-600',
-        '--red-600'];
+        '--red-600'
+    ];
 
-    public constructor(private positionService: PositionService) { }
+    public constructor(
+        private positionService: PositionService
+    ) {
+    }
 
     public handleFindGameModePositionsEvent($event: DropdownChangeEvent): void {
-        if (
-            $event &&
-            this.getPlayersRankingForm.value?.gameMode &&
-            this.gameModes.includes($event.value)
-        ) {
+        if ($event && this.getPlayersRankingForm.value?.gameMode && this.gameModes.includes($event.value)) {
+
             this.findGameModePositionsEvent.emit({
-                id: $event.value.id as number,
+                id: Number($event.value.id)
             });
+
         } else {
             this.getPlayersRankingForm.get('position').disable(true);
         }
     }
 
     public handleGetPlayersRankingEvent(): void {
-        const gameModeId = this.getPlayersRankingForm.value?.gameMode.id as
-            | number
-            | undefined;
-        const positionId = this.getPlayersRankingForm.value?.position
-            .positionId as number | undefined;
-        if (gameModeId && positionId) {
+        const gameModeIdInput = this.getPlayersRankingForm.value?.gameMode.id;
+        const positionIdInput = this.getPlayersRankingForm.value?.position.positionId;
+        if (gameModeIdInput && positionIdInput) {
+            const gameModeId: number = Number(gameModeIdInput);
+            const positionId: number = Number(positionIdInput)
+
             this.setPositionParameters(positionId);
-            this.playersRanking = undefined;
-            this.playersRankingLoading$.next(true);
-            this.getPlayersRankingEvent.emit({ gameModeId, positionId });
+
+            this.$playersRankingLoading.next(true);
+            this.$chartBarLoading.next(true);
+            this.$chartRadarLoading.next(true);
+
+            this.getPlayersRankingEvent.emit({
+                gameModeId, positionId
+            });
         }
     }
 
     private setPositionParameters(positionId: number): void {
         this.positionService
-            .findByIdWithParameters(positionId)
-            .pipe(takeUntil(this.destroy$))
+            .findById(positionId)
+            .pipe(takeUntil(this.$destroy))
             .subscribe({
                 next: (position: PositionDTO) => {
                     this.positionParameters = position.parameters;
@@ -106,202 +123,196 @@ export class PlayersStatisticsViewComponent implements OnDestroy {
     }
 
     public activeViewPlayersRanking() {
-        this.playersRankingViewEnable$.next(true);
+        this.$playersRankingViewEnable.next(true);
     }
 
     public desactiveViewPlayersRanking() {
-        this.playersRankingViewEnable$.next(false);
-        this.setChartBarData(0, 6);
-        this.setCharRadarData(0, 3);
+        this.reloadChartBarData();
+        this.reloadChartRadarData();
+
+        this.$playersRankingViewEnable.next(false);
     }
 
-    public onPageChangeRankingPage(event$: PaginatorState) {
-        if (
-            this.playersRanking &&
-            event$.first !== undefined &&
-            event$.rows !== undefined
-        ) {
-            const first = event$.first;
-            const rows = event$.rows;
-            this.playersRankingPage = this.playersRanking.filter(
-                (element, index) => index >= first && index < first + rows
-            );
+    public handleChangePlayersRankingPage($event: PaginatorState) {
+        if ($event && $event.first !== undefined && $event.rows !== undefined) {
+            const pageNumber: number = Math.ceil($event.first / $event.rows);
+            const pageSize: number = $event.rows !== 0 ? $event.rows : 5;
+
+            this.changePagePlayersRankingEvent.emit({
+                keyword: '',
+                pageNumber,
+                pageSize
+            });
         }
     }
 
-    public onPageChangeChartBar(event$: PaginatorState): void {
-        if (event$.first !== undefined && event$.rows !== undefined) {
-            this.setChartBarData(event$.first, event$.rows);
+    public handleChangePageChartBar($event: PaginatorState): void {
+        if ($event.first !== undefined && $event.rows !== undefined) {
+            const pageNumber: number = Math.ceil($event.first / $event.rows);
+            const pageSize: number = $event.rows !== 0 ? $event.rows : 5;
+
+            this.changePageChartBarEvent.emit({
+                keyword: '',
+                pageNumber,
+                pageSize
+            });
         }
     }
 
-    public onPageChangeChartRadar(event$: PaginatorState): void {
-        if (event$.first !== undefined && event$.rows !== undefined) {
-            this.setCharRadarData(event$.first, event$.rows);
+    public handleChangePageChartRadar($event: PaginatorState): void {
+        if ($event.first !== undefined && $event.rows !== undefined) {
+            const pageNumber: number = Math.ceil($event.first / $event.rows);
+            const pageSize: number = $event.rows !== 0 ? $event.rows : 3;
+
+            this.changePageChartRadarEvent.emit({
+                keyword: '',
+                pageNumber,
+                pageSize
+            });
         }
     }
 
-    public setChartBarData(
-        first: number,
-        rows: number,
-        playersRanking?: Array<PlayerFullScoreDTO>
-    ): void {
-        this.playersRanking = playersRanking ?? this.playersRanking;
+    public reloadChartBarData(): void {
+        const players: PlayerFullDataDTO[] = this.chartBarPage.content;
+        const playersNames: string[] = players.map(p => p.name);
+        const playersTotalScores: number[] = players.map(p => p.totalScore);
 
-        if (this.playersRanking) {
-            const playersNames = this.playersRanking
-                .filter(
-                    (element, index) => index >= first && index < first + rows
-                )
-                .map((value) => value.name);
-            const playersTotalScores = this.playersRanking
-                .filter(
-                    (element, index) => index >= first && index < first + rows
-                )
-                .map((value) => value.totalScore);
+        this.chartBarData = {
+            labels: playersNames,
+            datasets: [
+                {
+                    label: 'Total Score',
+                    backgroundColor:
+                        this.documentStyle.getPropertyValue('--green-600'),
+                    borderColor:
+                        this.documentStyle.getPropertyValue('--green-600'),
+                    data: playersTotalScores,
+                }
+            ],
+        };
 
-            this.chartBarData = {
-                labels: playersNames,
-                datasets: [
-                    {
-                        label: 'Total Score',
-                        backgroundColor:
-                            this.documentStyle.getPropertyValue('--green-600'),
-                        borderColor:
-                            this.documentStyle.getPropertyValue('--green-600'),
-                        data: playersTotalScores,
+        this.chartBarOptions = {
+            indexAxis: 'y',
+            maintainAspectRatio: false,
+            aspectRatio: 0.8,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: this.textColor,
+                        font: {
+                            weight: '500',
+                            size: 15,
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        color: this.textColorSecondary,
+                        font: {
+                            weight: '500',
+                            size: 15
+                        }
                     },
-                ],
-            };
-
-            this.chartBarOptions = {
-                indexAxis: 'y',
-                maintainAspectRatio: false,
-                aspectRatio: 0.8,
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: this.textColor,
-                            font: {
-                                weight: '500',
-                                size: 15,
-                            },
-                        },
-                    },
+                    grid: {
+                        color: this.surfaceBorder
+                    }
                 },
-                scales: {
-                    x: {
-                        ticks: {
-                            color: this.textColorSecondary,
-                            font: {
-                                weight: '500',
-                                size: 15,
-                            },
-                        },
-                        grid: {
-                            color: this.surfaceBorder,
-                        },
+                y: {
+                    ticks: {
+                        color: this.textColorSecondary,
+                        font: {
+                            weight: '500',
+                            size: 15
+                        }
                     },
-                    y: {
-                        ticks: {
-                            color: this.textColorSecondary,
-                            font: {
-                                weight: '500',
-                                size: 15,
-                            },
-                        },
-                        grid: {
-                            color: this.surfaceBorder,
-                        },
-                    },
-                },
-            };
-        }
-    }
-
-    public setCharRadarData(
-        first: number,
-        rows: number,
-        playersRanking?: Array<PlayerFullScoreDTO>
-    ): void {
-        this.playersRanking = playersRanking ?? this.playersRanking;
-
-        if (this.playersRanking) {
-            let datasets: any[] = [];
-            let colorIndex = 0;
-            for (let i = first + rows - 1; i >= first; i--, colorIndex++) {
-                const player = this.playersRanking.at(i);
-                if (player) {
-                    datasets.push({
-                        label: player.name,
-                        borderColor: this.documentStyle.getPropertyValue(
-                            String(this.colors.at(colorIndex))
-                        ),
-                        pointBackgroundColor:
-                            this.documentStyle.getPropertyValue(
-                                String(this.colors.at(colorIndex))
-                            ),
-                        pointBorderColor: this.documentStyle.getPropertyValue(
-                            String(this.colors.at(colorIndex))
-                        ),
-                        pointHoverBackgroundColor: this.textColor,
-                        pointHoverBorderColor:
-                            this.documentStyle.getPropertyValue(
-                                String(this.colors.at(colorIndex))
-                            ),
-                        pointBorderWidth: 3,
-                        data: player.parameters.map(
-                            (element) => element.score
-                        ),
-                    });
+                    grid: {
+                        color: this.surfaceBorder
+                    }
                 }
             }
-            datasets.reverse();
-            this.chartRadarData = {
-                labels: this.positionParameters.map((element) => element.name),
-                datasets,
-            };
+        };
+    }
 
-            this.chartRadarOptions = {
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: this.textColor,
-                            font: {
-                                weight: '500',
-                                size: 17,
-                            },
-                        },
-                    },
-                },
-                scales: {
-                    r: {
-                        grid: {
-                            color: this.documentStyle.getPropertyValue(
-                                '--gray-500'
-                            ),
-                        },
-                        pointLabels: {
-                            color: this.textColorSecondary,
-                            font: {
-                                size: 17,
-                            },
-                        },
-                        ticks: {
-                            color: this.textColorSecondary,
-                            font: {
-                                size: 17,
-                            },
-                        },
-                    },
-                },
-                backgroundColor: '#d0d0d001',
-            };
+    public reloadChartRadarData(): void {
+        const players: PlayerFullDataDTO[] = this.chartRadarPage.content;
+
+        let datasets: any[] = [];
+        let colorIndex = 0;
+        for (let i = players.length - 1; i >= 0; i--, colorIndex++) {
+            const player: PlayerFullDataDTO | undefined = players.at(i);
+            if (player) {
+                datasets.push({
+                    label: player.name,
+                    borderColor: this.documentStyle.getPropertyValue(
+                        String(this.colors.at(colorIndex))
+                    ),
+                    pointBackgroundColor:
+                        this.documentStyle.getPropertyValue(
+                            String(this.colors.at(colorIndex))
+                        ),
+                    pointBorderColor: this.documentStyle.getPropertyValue(
+                        String(this.colors.at(colorIndex))
+                    ),
+                    pointHoverBackgroundColor: this.textColor,
+                    pointHoverBorderColor:
+                        this.documentStyle.getPropertyValue(
+                            String(this.colors.at(colorIndex))
+                        ),
+                    pointBorderWidth: 3,
+                    data: player.parameters.map(
+                        (element) => element.score
+                    ),
+                });
+            }
         }
+
+        datasets.reverse();
+        this.chartRadarData = {
+            labels: this.positionParameters.map((element) => element.name),
+            datasets
+        };
+
+        this.chartRadarOptions = {
+            plugins: {
+                legend: {
+                    labels: {
+                        color: this.textColor,
+                        font: {
+                            weight: '500',
+                            size: 17
+                        }
+                    }
+                }
+            },
+            scales: {
+                r: {
+                    grid: {
+                        color: this.documentStyle.getPropertyValue(
+                            '--gray-500'
+                        )
+                    },
+                    pointLabels: {
+                        color: this.textColorSecondary,
+                        font: {
+                            size: 17
+                        }
+                    },
+                    ticks: {
+                        color: this.textColorSecondary,
+                        font: {
+                            size: 17
+                        }
+                    }
+                }
+            },
+            backgroundColor: '#d0d0d001',
+        };
     }
 
     public ngOnDestroy() {
-        this.destroy$.next();
-        this.destroy$.complete();
+        this.$destroy.next();
+        this.$destroy.complete();
     }
 }

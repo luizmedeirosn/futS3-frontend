@@ -11,7 +11,7 @@
             [minNumberCharacters]="3"
             [maxNumberCharacters]="30"
         ></app-form-control-alert>
-        <label for="formationName">Formation Name</label>
+        <label>Formation Name</label>
     </span>
 
     <span class="p-float-label">
@@ -27,7 +27,7 @@
             [minNumberCharacters]="0"
             [maxNumberCharacters]="2000"
         ></app-form-control-alert>
-        <label for="description">Description</label>
+        <label>Description</label>
     </span>
 
     <form
@@ -46,7 +46,7 @@
                     placeholder="Add a position"
                     formControlName="position"
                 ></p-dropdown>
-                <label for="position">Add a Position</label>
+                <label>Add a Position</label>
             </span>
             <p-button
                 [disabled]="!addPositionForm.valid"
@@ -81,7 +81,7 @@
         <p-table [value]="positionsOff" [rowHover]="true">
             <ng-template pTemplate="header">
                 <tr>
-                    <th id="" pSortableColumn="name">
+                    <th pSortableColumn="name">
                         <div
                             class="flex justify-content-between align-items-center"
                         >
@@ -107,10 +107,8 @@
                             </div>
                         </div>
                     </th>
-                    <th id="">
-                        <div
-                            class="flex justify-content-center align-items-center text-lg mt-1"
-                        >
+                    <th>
+                        <div class="flex justify-content-center align-items-center text-lg mt-1">
                             Delete
                         </div>
                     </th>
@@ -119,6 +117,8 @@
             <ng-template pTemplate="body" let-position>
                 <tr>
                     <td
+                        pTooltip="Click to edit"
+                        tooltipPosition="top"
                         style="cursor: pointer"
                         (click)="handleEditPositionEvent(position.id)"
                     >

@@ -1,19 +1,15 @@
-<div class="flex justify-content-center">
+<div class="flex justify-content-center mb-6">
     <p-card
         styleClass="fadein animation-duration-1000 animation-iteration-1 animation-ease-out"
-        [style]="{ width: '80rem' }"
+        [style]="{ width: '65rem' }"
         header="Statistics"
     >
         <form
             [formGroup]="getPlayersRankingForm"
             (ngSubmit)="handleGetPlayersRankingEvent()"
         >
-            <div
-                class="flex justify-content-center align-content-center align-items-center gap-3"
-            >
-                <div
-                    class="flex justify-content-between align-items-center gap-3"
-                >
+            <div class="flex justify-content-center align-content-center align-items-center gap-3">
+                <div class="flex justify-content-between align-items-center gap-3">
                     <span class="p-float-label">
                         <p-dropdown
                             [editable]="true"
@@ -27,11 +23,7 @@
                                 handleFindGameModePositionsEvent($event)
                             "
                         ></p-dropdown>
-                        <label
-                            for="float-label-gamemode"
-                            class="white-space-nowrap"
-                            >Select a Game Mode</label
-                        >
+                        <label class="white-space-nowrap">Select a Game Mode</label>
                     </span>
                     <span class="p-float-label">
                         <p-dropdown
@@ -43,11 +35,7 @@
                             placeholder="Select a Position"
                             inputId="float-label-position"
                         ></p-dropdown>
-                        <label
-                            for="float-label-position"
-                            class="white-space-nowrap"
-                            >Select a Position</label
-                        >
+                        <label class="white-space-nowrap">Select a Position</label>
                     </span>
                 </div>
                 <p-button
@@ -64,21 +52,19 @@
             </div>
         </form>
 
-        <div
-            class="flex justify-content-end align-items-center mt-3 mb-3 gap-2"
-        >
+        <div class="flex justify-content-end align-items-center mt-3 mb-3 gap-2">
             <p-button
                 [disabled]="
-                    playersRanking === undefined ||
-                    playersRanking.length === 0 ||
-                    (playersRankingLoading$ | async) ||
-                    (playersRankingViewEnable$ | async) === true
+                    !($viewActivate | async) ||
+                    ($playersRankingLoading | async) ||
+                    (($playersRankingViewEnable | async) === true)
                 "
                 styleClass="flex justify-content-center align-content-center align-items-end bg-red-800 hover:bg-red-900 border-none gap-2"
                 label="Ranking"
                 [raised]="true"
                 (onClick)="activeViewPlayersRanking()"
-                ><svg
+            >
+                <svg
                     xmlns="http://www.w3.org/2000/svg"
                     height="30"
                     width="30"
@@ -94,16 +80,16 @@
 
             <p-button
                 [disabled]="
-                    playersRanking === undefined ||
-                    playersRanking.length === 0 ||
-                    (playersRankingLoading$ | async) ||
-                    (playersRankingViewEnable$ | async) === false
+                    !($viewActivate | async) ||
+                    ($playersRankingLoading | async) ||
+                    !($playersRankingViewEnable | async)
                 "
                 styleClass="flex justify-content-center align-content-center align-items-end bg-purple-800 hover:bg-purple-900 border-none gap-2"
                 label="Insights"
                 [raised]="true"
                 (onClick)="desactiveViewPlayersRanking()"
-                ><svg
+            >
+                <svg
                     xmlns="http://www.w3.org/2000/svg"
                     height="28"
                     width="28"
@@ -118,28 +104,16 @@
             </p-button>
         </div>
 
-        <div
-            *ngIf="
-                (viewActivate$ | async) && (playersRankingViewEnable$ | async)
-            "
-        >
-            <div
-                *ngIf="
-                    playersRanking &&
-                    !(playersRankingLoading$ | async) &&
-                    playersRanking.length > 0
-                "
-            >
-                <p-accordion [multiple]="true" class="w-full">
+        <div *ngIf=" ($viewActivate | async) && ($playersRankingViewEnable | async)">
+            <div *ngIf="!($playersRankingLoading | async); else playersRankingLoading">
+                <p-accordion [multiple]="true" class="w-full" [style]="{ 'caret-color': 'transparent' }">
                     <div
-                        *ngFor="let player of playersRankingPage"
+                        *ngFor="let player of playersRankingPage.content"
                         class="mt-2 fadein animation-duration-300 animation-iteration-1"
                     >
                         <p-card
-                            styleClass="shadow-3 mt-3 ranking-text-accordion-header"
-                            header="Ranking #{{
-                                playersRanking.indexOf(player) + 1
-                            }}"
+                            styleClass="shadow-1 mt-3 ranking-text-accordion-header"
+                            header="Ranking #{{ (playersRankingPage.pageNumber * playersRankingPage.pageSize) + (playersRankingPage.content.indexOf(player) + 1) }}"
                             subheader="Total Score: {{ player.totalScore }}"
                         >
                             <p-accordionTab>
@@ -198,11 +172,13 @@
                                     </div>
                                     <p-table
                                         [value]="player.parameters"
+                                        [rows]="3"
+                                        [rowHover]="true"
+                                        [paginator]="true"
+                                        [showCurrentPageReport]="true"
+                                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} parameters"
                                         dataKey="id"
                                         styleClass="mt-3"
-                                        [rows]="3"
-                                        [paginator]="true"
-                                        [rowHover]="true"
                                     >
                                         <ng-template pTemplate="header">
                                             <tr>
@@ -229,15 +205,9 @@
                                                                 field="name"
                                                                 display="menu"
                                                                 matchMode="contains"
-                                                                [showMatchModes]="
-                                                                    false
-                                                                "
-                                                                [showOperator]="
-                                                                    false
-                                                                "
-                                                                [showAddButton]="
-                                                                    false
-                                                                "
+                                                                [showMatchModes]="false"
+                                                                [showOperator]="false"
+                                                                [showAddButton]="false"
                                                                 style="
                                                                     height: 1.7rem;
                                                                 "
@@ -286,84 +256,80 @@
                     </div>
                 </p-accordion>
                 <p-paginator
-                    (onPageChange)="onPageChangeRankingPage($event)"
-                    [first]="0"
-                    [rows]="6"
-                    [totalRecords]="playersRanking.length || 0"
+                    [first]="playersRankingPageable.indexFirstRow"
+                    [rows]="playersRankingPageable.pageSize"
+                    [totalRecords]="playersRankingPage.totalElements"
+                    [showCurrentPageReport]="true"
+                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} players"
+                    (onPageChange)="handleChangePlayersRankingPage($event)"
                 ></p-paginator>
             </div>
-            <div
-                *ngIf="!playersRanking || (playersRankingLoading$ | async)"
-                class="fadein animation-duration-1000 animation-iteration-1 animation-ease-out"
-            >
+            <ng-template #playersRankingLoading
+                         class="fadein animation-duration-1000 animation-iteration-1 animation-ease-out">
                 <p-skeleton styleClass="mt-3 h-10rem"></p-skeleton>
                 <p-skeleton styleClass="mt-3 h-10rem"></p-skeleton>
                 <p-skeleton styleClass="mt-3 h-10rem"></p-skeleton>
                 <p-skeleton styleClass="mt-3 h-10rem"></p-skeleton>
                 <p-skeleton styleClass="mt-3 h-10rem"></p-skeleton>
-            </div>
+            </ng-template>
         </div>
 
         <div
-            *ngIf="
-                (viewActivate$ | async) && !(playersRankingViewEnable$ | async)
-            "
+            *ngIf="($viewActivate | async) && !($playersRankingViewEnable | async)"
             class="insights-section"
         >
-            <div
-                *ngIf="
-                    playersRanking &&
-                    !(playersRankingLoading$ | async) &&
-                    playersRanking.length > 0
-                "
-                class="flex justify-content-between align-content-center mt-3 gap-3"
-            >
+            <div class="flex flex-column align-items-center align-content-center justify-content-center mt-3 gap-3">
                 <p-card
-                    styleClass="shadow-3 flex flex-column align-content-center"
-                    [style]="{ width: '38rem' }"
                     header="Total Score for Player"
+                    styleClass="shadow-1 flex flex-column align-items-center align-content-center justify-content-center"
+                    [style]="{ width: '60rem'}"
                 >
                     <p-chart
+                        *ngIf="!($chartBarLoading | async); else chartBarLoading"
                         type="bar"
                         [data]="chartBarData"
                         [options]="chartBarOptions"
-                        width="100%"
-                        height="35rem"
+                        width="55rem"
+                        height="20rem"
                     ></p-chart>
                     <p-paginator
-                        (onPageChange)="onPageChangeChartBar($event)"
-                        [first]="0"
-                        [rows]="5"
-                        [totalRecords]="playersRanking.length"
+                        [rows]="chartBarPageable.pageSize"
+                        [first]="chartBarPageable.indexFirstRow"
+                        [totalRecords]="chartBarPage.totalElements"
+                        [showCurrentPageReport]="true"
+                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} players"
+                        (onPageChange)="handleChangePageChartBar($event)"
                     ></p-paginator>
                 </p-card>
                 <p-card
-                    styleClass="shadow-3 flex flex-column align-content-center"
-                    [style]="{ width: '38rem' }"
+                    styleClass="shadow-1 flex flex-column align-items-center align-content-center justify-content-center"
+                    [style]="{ width: '60rem'}"
                     header="Parameters for Player"
                 >
                     <p-chart
+                        *ngIf="!($chartRadarLoading | async); else chartRadarLoading"
                         type="radar"
                         [data]="chartRadarData"
                         [options]="chartRadarOptions"
-                        width="100%"
+                        width="55rem"
                         height="35rem"
                     ></p-chart>
                     <p-paginator
-                        (onPageChange)="onPageChangeChartRadar($event)"
-                        [first]="0"
-                        [rows]="3"
-                        [totalRecords]="playersRanking.length"
+                        [first]="chartRadarPageable.indexFirstRow"
+                        [rows]="chartRadarPageable.pageSize"
+                        [totalRecords]="chartRadarPage.totalElements"
+                        [showCurrentPageReport]="true"
+                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} players"
+                        (onPageChange)="handleChangePageChartRadar($event)"
                     ></p-paginator>
                 </p-card>
             </div>
-            <div
-                *ngIf="!playersRanking || (playersRankingLoading$ | async)"
-                class="flex justify-content-center align-items-center mt-3 gap-3 fadein animation-duration-1000 animation-iteration-1 animation-ease-out"
-            >
-                <p-skeleton width="38rem" height="38rem"></p-skeleton>
-                <p-skeleton width="38rem" height="38rem"></p-skeleton>
-            </div>
+            <ng-template #chartBarLoading>
+                <p-skeleton width="55rem" height="20rem"></p-skeleton>
+            </ng-template>
+            <ng-template #chartRadarLoading>
+                <p-skeleton width="55rem" height="35rem"></p-skeleton>
+            </ng-template>
         </div>
     </p-card>
 </div>

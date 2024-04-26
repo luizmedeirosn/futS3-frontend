@@ -1,17 +1,17 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { MessageService } from 'primeng/api';
-import { DynamicDialogRef } from 'primeng/dynamicdialog';
-import { Subject, takeUntil } from 'rxjs';
-import { GameModeRequestDTO } from 'src/app/models/dto/gamemode/request/GameModeRequestDTO';
-import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
-import { EnumPositionEventsCrud } from 'src/app/models/enums/EnumPositionEventsCrud';
-import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
-import { PositionService } from 'src/app/services/position/position.service';
-import { SavePositionFormComponent } from '../../position-forms/save-position-form/save-position-form.component';
-import { CustomDialogService } from '../../../../services/custom-dialog/custom-dialog.service';
-import { EditPositionFormComponent } from '../../position-forms/edit-position-form/edit-position-form.component';
-import { ChangesOnService } from 'src/app/shared/services/changes-on/changes-on.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {FormBuilder, Validators} from '@angular/forms';
+import {MessageService} from 'primeng/api';
+import {DynamicDialogRef} from 'primeng/dynamicdialog';
+import {Subject, takeUntil} from 'rxjs';
+import {GameModeRequestDTO} from 'src/app/models/dto/gamemode/request/GameModeRequestDTO';
+import PositionMinDTO from 'src/app/models/dto/position/response/PositionMinDTO';
+import {EnumPositionEventsCrud} from 'src/app/models/enums/EnumPositionEventsCrud';
+import {GameModeService} from 'src/app/services/gamemode/gamemode.service';
+import {PositionService} from 'src/app/services/position/position.service';
+import {SavePositionFormComponent} from '../../position-forms/save-position-form/save-position-form.component';
+import {CustomDialogService} from '../../../../services/custom-dialog/custom-dialog.service';
+import {EditPositionFormComponent} from '../../position-forms/edit-position-form/edit-position-form.component';
+import {ChangesOnService} from 'src/app/shared/services/changes-on/changes-on.service';
 import Page from "../../../../../models/dto/generics/response/Page";
 
 @Component({

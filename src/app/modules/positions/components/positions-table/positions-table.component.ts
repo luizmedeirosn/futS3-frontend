@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { PositionMinDTO } from 'src/app/models/dto/position/response/PositionMinDTO';
-import { ViewAction } from 'src/app/models/events/ViewAction';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import PositionMinDTO from 'src/app/models/dto/position/response/PositionMinDTO';
+import {ViewAction} from 'src/app/models/events/ViewAction';
 
 @Component({
     selector: 'app-positions-table',
@@ -24,5 +24,4 @@ export class PositionsTableComponent {
             }
         );
     }
-
 }

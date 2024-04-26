@@ -6,5 +6,4 @@ export interface FullDataPosition {
     name: string;
     description: string;
     parameters: Array<ParameterWeightDTO>;
-
 }

@@ -1,4 +1,4 @@
-import { ParameterWeightDTO } from "../data/ParameterWeightDTO";
+import { ParameterWeightDTO } from "../aux/ParameterWeightDTO";
 
 export interface PositionRequestDTO {
 
