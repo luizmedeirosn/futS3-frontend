@@ -110,6 +110,7 @@ export class DeleteGamemodeFormComponent implements OnInit, OnDestroy {
 
             this.$loading.next(true);
 
+
             setTimeout(() => {
                 this.gameModeService.deleteById($event)
                     .pipe(takeUntil(this.$destroy))
