@@ -127,6 +127,7 @@ export class DeletePlayerFormComponent implements OnInit, OnDestroy {
         if ($event) {
             this.messageService.clear();
 
+            // Locks the table until deletion is completed
             this.$loading.next(true);
 
             setTimeout(() => {
@@ -134,6 +135,11 @@ export class DeletePlayerFormComponent implements OnInit, OnDestroy {
                     .pipe(takeUntil(this.$destroy))
                     .subscribe({
                         next: () => {
+                            this.playerService.changedPlayerId = undefined;
+                            this.changesOnService.setChangesOn(true);
+
+                            this.$loading.next(false);
+
                             this.setPlayersWithApi(this.pageable);
 
                             this.messageService.clear();
@@ -142,11 +148,6 @@ export class DeletePlayerFormComponent implements OnInit, OnDestroy {
                                 summary: 'Success',
                                 detail: 'Player deleted successfully!'
                             });
-
-                            this.playerService.changedPlayerId = undefined;
-                            this.changesOnService.setChangesOn(true);
-
-                            this.$loading.next(true);
                         },
                         error: (err) => {
                             this.messageService.clear();
@@ -160,7 +161,7 @@ export class DeletePlayerFormComponent implements OnInit, OnDestroy {
 
                             this.changesOnService.setChangesOn(false);
 
-                            this.$loading.next(true);
+                            this.$loading.next(false);
                         }
                     });
             }, 500);

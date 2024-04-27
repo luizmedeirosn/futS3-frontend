@@ -1,4 +1,4 @@
-import {Component, ViewChild, ViewEncapsulation} from '@angular/core';
+import {Component, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
 import {MessageService} from 'primeng/api';
 import {DynamicDialogConfig} from 'primeng/dynamicdialog';
@@ -22,7 +22,7 @@ import Page from "../../../../../models/dto/generics/response/Page";
     styleUrls: ['./edit-position-form.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
-export class EditPositionFormComponent {
+export class EditPositionFormComponent implements OnInit {
 
     private readonly $destroy: Subject<void> = new Subject();
     private readonly toastLife: number = 2000;
@@ -71,7 +71,7 @@ export class EditPositionFormComponent {
     }
 
     private setPositionsWithApi(): void {
-        this.positionService.findAll()
+        this.positionService.findAllWithTotalRecords()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
                 next: (positionsPage: Page<PositionMinDTO>) => {

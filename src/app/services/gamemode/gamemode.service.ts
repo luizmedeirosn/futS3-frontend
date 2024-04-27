@@ -16,7 +16,7 @@ export class GameModeService {
 
     private readonly API_URL: string = environment.API_URL;
 
-    public $gameModeView: Subject<boolean> = new Subject();
+    public $gameModeView!: Subject<boolean>;
 
     public changedGameModeId!: number | undefined;
     public gameModeIdInPreview!: number | undefined;
@@ -25,6 +25,7 @@ export class GameModeService {
     public constructor(
         private httpClient: HttpClient
     ) {
+        this.$gameModeView= new Subject<boolean>();
         this.$gameModeView.next(false);
     }
 

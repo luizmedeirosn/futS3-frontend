@@ -32,7 +32,7 @@ export class DeletePositionFormComponent implements OnInit, OnDestroy {
     }
 
     private setPositionsWithApi(): void {
-        this.positionService.findAll()
+        this.positionService.findAllWithTotalRecords()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
                 next: (positionsPage: Page<PositionMinDTO>) => {

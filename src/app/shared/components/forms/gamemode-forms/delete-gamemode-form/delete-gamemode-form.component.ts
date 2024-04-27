@@ -59,7 +59,7 @@ export class DeleteGamemodeFormComponent implements OnInit, OnDestroy {
                         this.page.pageSize = gameModesPage.pageable.pageSize;
                         this.page.totalElements = gameModesPage.totalElements;
 
-                        this.$loading.next(true);
+                        this.$loading.next(false);
                     },
                     error: (err) => {
                         this.messageService.clear();
@@ -72,7 +72,7 @@ export class DeleteGamemodeFormComponent implements OnInit, OnDestroy {
 
                         console.log(err);
 
-                        this.$loading.next(true);
+                        this.$loading.next(false);
                     }
                 });
             }, 500);
@@ -115,6 +115,11 @@ export class DeleteGamemodeFormComponent implements OnInit, OnDestroy {
                     .pipe(takeUntil(this.$destroy))
                     .subscribe({
                         next: () => {
+                            this.gameModeService.gameModeIdInPreview = undefined;
+                            this.changesOnService.setChangesOn(true);
+
+                            this.$loading.next(false);
+
                             this.setGameModesWithApi(this.pageable);
 
                             this.messageService.clear();
@@ -124,11 +129,6 @@ export class DeleteGamemodeFormComponent implements OnInit, OnDestroy {
                                 detail: 'Game mode deleted successfully!',
                                 life: this.toastLife
                             });
-
-                            this.gameModeService.gameModeIdInPreview = undefined;
-                            this.changesOnService.setChangesOn(true);
-
-                            this.$loading.next(true);
                         },
                         error: (err) => {
                             this.messageService.clear();
@@ -143,7 +143,7 @@ export class DeleteGamemodeFormComponent implements OnInit, OnDestroy {
 
                             this.changesOnService.setChangesOn(false);
 
-                            this.$loading.next(true);
+                            this.$loading.next(false);
                         }
                     });
             }, 500);

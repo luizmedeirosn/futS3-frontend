@@ -1,7 +1,7 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {DynamicDialogRef} from 'primeng/dynamicdialog';
-import {Subject, takeUntil} from 'rxjs';
+import {BehaviorSubject, Subject, takeUntil} from 'rxjs';
 import {FullDataPosition} from 'src/app/models/dto/position/aux/FullDataPosition';
 import {EditOrDeletePositionAction} from 'src/app/models/events/EditOrDeletePositionAction';
 import PositionMinDTO from 'src/app/models/dto/position/response/PositionMinDTO';
@@ -14,6 +14,9 @@ import {CustomDialogService} from 'src/app/shared/services/custom-dialog/custom-
 import {ChangesOnService} from '../../../../shared/services/changes-on/changes-on.service';
 import {ViewAction} from 'src/app/models/events/ViewAction';
 import Page from "../../../../models/dto/generics/response/Page";
+import Pageable from "../../../../models/dto/generics/request/Pageable";
+import PageMin from "../../../../models/dto/generics/response/PageMin";
+import ChangePageAction from "../../../../models/events/ChangePageAction";
 
 @Component({
     selector: 'app-positions-home',
@@ -25,44 +28,46 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
     private readonly $destroy: Subject<void> = new Subject();
     private readonly messageLife: number = 3000;
 
-    public positions!: PositionMinDTO[];
+    public pageable!: Pageable;
+    public $loading!: BehaviorSubject<boolean>;
+    public page!: PageMin<PositionMinDTO>;
 
-    public positionView!: boolean;
+    // The view is also controlled by the menu bar, so the observable is necessary. Use case: The view screen is active and the 'Find All' is triggered
+    public $positionView!: Subject<boolean>;
+
     public position!: FullDataPosition;
 
     private dynamicDialogRef!: DynamicDialogRef;
 
     public constructor(
-        private positionService: PositionService,
         private messageService: MessageService,
-        private customDialogService: CustomDialogService,
         private confirmationService: ConfirmationService,
+        private changeDetectorRef: ChangeDetectorRef,
+        private positionService: PositionService,
+        private customDialogService: CustomDialogService,
         private changesOnService: ChangesOnService,
     ) {
+        this.pageable = new Pageable('', 0, 5)
+        this.$loading = new BehaviorSubject(false);
+        this.page = {
+            content: [],
+            pageNumber: 0,
+            pageSize: 5,
+            totalElements: 0
+        };
+
+        this.$positionView = this.positionService.$positionView;
     }
 
     public ngOnInit(): void {
-        this.setPositionsWithApi();
-
-        this.positionService.$positionView
-            .pipe(takeUntil(this.$destroy))
-            .subscribe(
-                {
-                    next: (positionView) => {
-                        this.positionView = positionView;
-                    },
-                    error: (err) => {
-                        console.log(err);
-                    }
-                }
-            );
+        this.page.totalElements === 0 && this.setPositionsWithApi(this.pageable);
 
         this.changesOnService.getChangesOn()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
                 next: (changesOn: boolean) => {
                     if (changesOn) {
-                        this.setPositionsWithApi();
+                        this.setPositionsWithApi(this.pageable);
 
                         const changedPositionId: number | undefined = this.positionService.changedPositionId;
                         changedPositionId ? this.selectPosition(changedPositionId) : this.handleBackAction();
@@ -74,26 +79,50 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
             });
     }
 
-    private setPositionsWithApi(): void {
-        this.positionService.findAll()
-            .pipe(takeUntil(this.$destroy))
-            .subscribe(
-                {
-                    next: (positionsPage: Page<PositionMinDTO>) => {
-                        this.positions = positionsPage.content;
-                    },
-                    error: (err) => {
-                        this.messageService.clear();
-                        err.status != 403 && this.messageService.add({
-                            severity: 'error',
-                            summary: 'Error',
-                            detail: 'Unexpected error!',
-                            life: this.messageLife
-                        });
-                        console.log(err);
+    private setPositionsWithApi(pageable: Pageable): void {
+        this.pageable = pageable;
+
+        this.$loading.next(true);
+
+        setTimeout(() => {
+            this.positionService.findAll(pageable)
+                .pipe(takeUntil(this.$destroy))
+                .subscribe(
+                    {
+                        next: (positionsPage: Page<PositionMinDTO>) => {
+                            this.page.content = positionsPage.content;
+                            this.page.pageNumber = positionsPage.pageable.pageNumber;
+                            this.page.pageSize = positionsPage.pageable.pageSize;
+                            this.page.totalElements = positionsPage.totalElements;
+
+                            this.$loading.next(false);
+                        },
+                        error: (err) => {
+                            this.messageService.clear();
+                            err.status != 403 && this.messageService.add({
+                                severity: 'error',
+                                summary: 'Error',
+                                detail: 'Unexpected error!',
+                                life: this.messageLife
+                            });
+
+                            console.log(err);
+
+                            this.$loading.next(false);
+                        }
                     }
-                }
-            );
+                );
+        }, 500);
+    }
+
+    public handleChangePageAction($event: ChangePageAction) {
+        if ($event && $event.keyword !== undefined) {
+            this.setPositionsWithApi(new Pageable(
+                $event.keyword,
+                $event.pageNumber,
+                $event.pageSize,
+            ));
+        }
     }
 
     public handleViewFullDataPositionAction($event: ViewAction): void {
@@ -113,14 +142,13 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
                     },
                     error: (err) => {
                         this.messageService.clear();
-                        this.messageService.add(
-                            {
-                                severity: 'error',
-                                summary: 'Error',
-                                detail: 'Unable to access the position!',
-                                life: this.messageLife
-                            }
-                        );
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: 'Error',
+                            detail: 'Unable to access the position!',
+                            life: this.messageLife
+                        });
+
                         console.log(err);
                     }
                 }
@@ -128,7 +156,12 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
     }
 
     public handleBackAction(): void {
+        // Disable the selection of a game mode set in getChangesOn when the back button is pressed
+        this.positionService.changedPositionId = undefined;
+
+        // Do not change the order of actions
         this.positionService.$positionView.next(false);
+        this.changeDetectorRef.detectChanges();
     }
 
     public handleEditOrDeletePositionEvent($event: EditOrDeletePositionAction): void {
