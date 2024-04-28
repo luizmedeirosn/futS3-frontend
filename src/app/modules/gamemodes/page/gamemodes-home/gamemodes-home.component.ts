@@ -32,8 +32,10 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
     public $loading!: BehaviorSubject<boolean>;
     public page!: PageMin<GameModeMinDTO>;
 
+    // The view is also controlled by the menu bar, so the observable is necessary. Use case: The view screen is active and the 'Find All' is triggered
+    public $gameModeView!: Subject<boolean>;
+
     public gameMode!: GameModeDTO;
-    public gameModeView: Subject<boolean> = this.gameModeService.$gameModeView;
 
     private dynamicDialogRef!: DynamicDialogRef;
 
@@ -41,12 +43,11 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
         private messageService: MessageService,
         private changeDetectorRef: ChangeDetectorRef,
         private confirmationService: ConfirmationService,
-
         private gameModeService: GameModeService,
         private customDialogService: CustomDialogService,
         private changesOnService: ChangesOnService,
     ) {
-        this.pageable = new Pageable('', 0, 5, "name", 1);
+        this.pageable = new Pageable('', 0, 5);
         this.$loading = new BehaviorSubject(false);
         this.page = {
             content: [],
@@ -54,6 +55,8 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
             pageSize: 5,
             totalElements: 0
         };
+
+        this.$gameModeView = this.gameModeService.$gameModeView;
     }
 
     public ngOnInit(): void {
@@ -78,6 +81,7 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
 
     private setGameModesWithApi(pageable: Pageable): void {
         this.pageable = pageable;
+
         this.$loading.next(true);
 
         setTimeout(() => {
@@ -90,6 +94,8 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
                             this.page.pageNumber = gameModesPage.pageable.pageNumber;
                             this.page.pageSize = gameModesPage.pageable.pageSize;
                             this.page.totalElements = gameModesPage.totalElements;
+
+                            this.$loading.next(false);
                         },
                         error: (err) => {
                             this.messageService.clear();
@@ -99,11 +105,13 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
                                 detail: 'Unexpected error!',
                                 life: this.messageLife
                             });
+
                             console.log(err);
+
+                            this.$loading.next(false);
                         }
                     }
                 );
-            this.$loading.next(false);
         }, 500);
     }
 
@@ -134,14 +142,13 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
                         this.gameModeService.$gameModeView.next(true);
                     },
                     error: (err) => {
-                        this.messageService.add(
-                            {
-                                severity: 'error',
-                                summary: 'Error',
-                                detail: 'Unable to access the game mode!',
-                                life: this.messageLife
-                            }
-                        );
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: 'Error',
+                            detail: 'Unable to access the game mode!',
+                            life: this.messageLife
+                        });
+
                         console.log(err);
                     }
                 }
@@ -149,9 +156,35 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
     }
 
     public handleBackAction() {
+        // Disable the selection of a game mode set in getChangesOn when the back button is pressed
+        this.gameModeService.gameModeIdInPreview = undefined;
+
         // Do not change the order of actions
         this.gameModeService.$gameModeView.next(false);
         this.changeDetectorRef.detectChanges();
+    }
+
+    public handleEditOrDeleteGameModeEvent($event: EditOrDeleteGameModeAction): void {
+        if ($event && $event.action === EnumGameModeEventsCrud.EDIT) {
+            this.dynamicDialogRef = this.customDialogService.open(
+                EditGamemodeFormComponent,
+                {
+                    position: 'top',
+                    header: EnumGameModeEventsCrud.EDIT.valueOf(),
+                    contentStyle: {overflow: 'auto'},
+                    baseZIndex: 10000,
+                    data: {
+                        $event: EnumGameModeEventsCrud.EDIT,
+                        selectedGameModeId: $event.id
+                    }
+                });
+
+            this.dynamicDialogRef.onClose
+                .pipe(takeUntil(this.$destroy))
+                .subscribe(() => this.selectGameMode($event.id));
+        }
+
+        $event && $event.action === EnumGameModeEventsCrud.DELETE && this.deleteGameModeConfirmation();
     }
 
     private deleteGameMode(id: number): void {
@@ -202,29 +235,6 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
             rejectIcon: "none",
             accept: () => this.deleteGameMode(this.gameMode.id)
         });
-    }
-
-    public handleEditOrDeleteGameModeEvent($event: EditOrDeleteGameModeAction): void {
-        if ($event && $event.action === EnumGameModeEventsCrud.EDIT) {
-            this.dynamicDialogRef = this.customDialogService.open(
-                EditGamemodeFormComponent,
-                {
-                    position: 'top',
-                    header: EnumGameModeEventsCrud.EDIT.valueOf(),
-                    contentStyle: {overflow: 'auto'},
-                    baseZIndex: 10000,
-                    data: {
-                        $event: EnumGameModeEventsCrud.EDIT,
-                        selectedGameModeId: $event.id
-                    }
-                });
-
-            this.dynamicDialogRef.onClose
-                .pipe(takeUntil(this.$destroy))
-                .subscribe(() => this.selectGameMode($event.id));
-        }
-
-        $event && $event.action === EnumGameModeEventsCrud.DELETE && this.deleteGameModeConfirmation();
     }
 
     public ngOnDestroy(): void {

@@ -54,7 +54,7 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        this.positionService.findAll()
+        this.positionService.findAllWithTotalRecords()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
                 next: (positionsPage: Page<PositionMinDTO>) => {
@@ -70,7 +70,6 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
             .subscribe({
                 next: (parametersPage: Page<ParameterDTO>) => {
                     this.parameters = parametersPage.content;
-                    console.log(this.parameters);
                 },
                 error: (err) => {
                     console.log(err);

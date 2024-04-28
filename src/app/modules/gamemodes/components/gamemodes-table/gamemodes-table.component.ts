@@ -38,7 +38,7 @@ export class GameModesTableComponent {
     public handleChangePageEvent($event: TableLazyLoadEvent): void {
         if ($event && $event.first !== undefined && $event.rows) {
             const pageNumber: number = Math.ceil($event.first / $event.rows);
-            const pageSize: number = $event.rows !== 0 ? $event.rows : 10;
+            const pageSize: number = $event.rows !== 0 ? $event.rows : 5;
 
             this.pageable = new Pageable(this.pageable.keyword, pageNumber, pageSize);
 

@@ -1,7 +1,7 @@
 <app-menubar-navigation></app-menubar-navigation>
 
 <app-gamemodes-table
-    *ngIf="!(gameModeView | async)"
+    *ngIf="!($gameModeView | async)"
     [pageable]="pageable"
     [$loading] = "$loading"
     [page]="page"
@@ -10,7 +10,7 @@
 ></app-gamemodes-table>
 
 <app-gamemode-view
-    *ngIf="gameModeView | async"
+    *ngIf="$gameModeView | async"
     [gameMode]="gameMode"
     (backEvent)="handleBackAction()"
     (editOrDeleteGameModeEvent)="handleEditOrDeleteGameModeEvent($event)"

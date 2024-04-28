@@ -4,20 +4,24 @@
     class="flex flex-column align-content-center m-3 gap-4"
 >
     <span class="p-float-label mt-3">
-        <input pInputText formControlName="name" class="w-full" />
+        <input
+            pInputText
+            formControlName="name"
+            class="w-full"
+        />
         <app-form-control-alert
             [form]="newPositionForm"
             [controlName]="'name'"
             [minNumberCharacters]="3"
             [maxNumberCharacters]="30"
         ></app-form-control-alert>
-        <label for="name">Name</label>
+        <label>Name <span class="text-red-600">*</span></label>
     </span>
 
     <span class="p-float-label">
         <textarea
-            rows="6"
             pInputTextarea
+            rows="6"
             formControlName="description"
             class="w-full"
         ></textarea>
@@ -27,7 +31,7 @@
             [minNumberCharacters]="0"
             [maxNumberCharacters]="2000"
         ></app-form-control-alert>
-        <label for="description">Description</label>
+        <label>Description</label>
     </span>
 
     <form
@@ -38,32 +42,32 @@
         <div class="flex justify-content-between align-content-center gap-3">
             <span class="p-float-label">
                 <p-dropdown
-                    [options]="parameters"
-                    optionLabel="name"
+                    [options]="totalParameters"
                     [editable]="true"
                     [showClear]="true"
-                    styleClass="w-20rem"
-                    placeholder="Select a parameter"
+                    optionLabel="name"
                     formControlName="parameter"
+                    placeholder="Select a parameter"
+                    styleClass="w-20rem"
                 ></p-dropdown>
-                <label for="parameter">Select a parameter</label>
+                <label>Select a parameter</label>
             </span>
             <input
                 pInputText
-                class="w-7rem"
-                formControlName="weight"
                 [minlength]="1"
                 [maxlength]="3"
+                formControlName="weight"
+                class="w-7rem"
             />
         </div>
         <p-button
             [disabled]="!positionParameterForm.valid"
+            [rounded]="true"
             type="submit"
             severity="warning"
             icon="pi pi-plus"
             pTooltip="Add new parameter"
             tooltipPosition="top"
-            [rounded]="true"
         ></p-button>
     </form>
 
@@ -72,47 +76,35 @@
         class="flex flex-column gap-2"
     >
         <div class="flex justify-content-between align-items-center">
-            <span class="text-xl font-bold text-gray-900"
-                >Position parameters</span
-            >
+            <span class="text-xl font-bold text-gray-900">Position parameters</span>
         </div>
 
         <p-table [value]="positionParameters" [rowHover]="true">
             <ng-template pTemplate="header">
                 <tr>
-                    <th id="" pSortableColumn="name">
-                        <div
-                            class="flex justify-content-between align-items-center"
-                        >
-                            <div
-                                class="flex justify-content-center align-items-center text-lg mt-1"
-                            >
+                    <th pSortableColumn="name">
+                        <div class="flex justify-content-between align-items-center">
+                            <div class="flex justify-content-center align-items-center text-lg mt-1">
                                 Name
                             </div>
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
+                            <div class="flex justify-content-between align-items-center">
                                 <p-sortIcon field="name"></p-sortIcon>
                                 <p-columnFilter
-                                    type="text"
-                                    field="name"
-                                    display="menu"
-                                    matchMode="contains"
                                     [showMatchModes]="false"
                                     [showOperator]="false"
                                     [showAddButton]="false"
+                                    matchMode="contains"
+                                    type="text"
+                                    field="name"
+                                    display="menu"
                                     style="height: 1.7rem"
                                 ></p-columnFilter>
                             </div>
                         </div>
                     </th>
-                    <th id="" pSortableColumn="weight">
-                        <div
-                            class="flex justify-content-between align-items-center"
-                        >
-                            <div
-                                class="flex justify-content-center align-items-center text-lg mt-1"
-                            >
+                    <th pSortableColumn="weight">
+                        <div class="flex justify-content-between align-items-center">
+                            <div class="flex justify-content-center align-items-center text-lg mt-1">
                                 Weight
                             </div>
                             <div
@@ -120,22 +112,20 @@
                             >
                                 <p-sortIcon field="weight"></p-sortIcon>
                                 <p-columnFilter
-                                    type="text"
-                                    field="weight"
-                                    display="menu"
-                                    matchMode="contains"
                                     [showMatchModes]="false"
                                     [showOperator]="false"
                                     [showAddButton]="false"
+                                    matchMode="contains"
+                                    type="text"
+                                    field="weight"
+                                    display="menu"
                                     style="height: 1.7rem"
                                 ></p-columnFilter>
                             </div>
                         </div>
                     </th>
-                    <th id="">
-                        <div
-                            class="flex justify-content-center align-items-center text-lg mt-1"
-                        >
+                    <th>
+                        <div class="flex justify-content-center align-items-center text-lg mt-1">
                             Delete
                         </div>
                     </th>
@@ -155,9 +145,7 @@
                             severity="danger"
                             icon="pi pi-trash"
                             [rounded]="true"
-                            (onClick)="
-                                handleDeletePositionParameter(parameter.id)
-                            "
+                            (onClick)="handleDeleteParameter(parameter.id)"
                         ></p-button>
                     </td>
                 </tr>
@@ -171,9 +159,7 @@
         </h3>
     </ng-template>
 
-    <div
-        class="flex flex justify-content-center align-content-center align-items-center mt-4"
-    >
+    <div class="flex flex justify-content-center align-content-center align-items-center mt-4">
         <p-button
             [disabled]="!newPositionForm.valid"
             type="submit"

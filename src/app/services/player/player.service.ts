@@ -19,12 +19,12 @@ export class PlayerService {
     public changedPlayerId!: number | undefined;
     public changedPlayerPicture!: boolean;
 
-    public $playerView: Subject<boolean> = new Subject();
-
+    public $playerView: Subject<boolean>;
 
     public constructor(
         private httpClient: HttpClient
     ) {
+        this.$playerView= new Subject<boolean>();
         this.$playerView.next(false);
     };
 

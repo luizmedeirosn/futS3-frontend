@@ -21,6 +21,8 @@ import PageMin from "../../../../../models/dto/generics/response/PageMin";
 import {TableLazyLoadEvent} from "primeng/table";
 import _default from "chart.js/dist/plugins/plugin.tooltip";
 import reset = _default.reset;
+import {ParameterDTO} from "../../../../../models/dto/parameter/response/ParameterDTO";
+import {ParameterWeightDTO} from "../../../../../models/dto/position/aux/ParameterWeightDTO";
 
 @Component({
     selector: 'app-edit-gamemode-form',
@@ -120,6 +122,7 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
                         this.page.pageSize = gameModesPage.pageable.pageSize;
                         this.page.totalElements = gameModesPage.totalElements;
 
+                        this.$loading.next(false);
                     },
                     error: (err) => {
                         this.messageService.clear();
@@ -129,16 +132,17 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
                             detail: 'Failed to retrieve the data!',
                             life: this.toastLife
                         });
+
                         console.log(err);
+
+                        this.$loading.next(false);
                     }
                 });
-
-            this.$loading.next(false);
         }, 500);
     }
 
     private setPositionsWithApi(): void {
-        this.positionService.findAll()
+        this.positionService.findAllWithTotalRecords()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
                 next: (positionsPage: Page<PositionMinDTO>) => {
@@ -161,12 +165,12 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
         }
     }
 
-    public handleSelectGameMode($event: number): void {
-        if ($event) {
+    public handleSelectGameMode(id: number): void {
+        if (id) {
             // Reset available positions whenever a new game mode is chosen due to the strategy of deleting positions that already belong to the selected game mode
             this.setPositionsWithApi();
 
-            this.gameModeService.findById($event)
+            this.gameModeService.findById(id)
                 .pipe(takeUntil(this.$destroy))
                 .subscribe({
                     next: (gameMode: GameModeDTO) => {
@@ -245,29 +249,31 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
     }
 
     public handleAddPosition(): void {
-        const position = this.addPositionForm.value?.position as PositionMinDTO | undefined;
+        const position: PositionMinDTO | undefined = this.addPositionForm.value?.position as PositionMinDTO | undefined;
         if (position) {
             this.totalPositions = this.totalPositions.filter(p => p.id !== position.id);
+
             this.gameModePositions.push(position);
-            this.gameModePositions.sort((p1, p2) =>
-                p1.name.toUpperCase().localeCompare(p2.name.toUpperCase())
-            );
+            this.sortPositionsByName(this.gameModePositions);
         }
 
         this.addPositionForm.reset();
     }
 
-    public handleDeletePosition($event: number): void {
-        if ($event) {
-            const position: PositionMinDTO | undefined = this.gameModePositions.find((p) => p.id === $event);
+    public handleDeletePosition(id: number): void {
+        if (id) {
+            const position: PositionMinDTO | undefined = this.gameModePositions.find((p) => p.id === id);
             if (position) {
                 this.gameModePositions = this.gameModePositions.filter(p => p.id !== position.id);
+
                 this.totalPositions.push(position);
-                this.totalPositions.sort((p1, p2) =>
-                    p1.name.toUpperCase().localeCompare(p2.name.toUpperCase())
-                );
+                this.sortPositionsByName(this.totalPositions);
             }
         }
+    }
+
+    private sortPositionsByName(positions: PositionMinDTO[]): void {
+        positions.sort((p1, p2) => p1.name.toUpperCase().localeCompare(p2.name.toUpperCase()));
     }
 
     public handleSubmitEditGameModeForm(): void {
@@ -302,8 +308,6 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
                         this.handleBackAction();
                     },
                     error: (err) => {
-                        this.changesOnService.setChangesOn(false);
-
                         this.messageService.clear();
                         this.messageService.add({
                             severity: 'error',
@@ -311,13 +315,13 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
                             detail: 'Invalid registration!',
                             life: this.toastLife
                         });
+
                         console.log(err);
+
+                        this.changesOnService.setChangesOn(false);
                     }
                 });
         }
-
-        this.editGameModeForm.reset();
-        this.addPositionForm.reset();
     }
 
     public ngOnDestroy(): void {

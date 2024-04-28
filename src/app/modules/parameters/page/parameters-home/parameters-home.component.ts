@@ -16,7 +16,6 @@ export class ParametersHomeComponent implements OnInit, OnDestroy {
     private readonly $destroy: Subject<void> = new Subject();
     private readonly messageLife: number = 3000;
 
-
     public parameters!: ParameterDTO[];
 
     public constructor(

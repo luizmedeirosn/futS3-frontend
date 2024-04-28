@@ -1,7 +1,7 @@
 <app-menubar-navigation></app-menubar-navigation>
 
 <app-players-table
-    *ngIf="!(playerView | async)"
+    *ngIf="!($playerView | async)"
     [pageable]="pageable"
     [previousKeyword]="previousKeyword"
     [$loading] = "$loading"
@@ -11,7 +11,7 @@
 ></app-players-table>
 
 <app-player-view
-    *ngIf="(playerView | async)"
+    *ngIf="$playerView | async"
     [player]="player"
     (backEvent)="handleBackAction()"
     (editOrDeletePlayerEvent)="handleEditOrDeletePlayerEvent($event)"

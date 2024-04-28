@@ -1,13 +1,16 @@
 <app-menubar-navigation></app-menubar-navigation>
 
 <app-positions-table
-    *ngIf="!positionView"
-    [positions]="positions"
+    *ngIf="!($positionView | async)"
+    [pageable]="pageable"
+    [$loading] = "$loading"
+    [page]="page"
+    (changePageEvent)="handleChangePageAction($event)"
     (viewEvent)="handleViewFullDataPositionAction($event)"
 ></app-positions-table>
 
 <app-position-view
-    *ngIf="positionView"
+    *ngIf="($positionView | async)"
     [position]="position"
     (backEvent)="handleBackAction()"
     (editOrDeletePositionEvent)="handleEditOrDeletePositionEvent($event)"

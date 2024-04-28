@@ -1,6 +1,9 @@
-export interface ParameterWeightDTO {
+export class ParameterWeightDTO {
 
-    id: number;
-    name: string;
-    weight: number;
+    public constructor(
+        public id: number,
+        public name: string,
+        public weight: number
+    ) {
+    }
 }

@@ -44,7 +44,7 @@ export class PlayersTableComponent {
     public handleChangePageEvent($event: TableLazyLoadEvent): void {
         if ($event && $event.first !== undefined && $event.rows) {
             const pageNumber: number = Math.ceil($event.first / $event.rows);
-            const pageSize: number = $event.rows !== 0 ? $event.rows : 10;
+            const pageSize: number = $event.rows !== 0 ? $event.rows : 5;
 
             const fields: string | string[] = $event.sortField ?? "name";
             const sortField: string = Array.isArray(fields) ? fields[0] : fields;

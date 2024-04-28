@@ -20,9 +20,8 @@ export class SavePositionFormComponent implements OnInit, OnDestroy {
     private readonly $destroy: Subject<void> = new Subject();
     private readonly toastLife: number = 2000;
 
-    public parameters!: Array<ParameterDTO>;
-    private parametersOff: Array<ParameterDTO> = [];
-    public positionParameters: Array<ParameterWeightDTO> = [];
+    public totalParameters!: ParameterDTO[];
+    public positionParameters!: ParameterWeightDTO[];
 
     public newPositionForm: any = this.formBuilder.group({
         name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
@@ -40,14 +39,20 @@ export class SavePositionFormComponent implements OnInit, OnDestroy {
         private positionService: PositionService,
         private parameterService: ParameterService,
         private changesOnService: ChangesOnService,
-    ) { }
+    ) {
+        this.positionParameters = [];
+    }
 
     public ngOnInit(): void {
+        this.setParametersWithApi();
+    }
+
+    private setParametersWithApi(): void {
         this.parameterService.findAll()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
                 next: (parametersPage: Page<ParameterDTO>) => {
-                    this.parameters = parametersPage.content;
+                    this.totalParameters = parametersPage.content;
                 },
                 error: (err) => {
                     console.log(err);
@@ -56,36 +61,35 @@ export class SavePositionFormComponent implements OnInit, OnDestroy {
     }
 
     public handleAddNewParameter(): void {
-        const parameter = this.positionParameterForm.value?.parameter as ParameterDTO | undefined;
+        const parameter: ParameterDTO | undefined = this.positionParameterForm.value?.parameter as ParameterDTO | undefined;
         const weight = this.positionParameterForm.value?.weight as number | undefined;
 
         if (parameter && weight) {
-            const parameterName: string = this.parameters.filter((p) => p.name === parameter.name)[0].name;
+            this.totalParameters = this.totalParameters.filter(p => p.id !== parameter.id);
 
-            this.parametersOff.push(parameter);
-            this.parameters = this.parameters.filter(p => p.name !== parameterName);
-
-            const parameterWeight: ParameterWeightDTO = {
-                id: parameter.id,
-                weight: Number(this.positionParameterForm.value.weight),
-                name: parameterName
-            };
-
-            this.positionParameters.push(parameterWeight);
-            this.positionParameters.sort((p1, p2) => p1.name.toUpperCase().localeCompare(p2.name.toUpperCase()));
+            this.positionParameters.push(new ParameterWeightDTO(parameter.id, parameter.name, weight));
+            this.sortParametersByName(this.positionParameters);
         }
 
         this.positionParameterForm.reset();
     }
 
-    public handleDeletePositionParameter(id: number): void {
+    public handleDeleteParameter(id: number): void {
         if (id) {
-            this.positionParameters = this.positionParameters.filter(p => p.id !== id);
+            const parameterWeightDTO: ParameterWeightDTO | undefined = this.positionParameters.find((p) => p.id === id);
+            if (parameterWeightDTO) {
+                const parameter: ParameterDTO = new ParameterDTO(parameterWeightDTO.id, parameterWeightDTO.name);
 
-            const parameter: ParameterDTO | undefined = this.parametersOff.find((p) => p.id === id);
-            parameter && this.parameters.push(parameter);
-            this.parameters.sort((p1, p2) => p1.name.toUpperCase().localeCompare(p2.name.toUpperCase()));
+                this.positionParameters = this.positionParameters.filter(p => p.id !== parameter.id);
+
+                this.totalParameters.push(parameter);
+                this.sortParametersByName(this.totalParameters);
+            }
         }
+    }
+
+    private sortParametersByName(parameters: ParameterDTO[] | ParameterWeightDTO[]): void {
+        parameters.sort((p1, p2) => p1.name.toUpperCase().localeCompare(p2.name.toUpperCase()));
     }
 
     public handleSubmitSavePositionForm(): void {
@@ -96,12 +100,12 @@ export class SavePositionFormComponent implements OnInit, OnDestroy {
                 parameters: this.positionParameters
             }
 
-            this.newPositionForm.reset();
             this.positionService.save(positionRequest)
                 .pipe(takeUntil(this.$destroy))
                 .subscribe({
                     next: () => {
                         this.changesOnService.setChangesOn(true);
+
                         this.messageService.clear();
                         this.messageService.add({
                             severity: 'success',
@@ -111,7 +115,6 @@ export class SavePositionFormComponent implements OnInit, OnDestroy {
                         });
                     },
                     error: (err) => {
-                        this.changesOnService.setChangesOn(false);
                         this.messageService.clear();
                         this.messageService.add({
                             severity: 'error',
@@ -119,7 +122,10 @@ export class SavePositionFormComponent implements OnInit, OnDestroy {
                             detail: 'Invalid registration!',
                             life: this.toastLife
                         });
+
                         console.log(err);
+
+                        this.changesOnService.setChangesOn(false);
                     }
                 });
         }
@@ -127,15 +133,13 @@ export class SavePositionFormComponent implements OnInit, OnDestroy {
         this.newPositionForm.reset();
         this.positionParameterForm.reset();
 
-        this.parametersOff.forEach(e => this.parameters.push(e));
-        this.parameters.sort((p1, p2) => p1.name.toUpperCase().localeCompare(p2.name.toUpperCase()));
-        this.parametersOff = [];
+        // Reset totalParameters and positionParameters
         this.positionParameters = [];
+        this.setParametersWithApi();
     }
 
     public ngOnDestroy(): void {
         this.$destroy.next();
         this.$destroy.complete();
     }
-
 }

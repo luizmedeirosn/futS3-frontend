@@ -81,7 +81,7 @@ export class MenubarNavigationComponent implements OnInit, OnDestroy {
                         label: 'Edit',
                         icon: 'pi pi-fw pi-pencil',
                         command: () => {
-                            // prevent invalid use of changesOn in EditGameModeFormComponent
+                            // Prevent invalid use of changesOn in EditGameModeFormComponent
                             this.gameModeService.changedGameModeId = undefined;
 
                             this.dynamicDialogRef = this.customDialogService.open(

@@ -6,6 +6,7 @@ import {PositionRequestDTO} from 'src/app/models/dto/position/request/PositionRe
 import {PositionDTO} from 'src/app/models/dto/position/response/PositionDTO';
 import PositionMinDTO from 'src/app/models/dto/position/response/PositionMinDTO';
 import Page from "../../models/dto/generics/response/Page";
+import Pageable from "../../models/dto/generics/request/Pageable";
 
 @Injectable({
     providedIn: 'root'
@@ -14,19 +15,29 @@ export class PositionService {
 
     private readonly API_URL: string = environment.API_URL;
 
-    public $positionView: Subject<boolean> = new Subject();
+    public $positionView!: Subject<boolean>;
 
     public changedPositionId!: number | undefined;
 
     public constructor(
         private httpClient: HttpClient
     ) {
+        this.$positionView = new Subject<boolean>();
         this.$positionView.next(false);
     }
 
-    public findAll(): Observable<Page<PositionMinDTO>> {
+    public findAllWithTotalRecords(): Observable<Page<PositionMinDTO>> {
         return this.httpClient.get<Page<PositionMinDTO>>(
             `${this.API_URL}/positions`
+        );
+    }
+    public findAll(pageable: Pageable): Observable<Page<PositionMinDTO>> {
+        let queryParams = '';
+        queryParams += `?_pageNumber=${pageable.pageNumber}`;
+        queryParams += `&_pageSize=${pageable.pageSize}`;
+
+        return this.httpClient.get<Page<PositionMinDTO>>(
+            `${this.API_URL}/positions${queryParams}`
         );
     }
 

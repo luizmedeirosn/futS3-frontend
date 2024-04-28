@@ -34,8 +34,10 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
     public $loading!: BehaviorSubject<boolean>;
     public page!: PageMin<PlayerMinDTO>;
 
+    // The view is also controlled by the menu bar, so the observable is necessary. Use case: The view screen is active and the 'Find All' is triggered
+    public $playerView!: Subject<boolean>;
+
     public player!: PlayerFullDTO;
-    public playerView: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     public dynamicDialogRef!: DynamicDialogRef;
 
@@ -55,23 +57,12 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
             pageSize: 5,
             totalElements: 0
         };
+
+        this.$playerView = playerService.$playerView;
     }
 
     public ngOnInit(): void {
         this.page.totalElements === 0 && this.setPlayersWithApi(this.pageable);
-
-        this.playerService.$playerView
-            .pipe(takeUntil(this.$destroy))
-            .subscribe(
-                {
-                    next: (playerView) => {
-                        this.playerView.next(playerView);
-                    },
-                    error: (err) => {
-                        console.log(err);
-                    }
-                }
-            );
 
         this.changesOnService.getChangesOn()
             .pipe(takeUntil(this.$destroy))
@@ -111,10 +102,6 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                             this.$loading.next(false);
                         },
                         error: (err) => {
-                            console.log(err);
-
-                            this.$loading.next(false);
-
                             this.messageService.clear();
                             err.status != 403 && this.messageService.add({
                                 severity: 'error',
@@ -122,6 +109,10 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                                 detail: 'Unexpected error!',
                                 life: this.messageLife
                             });
+
+                            console.log(err);
+
+                            this.$loading.next(false);
                         }
                     }
                 );
@@ -164,6 +155,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                                 life: this.messageLife
                             }
                         );
+
                         console.log(err);
                     }
                 }
@@ -171,6 +163,9 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
     }
 
     public handleBackAction(): void {
+        // Disable the selection of a player set in getChangesOn when the back button is pressed
+        this.playerService.changedPlayerId = undefined;
+
         // Do not change the order of actions
         this.playerService.$playerView.next(false);
         this.changeDetectorRef.detectChanges();

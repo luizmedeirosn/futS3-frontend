@@ -5,6 +5,9 @@ import PositionMinDTO from 'src/app/models/dto/position/response/PositionMinDTO'
 import {PositionService} from 'src/app/services/position/position.service';
 import {ChangesOnService} from 'src/app/shared/services/changes-on/changes-on.service';
 import Page from "../../../../../models/dto/generics/response/Page";
+import Pageable from "../../../../../models/dto/generics/request/Pageable";
+import PageMin from "../../../../../models/dto/generics/response/PageMin";
+import {TableLazyLoadEvent} from "primeng/table";
 
 @Component({
     selector: 'app-delete-position-form',
@@ -17,38 +20,71 @@ export class DeletePositionFormComponent implements OnInit, OnDestroy {
     private readonly $destroy: Subject<void> = new Subject();
     private readonly toastLife: number = 2000;
 
-    public $loadingDeletion: BehaviorSubject<boolean> = new BehaviorSubject(false);
-    public positions!: Array<PositionMinDTO>;
+    public pageable!: Pageable;
+    public $loading!: BehaviorSubject<boolean>;
+    public page!: PageMin<PositionMinDTO>;
 
     public constructor(
         private positionService: PositionService,
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
         private changesOnService: ChangesOnService,
-    ) { }
-
-    public ngOnInit(): void {
-        this.setPositionsWithApi();
+    ) {
+        this.pageable = new Pageable('', 0, 10, "name", 1);
+        this.$loading = new BehaviorSubject(false);
+        this.page = {
+            content: [],
+            pageNumber: 0,
+            pageSize: 10,
+            totalElements: 0
+        };
     }
 
-    private setPositionsWithApi(): void {
-        this.positionService.findAll()
-            .pipe(takeUntil(this.$destroy))
-            .subscribe({
-                next: (positionsPage: Page<PositionMinDTO>) => {
-                    this.positions = positionsPage.content;
-                },
-                error: (err) => {
-                    this.messageService.clear();
-                    this.messageService.add({
-                        severity: 'error',
-                        summary: 'Error',
-                        detail: 'Failed to retrieve the data!',
-                        life: this.toastLife
-                    });
-                    console.log(err);
-                }
-            });
+    public ngOnInit(): void {
+        this.page.totalElements === 0 && this.setPositionsWithApi(this.pageable);
+    }
+
+    private setPositionsWithApi(pageable: Pageable): void {
+        this.pageable = pageable;
+
+        this.$loading.next(true);
+
+        setTimeout(() => {
+            this.positionService.findAll(pageable)
+                .pipe(takeUntil(this.$destroy))
+                .subscribe({
+                    next: (positionsPage: Page<PositionMinDTO>) => {
+                        this.page.content = positionsPage.content;
+                        this.page.pageNumber = positionsPage.pageable.pageNumber;
+                        this.page.pageSize = positionsPage.pageable.pageSize;
+                        this.page.totalElements = positionsPage.totalElements;
+
+                        this.$loading.next(false);
+                    },
+                    error: (err) => {
+                        this.messageService.clear();
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: 'Error',
+                            detail: 'Failed to retrieve the data!',
+                            life: this.toastLife
+                        });
+
+                        console.log(err);
+
+                        this.$loading.next(false);
+                    }
+                });
+        }, 500);
+    }
+
+    public handleChangePageAction($event: TableLazyLoadEvent) {
+        if ($event && $event.first !== undefined && $event.rows) {
+            const pageNumber = Math.ceil($event.first / $event.rows);
+            const pageSize = $event.rows !== 0 ? $event.rows : 10;
+
+            this.setPositionsWithApi(new Pageable(this.pageable.keyword, pageNumber, pageSize));
+        }
     }
 
     public handleDeletePositionEvent($event: PositionMinDTO): void {
@@ -70,33 +106,31 @@ export class DeletePositionFormComponent implements OnInit, OnDestroy {
 
     public handleDeletePositionAction($event: number): void {
         if ($event) {
-            this.$loadingDeletion.next(true);
             this.messageService.clear();
+
+            this.$loading.next(true);
 
             this.positionService.deleteById($event)
                 .pipe(takeUntil(this.$destroy))
                 .subscribe({
                     next: () => {
-                        setTimeout(() => {
-                            this.$loadingDeletion.next(false);
-                            this.setPositionsWithApi();
+                        this.positionService.changedPositionId = undefined;
+                        this.changesOnService.setChangesOn(true);
 
-                            this.messageService.clear();
-                            this.messageService.add({
-                                severity: 'success',
-                                summary: 'Success',
-                                detail: 'Position deleted successfully!',
-                                life: this.toastLife
-                            });
+                        this.$loading.next(false);
 
-                            this.positionService.changedPositionId = undefined;
-                            this.changesOnService.setChangesOn(true);
-                        }, 1000);
+                        this.setPositionsWithApi(this.pageable);
+
+                        this.messageService.clear();
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: 'Success',
+                            detail: 'Position deleted successfully!',
+                            life: this.toastLife
+                        });
                     },
                     error: (err) => {
                         setTimeout(() => {
-                            console.log(err);
-                            this.changesOnService.setChangesOn(false);
                             this.messageService.clear();
                             this.messageService.add({
                                 key: 'deletion-error',
@@ -105,7 +139,12 @@ export class DeletePositionFormComponent implements OnInit, OnDestroy {
                                 detail: 'Is the position part of a game mode or a player!',
                                 life: 6000
                             });
-                            this.$loadingDeletion.next(false);
+
+                            console.log(err);
+
+                            this.changesOnService.setChangesOn(false);
+
+                            this.$loading.next(false);
                         }, 1000);
                     }
                 });
