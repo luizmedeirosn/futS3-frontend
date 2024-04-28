@@ -89,23 +89,23 @@
             <span class="p-float-label">
                 <p-dropdown
                     [options]="totalPositions"
-                    optionLabel="name"
                     [editable]="true"
                     [showClear]="true"
-                    styleClass="w-20rem"
-                    placeholder="Add a position"
+                    optionLabel="name"
                     formControlName="position"
+                    placeholder="Add a position"
+                    styleClass="w-20rem"
                 ></p-dropdown>
                 <label>Add a Position</label>
             </span>
             <p-button
                 [disabled]="!addPositionForm.valid"
+                [rounded]="true"
                 type="submit"
                 severity="warning"
                 icon="pi pi-plus"
                 pTooltip="Add position"
                 tooltipPosition="top"
-                [rounded]="true"
             ></p-button>
         </div>
         <p-button
@@ -139,19 +139,19 @@
                             <div class="flex justify-content-between align-items-center">
                                 <p-sortIcon field="name"></p-sortIcon>
                                 <p-columnFilter
-                                    type="text"
-                                    field="name"
-                                    display="menu"
-                                    matchMode="contains"
                                     [showMatchModes]="false"
                                     [showOperator]="false"
                                     [showAddButton]="false"
+                                    matchMode="contains"
+                                    type="text"
+                                    field="name"
+                                    display="menu"
                                     style="height: 1.7rem"
                                 ></p-columnFilter>
                             </div>
                         </div>
                     </th>
-                    <th pSortableColumn="">
+                    <th>
                         <div class="flex justify-content-center align-items-center text-lg mt-1">
                             Delete
                         </div>
@@ -191,9 +191,7 @@
         </h3>
     </ng-template>
 
-    <div
-        class="flex flex justify-content-center align-content-center align-items-center mt-4"
-    >
+    <div class="flex flex justify-content-center align-content-center align-items-center mt-4">
         <p-button
             [disabled]="!editGameModeForm.valid"
             type="submit"
