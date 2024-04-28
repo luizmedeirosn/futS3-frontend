@@ -38,7 +38,7 @@ export class EditPositionFormComponent implements OnInit, OnDestroy {
 
     public selectedPosition!: PositionDTO | undefined;
     public totalParameters!: ParameterDTO[];
-    public positionParameters: Array<ParameterWeightDTO> = [];
+    public positionParameters!: ParameterWeightDTO[];
 
     public editPositionForm: any = this.formBuilder.group({
         name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
