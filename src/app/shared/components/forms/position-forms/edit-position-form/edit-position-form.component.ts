@@ -128,7 +128,7 @@ export class EditPositionFormComponent implements OnInit, OnDestroy {
         if (id) {
             // Reset available parameters whenever a new game mode is chosen due to the strategy of deleting positions that already belong to the selected position
             const totalParameters$: Observable<Page<ParameterDTO>> =
-                this.parameterService.findAll();
+                this.parameterService.findAllWithTotalRecords();
 
             const selectedPosition$: Observable<PositionDTO> =
                 this.positionService.findById(id);

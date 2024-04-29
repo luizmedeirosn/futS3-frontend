@@ -1,10 +1,11 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment.prod';
-import { ParameterRequestDTO } from 'src/app/models/dto/parameter/request/ParameterRequestDTO';
-import { ParameterDTO } from 'src/app/models/dto/parameter/response/ParameterDTO';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {environment} from 'src/environments/environment.prod';
+import {ParameterRequestDTO} from 'src/app/models/dto/parameter/request/ParameterRequestDTO';
+import {ParameterDTO} from 'src/app/models/dto/parameter/response/ParameterDTO';
 import Page from "../../models/dto/generics/response/Page";
+import Pageable from "../../models/dto/generics/request/Pageable";
 
 @Injectable({
     providedIn: 'root'
@@ -17,9 +18,17 @@ export class ParameterService {
         private httpClient: HttpClient
     ) { }
 
-    public findAll(): Observable<Page<ParameterDTO>> {
+    public findAllWithTotalRecords(): Observable<Page<ParameterDTO>> {
+        return this.httpClient.get<Page<ParameterDTO>>(`${this.API_URL}/parameters`);
+    }
+
+    public findAll(pageable: Pageable, s: string = ''): Observable<Page<ParameterDTO>> {
+        let queryParams = s;
+        queryParams += `?_pageNumber=${pageable.pageNumber}`;
+        queryParams += `&_pageSize=${pageable.pageSize}`;
+
         return this.httpClient.get<Page<ParameterDTO>>(
-            `${this.API_URL}/parameters`
+            `${this.API_URL}/parameters${queryParams}`
         );
     }
 

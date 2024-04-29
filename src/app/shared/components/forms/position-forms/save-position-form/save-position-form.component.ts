@@ -48,7 +48,7 @@ export class SavePositionFormComponent implements OnInit, OnDestroy {
     }
 
     private setParametersWithApi(): void {
-        this.parameterService.findAll()
+        this.parameterService.findAllWithTotalRecords()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
                 next: (parametersPage: Page<ParameterDTO>) => {

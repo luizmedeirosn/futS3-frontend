@@ -43,7 +43,7 @@ export class ParametersHomeComponent implements OnInit, OnDestroy {
     }
 
     private setParameters(): void {
-        this.parameterService.findAll()
+        this.parameterService.findAllWithTotalRecords()
             .pipe(takeUntil(this.$destroy))
             .subscribe(
                 {
