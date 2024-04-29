@@ -39,6 +39,9 @@ export class SaveParameterFormComponent implements OnDestroy {
             .pipe(takeUntil(this.$destroy))
             .subscribe({
                 next: () => {
+
+                    this.newParameterForm.reset();
+
                     this.changesOnService.setChangesOn(true);
 
                     this.messageService.clear();
@@ -50,7 +53,6 @@ export class SaveParameterFormComponent implements OnDestroy {
                     });
                 },
                 error: (err) => {
-                    this.changesOnService.setChangesOn(false);
 
                     this.messageService.clear();
                     this.messageService.add({
@@ -59,16 +61,16 @@ export class SaveParameterFormComponent implements OnDestroy {
                         detail: 'Invalid registration!',
                         life: this.toastLife
                     });
+
                     console.log(err);
+
+                    this.changesOnService.setChangesOn(false);
                 }
             });
-
-        this.newParameterForm.reset();
     }
 
     public ngOnDestroy(): void {
         this.$destroy.next();
         this.$destroy.complete();
     }
-
 }

@@ -106,6 +106,14 @@ export class SavePositionFormComponent implements OnInit, OnDestroy {
                     next: () => {
                         this.changesOnService.setChangesOn(true);
 
+
+                        this.newPositionForm.reset();
+                        this.positionParameterForm.reset();
+
+                        // Reset totalParameters and positionParameters
+                        this.positionParameters = [];
+                        this.setParametersWithApi();
+
                         this.messageService.clear();
                         this.messageService.add({
                             severity: 'success',
@@ -129,13 +137,6 @@ export class SavePositionFormComponent implements OnInit, OnDestroy {
                     }
                 });
         }
-
-        this.newPositionForm.reset();
-        this.positionParameterForm.reset();
-
-        // Reset totalParameters and positionParameters
-        this.positionParameters = [];
-        this.setParametersWithApi();
     }
 
     public ngOnDestroy(): void {
