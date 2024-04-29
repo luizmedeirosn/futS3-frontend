@@ -71,6 +71,12 @@ span {
     color: var(--gray-900);
 }
 
+.dropdown-caret-color-transparent {
+    .p-dropdown {
+        caret-color: transparent;
+    }
+}
+
 .p-dropdown {
     border: 1px solid;
     border-radius: 3px;

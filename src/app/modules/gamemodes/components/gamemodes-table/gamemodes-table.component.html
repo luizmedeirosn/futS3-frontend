@@ -12,8 +12,9 @@
             [rowHover]="true"
             [rowsPerPageOptions]="[5, 10, 20]"
             [showCurrentPageReport]="true"
-            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} game modes"
             dataKey="id"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} game modes"
+            styleClass="dropdown-caret-color-transparent"
         >
             <ng-template pTemplate="header">
                 <tr>

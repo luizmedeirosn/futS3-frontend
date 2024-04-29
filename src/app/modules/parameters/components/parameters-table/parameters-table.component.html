@@ -2,13 +2,13 @@
     <p-card *ngIf="parameters" [style]="{ width: '65rem' }" header="Parameters">
         <p-table
             [value]="parameters"
-            dataKey="id"
             [paginator]="true"
             [rows]="10"
             [showCurrentPageReport]="true"
             [rowHover]="true"
+            dataKey="id"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} parameters"
-            styleClass="fadein animation-duration-1000 animation-iteration-1 animation-ease-out"
+            styleClass="dropdown-caret-color-transparent"
         >
             <ng-template pTemplate="header">
                 <tr>
