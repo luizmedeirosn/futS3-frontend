@@ -13,6 +13,9 @@ import {CustomDialogService} from '../../../../services/custom-dialog/custom-dia
 import {EditPositionFormComponent} from '../../position-forms/edit-position-form/edit-position-form.component';
 import {ChangesOnService} from 'src/app/shared/services/changes-on/changes-on.service';
 import Page from "../../../../../models/dto/generics/response/Page";
+import {ParameterDTO} from "../../../../../models/dto/parameter/response/ParameterDTO";
+import {ParameterWeightDTO} from "../../../../../models/dto/position/aux/ParameterWeightDTO";
+import {PositionDTO} from "../../../../../models/dto/position/response/PositionDTO";
 
 @Component({
     selector: 'app-save-gamemode-form',
@@ -21,11 +24,14 @@ import Page from "../../../../../models/dto/generics/response/Page";
 })
 export class SaveGamemodeFormComponent implements OnInit, OnDestroy {
 
-    private readonly $destroy: Subject<void> = new Subject();
+    private readonly destroy$: Subject<void> = new Subject();
     private readonly toastLife: number = 2000;
 
-    public positions!: Array<PositionMinDTO>;
-    public positionsOff: Array<PositionMinDTO> = [];
+    // Prevent resetting of positions when the modal to trigger positions is opened during editing of a game mode in GameModeHomeComponent
+    private resetGameModePositions!: boolean;
+
+    public totalPositions!: PositionMinDTO[];
+    public gameModePositions!: PositionMinDTO[];
 
     public newGameModeForm: any = this.formBuilder.group({
         formationName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
@@ -45,18 +51,23 @@ export class SaveGamemodeFormComponent implements OnInit, OnDestroy {
         private gameModeService: GameModeService,
         private customDialogService: CustomDialogService,
         private changesOnService: ChangesOnService,
-    ) { }
+    ) {
+        this.gameModePositions = [];
 
-    public ngOnInit(): void {
-        this.setPositionsWithApi();
+        this.resetGameModePositions = true;
     }
 
-    private setPositionsWithApi(): void {
+    public ngOnInit(): void {
+        this.setTotalPositionsWithApi();
+    }
+
+    private setTotalPositionsWithApi(): void {
         this.positionService.findAllWithTotalRecords()
-            .pipe(takeUntil(this.$destroy))
+            .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (positionsPage: Page<PositionMinDTO>) => {
-                    this.positions = positionsPage.content.filter(p => !this.positionsOff.some(off => off.id === p.id));
+                    this.totalPositions = positionsPage.content;
+                    !this.resetGameModePositions && this.deleteIncludedPositionsInGameMode();
                 },
                 error: (err) => {
                     console.log(err);
@@ -64,28 +75,37 @@ export class SaveGamemodeFormComponent implements OnInit, OnDestroy {
             });
     }
 
+    private deleteIncludedPositionsInGameMode(): void {
+        const gameModePositionsIds: number[] = this.gameModePositions.map(p => p.id);
+        this.totalPositions = this.totalPositions.filter(p => !gameModePositionsIds.includes(p.id));
+    }
+
     public handleCreatePositionEvent(): void {
+        this.resetGameModePositions = false;
+
         this.dynamicDialogRef = this.customDialogService.open(
             SavePositionFormComponent,
             {
                 position: 'top',
                 header: EnumPositionEventsCrud.ADD.valueOf(),
-                contentStyle: { overflow: 'auto' },
+                contentStyle: {overflow: 'auto'},
                 baseZIndex: 10000,
             });
 
         this.dynamicDialogRef.onClose
-            .pipe(takeUntil(this.$destroy))
-            .subscribe(() => this.setPositionsWithApi());
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(() => this.setTotalPositionsWithApi());
     }
 
     public handleEditPositionEvent(id: number) {
+        this.resetGameModePositions = false;
+
         this.dynamicDialogRef = this.customDialogService.open(
             EditPositionFormComponent,
             {
                 position: 'top',
                 header: EnumPositionEventsCrud.EDIT.valueOf(),
-                contentStyle: { overflow: 'auto' },
+                contentStyle: {overflow: 'auto'},
                 baseZIndex: 10000,
                 data: {
                     $event: EnumPositionEventsCrud.EDIT,
@@ -94,32 +114,36 @@ export class SaveGamemodeFormComponent implements OnInit, OnDestroy {
             });
 
         this.dynamicDialogRef.onClose
-            .pipe(takeUntil(this.$destroy))
-            .subscribe(() => this.setPositionsWithApi());
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(() => this.setTotalPositionsWithApi());
     }
 
     public handleAddPosition(): void {
-        const position = this.addPositionForm.value?.position as PositionMinDTO | undefined;
-
+        const position: PositionMinDTO | undefined = this.addPositionForm.value?.position as PositionMinDTO | undefined;
         if (position) {
-            this.positionsOff.push(position);
-            this.positionsOff.sort((p1, p2) =>
-                p1.name.toUpperCase().localeCompare(p2.name.toUpperCase())
-            );
+            this.totalPositions = this.totalPositions.filter(p => p.id !== position.id);
 
-            const positionId: number = this.positions.filter((p) => p.id === position.id)[0].id;
-            this.positions = this.positions.filter(p => p.id !== positionId);
+            this.gameModePositions.push(position);
+            this.sortPositionsByName(this.gameModePositions);
         }
+
         this.addPositionForm.reset();
     }
 
-    public handleDeletePosition($event: number): void {
-        const position: PositionMinDTO | undefined = this.positionsOff.find((p) => p.id === $event);
-        position && this.positions.push(position);
-        this.positionsOff = position && this.positionsOff.filter(p => p.id !== position.id) || [];
-        this.positionsOff.sort((p1, p2) =>
-            p1.name.toUpperCase().localeCompare(p2.name.toUpperCase())
-        );
+    public handleDeletePosition(id: number): void {
+        if (id) {
+            const position: PositionMinDTO | undefined = this.gameModePositions.find((p) => p.id === id);
+            if (position) {
+                this.gameModePositions = this.gameModePositions.filter(p => p.id !== position.id);
+
+                this.totalPositions.push(position);
+                this.sortPositionsByName(this.totalPositions);
+            }
+        }
+    }
+
+    private sortPositionsByName(positions: PositionMinDTO[]): void {
+        positions.sort((p1, p2) => p1.name.toUpperCase().localeCompare(p2.name.toUpperCase()));
     }
 
     public handleSubmitSaveGameModeForm(): void {
@@ -127,14 +151,21 @@ export class SaveGamemodeFormComponent implements OnInit, OnDestroy {
             const gameModeRequest: GameModeRequestDTO = {
                 formationName: this.newGameModeForm.value.formationName as string,
                 description: this.newGameModeForm.value.description as string,
-                positions: this.positionsOff.map(p => p.id)
+                positions: this.gameModePositions.map(p => p.id)
             }
 
             this.gameModeService.save(gameModeRequest)
-                .pipe(takeUntil(this.$destroy))
+                .pipe(takeUntil(this.destroy$))
                 .subscribe({
                     next: () => {
+                        this.newGameModeForm.reset();
+
+                        // Reset totalParameters and positionParameters
+                        this.gameModePositions = [];
+                        this.setTotalPositionsWithApi();
+
                         this.changesOnService.setChangesOn(true);
+
                         this.messageService.clear();
                         this.messageService.add({
                             severity: 'success',
@@ -144,7 +175,6 @@ export class SaveGamemodeFormComponent implements OnInit, OnDestroy {
                         });
                     },
                     error: (err) => {
-                        this.changesOnService.setChangesOn(false);
                         this.messageService.clear();
                         this.messageService.add({
                             severity: 'error',
@@ -152,23 +182,17 @@ export class SaveGamemodeFormComponent implements OnInit, OnDestroy {
                             detail: 'Invalid registration!',
                             life: this.toastLife
                         });
+
                         console.log(err);
+
+                        this.changesOnService.setChangesOn(false);
                     }
                 });
         }
-
-        this.newGameModeForm.reset();
-        this.addPositionForm.reset();
-
-        this.positionsOff.forEach(e => this.positions.push(e));
-        this.positionsOff.sort((p1, p2) =>
-            p1.name.toUpperCase().localeCompare(p2.name.toUpperCase())
-        ); this.positionsOff = [];
     }
 
     public ngOnDestroy(): void {
-        this.$destroy.next();
-        this.$destroy.complete();
+        this.destroy$.next();
+        this.destroy$.complete();
     }
-
 }

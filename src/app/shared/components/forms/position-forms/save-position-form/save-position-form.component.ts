@@ -17,7 +17,7 @@ import Page from "../../../../../models/dto/generics/response/Page";
 })
 export class SavePositionFormComponent implements OnInit, OnDestroy {
 
-    private readonly $destroy: Subject<void> = new Subject();
+    private readonly destroy$: Subject<void> = new Subject();
     private readonly toastLife: number = 2000;
 
     public totalParameters!: ParameterDTO[];
@@ -44,13 +44,13 @@ export class SavePositionFormComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        this.setParametersWithApi();
+        this.setTotalParametersWithApi();
     }
 
-    private setParametersWithApi(): void
+    private setTotalParametersWithApi(): void
     {
         this.parameterService.findAllWithTotalRecords()
-            .pipe(takeUntil(this.$destroy))
+            .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (parametersPage: Page<ParameterDTO>) => {
                     this.totalParameters = parametersPage.content;
@@ -102,18 +102,17 @@ export class SavePositionFormComponent implements OnInit, OnDestroy {
             }
 
             this.positionService.save(positionRequest)
-                .pipe(takeUntil(this.$destroy))
+                .pipe(takeUntil(this.destroy$))
                 .subscribe({
                     next: () => {
-                        this.changesOnService.setChangesOn(true);
-
-
                         this.newPositionForm.reset();
                         this.positionParameterForm.reset();
 
                         // Reset totalParameters and positionParameters
                         this.positionParameters = [];
-                        this.setParametersWithApi();
+                        this.setTotalParametersWithApi();
+
+                        this.changesOnService.setChangesOn(true);
 
                         this.messageService.clear();
                         this.messageService.add({
@@ -141,7 +140,7 @@ export class SavePositionFormComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
-        this.$destroy.next();
-        this.$destroy.complete();
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

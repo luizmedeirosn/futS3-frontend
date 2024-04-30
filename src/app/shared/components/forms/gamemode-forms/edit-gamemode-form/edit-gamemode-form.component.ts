@@ -84,7 +84,7 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.page.totalElements === 0 && this.setGameModesWithApi(this.pageable);
-        this.setPositionsWithApi();
+        this.setTotalPositionsWithApi();
 
         const action = this.dynamicDialogConfig.data;
         if (action && action.$event === EnumGameModeEventsCrud.EDIT) {
@@ -141,13 +141,13 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
         }, 500);
     }
 
-    private setPositionsWithApi(): void {
+    private setTotalPositionsWithApi(): void {
         this.positionService.findAllWithTotalRecords()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
                 next: (positionsPage: Page<PositionMinDTO>) => {
                     this.totalPositions = positionsPage.content;
-                    !this.resetGameModePositions && this.deleteIncludedPositions();
+                    !this.resetGameModePositions && this.deleteIncludedPositionsInGameMode();
                 },
                 error: (err) => {
                     console.log(err);
@@ -168,7 +168,7 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
     public handleSelectGameMode(id: number): void {
         if (id) {
             // Reset available positions whenever a new game mode is chosen due to the strategy of deleting positions that already belong to the selected game mode
-            this.setPositionsWithApi();
+            this.setTotalPositionsWithApi();
 
             this.gameModeService.findById(id)
                 .pipe(takeUntil(this.$destroy))
@@ -185,7 +185,7 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
                             this.gameModePositions = gameMode.positions.map(p => new PositionMinDTO(p.id, p.name, p.description));
                         }
 
-                        this.deleteIncludedPositions();
+                        this.deleteIncludedPositionsInGameMode();
 
                         this.$viewTable.next(false);
                     },
@@ -196,7 +196,7 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
         }
     }
 
-    private deleteIncludedPositions(): void {
+    private deleteIncludedPositionsInGameMode(): void {
         const gameModePositionsIds: number[] = this.gameModePositions.map(p => p.id);
         this.totalPositions = this.totalPositions.filter(p => !gameModePositionsIds.includes(p.id));
     }
@@ -224,7 +224,7 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
 
         this.dynamicDialogRef.onClose
             .pipe(takeUntil(this.$destroy))
-            .subscribe(() => this.setPositionsWithApi());
+            .subscribe(() => this.setTotalPositionsWithApi());
     }
 
     public handleEditPositionEvent(id: number) {
@@ -245,7 +245,7 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
 
         this.dynamicDialogRef.onClose
             .pipe(takeUntil(this.$destroy))
-            .subscribe(() => this.setPositionsWithApi());
+            .subscribe(() => this.setTotalPositionsWithApi());
     }
 
     public handleAddPosition(): void {
