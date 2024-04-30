@@ -15,15 +15,15 @@ export class PositionService {
 
     private readonly API_URL: string = environment.API_URL;
 
-    public $positionView!: Subject<boolean>;
+    public positionView$!: Subject<boolean>;
 
     public changedPositionId!: number | undefined;
 
     public constructor(
         private httpClient: HttpClient
     ) {
-        this.$positionView = new Subject<boolean>();
-        this.$positionView.next(false);
+        this.positionView$ = new Subject<boolean>();
+        this.positionView$.next(false);
     }
 
     public findAllWithTotalRecords(): Observable<Page<PositionMinDTO>> {

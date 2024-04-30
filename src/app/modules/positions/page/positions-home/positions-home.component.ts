@@ -25,15 +25,18 @@ import ChangePageAction from "../../../../models/events/ChangePageAction";
 })
 export class PositionsHomeComponent implements OnInit, OnDestroy {
 
-    private readonly $destroy: Subject<void> = new Subject();
+    private readonly destroy$: Subject<void> = new Subject();
     private readonly messageLife: number = 3000;
 
     public pageable!: Pageable;
-    public $loading!: BehaviorSubject<boolean>;
+    public loading$!: BehaviorSubject<boolean>;
     public page!: PageMin<PositionMinDTO>;
 
     // The view is also controlled by the menu bar, so the observable is necessary. Use case: The view screen is active and the 'Find All' is triggered
-    public $positionView!: Subject<boolean>;
+    public positionView$!: Subject<boolean>;
+
+    // Changes in the table state through positionView$ from the menubar need to be detected by the 'parent component'
+    public homeChangeDetectorRef!: ChangeDetectorRef;
 
     public position!: FullDataPosition;
 
@@ -48,7 +51,7 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
         private changesOnService: ChangesOnService,
     ) {
         this.pageable = new Pageable('', 0, 5)
-        this.$loading = new BehaviorSubject(false);
+        this.loading$ = new BehaviorSubject(false);
         this.page = {
             content: [],
             pageNumber: 0,
@@ -56,14 +59,15 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
             totalElements: 0
         };
 
-        this.$positionView = this.positionService.$positionView;
+        this.positionView$ = this.positionService.positionView$;
+        this.homeChangeDetectorRef = changeDetectorRef;
     }
 
     public ngOnInit(): void {
         this.page.totalElements === 0 && this.setPositionsWithApi(this.pageable);
 
         this.changesOnService.getChangesOn()
-            .pipe(takeUntil(this.$destroy))
+            .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (changesOn: boolean) => {
                     if (changesOn) {
@@ -82,11 +86,11 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
     private setPositionsWithApi(pageable: Pageable): void {
         this.pageable = pageable;
 
-        this.$loading.next(true);
+        this.loading$.next(true);
 
         setTimeout(() => {
             this.positionService.findAll(pageable)
-                .pipe(takeUntil(this.$destroy))
+                .pipe(takeUntil(this.destroy$))
                 .subscribe(
                     {
                         next: (positionsPage: Page<PositionMinDTO>) => {
@@ -95,7 +99,7 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
                             this.page.pageSize = positionsPage.pageable.pageSize;
                             this.page.totalElements = positionsPage.totalElements;
 
-                            this.$loading.next(false);
+                            this.loading$.next(false);
                         },
                         error: (err) => {
                             this.messageService.clear();
@@ -108,7 +112,7 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
 
                             console.log(err);
 
-                            this.$loading.next(false);
+                            this.loading$.next(false);
                         }
                     }
                 );
@@ -131,14 +135,14 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
 
     private selectPosition(id: number) {
         id && this.positionService.findById(id)
-            .pipe(takeUntil(this.$destroy))
+            .pipe(takeUntil(this.destroy$))
             .subscribe(
                 {
                     next: (position) => {
                         this.position = position;
                         this.positionService.changedPositionId = id;
 
-                        this.positionService.$positionView.next(true);
+                        this.positionService.positionView$.next(true);
                     },
                     error: (err) => {
                         this.messageService.clear();
@@ -160,7 +164,7 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
         this.positionService.changedPositionId = undefined;
 
         // Do not change the order of actions
-        this.positionService.$positionView.next(false);
+        this.positionService.positionView$.next(false);
         this.changeDetectorRef.detectChanges();
     }
 
@@ -180,7 +184,7 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
                 });
 
             this.dynamicDialogRef.onClose
-                .pipe(takeUntil(this.$destroy))
+                .pipe(takeUntil(this.destroy$))
                 .subscribe(() => this.selectPosition($event.id));
         }
 
@@ -189,7 +193,7 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
 
     private deletePosition(id: number): void {
         id && this.positionService.deleteById(id)
-            .pipe(takeUntil(this.$destroy))
+            .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
                     this.messageService.clear();
@@ -237,7 +241,7 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
-        this.$destroy.next();
-        this.$destroy.complete();
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }
