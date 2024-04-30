@@ -27,10 +27,9 @@ export class PositionService {
     }
 
     public findAllWithTotalRecords(): Observable<Page<PositionMinDTO>> {
-        return this.httpClient.get<Page<PositionMinDTO>>(
-            `${this.API_URL}/positions`
-        );
+        return this.httpClient.get<Page<PositionMinDTO>>(`${this.API_URL}/positions`);
     }
+
     public findAll(pageable: Pageable): Observable<Page<PositionMinDTO>> {
         let queryParams = '';
         queryParams += `?_pageNumber=${pageable.pageNumber}`;

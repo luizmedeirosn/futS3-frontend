@@ -34,12 +34,12 @@ export class DeletePlayerFormComponent implements OnInit, OnDestroy {
         this.$destroy = new Subject<void>();
         this.toastLife = 2000;
 
-        this.pageable = new Pageable('', 0, 10, "name", 1);
+        this.pageable = new Pageable('', 0, 5, "name", 1);
         this.$loading = new BehaviorSubject(false);
         this.page = {
             content: [],
             pageNumber: 0,
-            pageSize: 10,
+            pageSize: 5,
             totalElements: 0
         };
     }
@@ -89,7 +89,7 @@ export class DeletePlayerFormComponent implements OnInit, OnDestroy {
     public handleChangePageAction($event: TableLazyLoadEvent) {
         if ($event && $event.first !== undefined && $event.rows) {
             const pageNumber = Math.ceil($event.first / $event.rows);
-            const pageSize = $event.rows !== 0 ? $event.rows : 10;
+            const pageSize = $event.rows !== 0 ? $event.rows : 5;
 
             const fields = $event.sortField ?? "name";
             const sortField = Array.isArray(fields) ? fields[0] : fields;

@@ -47,8 +47,9 @@ export class SavePositionFormComponent implements OnInit, OnDestroy {
         this.setParametersWithApi();
     }
 
-    private setParametersWithApi(): void {
-        this.parameterService.findAll()
+    private setParametersWithApi(): void
+    {
+        this.parameterService.findAllWithTotalRecords()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
                 next: (parametersPage: Page<ParameterDTO>) => {
@@ -106,6 +107,14 @@ export class SavePositionFormComponent implements OnInit, OnDestroy {
                     next: () => {
                         this.changesOnService.setChangesOn(true);
 
+
+                        this.newPositionForm.reset();
+                        this.positionParameterForm.reset();
+
+                        // Reset totalParameters and positionParameters
+                        this.positionParameters = [];
+                        this.setParametersWithApi();
+
                         this.messageService.clear();
                         this.messageService.add({
                             severity: 'success',
@@ -129,13 +138,6 @@ export class SavePositionFormComponent implements OnInit, OnDestroy {
                     }
                 });
         }
-
-        this.newPositionForm.reset();
-        this.positionParameterForm.reset();
-
-        // Reset totalParameters and positionParameters
-        this.positionParameters = [];
-        this.setParametersWithApi();
     }
 
     public ngOnDestroy(): void {

@@ -1,47 +1,31 @@
 <div class="edit-parameter-form flex justify-content-center">
     <p-card
-        *ngIf="parameters && ($viewTable | async)"
+        *ngIf="(viewTable$ | async)"
         header="Parameters"
         styleClass="shadow-none justify-content-center align-content-center align-content-center"
     >
         <p-table
-            #parametersTable
-            [value]="parameters"
-            dataKey="id"
-            [rows]="5"
+            [value]="page.content"
+            [rows]="pageable.pageSize"
+            [first]="pageable.indexFirstRow"
+            [paginator]= "true"
+            [totalRecords]="page.totalElements"
+            [lazy] = true
+            (onLazyLoad)="handleChangePageAction($event)"
+            [loading] = "loading$.getValue()"
             [rowHover]="true"
+            [rowsPerPageOptions]="[5, 10, 20]"
             [showCurrentPageReport]="true"
-            [paginator]="true"
-            [tableStyle]="{
-                width: 'w-full',
-            }"
+            dataKey="id"
+            paginatorPosition="top"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} parameters"
+            styleClass="dropdown-caret-color-transparent"
         >
             <ng-template pTemplate="header">
                 <tr>
-                    <th id="" pSortableColumn="name">
-                        <div
-                            class="flex justify-content-between align-items-center"
-                        >
-                            <div
-                                class="flex justify-content-between align-items-center text-lg mt-1"
-                            >
-                                Name
-                            </div>
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
-                                <p-sortIcon field="name"></p-sortIcon>
-                                <p-columnFilter
-                                    type="text"
-                                    field="name"
-                                    display="menu"
-                                    matchMode="contains"
-                                    [showMatchModes]="false"
-                                    [showOperator]="false"
-                                    [showAddButton]="false"
-                                    style="height: 1.8rem"
-                                ></p-columnFilter>
-                            </div>
+                    <th>
+                        <div class="flex justify-content-between align-items-center text-lg mt-1">
+                            Name
                         </div>
                     </th>
                 </tr>
@@ -58,7 +42,7 @@
 </div>
 
 <form
-    *ngIf="selectedParameter && !($viewTable | async)"
+    *ngIf="selectedParameter && !(viewTable$ | async)"
     [formGroup]="editParameterForm"
     (ngSubmit)="handleSubmitEditParameterForm()"
     class="flex flex-column align-content-center m-3 gap-4"
@@ -86,8 +70,8 @@
 
     <span class="p-float-label">
         <textarea
-            rows="6"
             pInputTextarea
+            rows="6"
             formControlName="description"
             class="w-full"
         ></textarea>
@@ -97,12 +81,10 @@
             [minNumberCharacters]="0"
             [maxNumberCharacters]="2000"
         ></app-form-control-alert>
-        <label for="description">Description</label>
+        <label>Description</label>
     </span>
 
-    <div
-        class="flex flex justify-content-center align-content-center align-items-center mt-4"
-    >
+    <div class="flex flex justify-content-center align-content-center align-items-center mt-4">
         <p-button
             [disabled]="!editParameterForm.valid"
             type="submit"

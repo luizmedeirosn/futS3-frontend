@@ -1,13 +1,15 @@
-import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { Validators, FormBuilder } from '@angular/forms';
-import { MessageService } from 'primeng/api';
-import { Table } from 'primeng/table';
-import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { ParameterRequestDTO } from 'src/app/models/dto/parameter/request/ParameterRequestDTO';
-import { ParameterDTO } from 'src/app/models/dto/parameter/response/ParameterDTO';
-import { ParameterService } from 'src/app/services/parameter/parameter.service';
-import { ChangesOnService } from 'src/app/shared/services/changes-on/changes-on.service';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import {FormBuilder, Validators} from '@angular/forms';
+import {MessageService} from 'primeng/api';
+import {TableLazyLoadEvent} from 'primeng/table';
+import {BehaviorSubject, Subject, takeUntil} from 'rxjs';
+import {ParameterRequestDTO} from 'src/app/models/dto/parameter/request/ParameterRequestDTO';
+import {ParameterDTO} from 'src/app/models/dto/parameter/response/ParameterDTO';
+import {ParameterService} from 'src/app/services/parameter/parameter.service';
+import {ChangesOnService} from 'src/app/shared/services/changes-on/changes-on.service';
 import Page from "../../../../../models/dto/generics/response/Page";
+import Pageable from "../../../../../models/dto/generics/request/Pageable";
+import PageMin from "../../../../../models/dto/generics/response/PageMin";
 
 @Component({
     selector: 'app-edit-parameter-form',
@@ -20,11 +22,12 @@ export class EditParameterFormComponent implements OnInit, OnDestroy {
     private readonly $destroy: Subject<void> = new Subject();
     private readonly toastLife: number = 2000;
 
-    @ViewChild('parametersTable') public parametersTable!: Table;
-    private parametersTablePages: Array<Array<ParameterDTO>> = [];
+    public pageable!: Pageable;
+    public loading$!: BehaviorSubject<boolean>;
+    public page!: PageMin<ParameterDTO>;
 
-    public $viewTable: BehaviorSubject<boolean> = new BehaviorSubject(true);
-    public parameters!: Array<ParameterDTO>;
+    public viewTable$: BehaviorSubject<boolean> = new BehaviorSubject(true);
+
     public selectedParameter!: ParameterDTO | undefined;
 
     public editParameterForm: any = this.formBuilder.group({
@@ -35,37 +38,42 @@ export class EditParameterFormComponent implements OnInit, OnDestroy {
     public constructor(
         private formBuilder: FormBuilder,
         private messageService: MessageService,
+        private changeDetectorRef: ChangeDetectorRef,
+
         private parameterService: ParameterService,
         private changesOnService: ChangesOnService,
 
     ) {
+        this.pageable = new Pageable('', 0, 5);
+        this.loading$ = new BehaviorSubject(false);
+        this.page = {
+            content: [],
+            pageNumber: 0,
+            pageSize: 5,
+            totalElements: 0
+        };
     }
 
     public ngOnInit(): void {
-        this.setParametersWithApi();
+        this.page.totalElements === 0 && this.setParametersWithApi(this.pageable);
     }
 
-    private setParametersWithApi(): void {
-        this.parameterService.findAll()
+    private setParametersWithApi(pageable: Pageable): void {
+        this.pageable = pageable;
+
+        this.loading$.next(true);
+
+        setTimeout(() => {
+        this.parameterService.findAll(pageable)
             .pipe(takeUntil(this.$destroy))
             .subscribe({
                 next: (parametersPage: Page<ParameterDTO>) => {
-                    if (parametersPage.content.length > 0) {
-                        this.parameters = parametersPage.content;
+                    this.page.content = parametersPage.content;
+                    this.page.pageNumber = parametersPage.pageable.pageNumber;
+                    this.page.pageSize = parametersPage.pageable.pageSize;
+                    this.page.totalElements = parametersPage.totalElements;
 
-                        let increment: number = 0;
-                        let page: Array<ParameterDTO> = [];
-
-                        parametersPage.content.forEach((parameter, index, array) => {
-                            page.push(parameter);
-                            increment += 1;
-                            if (increment === 5 || index === array.length - 1) {
-                                this.parametersTablePages.push(page);
-                                page = [];
-                                increment = 0;
-                            }
-                        });
-                    }
+                    this.loading$.next(false);
                 },
                 error: (err) => {
                     this.messageService.clear();
@@ -76,14 +84,25 @@ export class EditParameterFormComponent implements OnInit, OnDestroy {
                         life: this.toastLife
                     });
                     console.log(err);
+
+                    this.loading$.next(false);
                 }
             });
+        }, 500);
+    }
+    public handleChangePageAction(event$: TableLazyLoadEvent): void {
+        if (event$ && event$.first !== undefined && event$.rows) {
+            const pageNumber = Math.ceil(event$.first / event$.rows);
+            const pageSize = event$.rows !== 0 ? event$.rows : 5;
+
+            const pageable = new Pageable(this.pageable.keyword, pageNumber, pageSize);
+            this.setParametersWithApi(pageable);
+        }
     }
 
-    public handleSelectParameter($event: number): void {
-        if ($event) {
-            this.setParametersWithApi();
-            this.parameterService.findById($event)
+    public handleSelectParameter(id: number): void {
+        if (id) {
+            this.parameterService.findById(id)
                 .pipe(takeUntil(this.$destroy))
                 .subscribe({
                     next: (parameter: ParameterDTO) => {
@@ -93,7 +112,8 @@ export class EditParameterFormComponent implements OnInit, OnDestroy {
                                 name: parameter?.name,
                                 description: parameter?.description,
                             });
-                            this.$viewTable.next(false);
+
+                            this.viewTable$.next(false);
                         }
                     },
                     error: (err) => {
@@ -104,44 +124,29 @@ export class EditParameterFormComponent implements OnInit, OnDestroy {
     }
 
     public handleBackAction(): void {
-        // Activate the view child before referencing the table
-        this.$viewTable.next(true);
+        this.viewTable$.next(true);
 
-        // Delay until activating the viewChild
-        setTimeout(() => {
-            if (this.selectedParameter?.id) {
-                const selectedParameter: ParameterDTO | undefined = this.parameters.find(parameter => parameter.id === this.selectedParameter?.id);
+        this.selectedParameter = undefined;
 
-                if (selectedParameter) {
-                    const index = this.parameters.indexOf(selectedParameter);
-                    const numPage: number = Math.floor(index / 5);
-                    const page = this.parametersTablePages.at(numPage);
-                    const firstParameterPage: ParameterDTO | undefined = page?.at(0);
-
-                    if (firstParameterPage) {
-                        const parameter: ParameterDTO | undefined = this.parameters.find(parameter => parameter.id === firstParameterPage.id);
-
-                        this.parametersTable.first = parameter && this.parameters.indexOf(parameter);
-                    }
-                }
-            }
-            this.selectedParameter = undefined;
-        }, 10);
+        this.changeDetectorRef.detectChanges();
     }
 
     public handleSubmitEditParameterForm(): void {
-        const parameterResquest: ParameterRequestDTO = {
-            name: this.editParameterForm.value.name as string,
-            description: this.editParameterForm.value.description as string
-        };
+        if (this.editParameterForm.valid && this.editParameterForm.value) {
+            const parameterResquest: ParameterRequestDTO = {
+                name: this.editParameterForm.value.name as string,
+                description: this.editParameterForm.value.description as string
+            };
 
-        this.selectedParameter &&
+            this.selectedParameter &&
             this.parameterService.updateById(this.selectedParameter?.id, parameterResquest)
                 .pipe(takeUntil(this.$destroy))
                 .subscribe({
                     next: (parameter: ParameterDTO) => {
-                        const parameterUpdated = this.parameters.find(p => p.id === this.selectedParameter?.id);
+                        const parameterUpdated = this.page.content.find(p => p.id === this.selectedParameter?.id);
                         parameterUpdated && (parameterUpdated.name = parameter.name);
+
+                        this.editParameterForm.reset();
 
                         this.changesOnService.setChangesOn(true);
 
@@ -156,8 +161,6 @@ export class EditParameterFormComponent implements OnInit, OnDestroy {
                         this.handleBackAction();
                     },
                     error: (err) => {
-                        this.changesOnService.setChangesOn(false);
-
                         this.messageService.clear();
                         this.messageService.add({
                             severity: 'error',
@@ -165,18 +168,17 @@ export class EditParameterFormComponent implements OnInit, OnDestroy {
                             detail: 'Invalid registration!',
                             life: this.toastLife
                         });
+
                         console.log(err);
 
-                        this.handleBackAction();
+                        this.changesOnService.setChangesOn(false);
                     }
                 });
-
-        this.editParameterForm.reset();
+        }
     }
 
     public ngOnDestroy(): void {
         this.$destroy.next();
         this.$destroy.complete();
     }
-
 }

@@ -30,12 +30,12 @@ export class DeletePositionFormComponent implements OnInit, OnDestroy {
         private confirmationService: ConfirmationService,
         private changesOnService: ChangesOnService,
     ) {
-        this.pageable = new Pageable('', 0, 10, "name", 1);
+        this.pageable = new Pageable('', 0, 5);
         this.$loading = new BehaviorSubject(false);
         this.page = {
             content: [],
             pageNumber: 0,
-            pageSize: 10,
+            pageSize: 5,
             totalElements: 0
         };
     }
@@ -81,7 +81,7 @@ export class DeletePositionFormComponent implements OnInit, OnDestroy {
     public handleChangePageAction($event: TableLazyLoadEvent) {
         if ($event && $event.first !== undefined && $event.rows) {
             const pageNumber = Math.ceil($event.first / $event.rows);
-            const pageSize = $event.rows !== 0 ? $event.rows : 10;
+            const pageSize = $event.rows !== 0 ? $event.rows : 5;
 
             this.setPositionsWithApi(new Pageable(this.pageable.keyword, pageNumber, pageSize));
         }
@@ -104,13 +104,14 @@ export class DeletePositionFormComponent implements OnInit, OnDestroy {
         }
     }
 
-    public handleDeletePositionAction($event: number): void {
-        if ($event) {
+    public handleDeletePositionAction(id: number): void {
+        if (id) {
             this.messageService.clear();
 
             this.$loading.next(true);
 
-            this.positionService.deleteById($event)
+            setTimeout(() => {
+                this.positionService.deleteById(id)
                 .pipe(takeUntil(this.$destroy))
                 .subscribe({
                     next: () => {
@@ -130,24 +131,23 @@ export class DeletePositionFormComponent implements OnInit, OnDestroy {
                         });
                     },
                     error: (err) => {
-                        setTimeout(() => {
-                            this.messageService.clear();
-                            this.messageService.add({
-                                key: 'deletion-error',
-                                severity: 'error',
-                                summary: 'Error',
-                                detail: 'Is the position part of a game mode or a player!',
-                                life: 6000
-                            });
+                        this.messageService.clear();
+                        this.messageService.add({
+                            key: 'deletion-error',
+                            severity: 'error',
+                            summary: 'Error',
+                            detail: 'Is the position part of a game mode or a player!',
+                            life: 6000
+                        });
 
-                            console.log(err);
+                        console.log(err);
 
-                            this.changesOnService.setChangesOn(false);
+                        this.changesOnService.setChangesOn(false);
 
-                            this.$loading.next(false);
-                        }, 1000);
+                        this.$loading.next(false);
                     }
                 });
+            }, 500);
         }
     }
 
@@ -155,5 +155,4 @@ export class DeletePositionFormComponent implements OnInit, OnDestroy {
         this.$destroy.next();
         this.$destroy.complete();
     }
-
 }
