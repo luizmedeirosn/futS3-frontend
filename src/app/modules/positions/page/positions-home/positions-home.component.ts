@@ -35,17 +35,14 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
     // The view is also controlled by the menu bar, so the observable is necessary. Use case: The view screen is active and the 'Find All' is triggered
     public positionView$!: Subject<boolean>;
 
-    // Changes in the table state through positionView$ from the menubar need to be detected by the 'parent component'
-    public homeChangeDetectorRef!: ChangeDetectorRef;
-
     public position!: FullDataPosition;
 
     private dynamicDialogRef!: DynamicDialogRef;
 
     public constructor(
+        public changeDetectorRef: ChangeDetectorRef,
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
-        private changeDetectorRef: ChangeDetectorRef,
         private positionService: PositionService,
         private customDialogService: CustomDialogService,
         private changesOnService: ChangesOnService,
@@ -60,7 +57,6 @@ export class PositionsHomeComponent implements OnInit, OnDestroy {
         };
 
         this.positionView$ = this.positionService.positionView$;
-        this.homeChangeDetectorRef = changeDetectorRef;
     }
 
     public ngOnInit(): void {

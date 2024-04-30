@@ -62,7 +62,7 @@ export class MenubarNavigationComponent implements OnInit, OnDestroy {
                     {
                         label: 'Find All',
                         icon: 'pi pi-search',
-                        command: () => this.gameModeService.$gameModeView.next(false),
+                        command: () => this.gameModeService.gameModeView$.next(false),
                         routerLink: ['/gamemodes'],
                     },
                     {
@@ -226,7 +226,7 @@ export class MenubarNavigationComponent implements OnInit, OnDestroy {
                     {
                         label: 'Find All',
                         icon: 'pi pi-search',
-                        command: () => this.playerService.$playerView.next(false),
+                        command: () => this.playerService.playerView$.next(false),
                         routerLink: ['/players'],
                     },
                     {

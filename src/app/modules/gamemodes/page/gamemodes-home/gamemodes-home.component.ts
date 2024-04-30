@@ -25,30 +25,30 @@ import ChangePageAction from "../../../../models/events/ChangePageAction";
 })
 export class GameModesHomeComponent implements OnInit, OnDestroy {
 
-    private readonly $destroy: Subject<void> = new Subject();
+    private readonly destroy$: Subject<void> = new Subject();
     private readonly messageLife: number = 3000;
 
     public pageable!: Pageable;
-    public $loading!: BehaviorSubject<boolean>;
+    public loading$!: BehaviorSubject<boolean>;
     public page!: PageMin<GameModeMinDTO>;
 
     // The view is also controlled by the menu bar, so the observable is necessary. Use case: The view screen is active and the 'Find All' is triggered
-    public $gameModeView!: Subject<boolean>;
+    public gameModeView$!: Subject<boolean>;
 
     public gameMode!: GameModeDTO;
 
     private dynamicDialogRef!: DynamicDialogRef;
 
     public constructor(
+        public changeDetectorRef: ChangeDetectorRef,
         private messageService: MessageService,
-        private changeDetectorRef: ChangeDetectorRef,
         private confirmationService: ConfirmationService,
         private gameModeService: GameModeService,
         private customDialogService: CustomDialogService,
         private changesOnService: ChangesOnService,
     ) {
         this.pageable = new Pageable('', 0, 5);
-        this.$loading = new BehaviorSubject(false);
+        this.loading$ = new BehaviorSubject(false);
         this.page = {
             content: [],
             pageNumber: 0,
@@ -56,14 +56,14 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
             totalElements: 0
         };
 
-        this.$gameModeView = this.gameModeService.$gameModeView;
+        this.gameModeView$ = this.gameModeService.gameModeView$;
     }
 
     public ngOnInit(): void {
         this.page.totalElements === 0 && this.setGameModesWithApi(this.pageable);
 
         this.changesOnService.getChangesOn()
-            .pipe(takeUntil(this.$destroy))
+            .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (changesOn: boolean) => {
                     if (changesOn) {
@@ -82,11 +82,11 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
     private setGameModesWithApi(pageable: Pageable): void {
         this.pageable = pageable;
 
-        this.$loading.next(true);
+        this.loading$.next(true);
 
         setTimeout(() => {
             this.gameModeService.findAll(pageable)
-                .pipe(takeUntil(this.$destroy))
+                .pipe(takeUntil(this.destroy$))
                 .subscribe(
                     {
                         next: (gameModesPage: Page<GameModeMinDTO>) => {
@@ -95,7 +95,7 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
                             this.page.pageSize = gameModesPage.pageable.pageSize;
                             this.page.totalElements = gameModesPage.totalElements;
 
-                            this.$loading.next(false);
+                            this.loading$.next(false);
                         },
                         error: (err) => {
                             this.messageService.clear();
@@ -108,7 +108,7 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
 
                             console.log(err);
 
-                            this.$loading.next(false);
+                            this.loading$.next(false);
                         }
                     }
                 );
@@ -131,7 +131,7 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
 
     private selectGameMode(id: number) {
         id && this.gameModeService.findById(id)
-            .pipe(takeUntil(this.$destroy))
+            .pipe(takeUntil(this.destroy$))
             .subscribe(
                 {
                     next: (gameMode) => {
@@ -139,7 +139,7 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
                         this.gameModeService.changedGameModeId = id;
                         this.gameModeService.gameModeIdInPreview = id;
 
-                        this.gameModeService.$gameModeView.next(true);
+                        this.gameModeService.gameModeView$.next(true);
                     },
                     error: (err) => {
                         this.messageService.add({
@@ -160,7 +160,7 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
         this.gameModeService.gameModeIdInPreview = undefined;
 
         // Do not change the order of actions
-        this.gameModeService.$gameModeView.next(false);
+        this.gameModeService.gameModeView$.next(false);
         this.changeDetectorRef.detectChanges();
     }
 
@@ -180,7 +180,7 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
                 });
 
             this.dynamicDialogRef.onClose
-                .pipe(takeUntil(this.$destroy))
+                .pipe(takeUntil(this.destroy$))
                 .subscribe(() => this.selectGameMode($event.id));
         }
 
@@ -189,7 +189,7 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
 
     private deleteGameMode(id: number): void {
         id && this.gameModeService.deleteById(id)
-            .pipe(takeUntil(this.$destroy))
+            .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
                     this.messageService.clear();
@@ -238,7 +238,7 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
-        this.$destroy.next();
-        this.$destroy.complete();
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

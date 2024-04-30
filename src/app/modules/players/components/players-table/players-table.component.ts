@@ -1,11 +1,11 @@
-import {Component, EventEmitter, Input, Output, ViewEncapsulation} from '@angular/core';
+import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation} from '@angular/core';
 import {ViewAction} from 'src/app/models/events/ViewAction';
 import PlayerMinDTO from 'src/app/models/dto/player/response/PlayerMinDTO';
 import PageMin from "../../../../models/dto/generics/response/PageMin";
 import {TableLazyLoadEvent} from "primeng/table";
 import ChangePageAction from "../../../../models/events/ChangePageAction";
 import Pageable from "../../../../models/dto/generics/request/Pageable";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, Subject} from "rxjs";
 
 @Component({
     selector: 'app-players-table',
@@ -13,7 +13,7 @@ import {BehaviorSubject} from "rxjs";
     styleUrls: ['./players-table.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
-export class PlayersTableComponent {
+export class PlayersTableComponent implements OnInit {
 
     @Input()
     public pageable!: Pageable;
@@ -22,10 +22,18 @@ export class PlayersTableComponent {
     public previousKeyword!: string;
 
     @Input()
-    public $loading!: BehaviorSubject<boolean>;
+    public loading$!: BehaviorSubject<boolean>;
 
     @Input()
     public page!: PageMin<PlayerMinDTO>;
+
+    // The change detection is related to the change of state of the view
+    @Input()
+    public playerView$!: Subject<boolean>;
+
+    // Access to the change detector of the parent component to notify the changes
+    @Input()
+    public homeChangeDetectorRef!: ChangeDetectorRef
 
     @Output()
     public changePageEvent: EventEmitter<ChangePageAction> = new EventEmitter();
@@ -33,12 +41,9 @@ export class PlayersTableComponent {
     @Output()
     public viewEvent: EventEmitter<ViewAction> = new EventEmitter();
 
-    public handleViewFullDataPlayerEvent(id: number): void {
-        if (id) {
-            this.viewEvent.emit({
-                id: id,
-            });
-        }
+    public ngOnInit() {
+        // Changes in the table state through positionView$ from the menubar need to be detected by the 'parent component'
+        this.playerView$.subscribe(() => this.homeChangeDetectorRef.detectChanges());
     }
 
     public handleChangePageEvent($event: TableLazyLoadEvent): void {
@@ -71,6 +76,14 @@ export class PlayersTableComponent {
                 pageSize: this.pageable.pageSize,
                 sortField: this.pageable.sortField,
                 sortDirection: this.pageable.sortDirection
+            });
+        }
+    }
+
+    public handleViewFullDataPlayerEvent(id: number): void {
+        if (id) {
+            this.viewEvent.emit({
+                id: id,
             });
         }
     }
