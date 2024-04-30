@@ -177,7 +177,7 @@ export class EditPositionFormComponent implements OnInit, OnDestroy {
         this.changeDetectorRef.detectChanges();
     }
 
-    public handleAddNewParameter(): void {
+    public handleAddNewPositionParameter(): void {
         const parameter: ParameterDTO | undefined = this.positionParameterForm.value?.parameter as ParameterDTO | undefined;
         const weight = this.positionParameterForm.value?.weight as number | undefined;
 
@@ -191,7 +191,7 @@ export class EditPositionFormComponent implements OnInit, OnDestroy {
         this.positionParameterForm.reset();
     }
 
-    public handleDeleteParameter(id: number): void {
+    public handleDeletePositionParameter(id: number): void {
         if (id) {
             const parameterWeightDTO: ParameterWeightDTO | undefined = this.positionParameters.find((p) => p.id === id);
             if (parameterWeightDTO) {

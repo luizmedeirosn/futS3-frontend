@@ -1,6 +1,9 @@
-export default interface PlayerParameterDataDTO {
+export default class PlayerParameterDataDTO {
 
-    id: number;
-    name: string;
-    score: number;
+    public constructor(
+        public id: number,
+        public name: string,
+        public score: number
+    ) {
+    }
 }
