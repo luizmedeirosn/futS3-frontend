@@ -8,7 +8,7 @@
             [totalRecords]="page.totalElements"
             [lazy]="true"
             (onLazyLoad)="handleChangePageEvent($event)"
-            [loading]="$loading.getValue()"
+            [loading]="loading$.getValue()"
             [customSort]="true"
             (sortFunction)="handleChangePageEvent($event)"
             [resetPageOnSort]="false"

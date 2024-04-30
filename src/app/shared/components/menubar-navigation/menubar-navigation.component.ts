@@ -1,28 +1,30 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { MenuItem } from 'primeng/api';
-import { DynamicDialogRef } from 'primeng/dynamicdialog';
-import { Subject } from 'rxjs';
-import { EnumGameModeEventsCrud } from 'src/app/models/enums/EnumGameModeEventsCrud';
-import { EnumParameterEventsCrud } from 'src/app/models/enums/EnumParameterEventsCrud';
-import { EnumPlayerEventsCrud } from 'src/app/models/enums/EnumPlayerEventsCrud';
-import { EnumPositionEventsCrud } from 'src/app/models/enums/EnumPositionEventsCrud';
-import { AuthService } from 'src/app/services/auth/auth.service';
-import { GameModeService } from 'src/app/services/gamemode/gamemode.service';
-import { PlayerService } from 'src/app/services/player/player.service';
-import { PositionService } from 'src/app/services/position/position.service';
-import { CustomDialogService } from '../../services/custom-dialog/custom-dialog.service';
-import { DeleteGamemodeFormComponent } from '../forms/gamemode-forms/delete-gamemode-form/delete-gamemode-form.component';
-import { EditGamemodeFormComponent } from '../forms/gamemode-forms/edit-gamemode-form/edit-gamemode-form.component';
-import { SaveGamemodeFormComponent } from '../forms/gamemode-forms/save-gamemode-form/save-gamemode-form.component';
-import { DeleteParameterFormComponent } from '../forms/parameter-forms/delete-parameter-form/delete-parameter-form.component';
-import { EditParameterFormComponent } from '../forms/parameter-forms/edit-parameter-form/edit-parameter-form.component';
-import { SaveParameterFormComponent } from '../forms/parameter-forms/save-parameter-form/save-parameter-form.component';
-import { DeletePlayerFormComponent } from '../forms/player-forms/delete-players-form/delete-player-form.component';
-import { EditPlayerFormComponent } from '../forms/player-forms/edit-player-form/edit-player-form.component';
-import { SavePlayerFormComponent } from '../forms/player-forms/save-player-form/save-player-form.component';
-import { DeletePositionFormComponent } from '../forms/position-forms/delete-position-form/delete-position-form.component';
-import { EditPositionFormComponent } from '../forms/position-forms/edit-position-form/edit-position-form.component';
-import { SavePositionFormComponent } from '../forms/position-forms/save-position-form/save-position-form.component';
+import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import {MenuItem} from 'primeng/api';
+import {DynamicDialogRef} from 'primeng/dynamicdialog';
+import {Subject} from 'rxjs';
+import {EnumGameModeEventsCrud} from 'src/app/models/enums/EnumGameModeEventsCrud';
+import {EnumParameterEventsCrud} from 'src/app/models/enums/EnumParameterEventsCrud';
+import {EnumPlayerEventsCrud} from 'src/app/models/enums/EnumPlayerEventsCrud';
+import {EnumPositionEventsCrud} from 'src/app/models/enums/EnumPositionEventsCrud';
+import {AuthService} from 'src/app/services/auth/auth.service';
+import {GameModeService} from 'src/app/services/gamemode/gamemode.service';
+import {PlayerService} from 'src/app/services/player/player.service';
+import {PositionService} from 'src/app/services/position/position.service';
+import {CustomDialogService} from '../../services/custom-dialog/custom-dialog.service';
+import {DeleteGamemodeFormComponent} from '../forms/gamemode-forms/delete-gamemode-form/delete-gamemode-form.component';
+import {EditGamemodeFormComponent} from '../forms/gamemode-forms/edit-gamemode-form/edit-gamemode-form.component';
+import {SaveGamemodeFormComponent} from '../forms/gamemode-forms/save-gamemode-form/save-gamemode-form.component';
+import {
+    DeleteParameterFormComponent
+} from '../forms/parameter-forms/delete-parameter-form/delete-parameter-form.component';
+import {EditParameterFormComponent} from '../forms/parameter-forms/edit-parameter-form/edit-parameter-form.component';
+import {SaveParameterFormComponent} from '../forms/parameter-forms/save-parameter-form/save-parameter-form.component';
+import {DeletePlayerFormComponent} from '../forms/player-forms/delete-players-form/delete-player-form.component';
+import {EditPlayerFormComponent} from '../forms/player-forms/edit-player-form/edit-player-form.component';
+import {SavePlayerFormComponent} from '../forms/player-forms/save-player-form/save-player-form.component';
+import {DeletePositionFormComponent} from '../forms/position-forms/delete-position-form/delete-position-form.component';
+import {EditPositionFormComponent} from '../forms/position-forms/edit-position-form/edit-position-form.component';
+import {SavePositionFormComponent} from '../forms/position-forms/save-position-form/save-position-form.component';
 
 @Component({
     selector: 'app-menubar-navigation',
@@ -60,7 +62,7 @@ export class MenubarNavigationComponent implements OnInit, OnDestroy {
                     {
                         label: 'Find All',
                         icon: 'pi pi-search',
-                        command: () => this.gameModeService.$gameModeView.next(false),
+                        command: () => this.gameModeService.gameModeView$.next(false),
                         routerLink: ['/gamemodes'],
                     },
                     {
@@ -117,7 +119,7 @@ export class MenubarNavigationComponent implements OnInit, OnDestroy {
                     {
                         label: 'Find All',
                         icon: 'pi pi-search',
-                        command: () => this.positionService.$positionView.next(false),
+                        command: () => this.positionService.positionView$.next(false),
                         routerLink: ['/positions'],
                     },
                     {
@@ -224,7 +226,7 @@ export class MenubarNavigationComponent implements OnInit, OnDestroy {
                     {
                         label: 'Find All',
                         icon: 'pi pi-search',
-                        command: () => this.playerService.$playerView.next(false),
+                        command: () => this.playerService.playerView$.next(false),
                         routerLink: ['/players'],
                     },
                     {

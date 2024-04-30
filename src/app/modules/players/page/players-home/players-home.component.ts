@@ -26,31 +26,31 @@ import Pageable from "../../../../models/dto/generics/request/Pageable";
 })
 export class PlayersHomeComponent implements OnInit, OnDestroy {
 
-    private readonly $destroy: Subject<void> = new Subject();
+    private readonly destroy$: Subject<void> = new Subject();
     private readonly messageLife: number = 3000;
 
     public pageable!: Pageable;
     public previousKeyword!: string;
-    public $loading!: BehaviorSubject<boolean>;
+    public loading$!: BehaviorSubject<boolean>;
     public page!: PageMin<PlayerMinDTO>;
 
     // The view is also controlled by the menu bar, so the observable is necessary. Use case: The view screen is active and the 'Find All' is triggered
-    public $playerView!: Subject<boolean>;
+    public playerView$!: Subject<boolean>;
 
     public player!: PlayerFullDTO;
 
     public dynamicDialogRef!: DynamicDialogRef;
 
     public constructor(
+        public changeDetectorRef: ChangeDetectorRef,
         private messageService: MessageService,
-        private changeDetectorRef: ChangeDetectorRef,
         private confirmationService: ConfirmationService,
         private playerService: PlayerService,
         private customDialogService: CustomDialogService,
         private changesOnService: ChangesOnService,
     ) {
         this.pageable = new Pageable('', 0, 5, "name", 1);
-        this.$loading = new BehaviorSubject(false);
+        this.loading$ = new BehaviorSubject(false);
         this.page = {
             content: [],
             pageNumber: 0,
@@ -58,14 +58,14 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
             totalElements: 0
         };
 
-        this.$playerView = playerService.$playerView;
+        this.playerView$ = playerService.playerView$;
     }
 
     public ngOnInit(): void {
         this.page.totalElements === 0 && this.setPlayersWithApi(this.pageable);
 
         this.changesOnService.getChangesOn()
-            .pipe(takeUntil(this.$destroy))
+            .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (changesOn: boolean) => {
                     if (changesOn) {
@@ -86,11 +86,11 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
         this.previousKeyword = pageable.keyword;
         this.pageable = pageable;
 
-        this.$loading.next(true);
+        this.loading$.next(true);
 
         setTimeout(() => {
             this.playerService.findAll(pageable)
-                .pipe(takeUntil(this.$destroy))
+                .pipe(takeUntil(this.destroy$))
                 .subscribe(
                     {
                         next: (playersPage: Page<PlayerMinDTO>) => {
@@ -99,7 +99,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                             this.page.pageSize = playersPage.pageable.pageSize;
                             this.page.totalElements = playersPage.totalElements;
 
-                            this.$loading.next(false);
+                            this.loading$.next(false);
                         },
                         error: (err) => {
                             this.messageService.clear();
@@ -112,7 +112,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
 
                             console.log(err);
 
-                            this.$loading.next(false);
+                            this.loading$.next(false);
                         }
                     }
                 );
@@ -137,14 +137,14 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
 
     private selectPlayer(id: number): void {
         id && this.playerService.findById(id)
-            .pipe(takeUntil(this.$destroy))
+            .pipe(takeUntil(this.destroy$))
             .subscribe(
                 {
                     next: (player) => {
                         this.player = player;
                         this.playerService.changedPlayerId = id;
 
-                        this.playerService.$playerView.next(true);
+                        this.playerService.playerView$.next(true);
                     },
                     error: (err) => {
                         this.messageService.add(
@@ -167,7 +167,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
         this.playerService.changedPlayerId = undefined;
 
         // Do not change the order of actions
-        this.playerService.$playerView.next(false);
+        this.playerService.playerView$.next(false);
         this.changeDetectorRef.detectChanges();
     }
 
@@ -187,7 +187,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
                 });
 
             this.dynamicDialogRef.onClose
-                .pipe(takeUntil(this.$destroy))
+                .pipe(takeUntil(this.destroy$))
                 .subscribe(() => $event.id && this.selectPlayer($event.id));
         }
 
@@ -211,7 +211,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
 
     private deletePlayer(id: number): void {
         id && this.playerService.deleteById(id)
-            .pipe(takeUntil(this.$destroy))
+            .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
                     this.messageService.clear();
@@ -244,7 +244,7 @@ export class PlayersHomeComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
-        this.$destroy.next();
-        this.$destroy.complete();
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }
