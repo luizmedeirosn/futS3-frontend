@@ -29,12 +29,6 @@ export class GameModesTableComponent {
     @Output()
     public viewEvent: EventEmitter<ViewAction> = new EventEmitter();
 
-    public handleViewFullDataGameModeEvent(id: number): void {
-        this.viewEvent.emit({
-                id
-            });
-    }
-
     public handleChangePageEvent($event: TableLazyLoadEvent): void {
         if ($event && $event.first !== undefined && $event.rows) {
             const pageNumber: number = Math.ceil($event.first / $event.rows);
@@ -48,5 +42,11 @@ export class GameModesTableComponent {
                 pageSize
             });
         }
+    }
+
+    public handleViewFullDataGameModeEvent(id: number): void {
+        this.viewEvent.emit({
+                id
+            });
     }
 }

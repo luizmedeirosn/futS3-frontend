@@ -120,7 +120,7 @@ export class GameModesHomeComponent implements OnInit, OnDestroy {
             this.setGameModesWithApi(new Pageable(
                 $event.keyword,
                 $event.pageNumber,
-                $event.pageSize,
+                $event.pageSize
             ));
         }
     }

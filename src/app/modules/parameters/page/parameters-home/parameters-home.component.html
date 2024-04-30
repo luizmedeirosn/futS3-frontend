@@ -1,3 +1,8 @@
 <app-menubar-navigation></app-menubar-navigation>
 
-<app-parameters-table [parameters]="parameters"></app-parameters-table>
+<app-parameters-table
+    [pageable]="pageable"
+    [$loading] = "$loading"
+    [page]="page"
+    (changePageEvent)="handleChangePageAction($event)"
+></app-parameters-table>
