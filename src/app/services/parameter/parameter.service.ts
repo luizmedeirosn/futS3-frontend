@@ -22,8 +22,8 @@ export class ParameterService {
         return this.httpClient.get<Page<ParameterDTO>>(`${this.API_URL}/parameters`);
     }
 
-    public findAll(pageable: Pageable, s: string = ''): Observable<Page<ParameterDTO>> {
-        let queryParams = s;
+    public findAll(pageable: Pageable): Observable<Page<ParameterDTO>> {
+        let queryParams = '';
         queryParams += `?_pageNumber=${pageable.pageNumber}`;
         queryParams += `&_pageSize=${pageable.pageSize}`;
 

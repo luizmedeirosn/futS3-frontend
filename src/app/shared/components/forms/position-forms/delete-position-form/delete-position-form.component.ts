@@ -30,7 +30,7 @@ export class DeletePositionFormComponent implements OnInit, OnDestroy {
         private confirmationService: ConfirmationService,
         private changesOnService: ChangesOnService,
     ) {
-        this.pageable = new Pageable('', 0, 5, "name", 1);
+        this.pageable = new Pageable('', 0, 5);
         this.$loading = new BehaviorSubject(false);
         this.page = {
             content: [],
