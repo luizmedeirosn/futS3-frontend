@@ -12,8 +12,6 @@ import {PlayerService} from 'src/app/services/player/player.service';
 import {PositionService} from 'src/app/services/position/position.service';
 import {ChangesOnService} from 'src/app/shared/services/changes-on/changes-on.service';
 import Page from "../../../../../models/dto/generics/response/Page";
-import {PositionDTO} from "../../../../../models/dto/position/response/PositionDTO";
-import {ParameterWeightDTO} from "../../../../../models/dto/position/aux/ParameterWeightDTO";
 
 @Component({
     selector: 'app-players-form',
@@ -26,11 +24,12 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
     private readonly toastLife: number = 2000;
 
     public viewSelectedPicture$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
     public totalPositions!: PositionMinDTO[];
     public totalParameters!: ParameterDTO[];
     public playerParameters!: PlayerParameterDataDTO[];
 
-    public newPlayerForm: any = this.formBuilder.group({
+    public newPlayerForm = this.formBuilder.group({
         name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
         team: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
         age: [null, [Validators.min(1), Validators.max(150)]],

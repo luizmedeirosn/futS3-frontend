@@ -152,7 +152,7 @@ export class EditPositionFormComponent implements OnInit, OnDestroy {
                             description: position?.description,
                         });
                         this.positionParameters = position.parameters;
-                        this.deleteIncludedParameters();
+                        this.deleteIncludedPositionParameters();
 
                         this.viewTable$.next(false);
                     },
@@ -163,7 +163,7 @@ export class EditPositionFormComponent implements OnInit, OnDestroy {
         }
     }
 
-    private deleteIncludedParameters(): void {
+    private deleteIncludedPositionParameters(): void {
         const positionParametersIds: number[] = this.positionParameters.map(p => p.id);
         this.totalParameters = this.totalParameters.filter(p => !positionParametersIds.includes(p.id));
     }
@@ -174,6 +174,7 @@ export class EditPositionFormComponent implements OnInit, OnDestroy {
 
         this.selectedPosition = undefined;
 
+        // Update the table and detect the changes that occurred during editing
         this.changeDetectorRef.detectChanges();
     }
 
@@ -217,12 +218,13 @@ export class EditPositionFormComponent implements OnInit, OnDestroy {
                 parameters: this.positionParameters
             }
 
-            this.selectedPosition && this.positionService.updateById(this.selectedPosition?.id, positionRequest)
+            this.selectedPosition &&
+            this.positionService.updateById(this.selectedPosition?.id, positionRequest)
                 .pipe(takeUntil(this.destroy$))
                 .subscribe({
-                    next: (position: PositionMinDTO) => {
-                        const positionUpdated = this.page.content.find(p => p.id === this.selectedPosition?.id);
-                        positionUpdated && (positionUpdated.name = position.name);
+                    next: () => {
+                        this.editPositionForm.reset();
+                        this.positionParameterForm.reset();
 
                         this.changesOnService.setChangesOn(true);
 

@@ -19,10 +19,6 @@ import Page from "../../../../../models/dto/generics/response/Page";
 import Pageable from "../../../../../models/dto/generics/request/Pageable";
 import PageMin from "../../../../../models/dto/generics/response/PageMin";
 import {TableLazyLoadEvent} from "primeng/table";
-import _default from "chart.js/dist/plugins/plugin.tooltip";
-import reset = _default.reset;
-import {ParameterDTO} from "../../../../../models/dto/parameter/response/ParameterDTO";
-import {ParameterWeightDTO} from "../../../../../models/dto/position/aux/ParameterWeightDTO";
 
 @Component({
     selector: 'app-edit-gamemode-form',
@@ -207,6 +203,8 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
 
         this.selectedGameMode = undefined;
         this.resetGameModePositions = true;
+
+        // Update the table and detect the changes that occurred during editing
         this.changeDetectorRef.detectChanges();
     }
 
@@ -287,14 +285,11 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
                 positions: this.gameModePositions.map(p => p.id)
             }
 
-            this.selectedGameMode && this.gameModeService.updateById(this.selectedGameMode.id, gameModeRequest)
+            this.selectedGameMode &&
+            this.gameModeService.updateById(this.selectedGameMode.id, gameModeRequest)
                 .pipe(takeUntil(this.$destroy))
                 .subscribe({
-                    next: (gameMode) => {
-                        const gameModeUpdated =
-                            this.page.content.find(p => p.id === this.selectedGameMode?.id);
-                        gameModeUpdated && (gameModeUpdated.formationName = gameMode.formationName);
-
+                    next: () => {
                         this.changesOnService.setChangesOn(true);
 
                         this.messageService.clear();

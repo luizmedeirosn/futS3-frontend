@@ -13,9 +13,6 @@ import {CustomDialogService} from '../../../../services/custom-dialog/custom-dia
 import {EditPositionFormComponent} from '../../position-forms/edit-position-form/edit-position-form.component';
 import {ChangesOnService} from 'src/app/shared/services/changes-on/changes-on.service';
 import Page from "../../../../../models/dto/generics/response/Page";
-import {ParameterDTO} from "../../../../../models/dto/parameter/response/ParameterDTO";
-import {ParameterWeightDTO} from "../../../../../models/dto/position/aux/ParameterWeightDTO";
-import {PositionDTO} from "../../../../../models/dto/position/response/PositionDTO";
 
 @Component({
     selector: 'app-save-gamemode-form',
