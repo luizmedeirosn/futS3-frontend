@@ -170,7 +170,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
 
     public handleSelectPlayer(id: number): void {
         if (id) {
-            // Reset available parameters whenever a new game mode is chosen due to the strategy of deleting positions that already belong to the selected position
+            // Reset available parameters whenever a new player is chosen due to the strategy of deleting parameters that already belong to the selected player
             const totalParameters$: Observable<Page<ParameterDTO>> =
                 this.parameterService.findAllWithTotalRecords();
 
@@ -179,7 +179,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
             const combined$: Observable<[Page<ParameterDTO>, PlayerDTO]> =
                 zip(totalParameters$, selectedPlayer);
 
-            // It's necessary to synchronize the requests to avoid issues with undefined in 'this.totalParameters' in the 'deleteIncludedParameters' method
+            // It's necessary to synchronize the requests to avoid issues with undefined in 'this.totalParameters' in the 'deleteIncludedPlayerParameters' method
             combined$
                 .pipe(takeUntil(this.destroy$))
                 .subscribe({
@@ -280,7 +280,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                     playerPicture: this.playerPicture ?? undefined,
                     parameters: this.playerParameters
                 };
-                
+
                 this.playerPicture && (this.playerService.changedPlayerPicture = true);
 
                 this.playerService.update(playerRequest)
