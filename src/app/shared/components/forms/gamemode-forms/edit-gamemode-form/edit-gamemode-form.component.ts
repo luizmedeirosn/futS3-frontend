@@ -2,7 +2,7 @@ import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation} from
 import {FormBuilder, Validators} from '@angular/forms';
 import {MessageService} from 'primeng/api';
 import {DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
-import {BehaviorSubject, Subject, takeUntil} from 'rxjs';
+import {BehaviorSubject, Observable, Subject, takeUntil, zip} from 'rxjs';
 import {GameModeRequestDTO} from 'src/app/models/dto/gamemode/request/GameModeRequestDTO';
 import {GameModeDTO} from 'src/app/models/dto/gamemode/response/GameModeDTO';
 import {GameModeMinDTO} from 'src/app/models/dto/gamemode/response/GameModeMinDTO';
@@ -19,6 +19,8 @@ import Page from "../../../../../models/dto/generics/response/Page";
 import Pageable from "../../../../../models/dto/generics/request/Pageable";
 import PageMin from "../../../../../models/dto/generics/response/PageMin";
 import {TableLazyLoadEvent} from "primeng/table";
+import {ParameterDTO} from "../../../../../models/dto/parameter/response/ParameterDTO";
+import {PositionDTO} from "../../../../../models/dto/position/response/PositionDTO";
 
 @Component({
     selector: 'app-edit-gamemode-form',
@@ -28,17 +30,17 @@ import {TableLazyLoadEvent} from "primeng/table";
 })
 export class EditGamemodeFormComponent implements OnInit, OnDestroy {
 
-    private readonly $destroy: Subject<void> = new Subject();
+    private readonly destroy$: Subject<void> = new Subject();
     private readonly toastLife: number = 2000;
 
     // Prevent resetting of positions when the modal to trigger positions is opened during editing of a game mode in GameModeHomeComponent
     private resetGameModePositions!: boolean;
 
     public pageable!: Pageable;
-    public $loading!: BehaviorSubject<boolean>;
+    public loading$!: BehaviorSubject<boolean>;
     public page!: PageMin<GameModeMinDTO>;
 
-    public $viewTable: BehaviorSubject<boolean> = new BehaviorSubject(true);
+    public viewTable$: BehaviorSubject<boolean> = new BehaviorSubject(true);
     public closeableDialog: boolean = false;
 
     public selectedGameMode!: GameModeDTO | undefined;
@@ -67,7 +69,7 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
         private changesOnService: ChangesOnService,
     ) {
         this.pageable = new Pageable('', 0, 5);
-        this.$loading = new BehaviorSubject(false);
+        this.loading$ = new BehaviorSubject(false);
         this.page = {
             content: [],
             pageNumber: 0,
@@ -80,7 +82,6 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.page.totalElements === 0 && this.setGameModesWithApi(this.pageable);
-        this.setTotalPositionsWithApi();
 
         const action = this.dynamicDialogConfig.data;
         if (action && action.$event === EnumGameModeEventsCrud.EDIT) {
@@ -89,7 +90,7 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
         }
 
         this.changesOnService.getChangesOn()
-            .pipe(takeUntil(this.$destroy))
+            .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (changesOn: boolean) => {
                     if (changesOn) {
@@ -106,11 +107,11 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
     private setGameModesWithApi(pageable: Pageable): void {
         this.pageable = pageable;
 
-        this.$loading.next(true);
+        this.loading$.next(true);
 
         setTimeout(() => {
             this.gameModeService.findAll(pageable)
-                .pipe(takeUntil(this.$destroy))
+                .pipe(takeUntil(this.destroy$))
                 .subscribe({
                     next: (gameModesPage: Page<GameModeMinDTO>) => {
                         this.page.content = gameModesPage.content;
@@ -118,7 +119,7 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
                         this.page.pageSize = gameModesPage.pageable.pageSize;
                         this.page.totalElements = gameModesPage.totalElements;
 
-                        this.$loading.next(false);
+                        this.loading$.next(false);
                     },
                     error: (err) => {
                         this.messageService.clear();
@@ -131,24 +132,10 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
 
                         console.log(err);
 
-                        this.$loading.next(false);
+                        this.loading$.next(false);
                     }
                 });
         }, 500);
-    }
-
-    private setTotalPositionsWithApi(): void {
-        this.positionService.findAllWithTotalRecords()
-            .pipe(takeUntil(this.$destroy))
-            .subscribe({
-                next: (positionsPage: Page<PositionMinDTO>) => {
-                    this.totalPositions = positionsPage.content;
-                    !this.resetGameModePositions && this.deleteIncludedPositionsInGameMode();
-                },
-                error: (err) => {
-                    console.log(err);
-                }
-            });
     }
 
     public handleChangePageAction($event: TableLazyLoadEvent): void {
@@ -164,14 +151,27 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
     public handleSelectGameMode(id: number): void {
         if (id) {
             // Reset available positions whenever a new game mode is chosen due to the strategy of deleting positions that already belong to the selected game mode
-            this.setTotalPositionsWithApi();
+            const totalPositions$: Observable<Page<PositionMinDTO>> =
+                this.positionService.findAllWithTotalRecords();
+            const selectedGameMode$: Observable<GameModeDTO> =
+                this.gameModeService.findById(id);
 
-            this.gameModeService.findById(id)
-                .pipe(takeUntil(this.$destroy))
+            const combined$: Observable<[Page<PositionMinDTO>, GameModeDTO]> =
+                zip(totalPositions$, selectedGameMode$);
+
+            // It's necessary to synchronize the requests to avoid issues with undefined in 'this.totalParameters' in the 'deleteIncludedGameModePositions' method
+
+            combined$
+                .pipe(takeUntil(this.destroy$))
                 .subscribe({
-                    next: (gameMode: GameModeDTO) => {
-                        this.selectedGameMode = gameMode;
+                    next: (response: [Page<PositionMinDTO>, GameModeDTO]) => {
+                        let positionsPage: Page<PositionMinDTO>;
+                        let gameMode: GameModeDTO;
+                        [positionsPage, gameMode] = response;
 
+                        this.totalPositions = positionsPage.content;
+
+                        this.selectedGameMode = gameMode;
                         this.editGameModeForm.setValue({
                             formationName: gameMode?.formationName,
                             description: gameMode?.description,
@@ -180,10 +180,9 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
                         if (this.resetGameModePositions) {
                             this.gameModePositions = gameMode.positions.map(p => new PositionMinDTO(p.id, p.name, p.description));
                         }
+                        this.deleteIncludedGameModePositions();
 
-                        this.deleteIncludedPositionsInGameMode();
-
-                        this.$viewTable.next(false);
+                        this.viewTable$.next(false);
                     },
                     error: (err) => {
                         console.log(err);
@@ -192,14 +191,14 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
         }
     }
 
-    private deleteIncludedPositionsInGameMode(): void {
+    private deleteIncludedGameModePositions(): void {
         const gameModePositionsIds: number[] = this.gameModePositions.map(p => p.id);
         this.totalPositions = this.totalPositions.filter(p => !gameModePositionsIds.includes(p.id));
     }
 
     public handleBackAction(): void {
         this.closeableDialog ?
-            this.customDialogService.closeEndDialog() : this.$viewTable.next(true);
+            this.customDialogService.closeEndDialog() : this.viewTable$.next(true);
 
         this.selectedGameMode = undefined;
         this.resetGameModePositions = true;
@@ -221,8 +220,8 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
             });
 
         this.dynamicDialogRef.onClose
-            .pipe(takeUntil(this.$destroy))
-            .subscribe(() => this.setTotalPositionsWithApi());
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(() => this.handleSelectGameMode(Number(this.selectedGameMode?.id)));
     }
 
     public handleEditPositionEvent(id: number) {
@@ -242,8 +241,8 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
             });
 
         this.dynamicDialogRef.onClose
-            .pipe(takeUntil(this.$destroy))
-            .subscribe(() => this.setTotalPositionsWithApi());
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(() => this.handleSelectGameMode(Number(this.selectedGameMode?.id)));
     }
 
     public handleAddPosition(): void {
@@ -287,7 +286,7 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
 
             this.selectedGameMode &&
             this.gameModeService.updateById(this.selectedGameMode.id, gameModeRequest)
-                .pipe(takeUntil(this.$destroy))
+                .pipe(takeUntil(this.destroy$))
                 .subscribe({
                     next: () => {
                         this.changesOnService.setChangesOn(true);
@@ -320,7 +319,7 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
-        this.$destroy.next();
-        this.$destroy.complete();
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

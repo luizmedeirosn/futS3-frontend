@@ -1,6 +1,6 @@
 <div class="edit-gamemode-form flex justify-content-center">
     <p-card
-        *ngIf="!closeableDialog && ($viewTable | async)"
+        *ngIf="!closeableDialog && (viewTable$ | async)"
         header="Game modes"
         styleClass="shadow-none justify-content-center align-content-center align-content-center"
     >
@@ -12,7 +12,7 @@
             [totalRecords]="page.totalElements"
             [lazy] = true
             (onLazyLoad)="handleChangePageAction($event)"
-            [loading] = "$loading.getValue()"
+            [loading] = "loading$.getValue()"
             [rowHover]="true"
             [rowsPerPageOptions]="[5, 10, 20]"
             [showCurrentPageReport]="true"
@@ -42,7 +42,7 @@
 </div>
 
 <form
-    *ngIf="selectedGameMode && !($viewTable | async)"
+    *ngIf="selectedGameMode && !(viewTable$ | async)"
     [formGroup]="editGameModeForm"
     (ngSubmit)="handleSubmitEditGameModeForm()"
     class="flex flex-column align-content-center m-3 gap-4"
