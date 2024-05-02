@@ -86,7 +86,7 @@
 
     <form
         [formGroup]="positionParameterForm"
-        (ngSubmit)="handleAddNewParameter()"
+        (ngSubmit)="handleAddNewPositionParameter()"
         class="flex justify-content-between align-items-center mt-1 w-full"
     >
         <div class="flex justify-content-between align-content-center gap-3">
@@ -191,7 +191,7 @@
                             severity="danger"
                             icon="pi pi-trash"
                             [rounded]="true"
-                            (onClick)="handleDeleteParameter(parameter.id)"
+                            (onClick)="handleDeletePositionParameter(parameter.id)"
                         ></p-button>
                     </td>
                 </tr>

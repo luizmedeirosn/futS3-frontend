@@ -4,7 +4,11 @@
     class="flex flex-column align-content-center m-3 gap-4"
 >
     <span class="p-float-label mt-3">
-        <input pInputText formControlName="formationName" class="w-full" />
+        <input
+            pInputText
+            formControlName="formationName"
+            class="w-full"
+        />
         <app-form-control-alert
             [form]="newGameModeForm"
             [controlName]="'formationName'"
@@ -38,70 +42,67 @@
         <div class="flex justify-content-between align-content-center gap-3">
             <span class="p-float-label">
                 <p-dropdown
-                    [options]="positions"
-                    optionLabel="name"
+                    [options]="totalPositions"
                     [editable]="true"
                     [showClear]="true"
-                    styleClass="w-20rem"
-                    placeholder="Add a position"
+                    optionLabel="name"
                     formControlName="position"
+                    placeholder="Add a position"
+                    styleClass="w-20rem"
                 ></p-dropdown>
                 <label>Add a Position</label>
             </span>
             <p-button
                 [disabled]="!addPositionForm.valid"
+                [rounded]="true"
                 type="submit"
                 severity="warning"
                 icon="pi pi-plus"
                 pTooltip="Add position"
                 tooltipPosition="top"
-                [rounded]="true"
             ></p-button>
         </div>
         <p-button
+            (onClick)="handleCreatePositionEvent()"
             severity="info"
             label="Create"
             icon="pi pi-th-large"
             pTooltip="Create a new position"
             tooltipPosition="top"
             styleClass="flex justify-content-center align-content-center align-items-center gap-2 font-bold"
-            (onClick)="handleCreatePositionEvent()"
         >
         </p-button>
     </form>
 
     <div
-        *ngIf="positionsOff.length > 0; else withoutPositions"
+        *ngIf="gameModePositions.length > 0; else withoutPositions"
         class="flex flex-column gap-2"
     >
         <div class="flex justify-content-between align-items-center">
             <span class="text-xl font-bold text-gray-900">Positions</span>
         </div>
 
-        <p-table [value]="positionsOff" [rowHover]="true">
+        <p-table
+            [value]="gameModePositions"
+            [rowHover]="true"
+        >
             <ng-template pTemplate="header">
                 <tr>
                     <th pSortableColumn="name">
-                        <div
-                            class="flex justify-content-between align-items-center"
-                        >
-                            <div
-                                class="flex justify-content-center align-items-center text-lg mt-1"
-                            >
+                        <div class="flex justify-content-between align-items-center">
+                            <div class="flex justify-content-center align-items-center text-lg mt-1">
                                 Name
                             </div>
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
+                            <div class="flex justify-content-between align-items-center">
                                 <p-sortIcon field="name"></p-sortIcon>
                                 <p-columnFilter
-                                    type="text"
-                                    field="name"
-                                    display="menu"
-                                    matchMode="contains"
                                     [showMatchModes]="false"
                                     [showOperator]="false"
                                     [showAddButton]="false"
+                                    matchMode="contains"
+                                    type="text"
+                                    field="name"
+                                    display="menu"
                                     style="height: 1.7rem"
                                 ></p-columnFilter>
                             </div>
@@ -117,10 +118,10 @@
             <ng-template pTemplate="body" let-position>
                 <tr>
                     <td
+                        (click)="handleEditPositionEvent(position.id)"
                         pTooltip="Click to edit"
                         tooltipPosition="top"
                         style="cursor: pointer"
-                        (click)="handleEditPositionEvent(position.id)"
                     >
                         {{ position.name }}
                     </td>
@@ -147,9 +148,7 @@
         </h3>
     </ng-template>
 
-    <div
-        class="flex flex justify-content-center align-content-center align-items-center mt-4"
-    >
+    <div class="flex flex justify-content-center align-content-center align-items-center mt-4">
         <p-button
             [disabled]="!newGameModeForm.valid"
             type="submit"

@@ -1,11 +1,15 @@
 <form
     [formGroup]="newPlayerForm"
     (ngSubmit)="handleSubmitSavePlayerForm()"
-    class="p-button-danger-focus flex flex-column align-content-center m-3 gap-5"
     enctype="multipart/form-data"
+    class="p-button-danger-focus flex flex-column align-content-center m-3 gap-5"
 >
     <span class="p-float-label mt-3">
-        <input pInputText formControlName="name" class="w-full" />
+        <input
+            pInputText
+            formControlName="name"
+            class="w-full"
+        />
         <app-form-control-alert
             [form]="newPlayerForm"
             [controlName]="'name'"
@@ -31,9 +35,7 @@
         <label>Team <span class="text-red-600">*</span></label>
     </span>
 
-    <div
-        class="flex justify-content-between align-items-center gap-3"
-    >
+    <div class="flex justify-content-between align-items-center gap-3">
         <span class="p-float-label">
             <p-inputNumber
                 formControlName="age"
@@ -57,7 +59,7 @@
     <div class="flex justify-content-between align-items-start gap-3">
         <span class="p-float-label mt-1">
             <p-dropdown
-                [options]="positions"
+                [options]="totalPositions"
                 optionLabel="name"
                 [editable]="true"
                 [showClear]="true"
@@ -79,127 +81,119 @@
                 Choose Picture
             </label>
 
-            <span *ngIf="$viewSelectedPicture | async" class="font-medium">{{
-                playerPicture.name | shorten : 15
-            }}</span>
+            <span
+                *ngIf="viewSelectedPicture$ | async"
+                class="font-medium"
+            >
+                {{ playerPicture.name | shorten : 15 }}
+            </span>
 
             <input
+                (change)="handleUploadPicture($event)"
+                id="input-file"
                 type="file"
                 name="input-file"
-                id="input-file"
-                style="display: none"
                 accept=".jpg, .jpeg, .png .webp"
-                (change)="handleUploadPicture($event)"
+                style="display: none"
             />
         </div>
     </div>
 
     <form
         [formGroup]="playerParameterForm"
-        (ngSubmit)="handleAddNewParameter()"
+        (ngSubmit)="handleAddNewPlayerParameter()"
         class="flex justify-content-between align-items-center mt-1 w-full"
     >
         <div class="flex justify-content-between align-content-center gap-3">
             <span class="p-float-label">
                 <p-dropdown
-                    [options]="parameters"
-                    optionLabel="name"
+                    [options]="totalParameters"
                     [editable]="true"
                     [showClear]="true"
-                    styleClass="w-20rem"
-                    placeholder="Select a parameter"
+                    optionLabel="name"
                     formControlName="parameter"
+                    placeholder="Select a parameter"
+                    styleClass="w-20rem"
                 ></p-dropdown>
                 <label>Select a parameter</label>
             </span>
             <input
                 pInputText
-                class="w-7rem"
                 formControlName="score"
                 [minlength]="1"
                 [maxlength]="3"
+                class="w-7rem"
             />
         </div>
         <p-button
             [disabled]="!playerParameterForm.valid"
+            [rounded]="true"
             type="submit"
             severity="warning"
             icon="pi pi-plus"
             pTooltip="Add new parameter"
             tooltipPosition="top"
-            [rounded]="true"
         ></p-button>
     </form>
 
     <div
-        *ngIf="playerParametersScore.length > 0; else withoutParameters"
+        *ngIf="playerParameters.length > 0; else withoutParameters"
         class="flex flex-column gap-2"
     >
         <div class="flex justify-content-between align-items-center">
-            <span class="text-xl font-bold text-gray-900"
-                >Player parameters</span
-            >
+            <span class="text-xl font-bold text-gray-900">
+                Player parameters
+            </span>
         </div>
 
-        <p-table [value]="playerParametersScore" [rowHover]="true">
+        <p-table
+            [value]="playerParameters"
+            [rowHover]="true"
+        >
             <ng-template pTemplate="header">
                 <tr>
-                    <th id="" pSortableColumn="name">
-                        <div
-                            class="flex justify-content-between align-items-center"
-                        >
-                            <div
-                                class="flex justify-content-center align-items-center text-lg mt-1"
-                            >
+                    <th pSortableColumn="name">
+                        <div class="flex justify-content-between align-items-center">
+                            <div class="flex justify-content-center align-items-center text-lg mt-1">
                                 Name
                             </div>
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
+                            <div class="flex justify-content-between align-items-center">
                                 <p-sortIcon field="name"></p-sortIcon>
                                 <p-columnFilter
+                                    [showMatchModes]="false"
+                                    [showOperator]="false"
+                                    [showAddButton]="false"
+                                    matchMode="contains"
                                     type="text"
                                     field="name"
                                     display="menu"
-                                    matchMode="contains"
-                                    [showMatchModes]="false"
-                                    [showOperator]="false"
-                                    [showAddButton]="false"
                                     style="height: 1.7rem"
                                 ></p-columnFilter>
                             </div>
                         </div>
                     </th>
-                    <th id="" pSortableColumn="score">
-                        <div
-                            class="flex justify-content-between align-items-center"
-                        >
-                            <div
-                                class="flex justify-content-center align-items-center text-lg mt-1"
-                            >
+                    <th pSortableColumn="score">
+                        <div class="flex justify-content-between align-items-center">
+                            <div class="flex justify-content-center align-items-center text-lg mt-1">
                                 Score
                             </div>
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
+                            <div class="flex justify-content-between align-items-center">
                                 <p-sortIcon field="score"></p-sortIcon>
                                 <p-columnFilter
+                                    [showMatchModes]="false"
+                                    [showOperator]="false"
+                                    [showAddButton]="false"
+                                    matchMode="contains"
                                     type="text"
                                     field="score"
                                     display="menu"
-                                    matchMode="contains"
-                                    [showMatchModes]="false"
-                                    [showOperator]="false"
-                                    [showAddButton]="false"
                                     style="height: 1.7rem"
                                 ></p-columnFilter>
                             </div>
                         </div>
                     </th>
-                    <th id="">
-                        <div
-                            class="flex justify-content-center align-items-center text-lg mt-1"
-                        >
+                    <th>
+                        <div class="flex justify-content-center align-items-center text-lg mt-1">
                             Delete
                         </div>
                     </th>
@@ -216,12 +210,10 @@
                         class="p-button-danger-focus"
                     >
                         <p-button
+                            [rounded]="true"
+                            (onClick)="handleDeletePlayerParameter(parameter.id)"
                             severity="danger"
                             icon="pi pi-trash"
-                            [rounded]="true"
-                            (onClick)="
-                                handleDeletePlayerParameter(parameter.id)
-                            "
                         ></p-button>
                     </td>
                 </tr>
@@ -235,9 +227,7 @@
         </h3>
     </ng-template>
 
-    <div
-        class="flex flex justify-content-center align-content-center align-items-center mt-4"
-    >
+    <div class="flex flex justify-content-center align-content-center align-items-center mt-4">
         <p-button
             [disabled]="!newPlayerForm.valid"
             type="submit"

@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
 import {MessageService} from 'primeng/api';
-import {BehaviorSubject, Subject, takeUntil} from 'rxjs';
+import {BehaviorSubject, Observable, Subject, takeUntil, zip} from 'rxjs';
 import {ParameterDTO} from 'src/app/models/dto/parameter/response/ParameterDTO';
 import {PlayerParameterIdScoreDTO} from 'src/app/models/dto/player/request/PlayerParameterIdScoreDTO';
 import {PostPlayerDTO} from 'src/app/models/dto/player/request/PostPlayerDTO';
@@ -20,16 +20,16 @@ import Page from "../../../../../models/dto/generics/response/Page";
 })
 export class SavePlayerFormComponent implements OnInit, OnDestroy {
 
-    private readonly $destroy: Subject<void> = new Subject();
+    private readonly destroy$: Subject<void> = new Subject();
     private readonly toastLife: number = 2000;
 
-    public $viewSelectedPicture: BehaviorSubject<boolean> = new BehaviorSubject(false);
-    public positions!: PositionMinDTO[];
-    public parameters!: ParameterDTO[];
-    private parametersOff: ParameterDTO[] = [];
-    public playerParametersScore: PlayerParameterDataDTO[] = [];
+    public viewSelectedPicture$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-    public newPlayerForm: any = this.formBuilder.group({
+    public totalPositions!: PositionMinDTO[];
+    public totalParameters!: ParameterDTO[];
+    public playerParameters!: PlayerParameterDataDTO[];
+
+    public newPlayerForm = this.formBuilder.group({
         name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
         team: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
         age: [null, [Validators.min(1), Validators.max(150)]],
@@ -51,25 +51,53 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
         private playerService: PlayerService,
         private changesOnService: ChangesOnService,
     ) {
+        this.playerParameters = [];
     }
 
     public ngOnInit(): void {
-        this.positionService.findAllWithTotalRecords()
-            .pipe(takeUntil(this.$destroy))
+        this.setTotalPositionsAndParametersWithApi();
+    }
+
+    private setTotalParametersWithApi(): void {
+        this.parameterService.findAllWithTotalRecords()
+            .pipe(takeUntil(this.destroy$))
             .subscribe({
-                next: (positionsPage: Page<PositionMinDTO>) => {
-                    this.positions = positionsPage.content;
+                next: (parametersPage: Page<ParameterDTO>) => {
+                    this.totalParameters = parametersPage.content;
+
+                    // playerParametersScore cannot be undefined since it already starts with an empty array
+                    this.deleteIncludedParameters();
                 },
                 error: (err) => {
                     console.log(err);
                 }
             });
+    }
 
-        this.parameterService.findAllWithTotalRecords()
-            .pipe(takeUntil(this.$destroy))
+    private deleteIncludedParameters(): void {
+        const playerParametersIds: number[] = this.playerParameters.map(p => p.id);
+        this.totalParameters = this.totalParameters.filter(p => !playerParametersIds.includes(p.id));
+    }
+
+    private setTotalPositionsAndParametersWithApi() {
+        const totalPositions$: Observable<Page<PositionMinDTO>> =
+            this.positionService.findAllWithTotalRecords();
+        const totalParameters$: Observable<Page<ParameterDTO>> =
+            this.parameterService.findAllWithTotalRecords();
+
+        const combined$: Observable<[Page<PositionMinDTO>, Page<ParameterDTO>]> =
+            zip(totalPositions$, totalParameters$);
+
+        combined$
+            .pipe(takeUntil(this.destroy$))
             .subscribe({
-                next: (parametersPage: Page<ParameterDTO>) => {
-                    this.parameters = parametersPage.content;
+                next: (response: [Page<PositionMinDTO>, Page<ParameterDTO>]) => {
+                    let positionsPage: Page<PositionMinDTO>;
+                    let parametersPage: Page<ParameterDTO>;
+                    [positionsPage, parametersPage] = response;
+
+                    this.totalPositions = positionsPage.content;
+                    this.totalParameters = parametersPage.content;
                 },
                 error: (err) => {
                     console.log(err);
@@ -80,30 +108,19 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
     public handleUploadPicture($event: any): void {
         if ($event) {
             this.playerPicture = $event.target.files[0];
-            this.$viewSelectedPicture.next(true);
+            this.viewSelectedPicture$.next(true);
         }
     }
 
-    public handleAddNewParameter(): void {
-        const selectedParameter = this.playerParameterForm.value?.parameter as ParameterDTO | undefined;
+    public handleAddNewPlayerParameter(): void {
+        const parameter: ParameterDTO | undefined = this.playerParameterForm.value?.parameter as ParameterDTO | undefined;
         const score = this.playerParameterForm.value?.score as number | undefined;
 
-        if (selectedParameter && score) {
-            const parameter: ParameterDTO | undefined = this.parameters.find(p => p.id === selectedParameter.id);
-            if (parameter) {
-                this.parametersOff.push(parameter);
-                this.parameters = this.parameters.filter(p => p.id !== parameter.id);
+        if (parameter && score) {
+            this.totalParameters = this.totalParameters.filter(p => p.id !== parameter.id);
 
-                const playerParameterScore: PlayerParameterDataDTO = {
-                    id: parameter.id,
-                    name: parameter.name,
-                    score: Number(this.playerParameterForm.value.score),
-                };
-
-                this.playerParametersScore.push(playerParameterScore);
-                this.playerParametersScore.sort((p1, p2) => p1.name.toUpperCase().localeCompare(p2.name.toUpperCase()));
-            }
-
+            this.playerParameters.push(new PlayerParameterDataDTO(parameter.id, parameter.name, score));
+            this.sortParametersByName(this.playerParameters);
         }
 
         this.playerParameterForm.reset();
@@ -111,12 +128,20 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
 
     public handleDeletePlayerParameter(id: number): void {
         if (id) {
-            this.playerParametersScore = this.playerParametersScore.filter(p => p.id !== id);
+            const playerParameterDataDTO: PlayerParameterDataDTO | undefined = this.playerParameters.find((p) => p.id === id);
+            if (playerParameterDataDTO) {
+                const parameter: ParameterDTO = new ParameterDTO(playerParameterDataDTO.id, playerParameterDataDTO.name);
 
-            const parameter: ParameterDTO | undefined = this.parametersOff.find((p) => p.id === id);
-            parameter && this.parameters.push(parameter);
-            this.parameters.sort((p1, p2) => p1.name.toUpperCase().localeCompare(p2.name.toUpperCase()));
+                this.playerParameters = this.playerParameters.filter(p => p.id !== parameter.id);
+
+                this.totalParameters.push(parameter);
+                this.sortParametersByName(this.totalParameters);
+            }
         }
+    }
+
+    private sortParametersByName(parameters: ParameterDTO[] | PlayerParameterDataDTO[]): void {
+        parameters.sort((p1, p2) => p1.name.toUpperCase().localeCompare(p2.name.toUpperCase()));
     }
 
     public handleSubmitSavePlayerForm(): void {
@@ -124,7 +149,7 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
             const position = this.newPlayerForm.value.position as PositionMinDTO | undefined;
             if (position) {
                 const parameters: PlayerParameterIdScoreDTO[] =
-                    this.playerParametersScore.map(p => ({
+                    this.playerParameters.map(p => ({
                         id: p.id,
                         score: p.score
                     }));
@@ -139,11 +164,18 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
                     parameters
                 };
 
-                this.$viewSelectedPicture.next(false);
                 this.playerService.save(playerRequest)
-                    .pipe(takeUntil(this.$destroy))
+                    .pipe(takeUntil(this.destroy$))
                     .subscribe({
                         next: () => {
+                            this.newPlayerForm.reset();
+                            this.viewSelectedPicture$.next(false);
+                            this.playerParameterForm.reset();
+
+                            // Reset totalParameters and positionParameters
+                            this.playerParameters = [];
+                            this.setTotalParametersWithApi();
+
                             this.changesOnService.setChangesOn(true);
 
                             this.messageService.clear();
@@ -155,8 +187,6 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
                             });
                         },
                         error: (err) => {
-                            this.changesOnService.setChangesOn(false);
-
                             this.messageService.clear();
                             this.messageService.add({
                                 severity: 'error',
@@ -164,22 +194,18 @@ export class SavePlayerFormComponent implements OnInit, OnDestroy {
                                 detail: 'Invalid registration!',
                                 life: this.toastLife
                             });
+
                             console.log(err);
+
+                            this.changesOnService.setChangesOn(false);
                         }
                     });
             }
-            this.newPlayerForm.reset();
-            this.playerParameterForm.reset();
-
-            this.parametersOff.forEach(e => this.parameters.push(e));
-            this.parameters.sort((p1, p2) => p1.name.toUpperCase().localeCompare(p2.name.toUpperCase()));
-            this.parametersOff = [];
-            this.playerParametersScore = [];
         }
     }
 
     public ngOnDestroy(): void {
-        this.$destroy.next();
-        this.$destroy.complete();
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

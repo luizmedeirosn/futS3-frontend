@@ -3,7 +3,7 @@ import {FormBuilder, Validators} from '@angular/forms';
 import {MessageService} from 'primeng/api';
 import {DynamicDialogConfig} from 'primeng/dynamicdialog';
 import {TableLazyLoadEvent} from 'primeng/table';
-import {BehaviorSubject, Subject, takeUntil} from 'rxjs';
+import {BehaviorSubject, Observable, Subject, takeUntil, zip} from 'rxjs';
 import {ParameterDTO} from 'src/app/models/dto/parameter/response/ParameterDTO';
 import {UpdatePlayerDTO} from 'src/app/models/dto/player/request/UpdatePlayerDTO';
 import PlayerDTO from 'src/app/models/dto/player/response/PlayerDTO';
@@ -28,26 +28,26 @@ import Pageable from "../../../../../models/dto/generics/request/Pageable";
 })
 export class EditPlayerFormComponent implements OnInit, OnDestroy {
 
-    private readonly $destroy: Subject<void> = new Subject();
+    private readonly destroy$: Subject<void> = new Subject();
     private readonly toastLife: number = 2000;
 
     public pageable!: Pageable;
     private previousKeyword!: string;
-    public $loading!: BehaviorSubject<boolean>;
+    public loading$!: BehaviorSubject<boolean>;
     public page!: PageMin<PlayerMinDTO>;
 
-    public $viewTable: BehaviorSubject<boolean> = new BehaviorSubject(true);
+    public viewTable$: BehaviorSubject<boolean> = new BehaviorSubject(true);
     public closeableDialog: boolean = false;
 
     public selectedPlayer!: PlayerDTO | undefined;
 
-    public $viewSelectedPicture: BehaviorSubject<boolean> = new BehaviorSubject(false);
-    public positions!: PositionMinDTO[];
-    public parameters!: ParameterDTO[];
-    private parametersOff: ParameterDTO[] = [];
-    public playerParametersScore: PlayerParameterDataDTO[] = [];
+    public viewSelectedPicture$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-    public playerForm = this.formBuilder.group({
+    public totalPositions!: PositionMinDTO[];
+    public totalParameters!: ParameterDTO[];
+    public playerParameters!: PlayerParameterDataDTO[]
+
+    public editPlayerForm = this.formBuilder.group({
         name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
         team: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
         age: [this.selectedPlayer?.age, [Validators.min(1), Validators.max(150)]],
@@ -74,19 +74,20 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
         private changesOnService: ChangesOnService,
     ) {
         this.pageable = new Pageable('', 0, 5, "name", 1);
-        this.$loading = new BehaviorSubject(false);
+        this.loading$ = new BehaviorSubject(false);
         this.page = {
             content: [],
             pageNumber: 0,
             pageSize: 5,
             totalElements: 0
         };
+
+        this.playerParameters = [];
     }
 
     public ngOnInit(): void {
         this.page.totalElements === 0 && this.setPlayersWithApi(this.pageable);
-        this.setPositionsWithApi();
-        this.setParametersWithApi();
+        this.setTotalPositionsWithApi();
 
         const action = this.dynamicDialogConfig.data;
         if (action && action.$event === EnumPlayerEventsCrud.EDIT) {
@@ -100,11 +101,11 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
         this.previousKeyword = pageable.keyword;
         this.pageable = pageable;
 
-        this.$loading.next(true);
+        this.loading$.next(true);
 
         setTimeout(() => {
             this.playerService.findAll(pageable)
-                .pipe(takeUntil(this.$destroy))
+                .pipe(takeUntil(this.destroy$))
                 .subscribe(
                     {
                         next: (playersPage: Page<PlayerMinDTO>) => {
@@ -113,7 +114,7 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                             this.page.pageSize = playersPage.pageable.pageSize;
                             this.page.totalElements = playersPage.totalElements;
 
-                            this.$loading.next(false);
+                            this.loading$.next(false);
                         },
                         error: (err) => {
                             this.messageService.clear();
@@ -126,32 +127,19 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
 
                             console.log(err);
 
-                            this.$loading.next(false);
+                            this.loading$.next(false);
                         }
                     }
                 );
         }, 500);
     }
 
-    private setPositionsWithApi(): void {
+    private setTotalPositionsWithApi(): void {
         this.positionService.findAllWithTotalRecords()
-            .pipe(takeUntil(this.$destroy))
+            .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (positionsPage: Page<PositionMinDTO>) => {
-                    this.positions = positionsPage.content;
-                },
-                error: (err) => {
-                    console.log(err);
-                }
-            });
-    }
-
-    private setParametersWithApi(): void {
-        this.parameterService.findAllWithTotalRecords()
-            .pipe(takeUntil(this.$destroy))
-            .subscribe({
-                next: (parametersPage: Page<ParameterDTO>) => {
-                    this.parameters = parametersPage.content;
+                    this.totalPositions = positionsPage.content;
                 },
                 error: (err) => {
                     console.log(err);
@@ -180,122 +168,127 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
         }
     }
 
-    public handleSelectPlayer($event: number): void {
-        // Reset available parameters whenever a new player is chosen due to the strategy of deleting parameters that already belong to the selected player
-        this.setParametersWithApi();
+    public handleSelectPlayer(id: number): void {
+        if (id) {
+            // Reset available parameters whenever a new game mode is chosen due to the strategy of deleting positions that already belong to the selected position
+            const totalParameters$: Observable<Page<ParameterDTO>> =
+                this.parameterService.findAllWithTotalRecords();
 
-        this.playerService.findById($event)
-            .pipe(takeUntil(this.$destroy))
-            .subscribe({
-                next: (player: PlayerDTO) => {
-                    this.selectedPlayer = player;
+            const selectedPlayer: Observable<PlayerDTO> =
+                this.playerService.findById(id);
+            const combined$: Observable<[Page<ParameterDTO>, PlayerDTO]> =
+                zip(totalParameters$, selectedPlayer);
 
-                    this.playerForm.setValue({
-                        name: player.name,
-                        team: player.team,
-                        age: player.age,
-                        height: player.height,
-                        position: player.position,
-                    });
-                    this.playerParametersScore = player.parameters;
+            // It's necessary to synchronize the requests to avoid issues with undefined in 'this.totalParameters' in the 'deleteIncludedParameters' method
+            combined$
+                .pipe(takeUntil(this.destroy$))
+                .subscribe({
+                    next: (response: [Page<ParameterDTO>, PlayerDTO]) => {
+                        let parametersPage: Page<ParameterDTO>;
+                        let player: PlayerDTO;
+                        [parametersPage, player] = response;
 
-                    this.deleteIncludedParameters();
+                        this.totalParameters = parametersPage.content;
 
-                    this.$viewTable.next(false);
-                    this.$viewSelectedPicture.next(true);
-                },
-                error: (err) => {
-                    console.log(err);
-                }
-            });
+                        this.selectedPlayer = player;
+                        this.editPlayerForm.setValue({
+                            name: player.name,
+                            team: player.team,
+                            age: player.age,
+                            height: player.height,
+                            position: player.position,
+                        });
+                        this.playerParameters = player.parameters;
+                        this.deleteIncludedPlayerParameters();
+
+                        this.viewSelectedPicture$.next(true);
+                        this.viewTable$.next(false);
+                    },
+                    error: (err) => {
+                        console.log(err);
+                    }
+                });
+        }
     }
 
-    private deleteIncludedParameters(): void {
-        const playerParametersScoreIds = this.playerParametersScore.map(p => p.id);
-        this.parameters.forEach(
-            p => playerParametersScoreIds.includes(p.id) && this.parametersOff.push(p)
-        );
-
-        this.parameters = this.parameters.filter(p => !playerParametersScoreIds.includes(p.id));
+    private deleteIncludedPlayerParameters(): void {
+        const playerParametersIds: number[] = this.playerParameters.map(p => p.id);
+        this.totalParameters = this.totalParameters.filter(p => !playerParametersIds.includes(p.id));
     }
 
     public handleBackAction(): void {
         this.closeableDialog ?
-            this.customDialogService.closeEndDialog() : this.$viewTable.next(true);
+            this.customDialogService.closeEndDialog() : this.viewTable$.next(true);
 
         this.selectedPlayer = undefined;
         this.playerPicture = undefined;
 
+        // Update the table and detect the changes that occurred during editing
         this.changeDetectorRef.detectChanges();
     }
 
     public handleUploadPicture($event: any): void {
         if ($event) {
             this.playerPicture = $event.target.files[0];
-            this.$viewSelectedPicture.next(true);
+            this.viewSelectedPicture$.next(true);
         }
     }
 
-    public handleAddNewParameter(): void {
-        const parameter = this.playerParameterForm.value?.parameter as ParameterDTO | undefined;
+    public handleAddNewPlayerParameter(): void {
+        const parameter: ParameterDTO | undefined = this.playerParameterForm.value?.parameter as ParameterDTO | undefined;
         const score = this.playerParameterForm.value?.score as number | undefined;
 
         if (parameter && score) {
-            const parameterName: string = this.parameters.filter((p) => p.name === parameter.name)[0].name;
+            this.totalParameters = this.totalParameters.filter(p => p.id !== parameter.id);
 
-            this.parametersOff.push(parameter);
-            this.parameters = this.parameters.filter(p => p.name !== parameterName);
-
-            const playerParameterScore: PlayerParameterDataDTO = {
-                id: parameter.id,
-                name: parameterName,
-                score: Number(this.playerParameterForm.value.score),
-            };
-
-            this.playerParametersScore.push(playerParameterScore);
-            this.playerParametersScore.sort((p1, p2) => p1.name.toUpperCase().localeCompare(p2.name.toUpperCase()));
-
+            this.playerParameters.push(new PlayerParameterDataDTO(parameter.id, parameter.name, score));
+            this.sortParametersByName(this.playerParameters);
         }
 
         this.playerParameterForm.reset();
     }
 
-    public handleDeletePlayerParameter(name: string): void {
-        if (name) {
-            this.playerParametersScore = this.playerParametersScore.filter(p => p.name !== name);
+    public handleDeletePlayerParameter(id: number): void {
+        if (id) {
+            const playerParameterDataDTO: PlayerParameterDataDTO | undefined = this.playerParameters.find((p) => p.id === id);
+            if (playerParameterDataDTO) {
+                const parameter: ParameterDTO = new ParameterDTO(playerParameterDataDTO.id, playerParameterDataDTO.name);
 
-            const parameter: ParameterDTO | undefined = this.parametersOff.find((p) => p.name === name);
-            parameter && this.parameters.push(parameter);
-            this.parameters.sort((p1, p2) => p1.name.toUpperCase().localeCompare(p2.name.toUpperCase()));
+                this.playerParameters = this.playerParameters.filter(p => p.id !== parameter.id);
+
+                this.totalParameters.push(parameter);
+                this.sortParametersByName(this.totalParameters);
+            }
         }
     }
 
+    private sortParametersByName(parameters: ParameterDTO[] | PlayerParameterDataDTO[]): void {
+        parameters.sort((p1, p2) => p1.name.toUpperCase().localeCompare(p2.name.toUpperCase()));
+    }
+
     public handleSubmitEditPlayerForm(): void {
-        if (this.playerForm.valid && this.playerForm.value && this.playerForm.value && this.selectedPlayer?.id) {
-            const position = this.playerForm.value.position as UpdatePlayerDTO | undefined;
+        if (this.editPlayerForm.valid && this.editPlayerForm.value && this.editPlayerForm.value && this.selectedPlayer?.id) {
+            const position = this.editPlayerForm.value.position as UpdatePlayerDTO | undefined;
             if (position) {
                 const playerRequest: UpdatePlayerDTO = {
                     id: String(this.selectedPlayer.id),
-                    name: this.playerForm.value.name as string,
-                    team: this.playerForm.value.team as string,
-                    age: this.playerForm.value.age as string | undefined,
-                    height: this.playerForm.value.height as string | undefined,
+                    name: this.editPlayerForm.value.name as string,
+                    team: this.editPlayerForm.value.team as string,
+                    age: this.editPlayerForm.value.age as string | undefined,
+                    height: this.editPlayerForm.value.height as string | undefined,
                     positionId: String(position.id),
                     playerPicture: this.playerPicture ?? undefined,
-                    parameters: this.playerParametersScore
+                    parameters: this.playerParameters
                 };
+                
                 this.playerPicture && (this.playerService.changedPlayerPicture = true);
 
                 this.playerService.update(playerRequest)
-                    .pipe(takeUntil(this.$destroy))
+                    .pipe(takeUntil(this.destroy$))
                     .subscribe({
-                        next: (playerResponse: PlayerDTO) => {
-                            const updatedPlayer =
-                                this.page.content.find(p => p.id === this.selectedPlayer?.id);
-                            if (updatedPlayer) {
-                                updatedPlayer.name = playerResponse.name;
-                                updatedPlayer.team = playerResponse.team;
-                            }
+                        next: () => {
+                            this.editPlayerForm.reset();
+                            this.playerParameterForm.reset();
 
                             this.changesOnService.setChangesOn(true);
 
@@ -318,25 +311,16 @@ export class EditPlayerFormComponent implements OnInit, OnDestroy {
                                 detail: 'Invalid registration!',
                                 life: this.toastLife
                             });
-                            console.log(err);
 
-                            this.handleBackAction();
+                            console.log(err);
                         }
                     });
             }
-
-            this.playerForm.reset();
-            this.playerParameterForm.reset();
-
-            this.parametersOff.forEach(e => this.parameters.push(e));
-            this.parameters.sort((p1, p2) => p1.name.toUpperCase().localeCompare(p2.name.toUpperCase()));
-            this.parametersOff = [];
-            this.playerParametersScore = [];
         }
     }
 
     public ngOnDestroy(): void {
-        this.$destroy.next();
-        this.$destroy.complete();
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

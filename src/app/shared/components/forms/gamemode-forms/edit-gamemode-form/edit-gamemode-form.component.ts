@@ -19,10 +19,6 @@ import Page from "../../../../../models/dto/generics/response/Page";
 import Pageable from "../../../../../models/dto/generics/request/Pageable";
 import PageMin from "../../../../../models/dto/generics/response/PageMin";
 import {TableLazyLoadEvent} from "primeng/table";
-import _default from "chart.js/dist/plugins/plugin.tooltip";
-import reset = _default.reset;
-import {ParameterDTO} from "../../../../../models/dto/parameter/response/ParameterDTO";
-import {ParameterWeightDTO} from "../../../../../models/dto/position/aux/ParameterWeightDTO";
 
 @Component({
     selector: 'app-edit-gamemode-form',
@@ -84,7 +80,7 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.page.totalElements === 0 && this.setGameModesWithApi(this.pageable);
-        this.setPositionsWithApi();
+        this.setTotalPositionsWithApi();
 
         const action = this.dynamicDialogConfig.data;
         if (action && action.$event === EnumGameModeEventsCrud.EDIT) {
@@ -141,13 +137,13 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
         }, 500);
     }
 
-    private setPositionsWithApi(): void {
+    private setTotalPositionsWithApi(): void {
         this.positionService.findAllWithTotalRecords()
             .pipe(takeUntil(this.$destroy))
             .subscribe({
                 next: (positionsPage: Page<PositionMinDTO>) => {
                     this.totalPositions = positionsPage.content;
-                    !this.resetGameModePositions && this.deleteIncludedPositions();
+                    !this.resetGameModePositions && this.deleteIncludedPositionsInGameMode();
                 },
                 error: (err) => {
                     console.log(err);
@@ -168,7 +164,7 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
     public handleSelectGameMode(id: number): void {
         if (id) {
             // Reset available positions whenever a new game mode is chosen due to the strategy of deleting positions that already belong to the selected game mode
-            this.setPositionsWithApi();
+            this.setTotalPositionsWithApi();
 
             this.gameModeService.findById(id)
                 .pipe(takeUntil(this.$destroy))
@@ -185,7 +181,7 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
                             this.gameModePositions = gameMode.positions.map(p => new PositionMinDTO(p.id, p.name, p.description));
                         }
 
-                        this.deleteIncludedPositions();
+                        this.deleteIncludedPositionsInGameMode();
 
                         this.$viewTable.next(false);
                     },
@@ -196,7 +192,7 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
         }
     }
 
-    private deleteIncludedPositions(): void {
+    private deleteIncludedPositionsInGameMode(): void {
         const gameModePositionsIds: number[] = this.gameModePositions.map(p => p.id);
         this.totalPositions = this.totalPositions.filter(p => !gameModePositionsIds.includes(p.id));
     }
@@ -207,6 +203,8 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
 
         this.selectedGameMode = undefined;
         this.resetGameModePositions = true;
+
+        // Update the table and detect the changes that occurred during editing
         this.changeDetectorRef.detectChanges();
     }
 
@@ -224,7 +222,7 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
 
         this.dynamicDialogRef.onClose
             .pipe(takeUntil(this.$destroy))
-            .subscribe(() => this.setPositionsWithApi());
+            .subscribe(() => this.setTotalPositionsWithApi());
     }
 
     public handleEditPositionEvent(id: number) {
@@ -245,7 +243,7 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
 
         this.dynamicDialogRef.onClose
             .pipe(takeUntil(this.$destroy))
-            .subscribe(() => this.setPositionsWithApi());
+            .subscribe(() => this.setTotalPositionsWithApi());
     }
 
     public handleAddPosition(): void {
@@ -287,14 +285,11 @@ export class EditGamemodeFormComponent implements OnInit, OnDestroy {
                 positions: this.gameModePositions.map(p => p.id)
             }
 
-            this.selectedGameMode && this.gameModeService.updateById(this.selectedGameMode.id, gameModeRequest)
+            this.selectedGameMode &&
+            this.gameModeService.updateById(this.selectedGameMode.id, gameModeRequest)
                 .pipe(takeUntil(this.$destroy))
                 .subscribe({
-                    next: (gameMode) => {
-                        const gameModeUpdated =
-                            this.page.content.find(p => p.id === this.selectedGameMode?.id);
-                        gameModeUpdated && (gameModeUpdated.formationName = gameMode.formationName);
-
+                    next: () => {
                         this.changesOnService.setChangesOn(true);
 
                         this.messageService.clear();

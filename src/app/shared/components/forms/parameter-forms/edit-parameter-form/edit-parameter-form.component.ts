@@ -128,6 +128,7 @@ export class EditParameterFormComponent implements OnInit, OnDestroy {
 
         this.selectedParameter = undefined;
 
+        // Update the table and detect the changes that occurred during editing
         this.changeDetectorRef.detectChanges();
     }
 
@@ -142,10 +143,7 @@ export class EditParameterFormComponent implements OnInit, OnDestroy {
             this.parameterService.updateById(this.selectedParameter?.id, parameterResquest)
                 .pipe(takeUntil(this.$destroy))
                 .subscribe({
-                    next: (parameter: ParameterDTO) => {
-                        const parameterUpdated = this.page.content.find(p => p.id === this.selectedParameter?.id);
-                        parameterUpdated && (parameterUpdated.name = parameter.name);
-
+                    next: () => {
                         this.editParameterForm.reset();
 
                         this.changesOnService.setChangesOn(true);
