@@ -8,7 +8,7 @@ describe('PlayerViewComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [PlayerViewComponent]
+      declarations: [PlayerViewComponent],
     });
     fixture = TestBed.createComponent(PlayerViewComponent);
     component = fixture.componentInstance;

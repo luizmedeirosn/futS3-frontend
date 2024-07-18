@@ -1,5 +1,4 @@
 export interface PlayerParameterIdScoreDTO {
-
-    id: number;
-    score: number;
+  id: number;
+  score: number;
 }

@@ -11,7 +11,6 @@ import { GAME_MODES_ROUTES } from './gamemodes.routing';
 import { GameModesHomeComponent } from './page/gamemodes-home/gamemodes-home.component';
 import { PlayersStatisticsHomeComponent } from './page/players-statistics-home/players-statistics-home.component';
 
-
 import { AccordionModule } from 'primeng/accordion';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -26,41 +25,38 @@ import { ChartModule } from 'primeng/chart';
 import { PaginatorModule } from 'primeng/paginator';
 import { PanelModule } from 'primeng/panel';
 import { SelectButtonModule } from 'primeng/selectbutton';
-import {RippleModule} from "primeng/ripple";
-
-
+import { RippleModule } from 'primeng/ripple';
 
 @NgModule({
-    declarations: [
-        GameModesHomeComponent,
-        GameModesTableComponent,
-        GamemodeViewComponent,
-        PlayersStatisticsHomeComponent,
-        PlayersStatisticsViewComponent,
-    ],
-    imports: [
-        CommonModule,
-        RouterModule.forChild(GAME_MODES_ROUTES),
-        FormsModule,
-        ReactiveFormsModule,
+  declarations: [
+    GameModesHomeComponent,
+    GameModesTableComponent,
+    GamemodeViewComponent,
+    PlayersStatisticsHomeComponent,
+    PlayersStatisticsViewComponent,
+  ],
+  imports: [
+    CommonModule,
+    RouterModule.forChild(GAME_MODES_ROUTES),
+    FormsModule,
+    ReactiveFormsModule,
 
-        SharedModule,
+    SharedModule,
 
-        CardModule,
-        TableModule,
-        ToastModule,
-        ButtonModule,
-        TooltipModule,
-        PanelModule,
-        ScrollPanelModule,
-        DropdownModule,
-        AccordionModule,
-        SkeletonModule,
-        SelectButtonModule,
-        ChartModule,
-        PaginatorModule,
-        RippleModule,
-
-    ]
+    CardModule,
+    TableModule,
+    ToastModule,
+    ButtonModule,
+    TooltipModule,
+    PanelModule,
+    ScrollPanelModule,
+    DropdownModule,
+    AccordionModule,
+    SkeletonModule,
+    SelectButtonModule,
+    ChartModule,
+    PaginatorModule,
+    RippleModule,
+  ],
 })
-export class GamemodesModule { }
+export class GamemodesModule {}

@@ -1,25 +1,25 @@
 .delete-player-form {
-    .delete-players-table-profile-picture {
-        margin-top: 0.25rem;
-        width: 4rem;
-        height: 4rem;
-        border-style: solid;
-        border-width: 3px;
-        border-color: var(--green-700);
-        border-radius: 50%;
-    }
+  .delete-players-table-profile-picture {
+    margin-top: 0.25rem;
+    width: 4rem;
+    height: 4rem;
+    border-style: solid;
+    border-width: 3px;
+    border-color: var(--green-700);
+    border-radius: 50%;
+  }
 
-    .delete-players-table-profile-without-picture {
-        margin-top: 0.25rem;
-        width: 4rem;
-        height: 4rem;
-    }
+  .delete-players-table-profile-without-picture {
+    margin-top: 0.25rem;
+    width: 4rem;
+    height: 4rem;
+  }
 
-    .p-card-body {
-        width: 39rem;
-    }
+  .p-card-body {
+    width: 39rem;
+  }
 
-    .p-dialog-header-icon {
-        color: #fff;
-    }
+  .p-dialog-header-icon {
+    color: #fff;
+  }
 }

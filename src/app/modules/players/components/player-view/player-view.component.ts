@@ -4,29 +4,28 @@ import PlayerFullDTO from 'src/app/models/dto/player/response/PlayerDTO';
 import { EnumPlayerEventsCrud } from 'src/app/models/enums/EnumPlayerEventsCrud';
 
 @Component({
-    selector: 'app-player-view',
-    templateUrl: './player-view.component.html',
-    styleUrls: ['./player-view.component.scss'],
-    encapsulation: ViewEncapsulation.None,
+  selector: 'app-player-view',
+  templateUrl: './player-view.component.html',
+  styleUrls: ['./player-view.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class PlayerViewComponent {
+  public readonly playerEvents = EnumPlayerEventsCrud;
 
-    public readonly playerEvents = EnumPlayerEventsCrud;
+  @Input()
+  public player!: PlayerFullDTO;
 
-    @Input()
-    public player!: PlayerFullDTO;
+  @Output()
+  public backEvent: EventEmitter<number> = new EventEmitter();
 
-    @Output()
-    public backEvent: EventEmitter<number> = new EventEmitter();
+  @Output()
+  public editOrDeletePlayerEvent: EventEmitter<EditOrDeletePlayerAction> = new EventEmitter();
 
-    @Output()
-    public editOrDeletePlayerEvent: EventEmitter<EditOrDeletePlayerAction> = new EventEmitter();
+  public handleBackEvent() {
+    this.backEvent.emit();
+  }
 
-    public handleBackEvent() {
-        this.backEvent.emit();
-    }
-
-    public handleEditOrDeletePlayerEvent($event: EditOrDeletePlayerAction) {
-        this.editOrDeletePlayerEvent.emit($event);
-    }
+  public handleEditOrDeletePlayerEvent($event: EditOrDeletePlayerAction) {
+    this.editOrDeletePlayerEvent.emit($event);
+  }
 }

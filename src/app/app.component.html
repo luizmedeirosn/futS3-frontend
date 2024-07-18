@@ -1,72 +1,65 @@
 <router-outlet></router-outlet>
 
 <p-toast
-    position="bottom-right"
-    [showTransformOptions]="'translateY(100%)'"
-    [showTransitionOptions]="'1000ms'"
-    [hideTransitionOptions]="'500ms'"
-    styleClass="w-4 opacity-100"
-    [breakpoints]="{ '920px': { width: '100vw', right: '0', left: '0' } }"
-></p-toast>
+  position="bottom-right"
+  [showTransformOptions]="'translateY(100%)'"
+  [showTransitionOptions]="'1000ms'"
+  [hideTransitionOptions]="'500ms'"
+  styleClass="w-4 opacity-100"
+  [breakpoints]="{
+    '920px': { width: '100vw', right: '0', left: '0' },
+  }"></p-toast>
 
 <p-toast
-    key="welcome-back"
-    position="bottom-right"
-    [showTransformOptions]="'translateY(100%)'"
-    [showTransitionOptions]="'1000ms'"
-    [hideTransitionOptions]="'300ms'"
-    styleClass="opacity-100"
-></p-toast>
+  key="welcome-back"
+  position="bottom-right"
+  [showTransformOptions]="'translateY(100%)'"
+  [showTransitionOptions]="'1000ms'"
+  [hideTransitionOptions]="'300ms'"
+  styleClass="opacity-100"></p-toast>
 
 <p-toast
-    key="warn-session-expired"
-    position="top-center"
-    [showTransformOptions]="'translateY(-100%)'"
-    [showTransitionOptions]="'1000ms'"
-    [hideTransitionOptions]="'300ms'"
-    styleClass="w-5 opacity-100"
-    [breakpoints]="{ '920px': { width: '100vw', right: '0' } }"
-></p-toast>
+  key="warn-session-expired"
+  position="top-center"
+  [showTransformOptions]="'translateY(-100%)'"
+  [showTransitionOptions]="'1000ms'"
+  [hideTransitionOptions]="'300ms'"
+  styleClass="w-5 opacity-100"
+  [breakpoints]="{ '920px': { width: '100vw', right: '0' } }"></p-toast>
 
 <p-toast
-    key="info-statistics-section"
-    position="bottom-center"
-    [showTransformOptions]="'translateY(100%)'"
-    [showTransitionOptions]="'1000ms'"
-    [hideTransitionOptions]="'300ms'"
-    styleClass="w-4 opacity-100"
-    [breakpoints]="{ '920px': { width: '100vw', right: '0' } }"
-></p-toast>
+  key="info-statistics-section"
+  position="bottom-center"
+  [showTransformOptions]="'translateY(100%)'"
+  [showTransitionOptions]="'1000ms'"
+  [hideTransitionOptions]="'300ms'"
+  styleClass="w-4 opacity-100"
+  [breakpoints]="{ '920px': { width: '100vw', right: '0' } }"></p-toast>
 
 <p-toast
-    key="warn-statistics-section"
-    position="bottom-center"
-    [showTransformOptions]="'translateY(100%)'"
-    [showTransitionOptions]="'1000ms'"
-    [hideTransitionOptions]="'300ms'"
-    styleClass="w-7 opacity-100"
-    [breakpoints]="{ '920px': { width: '100vw', right: '0' } }"
-></p-toast>
+  key="warn-statistics-section"
+  position="bottom-center"
+  [showTransformOptions]="'translateY(100%)'"
+  [showTransitionOptions]="'1000ms'"
+  [hideTransitionOptions]="'300ms'"
+  styleClass="w-7 opacity-100"
+  [breakpoints]="{ '920px': { width: '100vw', right: '0' } }"></p-toast>
 
 <p-toast
-    key="deletion-error"
-    position="bottom-center"
-    [showTransformOptions]="'translateY(100%)'"
-    [showTransitionOptions]="'1000ms'"
-    [hideTransitionOptions]="'300ms'"
-    styleClass="w-5 opacity-100"
-    [breakpoints]="{ '920px': { width: '100vw', right: '0' } }"
-></p-toast>
+  key="deletion-error"
+  position="bottom-center"
+  [showTransformOptions]="'translateY(100%)'"
+  [showTransitionOptions]="'1000ms'"
+  [hideTransitionOptions]="'300ms'"
+  styleClass="w-5 opacity-100"
+  [breakpoints]="{ '920px': { width: '100vw', right: '0' } }"></p-toast>
 
 <p-toast
-    key="login-error"
-    position="top-right"
-    [showTransformOptions]="'translateY(-100%)'"
-    [showTransitionOptions]="'1000ms'"
-    [hideTransitionOptions]="'300ms'"
-    styleClass="opacity-100"
-></p-toast>
+  key="login-error"
+  position="top-right"
+  [showTransformOptions]="'translateY(-100%)'"
+  [showTransitionOptions]="'1000ms'"
+  [hideTransitionOptions]="'300ms'"
+  styleClass="opacity-100"></p-toast>
 
-<p-confirmDialog
-    styleClass="button-danger-focus w-3 text-large font-medium"
-></p-confirmDialog>
+<p-confirmDialog styleClass="button-danger-focus w-3 text-large font-medium"></p-confirmDialog>

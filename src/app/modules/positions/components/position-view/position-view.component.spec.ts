@@ -8,7 +8,7 @@ describe('PositionViewComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [PositionViewComponent]
+      declarations: [PositionViewComponent],
     });
     fixture = TestBed.createComponent(PositionViewComponent);
     component = fixture.componentInstance;

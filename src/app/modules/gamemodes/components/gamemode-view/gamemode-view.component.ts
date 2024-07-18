@@ -4,30 +4,28 @@ import { EnumGameModeEventsCrud } from 'src/app/models/enums/EnumGameModeEventsC
 import { EditOrDeleteGameModeAction } from 'src/app/models/events/EditOrDeleteGameModeAction';
 
 @Component({
-    selector: 'app-gamemode-view',
-    templateUrl: './gamemode-view.component.html',
-    styleUrls: ['./gamemode-view.component.scss'],
-    encapsulation: ViewEncapsulation.None,
+  selector: 'app-gamemode-view',
+  templateUrl: './gamemode-view.component.html',
+  styleUrls: ['./gamemode-view.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class GamemodeViewComponent {
+  public readonly gameModeEvents = EnumGameModeEventsCrud;
 
-    public readonly gameModeEvents = EnumGameModeEventsCrud;
+  @Input()
+  public gameMode!: GameModeDTO;
 
-    @Input()
-    public gameMode!: GameModeDTO;
+  @Output()
+  public backEvent: EventEmitter<void> = new EventEmitter();
 
-    @Output()
-    public backEvent: EventEmitter<void> = new EventEmitter();
+  @Output()
+  public editOrDeleteGameModeEvent: EventEmitter<EditOrDeleteGameModeAction> = new EventEmitter();
 
-    @Output()
-    public editOrDeleteGameModeEvent: EventEmitter<EditOrDeleteGameModeAction> = new EventEmitter();
+  public handleBackEvent() {
+    this.backEvent.emit();
+  }
 
-    public handleBackEvent() {
-        this.backEvent.emit();
-    }
-
-    public handleEditOrDeleteGameModeEvent($event: EditOrDeleteGameModeAction) {
-        this.editOrDeleteGameModeEvent.emit($event);
-    }
-
+  public handleEditOrDeleteGameModeEvent($event: EditOrDeleteGameModeAction) {
+    this.editOrDeleteGameModeEvent.emit($event);
+  }
 }

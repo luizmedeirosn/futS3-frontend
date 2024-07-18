@@ -1,21 +1,22 @@
 .edit-player-form {
-    .edit-players-table-profile-picture {
-        margin-top: 0.25rem;
-        width: 4rem;
-        height: 4rem;
-        border-style: solid;
-        border-width: 3px;
-        border-color: var(--green-700);
-        border-radius: 50%;
-    }
+  .edit-players-table-profile-picture {
+    margin-top: 0.25rem;
+    width: 4rem;
+    height: 4rem;
+    border-style: solid;
+    border-width: 3px;
+    border-color: var(--green-700);
+    border-radius: 50%;
+  }
 
-    .edit-players-table-profile-without-picture {
-        margin-top: 0.25rem;
-        width: 4rem;
-        height: 4rem;
-    }
+  .edit-players-table-profile-without-picture {
+    margin-top: 0.25rem;
+    width: 4rem;
+    height: 4rem;
+  }
 
-    .p-card, .p-card-body {
-        width: 39rem !important;
-    }
+  .p-card,
+  .p-card-body {
+    width: 39rem !important;
+  }
 }

@@ -1,6 +1,5 @@
 export interface ViewAction {
-
-    id: number;
-    name?: string;
-    description?: string;
+  id: number;
+  name?: string;
+  description?: string;
 }

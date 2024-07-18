@@ -1,100 +1,84 @@
 <div class="delete-player-form flex justify-content-center align-items-center">
-    <p-card
-        header="Players"
-        styleClass="shadow-none justify-content-center align-content-center align-content-center"
-    >
-        <p-table
-            [value]="page.content"
-            [rows]="page.pageSize"
-            [paginator]= "true"
-            [lazy] = true
-            [totalRecords]="page.totalElements"
-            (onLazyLoad)="handleChangePageAction($event)"
-            [loading] = "$loading.getValue()"
-            [rowHover]="true"
-            [rowsPerPageOptions]="[5, 10, 20]"
-            [showCurrentPageReport]="true"
-            dataKey="id"
-            paginatorPosition="top"
-            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} players"
-            styleClass="dropdown-caret-color-transparent"
-        >
-            <ng-template pTemplate="caption">
-                <div class="flex justify-content-center">
-                    <span class="p-input-icon-left w-full">
-                        <i class="pi pi-search"></i>
-                        <input
-                            pInputText
-                            type="text"
-                            class="w-full"
-                            placeholder="Find by name, team or position"
-                            [(ngModel)]="pageable.keyword"
-                            (input)="handleFindByKeywordAction()"
-                        />
-                    </span>
-                </div>
-            </ng-template>
-            <ng-template pTemplate="header">
-                <tr>
-                    <th pSortableColumn="" style="cursor: default">
-                        <div class="flex justify-content-between align-items-center text-lg mt-1">
-                            Picture
-                        </div>
-                    </th>
-                    <th pSortableColumn="name">
-                        <div class="flex justify-content-between align-items-center text-lg mt-1">
-                            Name
-                            <p-sortIcon field="name"></p-sortIcon>
-                        </div>
-                    </th>
-                    <th pSortableColumn="team">
-                        <div class="flex justify-content-between align-items-center text-lg mt-1">
-                            Team
-                            <p-sortIcon field="team"></p-sortIcon>
-                        </div>
-                    </th>
-                    <th pSortableColumn="" style="cursor: default">
-                        <div class="text-lg text-center mt-1">Delete</div>
-                    </th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-player>
-                <tr>
-                    <td>
-                        <img
-                            alt="{{ player.name }}"
-                            src="{{
-                                player.pictureUrl ||
-                                    '../../../../../../../assets/without-picture.png'
-                            }}"
-                            class="{{
-                                player.pictureUrl
-                                    ? 'delete-players-table-profile-picture'
-                                    : 'delete-players-table-profile-without-picture'
-                            }}"
-                        />
-                    </td>
-                    <td>
-                        {{ player.name | shorten : 15 }}
-                    </td>
-                    <td>
-                        {{ player.team | shorten : 15 }}
-                    </td>
-                    <td
-                        *ngIf="!($loading | async)"
-                        style="text-align: center"
-                        class="p-button-danger-focus"
-                    >
-                        <p-button
-                            [rounded]="true"
-                            (onClick)="handleDeletePlayerEvent(player)"
-                            severity="danger"
-                            icon="pi pi-trash"
-                            styleClass="fadeindown animation-duration-1000 animation-iteration-1 animation-ease-in-out"
-                        ></p-button>
-                    </td>
-                </tr>
-            </ng-template>
-        </p-table>
-    </p-card>
+  <p-card header="Players" styleClass="shadow-none justify-content-center align-content-center align-content-center">
+    <p-table
+      [value]="page.content"
+      [rows]="page.pageSize"
+      [paginator]="true"
+      [lazy]="true"
+      [totalRecords]="page.totalElements"
+      (onLazyLoad)="handleChangePageAction($event)"
+      [loading]="$loading.getValue()"
+      [rowHover]="true"
+      [rowsPerPageOptions]="[5, 10, 20]"
+      [showCurrentPageReport]="true"
+      dataKey="id"
+      paginatorPosition="top"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} players"
+      styleClass="dropdown-caret-color-transparent">
+      <ng-template pTemplate="caption">
+        <div class="flex justify-content-center">
+          <span class="p-input-icon-left w-full">
+            <i class="pi pi-search"></i>
+            <input
+              pInputText
+              type="text"
+              class="w-full"
+              placeholder="Find by name, team or position"
+              [(ngModel)]="pageable.keyword"
+              (input)="handleFindByKeywordAction()" />
+          </span>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="" style="cursor: default">
+            <div class="flex justify-content-between align-items-center text-lg mt-1">Picture</div>
+          </th>
+          <th pSortableColumn="name">
+            <div class="flex justify-content-between align-items-center text-lg mt-1">
+              Name
+              <p-sortIcon field="name"></p-sortIcon>
+            </div>
+          </th>
+          <th pSortableColumn="team">
+            <div class="flex justify-content-between align-items-center text-lg mt-1">
+              Team
+              <p-sortIcon field="team"></p-sortIcon>
+            </div>
+          </th>
+          <th pSortableColumn="" style="cursor: default">
+            <div class="text-lg text-center mt-1">Delete</div>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-player>
+        <tr>
+          <td>
+            <img
+              alt="{{ player.name }}"
+              src="{{ player.pictureUrl || '../../../../../../../assets/without-picture.png' }}"
+              class="{{
+                player.pictureUrl
+                  ? 'delete-players-table-profile-picture'
+                  : 'delete-players-table-profile-without-picture'
+              }}" />
+          </td>
+          <td>
+            {{ player.name | shorten: 15 }}
+          </td>
+          <td>
+            {{ player.team | shorten: 15 }}
+          </td>
+          <td *ngIf="!($loading | async)" style="text-align: center" class="p-button-danger-focus">
+            <p-button
+              [rounded]="true"
+              (onClick)="handleDeletePlayerEvent(player)"
+              severity="danger"
+              icon="pi pi-trash"
+              styleClass="fadeindown animation-duration-1000 animation-iteration-1 animation-ease-in-out"></p-button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
 </div>

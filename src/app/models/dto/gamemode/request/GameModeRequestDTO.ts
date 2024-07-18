@@ -1,7 +1,5 @@
 export interface GameModeRequestDTO {
-
-    formationName: string;
-    description: string;
-    positions: Array<number>;
-
+  formationName: string;
+  description: string;
+  positions: Array<number>;
 }

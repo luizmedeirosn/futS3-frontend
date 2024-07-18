@@ -3,12 +3,12 @@ import { GameModesHomeComponent } from './page/gamemodes-home/gamemodes-home.com
 import { PlayersStatisticsHomeComponent } from './page/players-statistics-home/players-statistics-home.component';
 
 export const GAME_MODES_ROUTES: Routes = [
-    {
-        path: '',
-        component: GameModesHomeComponent
-    },
-    {
-        path: 'statistics',
-        component: PlayersStatisticsHomeComponent
-    }
+  {
+    path: '',
+    component: GameModesHomeComponent,
+  },
+  {
+    path: 'statistics',
+    component: PlayersStatisticsHomeComponent,
+  },
 ];

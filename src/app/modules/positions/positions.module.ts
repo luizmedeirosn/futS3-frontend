@@ -14,30 +14,26 @@ import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { TableModule } from 'primeng/table';
 import { PositionViewComponent } from './components/position-view/position-view.component';
 import { PositionsTableComponent } from './components/positions-table/positions-table.component';
-import {RippleModule} from "primeng/ripple";
-import {TooltipModule} from "primeng/tooltip";
+import { RippleModule } from 'primeng/ripple';
+import { TooltipModule } from 'primeng/tooltip';
 
 @NgModule({
-    declarations: [
-        PositionsHomeComponent,
-        PositionsTableComponent,
-        PositionViewComponent,
-    ],
-    imports: [
-        CommonModule,
-        RouterModule.forChild(POSITIONS_ROUTES),
-        FormsModule,
-        ReactiveFormsModule,
+  declarations: [PositionsHomeComponent, PositionsTableComponent, PositionViewComponent],
+  imports: [
+    CommonModule,
+    RouterModule.forChild(POSITIONS_ROUTES),
+    FormsModule,
+    ReactiveFormsModule,
 
-        SharedModule,
+    SharedModule,
 
-        CardModule,
-        TableModule,
-        PanelModule,
-        ScrollPanelModule,
-        ButtonModule,
-        RippleModule,
-        TooltipModule,
-    ],
+    CardModule,
+    TableModule,
+    PanelModule,
+    ScrollPanelModule,
+    ButtonModule,
+    RippleModule,
+    TooltipModule,
+  ],
 })
-export class PositionsModule { }
+export class PositionsModule {}

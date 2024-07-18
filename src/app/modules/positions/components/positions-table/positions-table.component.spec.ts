@@ -8,7 +8,7 @@ describe('PositionsTableComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [PositionsTableComponent]
+      declarations: [PositionsTableComponent],
     });
     fixture = TestBed.createComponent(PositionsTableComponent);
     component = fixture.componentInstance;

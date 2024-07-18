@@ -1,48 +1,44 @@
 <div class="flex justify-content-center mb-6">
-    <p-card [style]="{ width: '65rem' }" header="Game Modes">
-        <p-table
-            [value]="page.content"
-            [rows]="page.pageSize"
-            [first]="pageable.indexFirstRow"
-            [paginator]="true"
-            [totalRecords]="page.totalElements"
-            [lazy]="true"
-            (onLazyLoad)="handleChangePageEvent($event)"
-            [loading]="$loading.getValue()"
-            [rowHover]="true"
-            [rowsPerPageOptions]="[5, 10, 20]"
-            [showCurrentPageReport]="true"
-            dataKey="id"
-            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} game modes"
-            styleClass="dropdown-caret-color-transparent"
-        >
-            <ng-template pTemplate="header">
-                <tr>
-                    <th>
-                        <div class="flex justify-content-start align-items-center text-lg mt-1 text-nowrap"  style="white-space: nowrap">
-                            Formation Name
-                        </div>
-                    </th>
-                    <th>
-                        <div class="flex justify-content-start align-items-center text-lg mt-1">
-                            Description
-                        </div>
-                    </th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-gameMode>
-                <tr style="cursor: pointer">
-                    <td (click)="handleViewFullDataGameModeEvent(gameMode.id)">
-                        {{ gameMode.formationName | shorten : 30 }}
-                    </td>
-                    <td (click)="handleViewFullDataGameModeEvent(gameMode.id)">
-                        {{
-                            (gameMode.description | shorten : 80) ||
-                                "No description for now!"
-                        }}
-                    </td>
-                </tr>
-            </ng-template>
-        </p-table>
-    </p-card>
+  <p-card [style]="{ width: '65rem' }" header="Game Modes">
+    <p-table
+      (onLazyLoad)="handleChangePageEvent($event)"
+      [first]="pageable.indexFirstRow"
+      [lazy]="true"
+      [loading]="$loading.getValue()"
+      [paginator]="true"
+      [rowHover]="true"
+      [rowsPerPageOptions]="[5, 10, 20]"
+      [rows]="page.pageSize"
+      [showCurrentPageReport]="true"
+      [totalRecords]="page.totalElements"
+      [value]="page.content"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} game modes"
+      dataKey="id"
+      styleClass="dropdown-caret-color-transparent">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>
+            <div
+              class="flex justify-content-start align-items-center text-lg mt-1 text-nowrap"
+              style="white-space: nowrap">
+              Formation Name
+            </div>
+          </th>
+          <th>
+            <div class="flex justify-content-start align-items-center text-lg mt-1">Description</div>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template let-gameMode pTemplate="body">
+        <tr style="cursor: pointer">
+          <td (click)="handleViewFullDataGameModeEvent(gameMode.id)">
+            {{ gameMode.formationName | shorten: 30 }}
+          </td>
+          <td (click)="handleViewFullDataGameModeEvent(gameMode.id)">
+            {{ (gameMode.description | shorten: 80) || 'No description for now!' }}
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
 </div>

@@ -1,59 +1,61 @@
 .ranking-text-accordion-header {
-    .p-card-body {
-        padding: 0.5rem;
-    }
+  .p-card-body {
+    padding: 0.5rem;
+  }
 
-    .p-card-content {
-        padding: 0.5rem;
-    }
+  .p-card-content {
+    padding: 0.5rem;
+  }
 
-    .p-card-title {
-        background: linear-gradient(to right, #080414, var(--blue-1));
-        -webkit-background-clip: text;
-        display: inline-block;
-        background-size: 100% 100%;
-        -webkit-text-fill-color: transparent;
-        color: transparent;
-        background-clip: text;
-        font-size: 1.5rem;
-        padding: 0;
-        margin: 0;
-    }
+  .p-card-title {
+    background: linear-gradient(to right, #080414, var(--blue-1));
+    -webkit-background-clip: text;
+    display: inline-block;
+    background-size: 100% 100%;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    background-clip: text;
+    font-size: 1.5rem;
+    padding: 0;
+    margin: 0;
+  }
 
-    .p-card-subtitle {
-        color: var(--black-1);
-        font-size: 0.95rem;
-        padding: 0;
-        margin: 0;
-    }
+  .p-card-subtitle {
+    color: var(--black-1);
+    font-size: 0.95rem;
+    padding: 0;
+    margin: 0;
+  }
 
-    .p-accordion, .p-accordion-header, .p-accordion-header-link {
-        padding: 0.8rem;
-        color: var(--black-1);
-    }
+  .p-accordion,
+  .p-accordion-header,
+  .p-accordion-header-link {
+    padding: 0.8rem;
+    color: var(--black-1);
+  }
 
-    .p-accordion-content {
-        border: none;
-    }
+  .p-accordion-content {
+    border: none;
+  }
 }
 
 .players-ranking-profile-picture {
-    width: 6rem;
-    height: 6rem;
-    border-style: solid;
-    border-width: 3px;
-    border-color: var(--blue-900);
-    border-radius: 0.3rem;
+  width: 6rem;
+  height: 6rem;
+  border-style: solid;
+  border-width: 3px;
+  border-color: var(--blue-900);
+  border-radius: 0.3rem;
 }
 
 .players-ranking-profile-without-picture {
-    width: 6rem;
-    height: 6rem;
+  width: 6rem;
+  height: 6rem;
 }
 
 .insights-section {
-    .p-card-title {
-        color: var(--black-1);
-        font-size: 2rem;
-    }
+  .p-card-title {
+    color: var(--black-1);
+    font-size: 2rem;
+  }
 }

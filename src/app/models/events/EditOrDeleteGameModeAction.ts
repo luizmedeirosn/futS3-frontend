@@ -1,7 +1,6 @@
-import { EnumGameModeEventsCrud } from "src/app/models/enums/EnumGameModeEventsCrud";
+import { EnumGameModeEventsCrud } from 'src/app/models/enums/EnumGameModeEventsCrud';
 
 export interface EditOrDeleteGameModeAction {
-
-    id: number;
-    action: EnumGameModeEventsCrud;
+  id: number;
+  action: EnumGameModeEventsCrud;
 }

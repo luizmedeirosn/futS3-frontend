@@ -1,143 +1,126 @@
 <div class="flex justify-content-center overflow-hidden">
-    <p-card
-        [style]="{ width: '60rem' }"
-        header="Position View"
-        styleClass="fadein animation-duration-300 animation-iteration-1 animation-ease-out"
-    >
-        <div class="flex justify-content-between align-content-center align-items-center mt-2"
+  <p-card
+    [style]="{ width: '60rem' }"
+    header="Position View"
+    styleClass="fadein animation-duration-300 animation-iteration-1 animation-ease-out">
+    <div class="flex justify-content-between align-content-center align-items-center mt-2">
+      <button
+        pButton
+        pRipple
+        icon="pi pi-arrow-left"
+        pTooltip="Return to the table"
+        tooltipPosition="top"
+        (click)="handleBackEvent()"></button>
+      <div class="flex justify-content-between align-content-center align-items-center gap-3">
+        <button
+          pButton
+          pRipple
+          icon="pi pi-pencil"
+          class="p-button-warning"
+          pTooltip="Edit player data"
+          tooltipPosition="top"
+          (click)="
+            handleEditOrDeletePositionEvent({
+              id: position.id,
+              action: positionEvents.EDIT,
+            })
+          "></button>
+        <button
+          pButton
+          pRipple
+          icon="pi pi-trash"
+          class="p-button-danger"
+          pTooltip="Delete player"
+          tooltipPosition="top"
+          (click)="
+            handleEditOrDeletePositionEvent({
+              id: position.id,
+              action: positionEvents.DELETE,
+            })
+          "></button>
+      </div>
+    </div>
+
+    <div
+      *ngIf="position"
+      class="panel-custom panel-custom-name flex justify-content-between align-items-start mt-3 gap-3">
+      <p-panel header="Name">
+        <p>
+          {{ position.name }}
+        </p>
+      </p-panel>
+
+      <div class="flex flex-column border-solid border-green-700 border-2 border-round-lg pb-1 bg-gray-50">
+        <label class="text-gray-900 font-bold text-medium text-center bg-gray-300 p-3 border-round-top-lg"
+          >Description</label
         >
-            <button
-                pButton
-                pRipple
-                icon="pi pi-arrow-left"
-                pTooltip="Return to the table"
-                tooltipPosition="top"
-                (click)="handleBackEvent()"
-            ></button>
-            <div class="flex justify-content-between align-content-center align-items-center gap-3">
-                <button
-                    pButton
-                    pRipple
-                    icon="pi pi-pencil"
-                    class="p-button-warning"
-                    pTooltip="Edit player data"
-                    tooltipPosition="top"
-                    (click)="handleEditOrDeletePositionEvent({
-                            id: position.id,
-                            action: positionEvents.EDIT
-                        })"
-                ></button>
-                <button
-                    pButton
-                    pRipple
-                    icon="pi pi-trash"
-                    class="p-button-danger"
-                    pTooltip="Delete player"
-                    tooltipPosition="top"
-                    (click)="
-                        handleEditOrDeletePositionEvent({
-                            id: position.id,
-                            action: positionEvents.DELETE
-                        })
-                    "
-                ></button>
+
+        <p-scrollPanel [style]="{ height: '150px' }">
+          <p class="text-justify text-gray-900 m-3" style="width: 35rem">
+            {{ position.description || 'No description for now!' }}
+          </p>
+        </p-scrollPanel>
+      </div>
+    </div>
+
+    <p-table
+      *ngIf="position && position.parameters.length > 0; else withoutParameters"
+      [value]="position.parameters"
+      [rows]="5"
+      [rowHover]="true"
+      [paginator]="true"
+      [showCurrentPageReport]="true"
+      dataKey="id"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} parameters"
+      styleClass="mt-2">
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="name">
+            <div class="flex justify-content-between align-items-center">
+              <div class="flex justify-content-center align-items-center text-lg mt-1">Name</div>
+              <div class="flex justify-content-between align-items-center">
+                <p-sortIcon field="name"></p-sortIcon>
+                <p-columnFilter
+                  [showMatchModes]="false"
+                  [showOperator]="false"
+                  [showAddButton]="false"
+                  matchMode="contains"
+                  type="text"
+                  field="name"
+                  display="menu"
+                  style="height: 1.7rem"></p-columnFilter>
+              </div>
             </div>
-        </div>
-
-        <div
-            *ngIf="position"
-            class="panel-custom panel-custom-name flex justify-content-between align-items-start mt-3 gap-3"
-        >
-            <p-panel header="Name">
-                <p>
-                    {{ position.name }}
-                </p>
-            </p-panel>
-
-            <div class="flex flex-column border-solid border-green-700 border-2 border-round-lg pb-1 bg-gray-50">
-                <label class="text-gray-900 font-bold text-medium text-center bg-gray-300 p-3 border-round-top-lg">Description</label>
-
-                <p-scrollPanel [style]="{ height: '150px' }">
-                    <p
-                        class="text-justify text-gray-900 m-3"
-                        style="width: 35rem"
-                    >
-                        {{ position.description || "No description for now!" }}
-                    </p>
-                </p-scrollPanel>
+          </th>
+          <th pSortableColumn="weight">
+            <div class="flex justify-content-between align-items-center">
+              <div class="flex justify-content-center align-items-center text-lg mt-1">Weight</div>
+              <div class="flex justify-content-between align-items-center">
+                <p-sortIcon field="weight"></p-sortIcon>
+                <p-columnFilter
+                  [showMatchModes]="false"
+                  [showOperator]="false"
+                  [showAddButton]="false"
+                  matchMode="contains"
+                  type="text"
+                  field="weight"
+                  display="menu"
+                  style="height: 1.7rem"></p-columnFilter>
+              </div>
             </div>
-        </div>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-parameter>
+        <tr>
+          <td>{{ parameter.name }}</td>
+          <td>{{ parameter.weight }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
 
-        <p-table
-            *ngIf="
-                position && position.parameters.length > 0;
-                else withoutParameters
-            "
-            [value]="position.parameters"
-            [rows]="5"
-            [rowHover]="true"
-            [paginator]="true"
-            [showCurrentPageReport]="true"
-            dataKey="id"
-            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} parameters"
-            styleClass="mt-2"
-        >
-            <ng-template pTemplate="header">
-                <tr>
-                    <th pSortableColumn="name">
-                        <div class="flex justify-content-between align-items-center">
-                            <div class="flex justify-content-center align-items-center text-lg mt-1">
-                                Name
-                            </div>
-                            <div class="flex justify-content-between align-items-center">
-                                <p-sortIcon field="name"></p-sortIcon>
-                                <p-columnFilter
-                                    [showMatchModes]="false"
-                                    [showOperator]="false"
-                                    [showAddButton]="false"
-                                    matchMode="contains"
-                                    type="text"
-                                    field="name"
-                                    display="menu"
-                                    style="height: 1.7rem"
-                                ></p-columnFilter>
-                            </div>
-                        </div>
-                    </th>
-                    <th pSortableColumn="weight">
-                        <div class="flex justify-content-between align-items-center">
-                            <div class="flex justify-content-center align-items-center text-lg mt-1">
-                                Weight
-                            </div>
-                            <div class="flex justify-content-between align-items-center">
-                                <p-sortIcon field="weight"></p-sortIcon>
-                                <p-columnFilter
-                                    [showMatchModes]="false"
-                                    [showOperator]="false"
-                                    [showAddButton]="false"
-                                    matchMode="contains"
-                                    type="text"
-                                    field="weight"
-                                    display="menu"
-                                    style="height: 1.7rem"
-                                ></p-columnFilter>
-                            </div>
-                        </div>
-                    </th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-parameter>
-                <tr>
-                    <td>{{ parameter.name }}</td>
-                    <td>{{ parameter.weight }}</td>
-                </tr>
-            </ng-template>
-        </p-table>
-
-        <ng-template #withoutParameters>
-            <h3 class="text-center text-large text-green-900">
-                No parameters for now!
-            </h3>
-        </ng-template>
-    </p-card>
+    <ng-template #withoutParameters>
+      <h3 class="text-center text-large text-green-900">No parameters for now!</h3>
+    </ng-template>
+  </p-card>
 </div>

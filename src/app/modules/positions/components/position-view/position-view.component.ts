@@ -4,30 +4,28 @@ import { EditOrDeletePositionAction } from 'src/app/models/events/EditOrDeletePo
 import { EnumPositionEventsCrud } from 'src/app/models/enums/EnumPositionEventsCrud';
 
 @Component({
-    selector: 'app-position-view',
-    templateUrl: './position-view.component.html',
-    styleUrls: [],
-    encapsulation: ViewEncapsulation.None,
+  selector: 'app-position-view',
+  templateUrl: './position-view.component.html',
+  styleUrls: [],
+  encapsulation: ViewEncapsulation.None,
 })
 export class PositionViewComponent {
+  public readonly positionEvents = EnumPositionEventsCrud;
 
-    public readonly positionEvents = EnumPositionEventsCrud;
+  @Input()
+  public position!: FullDataPosition;
 
-    @Input()
-    public position!: FullDataPosition;
+  @Output()
+  public backEvent: EventEmitter<void> = new EventEmitter();
 
-    @Output()
-    public backEvent: EventEmitter<void> = new EventEmitter();
+  @Output()
+  public editOrDeletePositionEvent: EventEmitter<EditOrDeletePositionAction> = new EventEmitter();
 
-    @Output()
-    public editOrDeletePositionEvent: EventEmitter<EditOrDeletePositionAction> = new EventEmitter();
+  public handleBackEvent() {
+    this.backEvent.emit();
+  }
 
-    public handleBackEvent() {
-        this.backEvent.emit();
-    }
-
-    public handleEditOrDeletePositionEvent($event: EditOrDeletePositionAction) {
-        this.editOrDeletePositionEvent.emit($event);
-    }
-
+  public handleEditOrDeletePositionEvent($event: EditOrDeletePositionAction) {
+    this.editOrDeletePositionEvent.emit($event);
+  }
 }

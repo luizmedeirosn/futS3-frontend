@@ -11,23 +11,8 @@ import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 
-
-
 @NgModule({
-  declarations: [
-    ParametersHomeComponent,
-    ParametersTableComponent
-
-  ],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(PARAMETERS_ROUTES),
-
-    SharedModule,
-
-    CardModule,
-    TableModule,
-    ToastModule,
-  ]
+  declarations: [ParametersHomeComponent, ParametersTableComponent],
+  imports: [CommonModule, RouterModule.forChild(PARAMETERS_ROUTES), SharedModule, CardModule, TableModule, ToastModule],
 })
-export class ParametersModule { }
+export class ParametersModule {}

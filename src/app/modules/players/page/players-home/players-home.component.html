@@ -1,20 +1,18 @@
 <app-menubar-navigation></app-menubar-navigation>
 
 <app-players-table
-    *ngIf="!(playerView$ | async)"
-    [pageable]="pageable"
-    [previousKeyword]="previousKeyword"
-    [loading$] = "loading$"
-    [page]="page"
-    [playerView$]="playerView$"
-    [homeChangeDetectorRef]="changeDetectorRef"
-    (changePageEvent)="handleChangePageAction($event)"
-    (viewEvent)="handleViewFullDataPlayerAction($event)"
-></app-players-table>
+  *ngIf="!(playerView$ | async)"
+  [pageable]="pageable"
+  [previousKeyword]="previousKeyword"
+  [loading$]="loading$"
+  [page]="page"
+  [playerView$]="playerView$"
+  [homeChangeDetectorRef]="changeDetectorRef"
+  (changePageEvent)="handleChangePageAction($event)"
+  (viewEvent)="handleViewFullDataPlayerAction($event)"></app-players-table>
 
 <app-player-view
-    *ngIf="playerView$ | async"
-    [player]="player"
-    (backEvent)="handleBackAction()"
-    (editOrDeletePlayerEvent)="handleEditOrDeletePlayerEvent($event)"
-></app-player-view>
+  *ngIf="playerView$ | async"
+  [player]="player"
+  (backEvent)="handleBackAction()"
+  (editOrDeletePlayerEvent)="handleEditOrDeletePlayerEvent($event)"></app-player-view>

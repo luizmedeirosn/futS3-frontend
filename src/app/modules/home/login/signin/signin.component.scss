@@ -1,33 +1,33 @@
 #home-box {
-    caret-color: transparent;
+  caret-color: transparent;
 }
 
 #home-title-icon {
-    color: var(--green-600);
-    font-size: 2rem;
+  color: var(--green-600);
+  font-size: 2rem;
 }
 
 #home-logo {
-    width: 230px;
-    height: 230px;
+  width: 230px;
+  height: 230px;
 }
 
 @keyframes slidedown-icon {
-    0% {
-        transform: translateY(-10px);
-    }
+  0% {
+    transform: translateY(-10px);
+  }
 
-    50% {
-        transform: translateY(10px);
-    }
+  50% {
+    transform: translateY(10px);
+  }
 
-    100% {
-        transform: translateY(-10px);
-    }
+  100% {
+    transform: translateY(-10px);
+  }
 }
 
 .slidedown-icon {
-    animation: slidedown-icon;
-    animation-duration: 3s;
-    animation-iteration-count: infinite;
+  animation: slidedown-icon;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
 }

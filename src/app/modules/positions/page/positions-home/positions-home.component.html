@@ -1,19 +1,17 @@
 <app-menubar-navigation></app-menubar-navigation>
 
 <app-positions-table
-    *ngIf="!(positionView$ | async)"
-    [pageable]="pageable"
-    [loading$] = "loading$"
-    [page]="page"
-    [positionView$]="positionView$"
-    [homeChangeDetectorRef]="changeDetectorRef"
-    (changePageEvent)="handleChangePageAction($event)"
-    (viewEvent)="handleViewFullDataPositionAction($event)"
-></app-positions-table>
+  *ngIf="!(positionView$ | async)"
+  [pageable]="pageable"
+  [loading$]="loading$"
+  [page]="page"
+  [positionView$]="positionView$"
+  [homeChangeDetectorRef]="changeDetectorRef"
+  (changePageEvent)="handleChangePageAction($event)"
+  (viewEvent)="handleViewFullDataPositionAction($event)"></app-positions-table>
 
 <app-position-view
-    *ngIf="(positionView$ | async)"
-    [position]="position"
-    (backEvent)="handleBackAction()"
-    (editOrDeletePositionEvent)="handleEditOrDeletePositionEvent($event)"
-></app-position-view>
+  *ngIf="positionView$ | async"
+  [position]="position"
+  (backEvent)="handleBackAction()"
+  (editOrDeletePositionEvent)="handleEditOrDeletePositionEvent($event)"></app-position-view>

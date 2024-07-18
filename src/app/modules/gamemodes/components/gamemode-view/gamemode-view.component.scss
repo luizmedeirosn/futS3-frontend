@@ -1,10 +1,12 @@
 .expand-button {
-    button {
-        border-color: rgb(126, 126, 126);
-    }
+  button {
+    border-color: rgb(126, 126, 126);
+  }
 
-    .p-button:focus {
-        box-shadow: 0 0 0 2px #E0E0E0, 0 0 0 4px #22c574, 0 1px 2px 0 rgb(0, 0, 0);
-    }
+  .p-button:focus {
+    box-shadow:
+      0 0 0 2px #e0e0e0,
+      0 0 0 4px #22c574,
+      0 1px 2px 0 rgb(0, 0, 0);
+  }
 }
-

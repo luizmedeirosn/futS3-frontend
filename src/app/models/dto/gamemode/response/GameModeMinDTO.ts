@@ -1,7 +1,5 @@
 export interface GameModeMinDTO {
-
-    id: number;
-    formationName: string;
-    description: string;
-
+  id: number;
+  formationName: string;
+  description: string;
 }

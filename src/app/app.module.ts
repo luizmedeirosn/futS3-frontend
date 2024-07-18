@@ -14,30 +14,28 @@ import { AuthInterceptor } from './interceptors/auth/auth.interceptor';
 import { AppComponent } from './app.component';
 
 @NgModule({
-    declarations: [
-        AppComponent,
-    ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        FormsModule,
-        ReactiveFormsModule,
-        HttpClientModule,
+  declarations: [AppComponent],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    FormsModule,
+    ReactiveFormsModule,
+    HttpClientModule,
 
-        ToastModule,
-        ConfirmDialogModule
-    ],
-    providers: [
-        MessageService,
-        DialogService,
-        ConfirmationService,
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: AuthInterceptor,
-            multi: true
-        }
-    ],
-    bootstrap: [AppComponent]
+    ToastModule,
+    ConfirmDialogModule,
+  ],
+  providers: [
+    MessageService,
+    DialogService,
+    ConfirmationService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+  ],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

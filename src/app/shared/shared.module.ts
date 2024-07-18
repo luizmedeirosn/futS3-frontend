@@ -29,45 +29,44 @@ import { EditPositionFormComponent } from './components/forms/position-forms/edi
 import { SavePositionFormComponent } from './components/forms/position-forms/save-position-form/save-position-form.component';
 import { MenubarNavigationComponent } from './components/menubar-navigation/menubar-navigation.component';
 import { ShortenPipe } from './pipes/shorten.pipe';
-import {RippleModule} from "primeng/ripple";
-
+import { RippleModule } from 'primeng/ripple';
 
 @NgModule({
-    declarations: [
-        MenubarNavigationComponent,
-        ShortenPipe,
-        FormControlAlertComponent,
-        SavePlayerFormComponent,
-        EditPlayerFormComponent,
-        DeletePlayerFormComponent,
-        SaveParameterFormComponent,
-        EditParameterFormComponent,
-        DeleteParameterFormComponent,
-        SavePositionFormComponent,
-        EditPositionFormComponent,
-        DeletePositionFormComponent,
-        SaveGamemodeFormComponent,
-        EditGamemodeFormComponent,
-        DeleteGamemodeFormComponent
-    ],
-    imports: [
-        CommonModule,
-        FormsModule,
-        ReactiveFormsModule,
+  declarations: [
+    MenubarNavigationComponent,
+    ShortenPipe,
+    FormControlAlertComponent,
+    SavePlayerFormComponent,
+    EditPlayerFormComponent,
+    DeletePlayerFormComponent,
+    SaveParameterFormComponent,
+    EditParameterFormComponent,
+    DeleteParameterFormComponent,
+    SavePositionFormComponent,
+    EditPositionFormComponent,
+    DeletePositionFormComponent,
+    SaveGamemodeFormComponent,
+    EditGamemodeFormComponent,
+    DeleteGamemodeFormComponent,
+  ],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
 
-        MenubarModule,
-        ButtonModule,
-        DynamicDialogModule,
-        InputTextModule,
-        InputNumberModule,
-        DropdownModule,
-        TableModule,
-        TooltipModule,
-        CardModule,
-        ProgressBarModule,
-        InputTextareaModule,
-        RippleModule,
-    ],
-    exports: [MenubarNavigationComponent, ShortenPipe, FormControlAlertComponent],
+    MenubarModule,
+    ButtonModule,
+    DynamicDialogModule,
+    InputTextModule,
+    InputNumberModule,
+    DropdownModule,
+    TableModule,
+    TooltipModule,
+    CardModule,
+    ProgressBarModule,
+    InputTextareaModule,
+    RippleModule,
+  ],
+  exports: [MenubarNavigationComponent, ShortenPipe, FormControlAlertComponent],
 })
-export class SharedModule { }
+export class SharedModule {}

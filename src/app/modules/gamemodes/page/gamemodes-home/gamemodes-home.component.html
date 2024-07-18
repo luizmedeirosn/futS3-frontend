@@ -1,19 +1,17 @@
 <app-menubar-navigation></app-menubar-navigation>
 
 <app-gamemodes-table
-    *ngIf="!(gameModeView$ | async)"
-    [pageable]="pageable"
-    [$loading] = "loading$"
-    [page]="page"
-    [gameModeView$]="gameModeView$"
-    [homeChangeDetectorRef]="changeDetectorRef"
-    (changePageEvent)="handleChangePageAction($event)"
-    (viewEvent)="handleViewFullDataGameModeAction($event)"
-></app-gamemodes-table>
+  *ngIf="!(gameModeView$ | async)"
+  [pageable]="pageable"
+  [$loading]="loading$"
+  [page]="page"
+  [gameModeView$]="gameModeView$"
+  [homeChangeDetectorRef]="changeDetectorRef"
+  (changePageEvent)="handleChangePageAction($event)"
+  (viewEvent)="handleViewFullDataGameModeAction($event)"></app-gamemodes-table>
 
 <app-gamemode-view
-    *ngIf="gameModeView$ | async"
-    [gameMode]="gameMode"
-    (backEvent)="handleBackAction()"
-    (editOrDeleteGameModeEvent)="handleEditOrDeleteGameModeEvent($event)"
-></app-gamemode-view>
+  *ngIf="gameModeView$ | async"
+  [gameMode]="gameMode"
+  (backEvent)="handleBackAction()"
+  (editOrDeleteGameModeEvent)="handleEditOrDeleteGameModeEvent($event)"></app-gamemode-view>
