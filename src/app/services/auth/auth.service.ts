@@ -56,6 +56,8 @@ export class AuthService {
     }
     this.cookieService.deleteAll();
     this.customDialogService.closeAll();
-    this.router.navigate(['/home']).then((r) => {});
+    this.router.navigate(['/home']).then(() => {
+      window.location.reload();
+    });
   }
 }

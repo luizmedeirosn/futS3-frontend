@@ -4,12 +4,12 @@
   --blue-2: #18afdda9;
 }
 
-body {
+body, html {
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
-  background-size: 100% 200%;
+  background-size: 100%;
   background: linear-gradient(to bottom, #080414, #02c986) no-repeat fixed;
   overflow-y: scroll !important;
 }
