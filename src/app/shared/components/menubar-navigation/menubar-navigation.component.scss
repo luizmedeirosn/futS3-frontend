@@ -27,34 +27,12 @@
   }
 
   .p-submenu-list {
-    display: none;
+    //display: none;
     height: 10.27rem;
     border-radius: 10px;
 
     background-size: 100% 200%;
     background: linear-gradient(to bottom, #0f0725, #02c986) no-repeat;
-  }
-
-  .p-menuitem:hover .p-submenu-list {
-    display: block;
-    animation: slideDown 0.5s ease;
-  }
-
-  @keyframes slideDown {
-    from {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @media screen and (max-width: 768px) {
-    .p-menuitem:hover .p-submenu-list {
-      animation: none;
-    }
   }
 
   .p-menuitem:hover {
@@ -84,19 +62,6 @@
 
 .p-menubar .p-menuitem.p-highlight > .p-menuitem-content {
   background-color: #ffffff00;
-}
-
-.p-menubar-button {
-  &:focus {
-    box-shadow:
-      0 0 0 3px #ffffff,
-      0 0 0 8px #2563eb,
-      0 0 0 2px rgba(0, 0, 0, 0);
-  }
-  transition:
-    background-color 0.2s,
-    color 0.2s,
-    box-shadow 0.2s;
 }
 
 @media screen and (max-width: 960px) {
