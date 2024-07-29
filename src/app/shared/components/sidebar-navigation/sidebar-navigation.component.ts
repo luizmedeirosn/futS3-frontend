@@ -25,16 +25,17 @@ import { EditPositionFormComponent } from '../forms/position-forms/edit-position
 import { SavePositionFormComponent } from '../forms/position-forms/save-position-form/save-position-form.component';
 
 @Component({
-  selector: 'app-menubar-navigation',
-  templateUrl: './menubar-navigation.component.html',
-  styleUrls: ['./menubar-navigation.component.scss'],
+  selector: 'app-sidebar-navigation',
+  templateUrl: './sidebar-navigation.component.html',
+  styleUrls: ['./sidebar-navigation.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class MenubarNavigationComponent implements OnInit, OnDestroy {
+export class SidebarNavigationComponent implements OnInit, OnDestroy {
   private readonly $destroy: Subject<void> = new Subject();
   private dynamicDialogRef!: DynamicDialogRef;
 
-  public items: MenuItem[] | undefined;
+  sidebarVisible = false;
+  items: MenuItem[] | undefined;
 
   constructor(
     private playerService: PlayerService,
@@ -50,10 +51,13 @@ export class MenubarNavigationComponent implements OnInit, OnDestroy {
         label: 'Statistics',
         icon: 'pi pi-chart-line',
         routerLink: ['/gamemodes/statistics'],
+        skipLocationChange: true,
       },
       {
         label: 'Game Modes',
         icon: 'pi pi-tablet',
+        expanded: true,
+        skipLocationChange: true,
         items: [
           {
             label: 'Find All',
@@ -105,6 +109,8 @@ export class MenubarNavigationComponent implements OnInit, OnDestroy {
       {
         label: 'Positions',
         icon: 'pi pi-th-large',
+        expanded: true,
+        skipLocationChange: true,
         items: [
           {
             label: 'Find All',
@@ -153,6 +159,7 @@ export class MenubarNavigationComponent implements OnInit, OnDestroy {
       {
         label: 'Parameters',
         icon: 'pi pi-tags',
+        skipLocationChange: true,
         items: [
           {
             label: 'Find All',
@@ -200,6 +207,7 @@ export class MenubarNavigationComponent implements OnInit, OnDestroy {
       {
         label: 'Players',
         icon: 'pi pi-users',
+        skipLocationChange: true,
         items: [
           {
             label: 'Find All',

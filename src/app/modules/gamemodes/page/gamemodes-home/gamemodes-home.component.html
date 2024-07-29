@@ -1,17 +1,26 @@
-<app-menubar-navigation></app-menubar-navigation>
+<div class="grid grid-nogutter h-screen">
+  <div class="col-fixed">
+    <app-sidebar-navigation></app-sidebar-navigation>
+  </div>
+  <div class="col overflow-y-auto">
+    <div class="w-full p-3">
+      <app-gamemodes-table
+        *ngIf="!(gameModeView$ | async)"
+        [pageable]="pageable"
+        [$loading]="loading$"
+        [page]="page"
+        [gameModeView$]="gameModeView$"
+        [homeChangeDetectorRef]="changeDetectorRef"
+        (changePageEvent)="handleChangePageAction($event)"
+        (viewEvent)="handleViewFullDataGameModeAction($event)">
+      </app-gamemodes-table>
 
-<app-gamemodes-table
-  *ngIf="!(gameModeView$ | async)"
-  [pageable]="pageable"
-  [$loading]="loading$"
-  [page]="page"
-  [gameModeView$]="gameModeView$"
-  [homeChangeDetectorRef]="changeDetectorRef"
-  (changePageEvent)="handleChangePageAction($event)"
-  (viewEvent)="handleViewFullDataGameModeAction($event)"></app-gamemodes-table>
-
-<app-gamemode-view
-  *ngIf="gameModeView$ | async"
-  [gameMode]="gameMode"
-  (backEvent)="handleBackAction()"
-  (editOrDeleteGameModeEvent)="handleEditOrDeleteGameModeEvent($event)"></app-gamemode-view>
+      <app-gamemode-view
+        *ngIf="gameModeView$ | async"
+        [gameMode]="gameMode"
+        (backEvent)="handleBackAction()"
+        (editOrDeleteGameModeEvent)="handleEditOrDeleteGameModeEvent($event)">
+      </app-gamemode-view>
+    </div>
+  </div>
+</div>

@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MenubarNavigationComponent } from './menubar-navigation.component';
+import { SidebarNavigationComponent } from './sidebar-navigation.component';
 
 describe('MenubarNavigationComponent', () => {
-  let component: MenubarNavigationComponent;
-  let fixture: ComponentFixture<MenubarNavigationComponent>;
+  let component: SidebarNavigationComponent;
+  let fixture: ComponentFixture<SidebarNavigationComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [MenubarNavigationComponent],
+      declarations: [SidebarNavigationComponent],
     });
-    fixture = TestBed.createComponent(MenubarNavigationComponent);
+    fixture = TestBed.createComponent(SidebarNavigationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

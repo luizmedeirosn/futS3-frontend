@@ -1,7 +1,15 @@
-<app-menubar-navigation></app-menubar-navigation>
-
-<app-parameters-table
-  [pageable]="pageable"
-  [$loading]="$loading"
-  [page]="page"
-  (changePageEvent)="handleChangePageAction($event)"></app-parameters-table>
+<div class="grid grid-nogutter h-screen">
+  <div class="col-fixed w-20rem overflow-y-auto">
+    <app-sidebar-navigation></app-sidebar-navigation>
+  </div>
+  <div class="col h-full overflow-y-auto">
+    <div class="w-full p-3">
+      <app-parameters-table
+        [pageable]="pageable"
+        [$loading]="$loading"
+        [page]="page"
+        (changePageEvent)="handleChangePageAction($event)">
+      </app-parameters-table>
+    </div>
+  </div>
+</div>

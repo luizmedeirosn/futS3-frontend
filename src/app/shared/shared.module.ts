@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { EditParameterFormComponent } from './components/forms/parameter-forms/edit-parameter-form/edit-parameter-form.component';
 
 import { ButtonModule } from 'primeng/button';
-import { MenubarModule } from 'primeng/menubar';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CardModule } from 'primeng/card';
@@ -27,13 +26,15 @@ import { SavePlayerFormComponent } from './components/forms/player-forms/save-pl
 import { DeletePositionFormComponent } from './components/forms/position-forms/delete-position-form/delete-position-form.component';
 import { EditPositionFormComponent } from './components/forms/position-forms/edit-position-form/edit-position-form.component';
 import { SavePositionFormComponent } from './components/forms/position-forms/save-position-form/save-position-form.component';
-import { MenubarNavigationComponent } from './components/menubar-navigation/menubar-navigation.component';
+import { SidebarNavigationComponent } from './components/sidebar-navigation/sidebar-navigation.component';
 import { ShortenPipe } from './pipes/shorten.pipe';
 import { RippleModule } from 'primeng/ripple';
+import { SidebarModule } from 'primeng/sidebar';
+import { PanelMenuModule } from 'primeng/panelmenu';
 
 @NgModule({
   declarations: [
-    MenubarNavigationComponent,
+    SidebarNavigationComponent,
     ShortenPipe,
     FormControlAlertComponent,
     SavePlayerFormComponent,
@@ -54,7 +55,8 @@ import { RippleModule } from 'primeng/ripple';
     FormsModule,
     ReactiveFormsModule,
 
-    MenubarModule,
+    SidebarModule,
+    PanelMenuModule,
     ButtonModule,
     DynamicDialogModule,
     InputTextModule,
@@ -67,6 +69,6 @@ import { RippleModule } from 'primeng/ripple';
     InputTextareaModule,
     RippleModule,
   ],
-  exports: [MenubarNavigationComponent, ShortenPipe, FormControlAlertComponent],
+  exports: [SidebarNavigationComponent, ShortenPipe, FormControlAlertComponent],
 })
 export class SharedModule {}

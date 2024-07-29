@@ -1,18 +1,26 @@
-<app-menubar-navigation></app-menubar-navigation>
+<div class="grid grid-nogutter h-screen">
+  <div class="col-fixed">
+    <app-sidebar-navigation></app-sidebar-navigation>
+  </div>
+  <div class="col h-full overflow-y-auto">
+    <div class="w-full p-3">
+      <app-players-table
+        *ngIf="!(playerView$ | async)"
+        [pageable]="pageable"
+        [previousKeyword]="previousKeyword"
+        [loading$]="loading$"
+        [page]="page"
+        [playerView$]="playerView$"
+        [homeChangeDetectorRef]="changeDetectorRef"
+        (changePageEvent)="handleChangePageAction($event)"
+        (viewEvent)="handleViewFullDataPlayerAction($event)"></app-players-table>
 
-<app-players-table
-  *ngIf="!(playerView$ | async)"
-  [pageable]="pageable"
-  [previousKeyword]="previousKeyword"
-  [loading$]="loading$"
-  [page]="page"
-  [playerView$]="playerView$"
-  [homeChangeDetectorRef]="changeDetectorRef"
-  (changePageEvent)="handleChangePageAction($event)"
-  (viewEvent)="handleViewFullDataPlayerAction($event)"></app-players-table>
-
-<app-player-view
-  *ngIf="playerView$ | async"
-  [player]="player"
-  (backEvent)="handleBackAction()"
-  (editOrDeletePlayerEvent)="handleEditOrDeletePlayerEvent($event)"></app-player-view>
+      <app-player-view
+        *ngIf="playerView$ | async"
+        [player]="player"
+        (backEvent)="handleBackAction()"
+        (editOrDeletePlayerEvent)="handleEditOrDeletePlayerEvent($event)">
+      </app-player-view>
+    </div>
+  </div>
+</div>

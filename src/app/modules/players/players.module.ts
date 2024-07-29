@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
@@ -35,6 +35,7 @@ import { PaginatorModule } from 'primeng/paginator';
     RippleModule,
     InputTextModule,
     PaginatorModule,
+    NgOptimizedImage,
   ],
 })
 export class PlayersHomeModule {}

@@ -1,22 +1,30 @@
-<app-menubar-navigation></app-menubar-navigation>
-
-<app-players-statistics-view
-  #playersStatisticsViewRef
-  [gameModes]="gameModes"
-  [selectedGameModePositions]="selectedGameModePositions"
-  [getPlayersRankingForm]="getPlayersRankingForm"
-  [$viewActivate]="$viewActivate"
-  [playersRankingPageable]="playersRankingPageable"
-  [chartBarPageable]="chartBarPageable"
-  [chartRadarPageable]="chartRadarPageable"
-  [$playersRankingLoading]="$playersRankingLoading"
-  [$chartBarLoading]="$chartBarLoading"
-  [$chartRadarLoading]="$chartRadarLoading"
-  [playersRankingPage]="playersRankingPage"
-  [chartBarPage]="chartBarPage"
-  [chartRadarPage]="chartRadarPage"
-  (findGameModePositionsEvent)="handleFindGameModePositionsAction($event)"
-  (getPlayersRankingEvent)="handleGetPlayersRankingAction($event)"
-  (changePagePlayersRankingEvent)="handleChangePagePlayersRankingAction($event)"
-  (changePageChartBarEvent)="handleChangePageChartBarAction($event)"
-  (changePageChartRadarEvent)="handleChangePageChartRadarAction($event)"></app-players-statistics-view>
+<div class="grid grid-nogutter h-screen">
+  <div class="col-fixed">
+    <app-sidebar-navigation></app-sidebar-navigation>
+  </div>
+  <div class="col h-full overflow-y-auto">
+    <div class="w-full p-3">
+      <app-players-statistics-view
+        #playersStatisticsViewRef
+        [gameModes]="gameModes"
+        [selectedGameModePositions]="selectedGameModePositions"
+        [getPlayersRankingForm]="getPlayersRankingForm"
+        [$viewActivate]="$viewActivate"
+        [playersRankingPageable]="playersRankingPageable"
+        [chartBarPageable]="chartBarPageable"
+        [chartRadarPageable]="chartRadarPageable"
+        [$playersRankingLoading]="$playersRankingLoading"
+        [$chartBarLoading]="$chartBarLoading"
+        [$chartRadarLoading]="$chartRadarLoading"
+        [playersRankingPage]="playersRankingPage"
+        [chartBarPage]="chartBarPage"
+        [chartRadarPage]="chartRadarPage"
+        (findGameModePositionsEvent)="handleFindGameModePositionsAction($event)"
+        (getPlayersRankingEvent)="handleGetPlayersRankingAction($event)"
+        (changePagePlayersRankingEvent)="handleChangePagePlayersRankingAction($event)"
+        (changePageChartBarEvent)="handleChangePageChartBarAction($event)"
+        (changePageChartRadarEvent)="handleChangePageChartRadarAction($event)">
+      </app-players-statistics-view>
+    </div>
+  </div>
+</div>

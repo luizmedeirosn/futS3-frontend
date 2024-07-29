@@ -1,0 +1,14 @@
+<div class="flex justify-content-start overflow-y-auto" [style]="{ height: '100vh', background: 'var(--purple-1)' }">
+  <div class="flex-column align-items-start w-full h-full">
+    <div id="logo" class="flex flex-column justify-content-start align-items-center p-3">
+      <img src="../../../../assets/logo-3.png" alt="futs3-logo" />
+      <h1 class="text-white m-2">Panel</h1>
+    </div>
+    <p-panelMenu
+      [model]="items"
+      styleClass="w-full w-16rem"
+      [multiple]="true"
+      [style]="{ background: 'var(--purple-1)' }">
+    </p-panelMenu>
+  </div>
+</div>

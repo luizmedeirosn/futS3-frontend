@@ -57,5 +57,11 @@
   .p-card-title {
     color: var(--black-1);
     font-size: 2rem;
+    padding: 2rem;
   }
+}
+
+.xl-chart {
+  width: 65rem !important;
+  height: 35rem !important;
 }
