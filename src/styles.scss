@@ -6,7 +6,8 @@
   --blue-2: #18afdda9;
 }
 
-body, html {
+body,
+html {
   margin: 0;
   padding: 0;
   width: 100vw;
@@ -25,7 +26,6 @@ svg {
   backface-visibility: hidden;
   transform: translateZ(0);
 }
-
 
 text,
 span {
