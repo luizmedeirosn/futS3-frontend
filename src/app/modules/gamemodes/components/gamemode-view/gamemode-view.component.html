@@ -40,22 +40,26 @@
         </div>
       </div>
 
-      <div class="panel-custom flex justify-content-center align-items-start mt-3 gap-3">
-        <p-panel header="Formation Name">
-          <p>
-            {{ gameMode.formationName }}
-          </p>
-        </p-panel>
-
-        <div class="flex flex-column border-solid border-green-700 border-2 border-round-lg pb-1 bg-gray-50">
-          <label class="text-gray-900 font-bold text-medium text-center bg-gray-300 p-3 border-round-top-lg">
-            Description
-          </label>
-          <p-scrollPanel [style]="{ height: '150px' }">
-            <p class="text-justify text-gray-900 m-3" style="width: 35rem">
-              {{ gameMode.description || 'No description for now!' }}
+      <div class="grid panel-custom mt-3 gap-3">
+        <div class="col md:col-12">
+          <p-panel header="Formation Name">
+            <p>
+              {{ gameMode.formationName }}
             </p>
-          </p-scrollPanel>
+          </p-panel>
+        </div>
+
+        <div class="col md:col-12">
+          <div class="flex flex-column border-solid border-green-700 border-2 border-round-lg pb-1 bg-gray-50">
+            <label class="text-gray-900 font-bold text-medium text-center bg-gray-300 p-3 border-round-top-lg">
+              Description
+            </label>
+            <p-scrollPanel>
+              <p class="text-justify text-gray-900 m-3">
+                {{ gameMode.description || 'No description for now!' }}
+              </p>
+            </p-scrollPanel>
+          </div>
         </div>
       </div>
 
