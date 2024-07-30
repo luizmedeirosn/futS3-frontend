@@ -73,6 +73,7 @@ export class SidebarNavigationComponent implements OnInit, OnDestroy {
                 position: 'top',
                 header: EnumGameModeEventsCrud.ADD.valueOf(),
                 contentStyle: { overflow: 'auto' },
+                styleClass: 'card',
                 baseZIndex: 10000,
               });
             },
